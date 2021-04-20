@@ -1,0 +1,132 @@
+//
+//  ViperArticle.swift
+//  VIperSpanish 2
+//
+//  Created by Charles Diggins on 3/30/21.
+//
+
+import Foundation
+
+class Article : Word {
+    var type: ArticleType
+    
+    init(word: String, def: String, type : ArticleType){
+        self.type = type
+        super.init(word: word, def: def, wordType: .article)
+    }
+}
+
+class EnglishArticle : Article {
+    let indefinitePreConsonsant = "a"
+    let indefinitePreVowel = "an"
+    let indefinitePlural = "some"
+    let definite = "the"
+    
+    func getIndefinite(number:Number, startingLetterIsVowelSound:Bool)->String{
+        switch number{
+        case .singular:
+            if startingLetterIsVowelSound {return indefinitePreVowel}
+            else { return indefinitePreVowel }
+        case .plural:
+            return indefinitePlural
+        }
+    }
+    
+    func getDefinite()->String{
+        return definite
+    }
+    
+    func isArticle(word: String)->(Bool, ArticleType, Number){
+        
+        //check for indefinite
+
+        if word == getIndefinite(number: .singular, startingLetterIsVowelSound: false){return (true, .indefinite, .singular)}
+        if word == indefinitePlural {return (true, .indefinite, .plural)}
+        
+        //check for definite
+        
+        if word == getDefinite() {return (true, .definite, .singular)}
+        
+        //else not an article
+        return (false, .definite, .singular)
+    }
+}
+
+
+class RomanceArticle : Article {
+    let indefiniteSingularMasc = "un"
+    let indefiniteSingularFem = "una"
+    let indefinitePluralMasc = "unos"
+    let indefinitePluralFem = "unas"
+        
+    let definiteSingularMasc = "el"
+    let definiteSingularFem = "la"
+    let definitePluralMasc = "los"
+    let definitePluralFem = "las"
+       
+    func getArticle(type: ArticleType, gender: Gender, number: Number)->String{
+        switch type {
+        case .indefinite:
+            return getIndefiniteForm(gender: gender, number: number)
+        case .definite:
+            return getDefiniteForm(gender: gender, number: number)
+        case .unknown:
+            return "unknown article type"
+        }
+    }
+    
+    func getIndefiniteForm(gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return indefiniteSingularFem
+            case .plural:
+                return indefinitePluralFem
+            }
+        case .masculine:
+            switch number {
+            case .singular:
+                return indefiniteSingularMasc
+            case .plural:
+                return indefinitePluralMasc
+            }
+        }
+    }
+
+    func getDefiniteForm(gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return definiteSingularFem
+            case .plural:
+                return definitePluralFem
+            }
+        case .masculine:
+            switch number {
+            case .singular:
+                return definiteSingularMasc
+            case .plural:
+                return definitePluralMasc
+            }
+        }
+    }
+
+    func isArticle(word: String)->(Bool, ArticleType, gender : Gender, number : Number){
+
+        if word == definiteSingularFem {return (true, .definite, .feminine, .singular)}
+        if word == definitePluralFem {return (true, .definite, .feminine, .plural)}
+        if word == definiteSingularMasc {return (true, .definite, .masculine, .singular)}
+        if word == definitePluralMasc {return (true, .definite,.masculine, .plural)}
+        
+        if word == indefiniteSingularFem {return (true, .indefinite, .feminine, .singular)}
+        if word == indefinitePluralFem {return (true, .indefinite,.feminine, .plural)}
+        if word == indefiniteSingularMasc {return (true, .indefinite, .masculine, .singular)}
+        if word == indefinitePluralMasc {return (true, .indefinite, .masculine, .plural)}
+
+        return (false, .indefinite, .feminine, .plural)
+    }
+    
+    
+}
