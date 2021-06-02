@@ -49,7 +49,7 @@ class RomanceNoun : Noun {
     }
     
     override func constructPlural(){
-        let util = Utilities()
+        let util = VerbUtilities()
         var root = word
         root.removeLast()
         
@@ -61,9 +61,25 @@ class RomanceNoun : Noun {
         }
         else{ plural = word + "s" }
     }
+  
+}
+
+class FrenchNoun : RomanceNoun {
     
-    
-    
+    override func constructPlural(){
+        let util = VerbUtilities()
+        var root = word
+        root.removeLast()
+        
+        let suffix = util.getLastNCharactersInString(inputString: word, copyCount: 1)
+
+        if ( suffix == "z" ){ plural = root + "ces" }
+        else if !util.isVowel(letter: suffix) || suffix == "Ì" || suffix == "˙" || suffix == "·" {
+            plural = word + "es"
+        }
+        else{ plural = word + "s" }
+    }
+  
 }
 
 class EnglishNoun : Noun {

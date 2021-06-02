@@ -16,7 +16,7 @@ class dSingle  : dCluster
 {
     //var m_clusterWord : Word
     
-    override init(word: Word, clusterType : ContextFreeSymbol, data: SentenceWordData){
+    override init(word: Word, clusterType : ContextFreeSymbol, data: WordStateData){
         super.init(word: word, clusterType: clusterType, data: data)
     }
     
@@ -27,9 +27,9 @@ class dSingle  : dCluster
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     
     var m_originalString = ""
-    var m_correction = dCorrection(m_inputInfo: SentenceWordData())
-    var m_inputInfo = SentenceWordData()
-    var m_outputInfo = SentenceWordData()
+    var m_correction = dCorrection(m_inputInfo: WordStateData())
+    var m_inputInfo = WordStateData()
+    var m_outputInfo = WordStateData()
     var m_clusterList = Array<dCluster>()
     func getClusterCount()->Int{return m_clusterList.count}
     func getClusterList()->[dCluster]{ return m_clusterList}
@@ -63,8 +63,8 @@ class dSingle  : dCluster
     }
     
 
-    func setInputInfo(info : SentenceWordData){m_inputInfo = info}
-    func setOutputInfo(info : SentenceWordData){m_outputInfo = info}
+    func setInputInfo(info : WordStateData){m_inputInfo = info}
+    func setOutputInfo(info : WordStateData){m_outputInfo = info}
     
     func getCorrection()->dCorrection{
         return m_correction
@@ -80,11 +80,11 @@ enum AdjectiveSuperState : String {
 
 class dDummySingle : dSingle {
     override init(){
-        super.init(word: Word(), clusterType: .AdvP, data: SentenceWordData() )
+        super.init(word: Word(), clusterType: .AdvP, data: WordStateData() )
     }
     
     init(word: Word){
-        super.init(word: word, clusterType: .AdvP, data: SentenceWordData())
+        super.init(word: word, clusterType: .AdvP, data: WordStateData())
     }
 }
 class dAdjectiveSingle :dSingle
@@ -93,10 +93,10 @@ class dAdjectiveSingle :dSingle
  ------------------------------------------------------------------*/
 {
     override init(){
-        super.init(word: Word(), clusterType: .Adj, data: SentenceWordData())
+        super.init(word: Word(), clusterType: .Adj, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: .Adj, data: data)
     }
     
@@ -151,10 +151,10 @@ class dAdverbSingle : dSingle
  ------------------------------------------------------------------*/
 {
     override init(){
-        super.init(word: Word(), clusterType: .Adv, data: SentenceWordData())
+        super.init(word: Word(), clusterType: .Adv, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: .Adv, data: data)
     }
     
@@ -172,10 +172,10 @@ class dAmbiguousSingle : dSingle
 {
     var type = ContextFreeSymbol.AMB
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -191,7 +191,7 @@ class dAmbiguousSingle : dSingle
     func  getSingleCount()->Int{return m_singleList.count}
     func hasMatch( ecfst : ContextFreeSymbol)->(Int, dSingle){
         let word = Word()
-        let single = dSingle(word: word, clusterType: ecfst, data: SentenceWordData())
+        let single = dSingle(word: word, clusterType: ecfst, data: WordStateData())
         return (m_bestIndex, single)
     }
     func  setBestIndex(index: Int){m_bestIndex = index}
@@ -201,10 +201,10 @@ class dAmbiguousSingle : dSingle
 class dArticleSingle :  dSingle{
     var type = ContextFreeSymbol.Art
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -225,10 +225,10 @@ class dArticleSingle :  dSingle{
 class dConjunctionSingle :  dSingle{
     var type = ContextFreeSymbol.C
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -240,10 +240,10 @@ class dConjunctionSingle :  dSingle{
 class dDeterminerSingle :  dSingle{
     var type = ContextFreeSymbol.Det
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -259,10 +259,10 @@ class dNumberSingle : dSingle
 {
     var type = ContextFreeSymbol.Num
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -271,10 +271,10 @@ class dNumberSingle : dSingle
 class dParticipleSingle :  dSingle{
     var type = ContextFreeSymbol.Part
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -288,10 +288,10 @@ class dPrepositionSingle : dSingle
 {
     var type = ContextFreeSymbol.P
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -309,10 +309,10 @@ class dPersonalPronounSingle : dSingle
 {
     var type = ContextFreeSymbol.PersPro
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -332,11 +332,15 @@ class dSubjectPronounSingle : dSingle
  ------------------------------------------------------------------*/
 {
     var type = ContextFreeSymbol.SubjP
-    override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+    var m_language : LanguageType
+    
+    init(language: LanguageType){
+        m_language = language
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
+        m_language = data.language
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -346,11 +350,27 @@ class dSubjectPronounSingle : dSingle
     
     func getPronounType()->PronounType{return m_pronounType}
 
-    override func    getString()->String{
+    override func getString()->String{
+        switch m_language {
+        case .Spanish: return getSpanishString()
+        case .French: return getFrenchString()
+        default:
+            return "HeSheIt"
+        }
+    }
+        
+    func    getSpanishString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         let sp = word as! SpanishPronoun
-        return sp.getSubject(gender:sd.gender, person: sd.person, formal: false)
+        return sp.getSubject(gender:sd.gender, person: sd.person, formal: true)
+    }
+    
+    func    getFrenchString()->String{
+        let sd = getSentenceData()
+        let word = getClusterWord()
+        let sp = word as! FrenchPronoun
+        return sp.getSubject(gender:sd.gender, person: sd.person, formal: true)
     }
     
 } //dSubjectPronounSingle
@@ -362,10 +382,10 @@ class dImpersonalPronounSingle :  dSingle
 {
     var type = ContextFreeSymbol.ObjP
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -384,10 +404,10 @@ class dPunctuationSingle :  dSingle
 {
     var type = ContextFreeSymbol.period
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -401,10 +421,10 @@ class dPunctuationSingle :  dSingle
 class dUnknownSingle : dSingle{
     var type = ContextFreeSymbol.UNK
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     

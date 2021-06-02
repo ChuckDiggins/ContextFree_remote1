@@ -1,6 +1,6 @@
-///
+//
 //  BVerb.swift
-//  ContextFree
+//  VIperSpanish 2
 //
 //  Created by Charles Diggins on 3/23/21.
 //
@@ -13,6 +13,20 @@ var person = Person.S1
 var fromWord = ""
 var toWord = ""
 }
+
+struct ReplaceMultipleForm {
+    var tense = Tense.present
+    var personList = [Person]()
+    var fromWord = ""
+    var toWord = ""
+}
+
+struct DropLettersForm {
+    var tense = Tense.present
+    var personList = [Person]()
+    var fromWord = ""
+}
+
 
 struct ReplaceEndingForm {
 var tense = Tense.present
@@ -36,6 +50,7 @@ class BVerb : Word, Identifiable {
     var languageType : LanguageType
     var m_isPassive = false
     var m_isIrregular = false
+    
     var m_pastParticiple = ""
     var m_gerund = ""
     private var m_isConjugated = false
@@ -54,6 +69,18 @@ class BVerb : Word, Identifiable {
         super.init(word: m_verbWord, def: "", wordType: .verb)
     }
 
+    func getInfinitiveAndParticiples()->(String, String, String){
+        return (word, m_pastParticiple, m_gerund)
+    }
+    
+    func getPresentParticiple()->String{
+        return m_gerund
+    }
+    
+    func getPastParticiple()->String{
+        return m_pastParticiple
+    }
+    
     func getId()->UUID{return id}
     
     //if any form is irregular, then the verb is irregular
@@ -62,7 +89,7 @@ class BVerb : Word, Identifiable {
     }
     
     func unConjugate(verbForm : String)->BVerb{
-        var verb = BVerb()
+        let verb = BVerb()
         return verb
     }
     
@@ -73,5 +100,12 @@ class BVerb : Word, Identifiable {
     func setIsConjugated(flag: Bool){
         m_isConjugated = flag
     }
+    
+    func getPhrase()->String{
+        return m_verbPhrase
+    }
+    
+    func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool) -> MorphStruct {
+        return MorphStruct(person: person)
+    }
 }
-

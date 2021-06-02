@@ -27,48 +27,12 @@ struct ContextFreeGrammarConstruction{
         cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .SubjP, word: Word(), isHead: true))
         grammar.addRule(cfr: cfr)
         
-        
-        /*
-        cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .Art, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .N, word: Word(), isHead: true))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .Adj, word: Word()))
-        grammar.addRule(cfr: cfr)
 
-        cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .Art, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .N, word: Word(), isHead: true))
-        grammar.addRule(cfr: cfr)
-
-        cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .Art, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .N, word: Word(), isHead: true))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .Adj, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .PP, word: Word()))
-        grammar.addRule(cfr: cfr)
-        */
-        
         cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
         cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .NP, word: Word(), isHead: true))
         cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .PP, word: Word(), optional: false, multiple: false))
         grammar.addRule(cfr: cfr)
         
-        /*
-        cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .N, word: Word(), isHead: true))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .Adj, word: Word()))
-        
-        grammar.addRule(cfr: cfr)
-        cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .NP, word: Word(), isHead: true))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .Adj, word: Word()))
-        
-        grammar.addRule(cfr: cfr)
-        cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .NP, word: Word(), isHead: true))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .PP, word: Word()))
-        
-        */
         
         print(grammar.name)
         grammar.printRules()
@@ -114,11 +78,17 @@ struct ContextFreeGrammarConstruction{
         cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .PP, word: Word()))
         grammar.addRule(cfr: cfr)
         
+        cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .VP, word: Word()))
+        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .V, word: Word(), isHead: true))
+        grammar.addRule(cfr: cfr)
+        
+        
         print(grammar.name)
         grammar.printRules()
         
         return grammar
     }
+    
     
     mutating func createSomeAdjectivePhraseGrammar()->ContextFreeGrammar{
         

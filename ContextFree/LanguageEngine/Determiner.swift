@@ -63,7 +63,7 @@ class RomanceDeterminer : Determiner {
             case .plural:
                 return femPlural
             }
-        case .masculine:
+        case .masculine, .either:
             switch number {
             case .singular:
                 return word

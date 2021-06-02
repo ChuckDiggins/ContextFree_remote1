@@ -21,15 +21,22 @@ struct ContentView: View {
                 .background(Color.orange)
                 .cornerRadius(10)
                 
-                NavigationLink(destination: ContextFreeGrammarSpecificationView()){
-                    Text("CF Grammar Specification")
+                NavigationLink(destination: AdjectiveListView(m_words: Array<Word>())){
+                    Text("Word Lists")
+                }.frame(width: 200, height: 50)
+                .padding(.leading, 10)
+                .background(Color.purple)
+                .cornerRadius(10)
+                
+                NavigationLink(destination: WordGames()){
+                    Text("Word Games")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
                 .background(Color.blue)
                 .cornerRadius(10)
                 
-                NavigationLink(destination: RandomSentenceGeneratorView()){
-                    Text("Generate Random Sentences")
+                NavigationLink(destination: SentenceGameView()){
+                    Text("Sentence Games")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
                 .background(Color.yellow)
@@ -40,7 +47,7 @@ struct ContentView: View {
     }
     
     func processSentence(){
-        let words = Utilities().getListOfWords(characterArray: sentence)
+        let words = VerbUtilities().getListOfWords(characterArray: sentence)
         for word in words {
             print ("\(word)")
         }

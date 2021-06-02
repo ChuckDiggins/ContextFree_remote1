@@ -54,15 +54,15 @@ class EnglishArticle : Article {
 
 
 class RomanceArticle : Article {
-    let indefiniteSingularMasc = "un"
-    let indefiniteSingularFem = "una"
-    let indefinitePluralMasc = "unos"
-    let indefinitePluralFem = "unas"
+    var indefiniteSingularMasc = ""
+    var indefiniteSingularFem = ""
+    var indefinitePluralMasc = ""
+    var indefinitePluralFem = ""
         
-    let definiteSingularMasc = "el"
-    let definiteSingularFem = "la"
-    let definitePluralMasc = "los"
-    let definitePluralFem = "las"
+    var definiteSingularMasc = ""
+    var definiteSingularFem = ""
+    var definitePluralMasc = ""
+    var definitePluralFem = ""
        
     func getArticle(type: ArticleType, gender: Gender, number: Number)->String{
         switch type {
@@ -72,6 +72,8 @@ class RomanceArticle : Article {
             return getDefiniteForm(gender: gender, number: number)
         case .unknown:
             return "unknown article type"
+        case .partative:
+            return ""
         }
     }
     
@@ -84,7 +86,7 @@ class RomanceArticle : Article {
             case .plural:
                 return indefinitePluralFem
             }
-        case .masculine:
+        case .masculine, .either:
             switch number {
             case .singular:
                 return indefiniteSingularMasc
@@ -103,7 +105,7 @@ class RomanceArticle : Article {
             case .plural:
                 return definitePluralFem
             }
-        case .masculine:
+        case .masculine, .either:
             switch number {
             case .singular:
                 return definiteSingularMasc
@@ -127,6 +129,69 @@ class RomanceArticle : Article {
 
         return (false, .indefinite, .feminine, .plural)
     }
+}
+
+
+class SpanishArticle : RomanceArticle {
     
+    init(){
+        super.init(word: "", def: "", type: .unknown)
+        
+        indefiniteSingularMasc = "un"
+        indefiniteSingularFem = "una"
+        indefinitePluralMasc = "unos"
+        indefinitePluralFem = "unas"
+        
+        definiteSingularMasc = "el"
+        definiteSingularFem = "la"
+        definitePluralMasc = "los"
+        definitePluralFem = "las"
+    }
+    
+}
+
+class FrenchArticle : RomanceArticle {
+    var partativeSingularMasc = ""
+    var partativeSingularFem = ""
+    var partativePluralMasc = ""
+    var partativePluralFem = ""
+    
+    init(){
+        super.init(word: "", def: "", type: .unknown)
+        
+        indefiniteSingularMasc = "un"
+        indefiniteSingularFem = "une"
+        indefinitePluralMasc = "des"
+        indefinitePluralFem = "des"
+        
+        definiteSingularMasc = "le"
+        definiteSingularFem = "la"
+        definitePluralMasc = "les"
+        definitePluralFem = "les"
+        
+        partativeSingularMasc = "du"
+        partativeSingularFem = "de la"
+        partativePluralMasc = "de l'"
+        partativePluralFem = "des"
+    }
+    
+    func getPartativeForm(gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return partativeSingularFem
+            case .plural:
+                return partativePluralFem
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return partativeSingularMasc
+            case .plural:
+                return partativePluralMasc
+            }
+        }
+    }
     
 }

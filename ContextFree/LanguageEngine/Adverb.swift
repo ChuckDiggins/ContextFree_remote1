@@ -17,6 +17,18 @@ class Adverb : Word {
     }
 }
 
+class FrenchAdverb : Adverb {
+    override init(word: String, def: String, type : AdverbType){
+        super.init(word: word, def: def, type: type)
+    }
+    
+    func isAdverb(word:String)->Bool{
+        if word == self.word {return true}
+        return false
+    }
+}
+
+
 class SpanishAdverb : Adverb {
     override init(word: String, def: String, type : AdverbType){
         super.init(word: word, def: def, type: type)

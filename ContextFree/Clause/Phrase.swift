@@ -10,7 +10,7 @@ import Foundation
 
 class dPhrase : dCluster {
     
-    override init(word: Word, clusterType : ContextFreeSymbol, data: SentenceWordData){
+    override init(word: Word, clusterType : ContextFreeSymbol, data: WordStateData){
         super.init(word: word, clusterType: clusterType, data: data)
     }
     
@@ -116,10 +116,10 @@ class dPhrase : dCluster {
 class dAdverbPhrase : dPhrase {
     var type = ContextFreeSymbol.AdvP
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -131,10 +131,10 @@ class dAdverbPhrase : dPhrase {
 class dPrepositionPhrase : dPhrase {
     var type = ContextFreeSymbol.PP
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     

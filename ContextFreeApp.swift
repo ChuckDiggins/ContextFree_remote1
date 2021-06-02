@@ -12,8 +12,6 @@ struct ContextFreeApp: App {
     var body: some Scene {
         WindowGroup {
             
- //           let cfModel = CFModel()
-            
             let cfModelView = CFModelView()
         
             //this initializes the view model in ViperView

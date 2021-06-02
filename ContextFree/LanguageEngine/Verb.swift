@@ -9,6 +9,9 @@ import Foundation
 
 class Verb : Word {
     var type: VerbType
+    var transitivity =  VerbTransitivity.transitive
+    var passivity =  VerbPassivity.active
+    var modality = VerbModality.notModal
     var tense = Tense.present
     var person = Person.S1
     var tensePersonSet = false
@@ -22,6 +25,16 @@ class Verb : Word {
         self.type = type
         self.person = person
         self.tense = tense
+        super.init(word: word, def: def, wordType: .verb)
+    }
+    
+    init(word: String, def: String, wsd: WordStateData){
+        self.type = wsd.verbType
+        self.person = wsd.person
+        self.tense = wsd.tense
+        self.transitivity = wsd.verbTransitivity
+        self.passivity = wsd.verbPassivity
+        self.modality = wsd.verbModality
         super.init(word: word, def: def, wordType: .verb)
     }
     
@@ -46,14 +59,7 @@ class Verb : Word {
 }
 
 class RomanceVerb : Verb {
-    var s1Form: String = ""
-    var s2Form: String = ""
-    var s3Form: String = ""
-    var p1Form: String = ""
-    var p2Form: String = ""
-    var p3Form: String = ""
-    
-    
+    var verbForm = Array<String>()
     override init(word: String, def: String, type: VerbType, tense: Tense, person: Person){
         super.init(word: word, def: def, type : type)
         setTensePerson(tense: tense, person: person)
@@ -64,60 +70,64 @@ class RomanceVerb : Verb {
     }
     
     
-    
     func setSimplePresentForms(s1: String, s2: String, s3: String, p1: String, p2:String, p3:String){
-        s1Form = s1
-        s2Form = s2
-        s3Form = s3
-        p1Form = p1
-        p2Form = p2
-        p3Form = p3
+        verbForm.removeAll()
+        verbForm.append(s1)
+        verbForm.append(s2)
+        verbForm.append(s3)
+        verbForm.append(p1)
+        verbForm.append(p2)
+        verbForm.append(p3)
     }
-    
-    /*override func setTensePerson(tense : Tense, person: Person ){
-        self.tense = tense
-        self.person = person
-        self.tensePersonSet = true
-    }
-    
-    override func isTensePersonSet()->Bool {
-        return tensePersonSet
-    }
-    */
     
     func getConjugateForm()->String{
         return getConjugateForm(tense: tense, person: person)
     }
     
-    func getConjugateForm(tense: Tense, person : Person)->String{
-        switch person {
-        case .S1:
-            return s1Form
-        case .S2:
-            return s2Form
-        case .S3:
-            return s3Form
-        case .P1:
-            return p1Form
-        case .P2:
-            return p2Form
-        case .P3:
-            return p3Form
-        }
-    }
+    func getConjugateForm(tense: Tense, person : Person)->String{ return verbForm[person.getIndex()] }
     
     func isConjugateForm(word: String)->(Bool, Tense, Person){
-        if ( word == s1Form ){return (true, .present, .S1)}
-        if ( word == s2Form ){return (true, .present, .S2)}
-        if ( word == s3Form ){return (true, .present, .S3)}
-        if ( word == p1Form ){return (true, .present, .P1)}
-        if ( word == p2Form ){return (true, .present, .P2)}
-        if ( word == p3Form ){return (true, .present, .P3)}
+        for p in 0..<6 {
+            let person = Person.allCases[p]
+            if word == verbForm[p]{return (true, .present, person)}
+        }
         return (false, .present, .S1)
     }
     
+}
+
+class FrenchVerb : RomanceVerb {
     
+}
+
+class SpanishVerb : RomanceVerb {
+    var bVerb : BSpanishVerb
+    init(bVerb: BSpanishVerb){
+        self.bVerb = bVerb
+        super.init(word: bVerb.m_verbWord, def: bVerb.def, type : VerbType.normal)
+        conjugateAndSetSimplePresentForms()
+    }
     
+    func getBVerb()->BSpanishVerb{
+        return bVerb
+    }
+    
+    func conjugateAndSetSimplePresentForms(){
+        for p in 0..<6 {
+            let person = Person.allCases[p]
+            _ = bVerb.getConjugatedMorphStruct(tense: .present, person: person, conjugateEntirePhrase : false )
+            verbForm.append(bVerb.getFinalVerbForm(person : person))
+        }
+    }
+    
+    override func getConjugateForm(tense: Tense, person : Person)->String{
+        switch tense {
+        case .pastParticiple: return bVerb.getPastParticiple()
+        case .presentParticiple: return bVerb.getPresentParticiple()
+        case .infinitive: return bVerb.m_verbWord
+        default:  return bVerb.getConjugateForm(tense: tense, person: person)
+        }
+    }
 }
 
 class EnglishVerb : Verb {

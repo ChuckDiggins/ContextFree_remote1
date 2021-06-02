@@ -7,58 +7,8 @@
 
 import Foundation
 
-enum ExceptionPattern : String {
-    case STEM
-    case STEMSINGLE
-    case PRETSTEM
-    case PRETSTEM2
-    case PRETSTEM3
-    case ORTHO
-    case REPLACE
-    case REPLACEINFINITIVE //decir with dir for future, conditional
-    case REPLACEENDING     //dejieron to dijeron
-    case STANDALONE     //   only has one verb pertaining to this model.  Such as ir, dar, estar.
-                        //   Prevents other verbs with identical suffixes from using this model.
-    case SPECIAL //just creates canned verb without "oir", "ser", "ir"
-    
-    case IRREG
-    case NONE
-}
 
-enum ExceptionTense : String{
-    case PRESENT
-    case PRETERITE
-    case PRESENTSUBJ
-    case FUTURE
-    case CONDITIONAL
-    case IMPERFECTSUBJRA
-    case IMPERFECTSUBJSE
-    case PASTPART
-    case GERUND
-}
-
-enum ExceptionPerson  : String {
-    case S1
-    case S2
-    case S3
-    case P1
-    case P2
-    case P3
-    case S1toP3All
-    case S2toP3All
-    case S1S2S3P3
-    case S3P3
-    case P1P2     //enraizars
-}
-
-enum ExceptionVerbEnding : String {
-    case ar
-    case er
-    case ir
-    case none
-    
-}
-
+//these verbs has special construction logic for several of their tenses
 enum SpecialVerbModel {
     case ESTAR
     case HABER
@@ -71,9 +21,7 @@ enum SpecialVerbModel {
     case VER
     case none
 }
-
-//var  standAloneModel = false //such as "dar" or "estar", no other verbs share this model
-
+/*
 struct ParsedExceptionStruct {
     var tense = Tense.present
     var pattern = ExceptionPattern.STEM
@@ -82,6 +30,7 @@ struct ParsedExceptionStruct {
     var personList = [Person]()
     var standAlone = false
 }
+*/
 
 struct VerbModel : Identifiable {
     

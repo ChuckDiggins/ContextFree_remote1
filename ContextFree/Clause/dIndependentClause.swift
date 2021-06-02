@@ -8,8 +8,10 @@
 import Foundation
 
 class dIndependentClause : dClause {
+    var m_language : LanguageType
     var grammarLibrary = CFGrammarLibrary()
     var originalSentenceString = String()
+    var processedSentenceString = ""
     var dataList = Array<SentenceData>()
     var clauseList = Array<WordRuleManager>()
     var currentWordRuleIndex = 0
@@ -19,23 +21,34 @@ class dIndependentClause : dClause {
     
     //var wordObjectList = Array<Word>()
     //var sentenceWordData = Array<SentenceWordData>()  //current information about each word
-
-    init(sentenceString: String, data: Array<SentenceData>){
+    
+    init(language: LanguageType, sentenceString: String, data: Array<SentenceData>){
         self.originalSentenceString = sentenceString
         self.dataList = data
+        self.m_language = language
+        super.init(word: Word(), clusterType: .InDCls)
+    }
+    
+    init(language: LanguageType){
+        self.m_language = language
         super.init(word: Word(), clusterType: .InDCls)
     }
     
     func setGrammarLibrary(cfLib : CFGrammarLibrary){
         grammarLibrary = cfLib
     }
-
+    
+    
     func getCurrentRuleManager()->WordRuleManager{
         return clauseList[currentWordRuleIndex]
     }
     
     func setCurrentWordRuleManager(mgr : WordRuleManager){
         clauseList[currentWordRuleIndex] = mgr
+    }
+    
+    override func appendCluster(cluster: dCluster){
+        sentence.appendCluster(cluster: cluster)
     }
     
     func appendWord(data: SentenceData){
@@ -75,7 +88,7 @@ class dIndependentClause : dClause {
             print("\nStep 3 - noun phrase parsing")
             checkForNounPhrases()
             printClusters()
-        
+            
             print("\nStep 4 - prepositional phrase parsing")
             checkForPrepositionPhrases()
             
@@ -86,36 +99,80 @@ class dIndependentClause : dClause {
             checkForVerbPhrases()
             
             printClusters()
-
-            //set the head noun and verb
             
-            let count = sentence.getClusterCount()
-            for cluster in sentence.getClusterList(){
-                //for now assume that the first NP is the head noun
-                //let hct = headNoun.getClusterType()
-                if cluster.getClusterType() == .NP && headNoun.getClusterType() == .UNK {
-                    print("setting head noun phrase")
-                    headNoun = cluster
-                }
-                //let hcv = headVerb.getClusterType()
-                if cluster.getClusterType() == .VP && headVerb.getClusterType() == .UNK {
-                    print("setting head verb phrase")
-                    headVerb = cluster
-                }
-            }
-            informHeadVerb()
+            setHeadNounAndHeadVerb()
             
-            let str = Utilities().makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: getReconstructedSentenceString())
-            print("Reconstructed Sentence: \(str)")
+            let sentenceString = getReconstructedSentenceString()
+            processedSentenceString = VerbUtilities().makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: sentenceString)
+            
+            print("Reconstructed Sentence: \(processedSentenceString)")
             
         }
     }
     
+    func setHeadNounAndHeadVerb(){
+
+        for cluster in sentence.getClusterList(){
+            
+            //for now assume that the first NP is the head noun
+            //let hct = headNoun.getClusterType()
+            if cluster.getClusterType() == .NP && headNoun.getClusterType() == .UNK {
+                //print("setting head noun phrase")
+                headNoun = cluster
+            }
+            //let hcv = headVerb.getClusterType()
+            if cluster.getClusterType() == .VP && headVerb.getClusterType() == .UNK {
+                //print("setting head verb phrase")
+                headVerb = cluster
+            }
+        }
+        informHeadVerb()
+    }
+    
+    func createNewSentenceString(tense: Tense, person: Person)->String{
+        if ( headVerb.getClusterType() != .UNK){
+            let hvp = headVerb as! dVerbPhrase
+            hvp.setTense(value: tense)
+            hvp.setPerson(value: person)
+        }
+        
+        if ( headNoun.getClusterType() != .UNK){
+            let hnp = headNoun as! dNounPhrase
+            hnp.setPerson(value: person)
+        }
+        
+        var sentenceString = getReconstructedSentenceString()
+        sentenceString = VerbUtilities().makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: sentenceString)
+        return sentenceString
+    }
+    
+    func setHeadVerbTense(tense: Tense){
+        let hv = headVerb as! dVerbPhrase
+        hv.setTense(value: tense)
+    }
+    
+    func getProcessedSentenceString()->String{
+        return processedSentenceString
+    }
+    
     //this has the head NP inform the head VP about person
     
+    func hasHeadVerb()->Bool{
+        if headVerb.getClusterType() == .V || headVerb.getClusterType() == .VP {return true}
+        return false
+        
+    }
+    
+    func hasHeadNoun()->Bool{
+        if headNoun.getClusterType() == .N || headNoun.getClusterType() == .NP {return true}
+        return false
+    }
+    
     func informHeadVerb(){
-        let hvp = headVerb as! dVerbPhrase
-        hvp.setPerson(value: headNoun.getPerson())
+        if hasHeadVerb() && hasHeadNoun() {
+            let hvp = headVerb as! dVerbPhrase
+            hvp.setPerson(value: headNoun.getPerson())
+        }
     }
     
     func findNextLocationOfSymbolInClusterList(sym : ContextFreeSymbol, startIndex : Int)->Int{
@@ -133,9 +190,9 @@ class dIndependentClause : dClause {
         let cfSymbolStructCount = cfRule.getSymbolStructCount()
         var minMatchCount = 0
         var matchCount = 0
-
+        
         let symStrList = cfRule.getSymbolStrList()
-        var headWordStruct = cfRule.getHeadCFSymbolStruct()
+        let headWordStruct = cfRule.getHeadCFSymbolStruct()
         let clusterCount = sentence.getClusterCount()
         let clusterList = sentence.getClusterList()
         var newPhrase : dPhrase
@@ -155,12 +212,12 @@ class dIndependentClause : dClause {
                 headLocation = j
                 matchCount = 1
             }
-
+            
             
         }
         
         //find the start location in the cluster list that matches the headWordStruct
-  
+        
         
         let clusterHeadLocation = findNextLocationOfSymbolInClusterList(sym: cfRule.getHeadSymbol(), startIndex : 0)
         
@@ -168,6 +225,7 @@ class dIndependentClause : dClause {
         if ( clusterHeadLocation < 0 ){return -1}
         
         let offset = clusterHeadLocation - headLocation
+        if ( offset < 0 ){return -1}
         let headCluster = clusterList[clusterHeadLocation]
         
         
@@ -187,8 +245,8 @@ class dIndependentClause : dClause {
             }
             else { break }
         }
-    
-            
+        
+        
         if ( matchCount >= minMatchCount){
             switch headWordStruct.getSymbol(){
             case .NP:
@@ -218,15 +276,17 @@ class dIndependentClause : dClause {
         }
         return -1
     }
-        
-
+    
+    
     func printClusters(){
         print("Clause - analyze - Cluster count = \(sentence.getClusterCount())")
         for  cluster in sentence.getClusterList() {
             if cluster.getClusterType().isSingle()
             {
                 let single = cluster as! dSingle
-                print("single: \(single.getString()) - single wordType: \(cluster.getClusterType())")
+                let clusterType = cluster.getClusterType()
+                let singleString = single.getString()
+                print("single: \(singleString) - single wordType: \(clusterType)")
             }
             else if cluster.getClusterType().isPhrase()
             {
@@ -241,7 +301,6 @@ class dIndependentClause : dClause {
     func checkForNounPhrases(){
         let grammar = grammarLibrary.nounPhraseGrammar
         var startIndex = 0
-        var ruleCount = grammar.getRuleCount()
         
         for rule in grammar.cfRuleList {
             var index = 0
@@ -256,7 +315,7 @@ class dIndependentClause : dClause {
     func checkForVerbPhrases(){
         let grammar = grammarLibrary.verbPhraseGrammar
         var startIndex = 0
-
+        
         for rule in grammar.cfRuleList {
             var index = 0
             while index >= 0 && index < sentence.getClusterCount() {
@@ -266,11 +325,11 @@ class dIndependentClause : dClause {
         }
         print("Sentence.Analyze: after verb phrase rule count = \(sentence.getClusterCount())")
     }
-
+    
     func checkForPrepositionPhrases(){
         let grammar = grammarLibrary.prepositionalPhraseGrammar
         var startIndex = 0
-
+        
         for rule in grammar.cfRuleList {
             var index = 0
             while index >= 0 && index < sentence.getClusterCount() {
@@ -280,13 +339,35 @@ class dIndependentClause : dClause {
         }
         print("Sentence.Analyze: after preposition phrase rule count = \(sentence.getClusterCount())")
     }
-
     
-        func createClustersFromWordList(){
+    func breakUpContraction()->Bool{
+        var contractionFound = false
+        switch m_language {
+        
+        case .English:
+            // break up don'ts and won'ts, etc
+            contractionFound = false
+        case .Spanish:
+            // break up don'ts and won'ts, etc
+            contractionFound = false
+        case .French:
+            // break up don'ts and won'ts, etc
+            contractionFound = false           
+        case .Italian:
+            // break up don'ts and won'ts, etc
+            contractionFound = false
+        case .Portuguese:
+            // break up don'ts and won'ts, etc
+            contractionFound = false
+        }
+        return contractionFound
+    }
+    
+    func createSinglesFromWordList(){
         if ( clauseList.isEmpty ){
             let cfHead = ContextFreeSymbolStruct(cfs : .S, word: Word() )
             let sentenceClause = WordRuleManager(phraseType: .S,
-                                             cfss: cfHead)
+                                                 cfss: cfHead)
             clauseList.append(sentenceClause)
         }
         
@@ -315,29 +396,42 @@ class dIndependentClause : dClause {
                 single = dSubjectPronounSingle(word: word, data: data.data)
             case .preposition:
                 single = dPrepositionSingle(word: word, data: data.data)
+            case .punctuation:
+                single = dPunctuationSingle(word: word, data: data.data)
             case .verb:
-                single = dVerbSingle(word: word, data: data.data)
+                switch m_language{
+                case .Spanish:
+                    single = dSpanishVerbSingle(word: word, data: data.data)
+                case .French:
+                    single = dFrenchVerbSingle(word: word, data: data.data)
+                case .Italian, .English, .Portuguese:
+                    single = dVerbSingle(word: word, data: data.data)
+                }
+                
             default:
                 single = dUnknownSingle(word: word, data: data.data)
             }
             
             sentence.appendCluster(cluster: single)
             
-            }
-        print("createClustersFromWordList - Single count = \(sentence.getClusterCount())")
-        for  cluster in sentence.getClusterList() {
-            let single = cluster as! dSingle
-            print("single: \(single.getString()) - single wordType: \(cluster.getClusterType())")
         }
- 
-        }//sentence
+        print("createClustersFromWordList - Single count = \(sentence.getClusterCount())")
+        /*
+         for  cluster in sentence.getClusterList() {
+         let single = cluster as! dSingle
+         print("single: \(single.getString()) - single wordType: \(cluster.getClusterType())")
+         }
+         
+         */
         
-     
+    }//sentence
+    
+    
     func getReconstructedSentenceString()->String {
         var ss = ""
         var str = ""
         //print ("getReconstructedSentenceString - dataList count = \(dataList.count)")
-
+        
         
         for cluster in sentence.getClusterList() {
             
@@ -395,7 +489,7 @@ class dIndependentClause : dClause {
                 let c = cluster as! dVerbSingle
                 str = c.getString()
             case .VP:
-                let c = cluster as! dPhrase
+                let c = cluster as! dVerbPhrase
                 str = c.getString()
             case .AuxV:
                 let c = cluster as! dVerbSingle
@@ -408,10 +502,10 @@ class dIndependentClause : dClause {
                 
             }
             ss += str + " "
-       
+            
         }
         
         return ss
     }
-
+    
 }

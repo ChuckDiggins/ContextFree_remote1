@@ -9,18 +9,18 @@ import Foundation
 
 struct dCorrection {
     var m_error = false
-    var m_inputInfo : SentenceWordData
-    var m_outputInfo = SentenceWordData()
+    var m_inputInfo : WordStateData
+    var m_outputInfo = WordStateData()
     
-    func getInputInfo()->SentenceWordData{
+    func getInputInfo()->WordStateData{
         return m_inputInfo
     }
     
-    func getOutputInfo()->SentenceWordData{
+    func getOutputInfo()->WordStateData{
         return m_outputInfo
     }
     
-    mutating func setOutputInfo(outputInfo: SentenceWordData){
+    mutating func setOutputInfo(outputInfo: WordStateData){
         m_outputInfo = outputInfo
     }
     

@@ -67,7 +67,7 @@ func createVerbModels()->[VerbModel]{
     thisVerb.appendException(exceptionPattern: ExceptionPattern.ORTHO,
                            tense: ExceptionTense.PRESENT,
                            person: ExceptionPerson.S1,
-                           from: "ien", to: "eng")  //this will change all the present subjunctive
+                           from: "en", to: "eng")  //this will change all the present subjunctive
     thisVerb.appendException(exceptionPattern: ExceptionPattern.PRETSTEM,
                            tense: ExceptionTense.PRETERITE,
                            person: ExceptionPerson.S1toP3All,

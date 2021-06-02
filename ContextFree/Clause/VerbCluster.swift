@@ -10,10 +10,10 @@ import Foundation
 class dVerbPhrase : dPhrase {
     var type = ContextFreeSymbol.VP
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -24,7 +24,7 @@ class dVerbPhrase : dPhrase {
     var m_computedPerson = Person.S1
     var m_subjectCluster = dCluster(word: Word(), clusterType: .SubjP)
  
-    var m_verbType = VerbType.transitive
+    var m_verbType = VerbType.normal
     func setVerbType(type: VerbType ){m_verbType = type}
     func getVerbType()->VerbType{return m_verbType}
     
@@ -32,12 +32,8 @@ class dVerbPhrase : dPhrase {
     func getSubjectCluster()->dCluster{return m_subjectCluster}
     
     override func setPerson(value: Person){
-        //var data = getSentenceData()
-        //data.person = value
-        //setSentenceData(data: data)
+        //print ("dVerbPhrase.setPerson")
         for cluster in getClusterList(){
-            let clusterType = cluster.getClusterType()
-            print ("dVerbPhrase.setPerson \(clusterType)")
             if cluster.getClusterType() == .V {
                 let v = cluster as! dVerbSingle
                 v.setPerson(value: value)
@@ -50,10 +46,25 @@ class dVerbPhrase : dPhrase {
         }
     }
     
+    override func setTense(value: Tense){
+        for cluster in getClusterList(){
+            if cluster.getClusterType() == .V {
+                let v = cluster as! dVerbSingle
+                v.setTense(value: value)
+            }
+            if cluster.getClusterType() == .VP {
+                let vp = cluster as! dVerbPhrase
+                vp.setTense(value: value)
+            }
+            
+        }
+    }
+    /*
     func setComputedTense(tense: Tense){m_computedTense = tense}
     func getComputedTense()->Tense{return m_computedTense}
     func setComputedPerson(person: Person){m_computedPerson = person}
     func getComputedPerson()->Person{return m_computedPerson}
+    */
     
     func isConjugated()->Bool{return m_isConjugated}
     func isToBe()->Bool{return m_toBe}
@@ -67,22 +78,29 @@ class dVerbSingle : dSingle
  ------------------------------------------------------------------*/
 {
     override init(){
-        super.init(word: Word(), clusterType: .V, data: SentenceWordData())
+        super.init(word: Word(), clusterType: .V, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData){
+    init(word: Word, data: WordStateData){
         super.init(word: word, clusterType: .V, data: data)
     }
     
     var    m_toBe = false
     var    m_isPerfect = false
     var    m_bestPreposition = ""
-    var    m_auxiliary = dSingle(word: Word(), clusterType: .AuxV, data: SentenceWordData())
-    var    m_modalAuxiliary = dSingle(word: Word(), clusterType: .ModalAuxV, data: SentenceWordData())
-    var    m_perfectAuxiliary = dSingle(word: Word(), clusterType: .PerfV, data: SentenceWordData())
-    var    m_progressiveAuxiliary = dSingle(word: Word(), clusterType: .ProgV, data: SentenceWordData())
-    var    m_passiveAuxiliary = dSingle(word: Word(), clusterType: .PassiveAuxV, data: SentenceWordData())
-    var    m_verbType = VerbType.transitive
+    /*
+    var    m_auxiliary = dSingle(word: Word(), clusterType: .AuxV, data: WordStateData())
+    var    m_modalAuxiliary = dSingle(word: Word(), clusterType: .ModalAuxV, data: WordStateData())
+    var    m_perfectAuxiliary = dSingle(word: Word(), clusterType: .PerfV, data: WordStateData())
+    var    m_progressiveAuxiliary = dSingle(word: Word(), clusterType: .ProgV, data: WordStateData())
+    var    m_passiveAuxiliary = dSingle(word: Word(), clusterType: .PassiveAuxV, data: WordStateData())
+     func    setAuxiliary(single : dVerbSingle){m_auxiliary = single}
+     func    setModalAuxiliary(single : dVerbSingle){m_modalAuxiliary = single}
+     func    setPerfectAuxiliary(single : dVerbSingle){m_perfectAuxiliary = single}
+     func    setPassiveAuxiliary(single : dVerbSingle){m_passiveAuxiliary = single}
+     func    setProgressiveAuxiliary(single : dVerbSingle){m_progressiveAuxiliary = single}
+ */
+    var    m_verbType = VerbType.normal
     var    m_isConjugated = false
     var    m_auxiliaryType = AuxiliaryType.IS
     var    m_modalAuxiliaryType = AuxiliaryType.can
@@ -95,11 +113,7 @@ class dVerbSingle : dSingle
     func   isToBe()->Bool{return m_toBe}
     func   isPerfect()->Bool{return m_isPerfect}
     
-    func    setAuxiliary(single : dVerbSingle){m_auxiliary = single}
-    func    setModalAuxiliary(single : dVerbSingle){m_modalAuxiliary = single}
-    func    setPerfectAuxiliary(single : dVerbSingle){m_perfectAuxiliary = single}
-    func    setPassiveAuxiliary(single : dVerbSingle){m_passiveAuxiliary = single}
-    func    setProgressiveAuxiliary(single : dVerbSingle){m_progressiveAuxiliary = single}
+    
     //func    processCompoundTense(){flag = true}
     func    setAuxiliaryType(type:AuxiliaryType){m_auxiliaryType = type}
     func    getAuxiliaryType()->AuxiliaryType{return m_auxiliaryType}
@@ -131,3 +145,50 @@ class dVerbSingle : dSingle
     
     
 } //dVerbSingle
+
+class dSpanishVerbSingle : dVerbSingle
+/*------------------------------------------------------------------
+ Purpose: provide a phrase for handling verb single word clusters.
+ ------------------------------------------------------------------*/
+{
+    override init(){
+        super.init()
+    }
+    
+    override init(word: Word, data: WordStateData){
+        super.init(word: word, data: data)
+    }
+
+    override func    getWordString()->String{
+        let sd = getSentenceData()
+        let word = getClusterWord()
+        let verb = word as! SpanishVerb
+        return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+    }
+    
+
+}
+
+class dFrenchVerbSingle : dVerbSingle
+/*------------------------------------------------------------------
+ Purpose: provide a phrase for handling verb single word clusters.
+ ------------------------------------------------------------------*/
+{
+    override init(){
+        super.init()
+    }
+    
+    override init(word: Word, data: WordStateData){
+        super.init(word: word, data: data)
+    }
+
+    override func    getWordString()->String{
+        let sd = getSentenceData()
+        let word = getClusterWord()
+        let verb = word as! FrenchVerb
+        return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+    }
+    
+
+}
+

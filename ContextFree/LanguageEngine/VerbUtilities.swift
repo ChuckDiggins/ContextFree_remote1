@@ -21,7 +21,7 @@ import Foundation
 //
 
 
-struct Utilities {
+struct VerbUtilities {
 
     func isVowel(letter: String)->Bool{
         if (letter == "a" || letter == "e" || letter == "i" || letter == "o" || letter == "u" ){return true}
@@ -31,7 +31,49 @@ struct Utilities {
         return false
     }
 
-    func doesStringContainSubstring(inputStringList: [String], subStringList: [String], startIndex : Int)->(Int){
+    func doesWordContainSubstring(inputString: String, subString: String)->(Bool, Int, Int){
+        if let range: Range<String.Index> = inputString.range(of: subString) {
+            let index1: Int = inputString.distance(from: inputString.startIndex, to: range.lowerBound)
+            let index2: Int = inputString.distance(from: inputString.startIndex, to: range.upperBound)
+            print("index: ", index1)
+            print("index2: ", index2)
+            return (true, index1, index2)
+        }
+        return (false, 0, 0)
+    }
+    
+    func doesWordListContainSubstringList(inputWordList: [Word], subStringList: [String], startIndex : Int)->(Int){
+        var wordIndex = startIndex
+        var matching = false
+        let subStringCount = subStringList.count
+        var inputIndex = 0
+        var compareIndex = 0
+        var hitCount = 0
+        while wordIndex < inputWordList.count {
+            inputIndex = 0
+            
+            matching = true
+            hitCount = 0
+            compareIndex = wordIndex
+            while (inputIndex < subStringCount && matching) {
+                if ( inputWordList[compareIndex].word == subStringList[inputIndex]){
+                    hitCount += 1
+                    matching = true
+                }
+                else {
+                    matching = false
+                }
+                compareIndex += 1
+                inputIndex += 1
+            }
+            if hitCount == subStringCount {return wordIndex}
+            wordIndex += 1
+        }
+        
+        return -1
+    }
+    
+    func doesStringListContainSubstringList(inputStringList: [String], subStringList: [String], startIndex : Int)->(Int){
         var wordIndex = startIndex
         var matching = false
         let subStringCount = subStringList.count
@@ -184,6 +226,7 @@ struct Utilities {
     
     func makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: String)->String{
         var sentenceString = ""
+        if characterArray.isEmpty {return ""}
         
         let listOfWords = getListOfWordsIncludingPunctuation(characterArray: characterArray)
         
@@ -192,9 +235,11 @@ struct Utilities {
         var c : Character = " "
         
         for word in listOfWords {
-            c = word[word.startIndex]
-            if isPunctuation(input: c){sentenceString += word}
-            else {sentenceString += word + " "}
+            if !word.isEmpty {
+                c = word[word.startIndex]
+                if isPunctuation(input: c){sentenceString += word}
+                else {sentenceString += word + " "}
+            }
         }
         if ( sentenceString.suffix(1) == " "){sentenceString.removeLast()}
             
@@ -298,6 +343,7 @@ struct Utilities {
         if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
             || input == "ü" || input == "ñ"
+            || input == "ç" || input == "è"
         { return true }
         if isPunctuation(input: input)
         { return true }
@@ -318,6 +364,75 @@ struct Utilities {
           }
        }
        return true
+    }
+    //sample verb word = "tenerse" -> tener + true
+    func testForReflexiveEnding (testWord: String) -> (verb:String, bIsReflexive: Bool)
+    {
+        var  isReflexive = false
+        var  verbWord = testWord
+        
+        //if verbWord is reflexive, strip off final two letters
+        
+        if ( verbWord.hasSuffix("se")){
+            isReflexive = true
+            verbWord.remove(at: verbWord.index(before: verbWord.endIndex))
+            verbWord.remove(at: verbWord.index(before: verbWord.endIndex))
+        }
+
+        return (verb : verbWord, bIsReflexive: isReflexive)
+    }
+    
+    func  analyzeWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
+    {
+        let wordList = getListOfWords(characterArray: testString)
+   
+        //if analyzeWordPhrase returns an empty verbWord, the testString does not start with a legitimate Spanish verb
+        if wordList.isEmpty {
+            return  (verbWord:"", verbEnding:.none, residualPhrase:"", isReflexive:false)
+        }
+        
+        var verbWord = ""
+        var  residualPhrase = ""
+        var isReflexive = false
+
+        verbWord = wordList[0]
+        
+        if ( verbWord.count > 2 ){
+            //if word is a verb with a reflexive ending, then return the word without the "se" ending
+            let result = testForReflexiveEnding(testWord: verbWord)
+            verbWord = result.0
+            isReflexive = result.1
+        }
+        
+        //check to see if the verbWord has a legitimate verb (ar, er, ir, ír or oir (french)) ending
+        
+        let verbEnding = determineVerbEnding(verbWord: verbWord)
+        
+        if ( verbEnding == VerbEnding.none){
+            return  (verbWord:"", verbEnding:.none, residualPhrase:"", isReflexive:false)
+        }
+
+        //if more than one word in the wordList, then there must be a residual phrase attached
+        //build the residual phrase from the remaining words in the list
+        
+        if wordList.count > 1 {
+            for i in 1..<wordList.count {
+                residualPhrase += wordList[i] + " "
+            }
+        }
+        
+        
+        return (verbWord:verbWord, verbEnding: verbEnding, residualPhrase: residualPhrase, isReflexive: isReflexive)
+    }//func analyzeWordPhrase
+
+    mutating func getVerbStem(verbWord: String, verbEnding : VerbEnding )->String {
+        var verbStem = verbWord
+        verbStem.remove(at: verbStem.index(before: verbStem.endIndex))
+        verbStem.remove(at: verbStem.index(before: verbStem.endIndex))
+        if verbEnding == .OIR {
+            verbStem.remove(at: verbStem.index(before: verbStem.endIndex))
+        }
+        return verbStem
     }
     
 
@@ -389,6 +504,38 @@ struct Utilities {
         while newWord.hasSuffix(" ")
         
         return newWord
+    }
+
+    //determineVerbEnding determines what type verb AR, ER or IR
+    func  determineVerbEnding (verbWord: String)-> VerbEnding
+    {
+        var verbType : VerbEnding
+        
+        if (verbWord.hasSuffix("ar"))
+        {
+            verbType = VerbEnding.AR
+        }
+        else if (verbWord.hasSuffix("er"))
+        {
+            verbType = VerbEnding.ER
+        }
+        else if (verbWord.hasSuffix("ir"))
+        {
+            verbType = VerbEnding.IR
+        }
+        else if (verbWord.hasSuffix("ír"))
+        {
+            verbType = VerbEnding.accentIR  //oír and reír
+        }
+        else if (verbWord.hasSuffix("re"))
+        {
+            verbType = VerbEnding.OIR
+        }
+        
+        else {
+            verbType = VerbEnding.none
+        }
+        return verbType
     }
 
 

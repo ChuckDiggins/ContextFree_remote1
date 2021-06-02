@@ -15,6 +15,19 @@ class Conjunction : Word {
         self.type = type
         super.init(word: word, def: def, wordType: .conjunction)
     }
+    
+    func isConjunction(word:String)->Bool{
+        if word == self.word {return true}
+        return false
+    }
+}
+
+class FrenchConjunction : Conjunction {
+    override init(word: String, def: String, type : ConjunctionType){
+        super.init(word: word, def: def, type: type)
+    }
+    
+    
 }
 
 class SpanishConjunction : Conjunction {
@@ -22,19 +35,12 @@ class SpanishConjunction : Conjunction {
         super.init(word: word, def: def, type: type)
     }
     
-    func isConjunction(word:String)->Bool{
-        if word == self.word {return true}
-        return false
-    }
 }
+
 
 class EnglishConjunction : Conjunction {
     override init(word: String, def: String, type : ConjunctionType){
         super.init(word: word, def: def, type: type)
     }
     
-    func isConjunction(word:String)->Bool{
-        if word == self.word {return true}
-        return false
-    }
 }

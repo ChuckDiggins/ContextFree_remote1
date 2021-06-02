@@ -14,11 +14,12 @@ class dNounSingle : dSingle
  ------------------------------------------------------------------*/
 {
     override init(){
-        super.init(word: Word(), clusterType: .N, data: SentenceWordData())
+        super.init(word: Word(), clusterType: .N, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: .N, data: data)
+        setGender(value: data.gender)
     }
     
     var      m_isSubject = false
@@ -51,10 +52,10 @@ class dNounPhrase : dPhrase {
 
     var type = ContextFreeSymbol.NP
     override init(){
-        super.init(word: Word(), clusterType: type, data: SentenceWordData())
+        super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -76,11 +77,40 @@ class dNounPhrase : dPhrase {
     func    setNounType (type : NounType){m_nounType = type}
     func    getNounType ()->NounType{return m_nounType}
     
-    func processInfo(){
-        m_nounCount = 0
+    override func setPerson(value: Person){
         for cluster in getClusterList() {
             let clusterType = cluster.getClusterType()
+            if clusterType == .SubjP {
+                let c = cluster as! dSubjectPronounSingle
+                c.setPerson(value: value)
+                if c.getPronounType() == .SUBJECT {m_isSubject = true}
+            }
+        }
+    }
+    
+    func processInfo(){
+        m_nounCount = 0
+        
+        let gender = getGender()
+        let number = getNumber()
+        
+        print ("Noun clause: \(getString()), gender: \(gender), number: \(number)")
+        
+        for cluster in getClusterList() {
+            
+            let clusterType = cluster.getClusterType()
             switch clusterType {
+            case .Art:
+                let c = cluster as! dArticleSingle
+                c.setGender(value: gender)
+                c.setNumber(value: number)
+                print("Article:  gender: \(gender), number: \(number), \(c.getString())")
+            case .Adj:
+                let c = cluster as! dAdjectiveSingle
+                c.setGender(value: gender)
+                c.setNumber(value: number)
+                print("Adjective: gender: \(gender), number: \(number), \(c.getString())")
+                
             case .Num:
                 let c = cluster as! dNumberSingle
                 setNumber(value: c.getNumber())
@@ -107,7 +137,7 @@ class dNounClause : dClause {
         super.init(word: Word(), clusterType: type)
     }
     
-    init(word: Word, data: SentenceWordData ){
+    init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type)
     }
     

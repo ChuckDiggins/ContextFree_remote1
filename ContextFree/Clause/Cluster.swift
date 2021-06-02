@@ -14,7 +14,7 @@ class dCluster {
         m_clusterType = clusterType
     }
     
-    init(word : Word, clusterType: ContextFreeSymbol, data: SentenceWordData){
+    init(word : Word, clusterType: ContextFreeSymbol, data: WordStateData){
         m_clusterWord = word
         m_clusterType = clusterType
         m_sentenceData = data
@@ -25,13 +25,13 @@ class dCluster {
     func putClusterWord(word: Word){m_clusterWord = word}
     func getClusterWord()->Word{return m_clusterWord}
     
-    var m_sentenceData = SentenceWordData()
+    var m_sentenceData = WordStateData()
     
-    func setSentenceData(data: SentenceWordData){
+    func setSentenceData(data: WordStateData){
         m_sentenceData = data
     }
     
-    func getSentenceData()->SentenceWordData{
+    func getSentenceData()->WordStateData{
         return m_sentenceData
     }
     
@@ -41,10 +41,14 @@ class dCluster {
     func setGender(value : Gender){m_sentenceData.gender = value}
     func getGender()->Gender{return m_sentenceData.gender}
 
-    func setPerson(value : Person){m_sentenceData.person = value}
+    func setPerson(value : Person){
+        m_sentenceData.person = value    
+    }
     func getPerson()->Person{return m_sentenceData.person}
 
-    func setTense(value : Tense){m_sentenceData.tense = value}
+    func setTense(value : Tense){
+        m_sentenceData.tense = value
+    }
     func getTense()->Tense{return m_sentenceData.tense}
 
     func setNumber(value : Number){m_sentenceData.number = value}
