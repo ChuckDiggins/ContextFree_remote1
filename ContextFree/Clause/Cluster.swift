@@ -35,6 +35,14 @@ class dCluster {
         return m_sentenceData
     }
     
+    func setProcessWordInWordStateData(str: String){
+        m_sentenceData.processedWord = str
+    }
+    
+    func getProcessWordInWordStateData()->String{
+        return m_sentenceData.processedWord
+    }
+    
     func setClusterType(type: ContextFreeSymbol){m_clusterType = type}
     func getClusterType()->ContextFreeSymbol{return m_clusterType}
     

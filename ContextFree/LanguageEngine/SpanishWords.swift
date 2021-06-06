@@ -190,7 +190,18 @@ struct SpanishWords {
         createAdjectiveAndAppend(word: "negro", def: "black", type: .color, position: .following)
         
         createAdjectiveAndAppend(word: "pequeño", def: "small", type: .size, position: .following)
-        createAdjectiveAndAppend(word: "pequeño", def: "slight", type: .size, position: .preceding) //4.5.4
+        createAdjectiveAndAppend(word: "quieto", def: "quiet", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "interesante", def: "small", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "divertido", def: "small", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "enojado", def: "small", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "cansado", def: "small", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "bonito", def: "pretty", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "encuerado", def: "naked", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "mojado", def: "wet", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "seco", def: "dry", type: .size, position: .following)
+        createAdjectiveAndAppend(word: "frío", def: "cold", type: .size, position: .following) //4.5.4
+        
+        
         createAdjectiveAndAppend(word: "ambos", def: "both", type: .size, position: .preceding)
         createAdjectiveAndAppend(word: "llamado", def: "so-called", type: .condition, position: .preceding)
         createAdjectiveAndAppend(word: "mucho", def: "much", type: .size, position: .preceding)
@@ -207,19 +218,26 @@ struct SpanishWords {
         createNounAndAppend(word: "agua", def: "water", type: .thing, gender: .feminine)
         createNounAndAppend(word: "casa", def: "house", type: .place, gender: .feminine)
         createNounAndAppend(word: "cerveza", def: "beer", type: .thing, gender: .feminine)
+        createNounAndAppend(word: "computadora", def: "beer", type: .thing, gender: .feminine)
+        createNounAndAppend(word: "puerta", def: "beer", type: .thing, gender: .feminine)
+        createNounAndAppend(word: "ventana", def: "beer", type: .thing, gender: .feminine)
+        createNounAndAppend(word: "universidad", def: "beer", type: .place, gender: .feminine)
+        createNounAndAppend(word: "cerveza", def: "beer", type: .thing, gender: .feminine)
         createNounAndAppend(word: "hielo", def: "ice", type: .thing, gender: .masculine)
         createNounAndAppend(word: "hijo", def: "son", type: .person, gender: .masculine)
         createNounAndAppend(word: "hija", def: "daughter", type: .person, gender: .feminine)
         createNounAndAppend(word: "niño", def: "boy", type: .person, gender: .masculine)
-        createNounAndAppend(word: "niño", def: "boy", type: .person, gender: .masculine)
-        createNounAndAppend(word: "niña", def: "girl", type: .person, gender: .masculine)
+        createNounAndAppend(word: "niña", def: "girl", type: .person, gender: .feminine)
         createNounAndAppend(word: "mujer", def: "woman", type: .person, gender: .feminine)
+        createNounAndAppend(word: "profesora", def: "professor", type: .person, gender: .feminine)
+        createNounAndAppend(word: "abuela", def: "grand mother", type: .person, gender: .feminine)
+        createNounAndAppend(word: "vieja", def: "old person", type: .person, gender: .feminine)
+        createNounAndAppend(word: "cientifica", def: "scientist", type: .person, gender: .feminine)
         createNounAndAppend(word: "madre", def: "mother", type: .person, gender: .feminine)
-        createNounAndAppend(word: "padre", def: "father", type: .person, gender: .feminine)
+        createNounAndAppend(word: "padre", def: "father", type: .person, gender: .masculine)
         createNounAndAppend(word: "hombre", def: "man", type: .person, gender: .masculine)
         createNounAndAppend(word: "chico", def: "boy", type: .person, gender: .masculine)
-        createNounAndAppend(word: "chica", def: "girl", type: .person, gender: .masculine)
-        
+        createNounAndAppend(word: "chica", def: "girl", type: .person, gender: .feminine)
         createNounAndAppend(word: "pollo", def: "chicken", type: .animal, gender: .masculine)
         createNounAndAppend(word: "gato", def: "cat", type: .animal, gender: .masculine)
         createNounAndAppend(word: "perro", def: "dog", type: .animal, gender: .masculine)
@@ -233,6 +251,7 @@ struct SpanishWords {
         createNounAndAppend(word: "corazón", def: "heart", type: .bodyPart, gender: .feminine)
     }
     
+    /*
     mutating func createSomeVerbsA(){
         var verb : RomanceVerb
         verb = RomanceVerb(word: "vivir", def: "live", type: .normal)
@@ -264,7 +283,7 @@ struct SpanishWords {
         verbList.append(verb)
         
     }
-    
+    */
   
     
       
@@ -314,12 +333,12 @@ struct SpanishWords {
         let pos = RomancePreposition(word: word, def: def, type: type)
         prepositionList.append(pos)
     }
-    
+    /*
     mutating func createVerbAndAppend (word : String, def: String, type : VerbType){
         let pos = RomanceVerb(word: word, def: def, type: type)
         verbList.append(pos)
     }
-    
+    */
    
 
     

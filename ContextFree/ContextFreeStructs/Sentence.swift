@@ -16,48 +16,7 @@ struct NounSettings{
     var number : Number
 }
 
-struct WordStateData {
-    //var word = Word()
-    //states
-    var language = LanguageType.Spanish
-    var tense = Tense.infinitive
-    var person = Person.S1
-    var number = Number.singular
-    var gender = Gender.masculine
-    //identity
-    var wordType = WordType.unknown
-    var ambiguousType = AmbiguousType.general
-    var adverbType = AdverbType.when
-    var articleType = ArticleType.definite
-    var conjunctionType = ConjunctionType.coordinating
-    var determinerType = DeterminerType.definite
-    var adjectiveType = AdjectiveType.any
-    var adjectivePosition = AdjectivePositionType.following
-    var prepositionType = PrepositionType.general
-    var pronounType = PronounType.none
-    var punctuationType = PunctuationType.none
-    
-    var nounType = NounType.any
-    var nounSubjectivity = NounSubjectivity.either
-    
-    var verbModality = VerbModality.notModal
-    var verbPassivity = VerbPassivity.active
-    var verbPronominality = VerbPronomality.notPronominal
-    var verbPreference = VerbPreference.any
-    var verbTransitivity = VerbTransitivity.transitive
-    var verbType = VerbType.normal
-    
-    
-    func getWordType()->WordType{
-        return wordType
-    }
-    
-    func getWordTypeString()->String{
-        return wordType.rawValue
-    }
-    
 
-}
 
 struct SentenceData {
     var word = Word()

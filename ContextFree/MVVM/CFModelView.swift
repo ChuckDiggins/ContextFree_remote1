@@ -13,6 +13,9 @@ class CFModelView: ObservableObject {
     init(){
     }
     
+    func getParser()->WordStringParser{
+        return cfModel!.getParser()
+    }
     func createNewModel(language: LanguageType){
         cfModel = CFModel(language: language)
     }

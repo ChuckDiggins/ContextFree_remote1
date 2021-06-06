@@ -304,7 +304,7 @@ class FrenchDemonstrativeAdjective : RomanceAdjective {
 
 
 class SpanishAdjective : RomanceAdjective {
-    override init(word: String, def: String, type: AdjectiveType)
+    override init(word: String, def: String, type: AdjectiveType )
     {
         super.init(word: word, def: def, type: type)
         self.createOtherForms()
@@ -361,7 +361,7 @@ class SpanishAdjective : RomanceAdjective {
         case .L:   //azul
             mascPlural = word + "es"
             femWord = word
-            femPlural = stem + "es"
+            femPlural = word + "es"
         case .Vowel:
             mascPlural = word + "s"
             stem = word

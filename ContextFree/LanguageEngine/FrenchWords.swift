@@ -131,9 +131,10 @@ struct FrenchWords{
         createNounAndAppend(word: "carte de crédit", def: "money", type: .thing, gender: .masculine)
     }
     
-    mutating func createSomeVerbs(){
+    mutating func createSomeVerbsA(){
+        /*
         var verb : RomanceVerb
-        verb = FrenchVerb(word: "être", def: "be", type: .normal)
+        verb = FrenchVerb(bVerb: <#BFrenchVerb#>, word: "être", def: "be", type: .normal)
         verb.setSimplePresentForms(s1:"suis", s2:"es", s3:"est", p1:"sommes", p2:"êtes", p3:"sont")
         verbList.append(verb)
         verb = FrenchVerb(word: "avoir", def: "be", type: .normal)
@@ -160,6 +161,7 @@ struct FrenchWords{
         verb = FrenchVerb(word: "mettre", def: "put", type: .normal)
         verb.setSimplePresentForms(s1:"mets", s2:"mets", s3:"met", p1:"mettons", p2:"mettez", p3:"mettent")
         verbList.append(verb)
+ */
     }
     
     //  ç  è
@@ -230,10 +232,11 @@ struct FrenchWords{
         prepositionList.append(pos)
     }
     
+    /*
     mutating func createVerbAndAppend (word : String, def: String, type : VerbType){
         let pos = RomanceVerb(word: word, def: def, type: type)
         verbList.append(pos)
     }
-
+*/
     
 }

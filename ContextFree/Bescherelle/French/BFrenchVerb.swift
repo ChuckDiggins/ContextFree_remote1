@@ -75,6 +75,11 @@ class BFrenchVerb : BRomanceVerb {
         
     }//SetPatterns
     
+    override func getConjugateForm(tense : Tense, person : Person)->String {
+        let ms = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
+        return ms.finalVerbForm()
+    }
+    
     //these patterns are not mutually exclusive
     
     override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool) -> MorphStruct {

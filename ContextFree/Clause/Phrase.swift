@@ -24,6 +24,10 @@ class dPhrase : dCluster {
     func getClusterCount()->Int{return m_clusterList.count}
     func getClusterList()->[dCluster]{ return m_clusterList}
     func appendCluster(cluster: dCluster){
+        if cluster.getWordType() == .noun {
+            m_sentenceData.gender = cluster.getGender()
+            m_sentenceData.number = cluster.getNumber()
+        }
         m_clusterList.append(cluster)        
     }
     func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
@@ -66,8 +70,102 @@ class dPhrase : dCluster {
         return wordListCopy.getString()
     }
 
+    func getWordStateList(inputWordList: [WordStateData])->[WordStateData]{
+        var wordList = inputWordList
+        for cluster in getClusterList(){
+            let type = cluster.getClusterType()
+            if cluster.getClusterType().isSingle()
+            {
+                if ( type == .N){
+                    //let c = cluster as! dNounSingle
+                    wordList.append(cluster.getSentenceData())
+                }
+                else if ( type == .V){
+                    let sd = cluster.getSentenceData()
+                    wordList.append(sd)
+                }
+                else if ( type == .SubjP){
+                    //let c = cluster as! dSubjectPronounSingle
+                    wordList.append(cluster.getSentenceData())
+                }
+                else if ( type == .Art){
+                    //let c = cluster as! dArticleSingle
+                    wordList.append(cluster.getSentenceData())
+                }
+                else {
+                    wordList.append(cluster.getSentenceData())
+                }
+                
+            }
+            else if cluster.getClusterType().isPhrase()
+            {
+                switch cluster.getClusterType(){
+                case .NP:
+                    let c = cluster as! dNounPhrase
+                    wordList = c.getWordStateList(inputWordList: wordList)
+                case .VP:
+                    let c = cluster as! dVerbPhrase
+                    wordList = c.getWordStateList(inputWordList: wordList)
+                case .PP:
+                    let c = cluster as! dPrepositionPhrase
+                    wordList = c.getWordStateList(inputWordList: wordList)
+                default: break
+                }
+            }
+        }
+        return wordList
+    }
+    
+    func getWordList(inputWordList: [Word])->[Word]{
+        var wordList = inputWordList
+        var str = ""
+        for cluster in getClusterList(){
+            let type = cluster.getClusterType()
+            if cluster.getClusterType().isSingle()
+            {
+                if ( type == .N){
+                    //let c = cluster as! dNounSingle
+                    wordList.append(cluster.getClusterWord())
+                }
+                else if ( type == .V){
+                    wordList.append(cluster.getClusterWord())
+                }
+                else if ( type == .SubjP){
+                    let c = cluster as! dSubjectPronounSingle
+                    wordList.append(c.getClusterWord())
+                }
+                else if ( type == .Art){
+                    let c = cluster as! dArticleSingle
+                    wordList.append(c.getClusterWord())
+                }
+                else {
+                    wordList.append(cluster.getClusterWord())
+                }
+                
+            }
+            else if cluster.getClusterType().isPhrase()
+            {
+                switch cluster.getClusterType(){
+                case .NP:
+                    let c = cluster as! dNounPhrase
+                    wordList = c.getWordList(inputWordList: wordList)
+                case .VP:
+                    let c = cluster as! dVerbPhrase
+                    wordList = c.getWordList(inputWordList: wordList)
+                case .PP:
+                    let c = cluster as! dPrepositionPhrase
+                    wordList = c.getWordList(inputWordList: wordList)
+                default: break
+                }
+            }
+        }
+        return wordList
+    }
+    
     func getString( )->String{
         var str = ""
+        var tempStr = ""
+        
         for cluster in getClusterList(){
             let type = cluster.getClusterType()
             if cluster.getClusterType().isSingle()
@@ -75,18 +173,25 @@ class dPhrase : dCluster {
                 if ( type == .N){
                     let c = cluster as! dNounSingle
                     str += c.getString() + " "
+                    c.setProcessWordInWordStateData(str: c.getString())
                 }
                 else if ( type == .V){
                     let c = cluster as! dVerbSingle
                     str += c.getString() + " "
+                    c.setProcessWordInWordStateData(str: c.getString())
+
                 }
                 else if ( type == .SubjP){
                     let c = cluster as! dSubjectPronounSingle
                     str += c.getString() + " "
+                    c.setProcessWordInWordStateData(str: c.getString())
                 }
                 else {
                     let single = cluster as! dSingle
-                    str += single.getString() + " "
+                    let singleStr = single.getString()
+                    str += singleStr + " "
+                    single.setProcessWordInWordStateData(str: singleStr)
+                    tempStr = single.getProcessWordInWordStateData()
                 }
                 
             }
@@ -107,6 +212,16 @@ class dPhrase : dCluster {
                 }
             }
         }
+        
+        /*
+        var wsdStr = ""
+        for cluster in getClusterList(){
+            if cluster.getClusterType().isSingle() {
+                wsdStr += cluster.getProcessWordInWordStateData() + " "
+            }
+        }
+        print(wsdStr)
+ */
         return str
     }
 
@@ -156,6 +271,29 @@ class dPrepositionPhrase : dPhrase {
     func setIsSuppressPrep (flag : Bool){isSuppressPrep = flag}
     func getIsSuppressPrep()->Bool{return isSuppressPrep}
     
+    func reconcile(){
+        for cluster in getClusterList(){
+            let sym = cluster.getClusterType()
+            if ( sym == .Art || sym == .Adj ){
+                let data = getSentenceData()
+                cluster.setGender(value: data.gender)
+                cluster.setNumber(value: data.number)
+                var sd = cluster.getSentenceData()
+                sd.gender = data.gender
+                sd.number = data.number
+                cluster.setSentenceData(data: sd)
+            }
+            else if sym == .NP {
+                let np = cluster as! dNounPhrase
+                np.reconcile()
+            }
+            else if sym == .PP {
+                let pp = cluster as! dPrepositionPhrase
+                pp.reconcile()
+            }
+        }
+    }
+    
 
     func appendThisCluster(cluster : dCluster){
         switch(cluster.getClusterType()){
@@ -169,6 +307,7 @@ class dPrepositionPhrase : dPhrase {
         case .NP:
             let noun = cluster as! dNounPhrase
             if ( noun.getNounType() == NounType.any ){ setIsPersonal(flag: true)}
+            noun.reconcile()
         case .PersPro:
              setIsPersonal(flag: true)
         default:

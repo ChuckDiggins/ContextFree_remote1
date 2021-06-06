@@ -36,16 +36,18 @@ struct RandomWordLists{
     mutating func createListOfAdjectives(){
         switch m_language {
         case .Spanish:
-            for adj in m_wsp!.getSpanishWords().adjectiveList{
-                m_adjectives.append(adj)
+            for word in m_wsp!.getSpanishWords().adjectiveList{
+                let adj = word as! Adjective
+                if (adj.preferredPosition == .following ){m_adjectives.append(adj)}
             }
         case .English:
             for adj in m_wsp!.getEnglishWords().adjectiveList{
                 m_adjectives.append(adj)
             }
         case .French:
-            for adj in m_wsp!.getFrenchWords().adjectiveList{
-                m_adjectives.append(adj)
+            for word in m_wsp!.getFrenchWords().adjectiveList{
+                let adj = word as! Adjective
+                if (adj.preferredPosition == .following ){m_adjectives.append(adj)}
             }
         case .Italian: break
         case .Portuguese: break
@@ -137,7 +139,7 @@ struct RandomWordLists{
         switch m_language {
         case .Spanish:
             for noun in m_wsp!.getSpanishWords().nounList{
-                if (noun.type == .plant || noun.type == .thing){m_objects.append(noun)}
+                if (noun.type == .plant || noun.type == .thing || noun.type == .place){m_objects.append(noun)}
             }
         case .English:
             for noun in m_wsp!.getEnglishWords().nounList{
@@ -179,29 +181,59 @@ struct RandomWordLists{
         var word = Word()
         var i = 0
         var single = dSingle()
-        var wsd = WordStateData()
-        wsd.language = m_wsp!.getLanguage()
+        
         switch wordType{
         case .article:
+            var wsd = WordStateData()
+            wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_articles.count)
             word = m_articles[i]
+            wsd.word = word
             wsd.articleType = .definite
+            var number = Int.random(in: 1 ..< 3)
+            if ( number == 1 ) { wsd.gender = .masculine}
+            else {wsd.gender = .feminine}
             wsd.gender = .masculine
-            wsd.number = .singular
-            single = dArticleSingle(word: word, data: wsd)
+            number = Int.random(in: 1 ..< 3)
+            if ( number == 1 ) { wsd.number = .singular}
+            else {wsd.number = .plural}
+            wsd.wordType = .article
+            //create a new instance of this article
+            if wsd.language == .Spanish {
+                let newArt = SpanishArticle()
+                single = dArticleSingle(word: newArt, data: wsd)
+            }
+            else if wsd.language == .French {
+                let newArt = FrenchArticle()
+                single = dArticleSingle(word: newArt, data: wsd)
+            }
         case .adjective:
             i = Int.random(in: 0 ..< m_adjectives.count)
+            var wsd = WordStateData()
+            wsd.language = m_wsp!.getLanguage()
             word = m_adjectives[i]
             let adj = word as! Adjective
+            wsd.word = word
             wsd.adjectiveType = adj.type
+            wsd.wordType = .adjective
+            
+            //create a new instance of this adjective
+
             single = dAdjectiveSingle(word: word, data: wsd)
+                
         case .preposition:
             i = Int.random(in: 0 ..< m_prepositions.count)
+            var wsd = WordStateData()
+            wsd.language = m_wsp!.getLanguage()
             word = m_prepositions[i]
+            wsd.word = word
             let prep = word as! Preposition
             wsd.prepositionType = prep.type
+            wsd.wordType = .preposition
             single = dPrepositionSingle(word: word, data: wsd)
         case .noun:
+            var wsd = WordStateData()
+            wsd.language = m_wsp!.getLanguage()
             if isSubject {
                 i = Int.random(in: 0 ..< m_subjects.count)
                 word = m_subjects[i]
@@ -209,21 +241,34 @@ struct RandomWordLists{
                 i = Int.random(in: 0 ..< m_objects.count)
                 word = m_objects[i]
             }
+            let number = Int.random(in: 1 ..< 3)
+            if ( number == 1 ) { wsd.number = .singular}
+            else {wsd.number = .plural}
+            wsd.word = word
             let noun = word as! RomanceNoun
             wsd.nounType = noun.type
             wsd.gender = noun.gender
+            wsd.wordType = .noun
             single = dNounSingle(word: word, data: wsd)
         case .pronoun:
+            var wsd = WordStateData()
+            wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_pronouns.count)
             word = m_pronouns[i]
+            wsd.word = word
             let pronoun = word as! Pronoun
             wsd.pronounType = pronoun.type
+            wsd.wordType = .pronoun
             single = dSubjectPronounSingle(word: word, data: wsd)
         case .verb:
+            var wsd = WordStateData()
+            wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_verbs.count)
             word = m_verbs[i]
+            wsd.word = word
             let verb = word as! Verb
             wsd.verbType = verb.type
+            wsd.wordType = .verb
             single = dVerbSingle(word: word, data: wsd)
         default:
             break
@@ -232,54 +277,5 @@ struct RandomWordLists{
         return single
     }
     
-    func getRandomWordAsSingleA(wordType : WordType, inWsd: WordStateData)->dSingle{
-        var word = Word()
-        var i = 0
-        var single = dSingle()
-        var wsd = inWsd
-        switch wordType{
-        case .article:
-            i = Int.random(in: 0 ..< m_articles.count)
-            word = m_articles[i]
-            wsd.articleType = .definite
-            wsd.gender = .masculine
-            wsd.number = .singular
-            single = dArticleSingle(word: word, data: wsd)
-        case .adjective:
-            i = Int.random(in: 0 ..< m_adjectives.count)
-            word = m_adjectives[i]
-            let adj = word as! Adjective
-            wsd.adjectiveType = adj.type
-            single = dAdjectiveSingle(word: word, data: wsd)
-        case .preposition:
-            i = Int.random(in: 0 ..< m_prepositions.count)
-            word = m_prepositions[i]
-            let prep = word as! Preposition
-            wsd.prepositionType = prep.type
-            single = dPrepositionSingle(word: word, data: wsd)
-        case .noun:
-            i = Int.random(in: 0 ..< m_objects.count)
-            word = m_objects[i]
-            let noun = word as! Noun
-            wsd.nounType = noun.type
-            single = dNounSingle(word: word, data: wsd)
-        case .pronoun:
-            i = Int.random(in: 0 ..< m_pronouns.count)
-            word = m_pronouns[i]
-            let pronoun = word as! Pronoun
-            wsd.pronounType = pronoun.type
-            single = dSubjectPronounSingle(word: word, data: wsd)
-        case .verb:
-            i = Int.random(in: 0 ..< m_verbs.count)
-            word = m_verbs[i]
-            let verb = word as! Verb
-            wsd.verbType = verb.type
-            single = dVerbSingle(word: word, data: wsd)
-        default:
-            break
-        }
-        
-        return single
-    }
     
 }

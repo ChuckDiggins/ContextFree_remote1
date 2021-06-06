@@ -241,19 +241,20 @@ enum  Person:  Int, CaseIterable
 }
 
 
-enum Number
+enum Number : String
 {
     case singular
     case plural
 }
 
-enum Gender {
+enum Gender : String
+{
     case masculine
     case feminine
     case either
 }
 
-enum Mood {
+enum Mood : String {
      case   indicative,
         imperative,
         subjunctive
@@ -264,7 +265,7 @@ enum AmbiguousType {
     case pronoun  //in Spanish, "me" can be a reflexive pronoun, direct object pronoun, for example
 }
 
-enum AdjectiveType {
+enum AdjectiveType : String {
     case regular
     case demonstrative
     case possessive
@@ -288,7 +289,7 @@ enum AdjectiveType {
     }
 }
 
-enum  AdjectivePositionType
+enum  AdjectivePositionType  : String
 {
     case preceding
     case following
@@ -296,13 +297,13 @@ enum  AdjectivePositionType
 }
 
 
-enum DeterminerType {
+enum DeterminerType  : String {
     case definite
     case indefinite
     case partative   //french - du, de la, de l', des
 }
 
-enum  AdverbType
+enum  AdverbType  : String
 {
     case comparing      //mas or menos
     case modifying      //mucho, muy
@@ -312,7 +313,7 @@ enum  AdverbType
     case verbAssociated      //lentamente - associated with verbs
 }
 
-enum ArticleType
+enum ArticleType  : String
 {
     case definite
     case indefinite
@@ -320,7 +321,7 @@ enum ArticleType
     case unknown
 }
 
-enum  ConjunctionType
+enum  ConjunctionType  : String
 {
     case and     //adds objects
     case or       //
@@ -357,7 +358,7 @@ enum WordType : String {
     case unknown
 }
 
-enum NounType {
+enum NounType  : String  {
     case agent
     case person     //person type
     case animal      //dog, cat, horse type
@@ -381,7 +382,7 @@ enum NounSubjectivity  //LOL
     case either
 }
 
-enum PunctuationType {
+enum PunctuationType  : String {
     case period
     case questionMark
     case upsideDownQuestionMark
@@ -395,14 +396,14 @@ enum PunctuationType {
     case none
 }
 
-enum VerbTransitivity {
+enum VerbTransitivity  : String {
     case transitive     //can take direct object "I see the house"
     case intransitive   //cannot take a direct object "I sleep"
     case ditransitive   //can be both transitive and intransitive
     case ergative        //takes nothing after verb - "the ship sank"
 }
 
-enum VerbModality {
+enum VerbModality  : String {
     case modalAuxiliary    //can, could, may, might, must, shall, should, will, would,
                          // also: dare, need, ought
     case modal          //querer ... yo quiero una pelota / yo quiero ir a la casa
@@ -410,7 +411,7 @@ enum VerbModality {
     case notModal
 }
 
-enum VerbPassivity {
+enum VerbPassivity  : String {
     case passive    //gustar
     case active
 }
@@ -421,14 +422,14 @@ enum VerbPronomality {
     case notPronominal
 }
 
-enum VerbType {
+enum VerbType  : String {
     case normal
     case auxiliary
     case idiom
     case defective
 }
 
-enum  VerbPreference   //for subject and/or  object
+enum  VerbPreference   : String  //for subject and/or  object
 {
     case animate       //person, animal
     case inanimate    //object
@@ -440,7 +441,7 @@ enum  VerbPreference   //for subject and/or  object
     case any
 }
 
-enum PrepositionType
+enum PrepositionType  : String
 {
     case spatial        //behind, around, between, inside, etc.
     case temporal      //after, before, until, during
@@ -450,7 +451,7 @@ enum PrepositionType
 }
 
 
-enum   PronounType
+enum   PronounType  : String
 {
     case PERSONAL         //could be subject or object - the boy and you (subj, obj?)
     case SUBJECT          //NOMINATIVE_CASE  I, you, he  ...
@@ -466,7 +467,7 @@ enum   PronounType
     case NON_PRONOUN                //for noun phrases
 }
 
-enum  AuxiliaryType  //English
+enum  AuxiliaryType   : String //English
 {
     case future         //will
     case conditional    //would

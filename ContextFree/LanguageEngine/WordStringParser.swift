@@ -61,7 +61,7 @@ struct WordStringParser {
             frenchWords.createSomeNouns()
             frenchWords.createSomePrepositions()
             frenchWords.createSomePronouns()
-            frenchWords.createSomeVerbs()
+            //verbs are constructed elsewhere using BFrenchVerbs
         default:
             break
         }
@@ -70,6 +70,11 @@ struct WordStringParser {
     mutating func addSpanishVerbToDictionary(verb: Verb){
         spanishWords.verbList.append(verb)
     }
+    
+    mutating func addFrenchVerbToDictionary(verb: Verb){
+        frenchWords.verbList.append(verb)
+    }
+    
     
     func convertWordToSentenceData(word: Word, wordType: WordType)->SentenceData{
         var sentenceData = SentenceData()
@@ -482,14 +487,14 @@ struct WordStringParser {
         return sd
     }
     
-    
+    /*
     func unConjugate(verbForm : String)->( Word, BSpanishVerb, Tense, Person)  {
         var conjugateForm = ""
         
         var count = 0
-        var bVerb : BSpanishVerb
+        var bVerb : BRomanceVerb
         for word in spanishWords.verbList{
-            let verb = word as! SpanishVerb
+            let verb = word as! RomanceVerb
             bVerb = verb.getBVerb()
             
             let wordList = bVerb.getInfinitiveAndParticiples()
@@ -542,7 +547,8 @@ struct WordStringParser {
         print("\(count) verb forms were searched")
         return (Word(), BSpanishVerb(), .present, .S1)
     }
-
+*/
+    
     func getVerb(wordString: String)->SentenceData{
         var sd = SentenceData()
         
@@ -555,6 +561,7 @@ struct WordStringParser {
                     sd.data.tense = .infinitive
                     return sd
                 }
+                /*
                 else {
                     let result = unConjugate(verbForm : wordString)
                     let bVerb = result.1
@@ -572,6 +579,7 @@ struct WordStringParser {
                     }
                     return sd
                 }
+ */
             }
         case .French:
             for word in frenchWords.verbList {

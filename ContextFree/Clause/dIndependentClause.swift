@@ -146,6 +146,10 @@ class dIndependentClause : dClause {
         return sentenceString
     }
     
+    func modifyClauseWord(newWord: dSingle){
+        
+    }
+    
     func setHeadVerbTense(tense: Tense){
         let hv = headVerb as! dVerbPhrase
         hv.setTense(value: tense)
@@ -427,6 +431,32 @@ class dIndependentClause : dClause {
     }//sentence
     
     
+    func getWordStateDataList()->[WordStateData]{
+        var wordStateList = [WordStateData]()
+        for cluster in sentence.getClusterList(){
+            switch cluster.getClusterType() {
+            case .Adj, .AdjCls, .Adv, .AMB, .Art, .C, .comma,
+                 .Det, .Num, .PersPro, .P, .V, .SubjP, .AuxV, .UNK :
+                wordStateList.append(cluster.getSentenceData())
+            case .NP:
+                let c = cluster as! dNounPhrase
+                wordStateList = c.getWordStateList(inputWordList: wordStateList)
+            case .PP:
+                let c = cluster as! dPrepositionPhrase
+                wordStateList = c.getWordStateList(inputWordList: wordStateList)
+            case .VP:
+                let c = cluster as! dVerbPhrase
+                wordStateList = c.getWordStateList(inputWordList: wordStateList)
+            default: break
+            }
+        }
+        return wordStateList
+    }
+   
+    func setWordStateData(wsd: WordStateData){
+        
+    }
+    
     func getReconstructedSentenceString()->String {
         var ss = ""
         var str = ""
@@ -439,33 +469,43 @@ class dIndependentClause : dClause {
             case .Adj:
                 let c = cluster as! dAdjectiveSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .AdjCls:
                 let c = cluster as! dAdjectiveSingle //for now
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .Adv:
                 let c = cluster as! dAdverbSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .AdvP:
                 let c = cluster as! dAdverbPhrase
                 str = c.getString()
+ //               c.getSentenceData().processedWord = c.getString()
             case .AMB:
                 let c = cluster as! dAmbiguousSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .Art:
                 let c = cluster as! dArticleSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .C:
                 let c = cluster as! dConjunctionSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .comma:
                 let c = cluster as! dPunctuationSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .Det:
                 let c = cluster as! dDeterminerSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .N:
                 let c = cluster as! dNounSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .NP:
                 let c = cluster as! dNounPhrase
                 c.reconcile()  //informs all member clusters of number, gender, etc
@@ -473,30 +513,37 @@ class dIndependentClause : dClause {
             case .Num:
                 let c = cluster as! dNumberSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .PersPro:
                 let c = cluster as! dPersonalPronounSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .P:
                 let c = cluster as! dPrepositionSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .PP:
                 let c = cluster as! dPrepositionPhrase
                 str = c.getString()
             case .SubjP:
                 let c = cluster as! dSubjectPronounSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .V:
                 let c = cluster as! dVerbSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .VP:
                 let c = cluster as! dVerbPhrase
                 str = c.getString()
             case .AuxV:
                 let c = cluster as! dVerbSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             case .UNK:
                 let c = cluster as! dUnknownSingle
                 str = c.getString()
+                cluster.setProcessWordInWordStateData(str: c.getString())
             default:
                 str = ""
                 

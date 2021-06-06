@@ -129,6 +129,22 @@ class dAdjectiveSingle :dSingle
     
     func isComparative ()->Bool { return m_isComparative}
     func isSuperlative ()->Bool { return m_isSuperlative}
+        
+    func getWordStateData()->WordStateData{
+        return getSentenceData()
+    }
+    
+    func setState(gender: Gender, number: Number){
+        var sd = getSentenceData()
+        let w = getClusterWord()
+        let sw = sd.word
+        let g = sd.gender
+        let n = sd.number
+        //print("dAdjectiveSingle: \(w.word): \(sw.word): \(g) :\(n)")
+        sd.gender = gender
+        sd.number = number
+        setSentenceData(data: sd)
+    }
     
     func    getWordString()->String{
         let sd = getSentenceData()
@@ -208,6 +224,20 @@ class dArticleSingle :  dSingle{
         super.init(word: word, clusterType: type, data: data)
     }
     
+    /*
+    override func getClusterWord()->Word {
+        switch m_sentenceData.language {
+        case .Spanish:
+            return Word(word: "el", def: "the", wordType: WordType.article)
+        case .French:
+            return Word(word: "le", def: "the", wordType: WordType.article)
+        default:
+            return Word()
+        }
+    }
+    */
+    
+
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()

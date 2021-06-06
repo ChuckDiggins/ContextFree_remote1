@@ -45,13 +45,10 @@ struct CFModel{
     init(language: LanguageType){
         m_currentLanguage = language
         m_wsp = WordStringParser(language:m_currentLanguage)
-        
+        m_verbModelConjugation.setLanguage(language: m_currentLanguage)
         buildSomeStuff()
-        if ( m_currentLanguage == .Spanish ){
-            loadSpanishVerbStuff()
-        }
-        
-        //m_randomWord = RandomWordLists(wsp: m_wsp)
+        loadRomanceVerbStuff()
+
         
         //m_cfcg = ContextFreeConstructionGrammar(wsp: m_wsp)
 
@@ -62,7 +59,16 @@ struct CFModel{
         createJsonVerb()
     }
 
+    func getParser()->WordStringParser{
+        return m_wsp
+    }
+    
     mutating func getRandomSentence()->dIndependentClause{
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .twoArticles)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simplePrepositionPhrase)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleVerbPhrase)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .complexNounPhrase)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleNounPhrase)
         var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleClause)
         return randomSentence.createRandomSentenceNew()     
     }
@@ -395,19 +401,27 @@ struct CFModel{
         m_masterVerbList.append(verb)
     }
     
-    mutating func loadSpanishVerbStuff(){
+    mutating func loadRomanceVerbStuff(){
         m_tenseList = tenseManager.getActiveTenseList()
         loadCurrentVerbStringListFromCurrentDictionary()
         createMasterVerbListFromVerbStrings()
         
         //if Spanish, then load all the bSpVerbs into the Verb dictionary
         
-        if ( m_currentLanguage == .Spanish){
+        switch m_currentLanguage{
+        case .Spanish:
             for bVerb in m_masterVerbList {
                 let bSpVerb = bVerb as! BSpanishVerb
                 let verb = SpanishVerb(bVerb: bSpVerb)
                 m_wsp.addSpanishVerbToDictionary(verb: verb)
             }
+        case .French:
+            for bVerb in m_masterVerbList {
+                let bFrVerb = bVerb as! BFrenchVerb
+                let verb = FrenchVerb(bVerb: bFrVerb)
+                m_wsp.addFrenchVerbToDictionary(verb: verb)
+            }
+        default: break
         }
         
     }
@@ -473,20 +487,23 @@ struct CFModel{
         
     }
 
-    mutating func getCurrentDictionary()->[String:String]{
-        
-        //return SpanishVerbList().getVerbs(svl: spanishVerbList.tenerOnly)
-        return SpanishVerbList().getVerbs(svl: spanishVerbList.popular100)
-    }
-    
     mutating func loadCurrentVerbStringListFromCurrentDictionary(){
-        let dictionary = getCurrentDictionary()
+        var dictionary = [String]()
+        switch (m_currentLanguage){
+        case .Spanish:
+            dictionary = SpanishVerbList().getVerbList(svl: spanishVerbList.orthoPresent)
+        case .French:
+            dictionary = FrenchVerbList().getVerbList(svl: frenchVerbList.irregular )
+        default:  break
+        }
         
-        for ( key, _ ) in dictionary {
-            m_verbStringList.append(key)
-            print("\(key)")
+        m_verbStringList.removeAll()
+        
+        for str in dictionary {
+            m_verbStringList.append(str)
         }
     }
+
     
     mutating func createMasterVerbListFromVerbStrings(){
         for testVerbPhrase in m_verbStringList {
@@ -509,8 +526,7 @@ struct CFModel{
             i += 1
         }
         
-        let verb = m_masterVerbList[m_currentVerbIndex]
-        m_currentVerb = verb as! BSpanishVerb
+        m_currentVerb = m_masterVerbList[m_currentVerbIndex] as! BRomanceVerb
         conjugateCurrentVerb()
         
     }

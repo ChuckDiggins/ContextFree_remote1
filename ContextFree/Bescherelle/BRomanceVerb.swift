@@ -244,6 +244,11 @@ class BRomanceVerb: BVerb {
         }
     }
     
+    func getConjugateForm(tense : Tense, person : Person)->String {
+        let ms = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
+        return ms.finalVerbForm()
+    }
+    
     func setPatterns (verbModel : RomanceVerbModel) {
         bVerbModel = verbModel
        
