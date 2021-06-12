@@ -59,7 +59,7 @@ struct ClusterResolution {
                     
                     tense = nextWordData.data.tense
                     if tense == .pastParticiple {
-                        var newSD = nextWordData
+                        let newSD = nextWordData
                         let newTense = wordData.data.tense.getPerfectTense()
                         newSD.data.tense = newTense
                         sentenceDataList.remove(at: sdIndex)
@@ -68,7 +68,7 @@ struct ClusterResolution {
                         compoundVerbFound = true
                     }
                     else if tense == .presentParticiple {
-                        var newSD = nextWordData
+                        let newSD = nextWordData
                         newSD.data.tense = wordData.data.tense.getProgressiveTense()
                         sentenceDataList.remove(at: sdIndex)
                         sentenceDataList.remove(at: sdIndex)

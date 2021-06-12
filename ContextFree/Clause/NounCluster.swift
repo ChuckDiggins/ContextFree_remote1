@@ -30,6 +30,14 @@ class dNounSingle : dSingle
     func    setIsSubject(flag:Bool){m_isSubject = flag}
     func   isSubject()->Bool{return m_isSubject}
     
+    override func copyGuts(newSingle: dSingle){
+        putClusterWord(word: newSingle.getClusterWord())
+        setSentenceData(data: newSingle.getSentenceData())
+        let sd = getSentenceData()
+        print("in dNounSingle: \(sd.word.word):  \(sd.gender), \(sd.number)")
+    }
+    
+
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
@@ -59,6 +67,14 @@ class dNounPhrase : dPhrase {
         super.init(word: word, clusterType: type, data: data)
     }
     
+    func getNounSingle()->dNounSingle{
+        let nounSingle = dNounSingle()
+        for cluster in getClusterList(){
+            if cluster.getClusterType() == .N {return cluster as! dNounSingle}
+        }
+        return nounSingle
+    }
+    
     func reconcile(){
         let npSentenceData = getSentenceData()
         for cluster in getClusterList(){
@@ -66,7 +82,7 @@ class dNounPhrase : dPhrase {
             if ( sym == .Art || sym == .Adj ){
                 //cluster.setGender(value: npSentenceData.gender)
                 //cluster.setNumber(value: npSentenceData.number)
-                var sd = cluster.getSentenceData()
+                let sd = cluster.getSentenceData()
                 sd.gender = npSentenceData.gender
                 sd.number = npSentenceData.number
                 if sym == .Art {
@@ -96,6 +112,26 @@ class dNounPhrase : dPhrase {
         }
     }
     
+    override func getPerson()->Person{
+        for cluster in getClusterList() {
+            let clusterType = cluster.getClusterType()
+            if clusterType == .SubjP {
+                let c = cluster as! dSubjectPronounSingle
+                let person = c.getPerson()
+                getSentenceData().person = person
+                if c.getPronounType() == .SUBJECT {m_isSubject = true}
+                return person      
+            }
+            else if clusterType == .N {
+                let c = cluster as! dNounSingle
+                let person = c.getPerson()
+                getSentenceData().person = person
+                return person
+            }
+        }
+        return .S3
+    }
+    
     func setAsSubject(flag : Bool){
         m_isSubject = flag
     }
@@ -114,44 +150,7 @@ class dNounPhrase : dPhrase {
         }
     }
     
-    func processInfo(){
-        m_nounCount = 0
-        
-        let gender = getGender()
-        let number = getNumber()
-   
-        for cluster in getClusterList() {
-            
-            let clusterType = cluster.getClusterType()
-            switch clusterType {
-            case .Art:
-                let c = cluster as! dArticleSingle
-                c.setGender(value: gender)
-                c.setNumber(value: number)
-                c.setProcessWordInWordStateData(str: c.getWordString())
-            case .Adj:
-                let c = cluster as! dAdjectiveSingle
-                c.setGender(value: gender)
-                c.setNumber(value: number)
-                c.setProcessWordInWordStateData(str: c.getWordString())
-                
-            case .Num:
-                let c = cluster as! dNumberSingle
-                setNumber(value: c.getNumber())
-            case .SubjP:
-                let c = cluster as! dSubjectPronounSingle
-                if c.getPronounType() == .SUBJECT {m_isSubject = true}
-            case .N, .NP:
-                m_nounCount += 1
-                setPerson(value: cluster.getPerson())
-                setGender(value: cluster.getGender())
-                setNumber(value: cluster.getNumber())
-            default:
-                setTense(value: .present)
-            }
-        }
-        if ( m_nounCount > 1){setNumber(value: .plural)}
-    }
+    
 }
 
 class dNounClause : dClause {

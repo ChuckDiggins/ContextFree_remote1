@@ -34,10 +34,20 @@ class dIndependentClause : dClause {
         super.init(word: Word(), clusterType: .InDCls)
     }
     
+    func setLanguage(language: LanguageType){
+        self.m_language = language
+        getSentenceData().language = language
+    }
+    
     func setGrammarLibrary(cfLib : CFGrammarLibrary){
         grammarLibrary = cfLib
     }
     
+    override func getPerson()->Person{
+        setHeadNounAndHeadVerb()
+        getSentenceData().person = headNoun.getPerson()
+        return getSentenceData().person
+    }
     
     func getCurrentRuleManager()->WordRuleManager{
         return clauseList[currentWordRuleIndex]
@@ -129,7 +139,7 @@ class dIndependentClause : dClause {
         informHeadVerb()
     }
     
-    func createNewSentenceString(tense: Tense, person: Person)->String{
+    func setTenseAndPersonAndCreateNewSentenceString(tense: Tense, person: Person)->String{
         if ( headVerb.getClusterType() != .UNK){
             let hvp = headVerb as! dVerbPhrase
             hvp.setTense(value: tense)
@@ -140,7 +150,10 @@ class dIndependentClause : dClause {
             let hnp = headNoun as! dNounPhrase
             hnp.setPerson(value: person)
         }
+        return createNewSentenceString()
+    }
         
+    func createNewSentenceString()->String{
         var sentenceString = getReconstructedSentenceString()
         sentenceString = VerbUtilities().makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: sentenceString)
         return sentenceString
@@ -175,7 +188,15 @@ class dIndependentClause : dClause {
     func informHeadVerb(){
         if hasHeadVerb() && hasHeadNoun() {
             let hvp = headVerb as! dVerbPhrase
-            hvp.setPerson(value: headNoun.getPerson())
+            if  headNoun.getClusterType() == .N || headNoun.getClusterType() == .SubjP {hvp.setPerson(value: headNoun.getPerson())}
+            else if headNoun.getClusterType() == .NP {
+                let hnp = headNoun as! dNounPhrase
+                let npPerson = hnp.getPerson()
+                hvp.setPerson(value: hnp.getPerson())
+                let vpPerson = hvp.getPerson()
+                print("InformHeadVerb: npPerson \(npPerson) ... vpPerson \(vpPerson)")
+                print("... tense = \(hvp.getTense())")
+            }
         }
     }
     
@@ -420,16 +441,29 @@ class dIndependentClause : dClause {
             
         }
         print("createClustersFromWordList - Single count = \(sentence.getClusterCount())")
-        /*
-         for  cluster in sentence.getClusterList() {
-         let single = cluster as! dSingle
-         print("single: \(single.getString()) - single wordType: \(cluster.getClusterType())")
-         }
-         
-         */
         
     }//sentence
     
+    func processInfo(){
+        print("dIndependentClause: cluster count = \(sentence.getClusterList().count)")
+        for cluster in sentence.getClusterList(){
+            switch cluster.getClusterType() {
+            case .Adj, .AdjCls, .Adv, .AMB, .Art, .C, .comma,
+                 .Det, .Num, .PersPro, .P, .V, .SubjP, .AuxV, .UNK :
+                continue
+            case .NP:
+                let c = cluster as! dNounPhrase
+                c.processInfo()
+            case .PP:
+                let c = cluster as! dPrepositionPhrase
+                c.processInfo()
+            case .VP:
+                let c = cluster as! dVerbPhrase
+                c.processInfo()
+            default: break
+            }
+        }
+    }
     
     func getWordStateDataList()->[WordStateData]{
         var wordStateList = [WordStateData]()
@@ -453,16 +487,34 @@ class dIndependentClause : dClause {
         return wordStateList
     }
    
-    func setWordStateData(wsd: WordStateData){
-        
+    func getSingleList()->[dSingle]{
+        var singleList = [dSingle]()
+        for cluster in sentence.getClusterList(){
+            switch cluster.getClusterType() {
+            case .Adj, .AdjCls, .Adv, .AMB, .Art, .C, .comma,
+                 .Det, .Num, .PersPro, .P, .V, .SubjP, .AuxV, .UNK :
+                let single = cluster as! dSingle
+                singleList.append(single)
+            case .NP:
+                let c = cluster as! dNounPhrase
+                singleList = c.getSingleList(inputSingleList: singleList)
+            case .PP:
+                let c = cluster as! dPrepositionPhrase
+                singleList = c.getSingleList(inputSingleList: singleList)
+            case .VP:
+                let c = cluster as! dVerbPhrase
+                singleList = c.getSingleList(inputSingleList: singleList)
+            default: break
+            }
+        }
+        return singleList
     }
-    
+   
     func getReconstructedSentenceString()->String {
         var ss = ""
         var str = ""
         //print ("getReconstructedSentenceString - dataList count = \(dataList.count)")
-        
-        
+
         for cluster in sentence.getClusterList() {
             
             switch cluster.getClusterType() {

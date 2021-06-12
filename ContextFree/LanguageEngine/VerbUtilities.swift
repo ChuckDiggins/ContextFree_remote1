@@ -23,6 +23,21 @@ import Foundation
 
 struct VerbUtilities {
 
+ 
+    func doesWordContainLetter(inputString: String, letter: String)->Bool{
+        if let _: Range<String.Index> = inputString.range(of: letter) {
+            return true
+        }
+        return false
+    }
+    
+    mutating func reconstructVerbPhrase(verbWord: String, residualPhrase: String, isReflexive: Bool)->String{
+        var verbPhrase = verbWord
+        if  isReflexive {verbPhrase += "se"}
+        if residualPhrase.count > 0 { verbPhrase += " " + residualPhrase}
+        return verbPhrase
+    }
+   
     func isVowel(letter: String)->Bool{
         if (letter == "a" || letter == "e" || letter == "i" || letter == "o" || letter == "u" ){return true}
         if (letter == "á" || letter == "é" || letter == "í" || letter == "ó" || letter == "ú" ){return true}

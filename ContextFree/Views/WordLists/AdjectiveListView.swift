@@ -77,7 +77,7 @@ struct AdjectiveListView: View {
         m_words = cfModelView.getModifierList(wordType: wordType)
         var romanceList = Array<RomanceAdjective>()
         for word in m_words {
-            var adj = word as! RomanceAdjective
+            let adj = word as! RomanceAdjective
             romanceList.append(adj)
         }
         return romanceList

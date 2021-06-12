@@ -28,8 +28,10 @@ class dPhrase : dCluster {
             m_sentenceData.gender = cluster.getGender()
             m_sentenceData.number = cluster.getNumber()
         }
-        m_clusterList.append(cluster)        
+        m_clusterList.append(cluster)
+        if m_clusterList.count == 1 {m_sentenceData.language = cluster.getSentenceData().language}
     }
+    
     func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
     func insertCluster(index: Int, cluster : dCluster){m_clusterList.insert(cluster, at: index)}
     
@@ -70,6 +72,50 @@ class dPhrase : dCluster {
         return wordListCopy.getString()
     }
 
+    func getSingleList(inputSingleList: [dSingle])->[dSingle]{
+        var singleList = inputSingleList
+        for cluster in getClusterList(){         
+            let type = cluster.getClusterType()
+            if cluster.getClusterType().isSingle()
+            {
+                let single = cluster as! dSingle
+                if ( type == .N){
+                    singleList.append(single)
+                }
+                else if ( type == .V){
+                    singleList.append(single)
+                }
+                else if ( type == .SubjP){
+                    singleList.append(single)
+                }
+                else if ( type == .Art){
+                    singleList.append(single)
+                }
+                else
+                {
+                    singleList.append(single)
+                }
+                
+            }
+            else if cluster.getClusterType().isPhrase()
+            {
+                switch cluster.getClusterType(){
+                case .NP:
+                    let c = cluster as! dNounPhrase
+                    singleList = c.getSingleList(inputSingleList: singleList)
+                case .VP:
+                    let c = cluster as! dVerbPhrase
+                    singleList = c.getSingleList(inputSingleList: singleList)
+                case .PP:
+                    let c = cluster as! dPrepositionPhrase
+                    singleList = c.getSingleList(inputSingleList: singleList)
+                default: break
+                }
+            }
+        }
+        return singleList
+    }
+    
     func getWordStateList(inputWordList: [WordStateData])->[WordStateData]{
         var wordList = inputWordList
         for cluster in getClusterList(){
@@ -116,55 +162,67 @@ class dPhrase : dCluster {
         return wordList
     }
     
-    func getWordList(inputWordList: [Word])->[Word]{
-        var wordList = inputWordList
-        var str = ""
-        for cluster in getClusterList(){
-            let type = cluster.getClusterType()
-            if cluster.getClusterType().isSingle()
-            {
-                if ( type == .N){
-                    //let c = cluster as! dNounSingle
-                    wordList.append(cluster.getClusterWord())
-                }
-                else if ( type == .V){
-                    wordList.append(cluster.getClusterWord())
-                }
-                else if ( type == .SubjP){
-                    let c = cluster as! dSubjectPronounSingle
-                    wordList.append(c.getClusterWord())
-                }
-                else if ( type == .Art){
-                    let c = cluster as! dArticleSingle
-                    wordList.append(c.getClusterWord())
-                }
-                else {
-                    wordList.append(cluster.getClusterWord())
-                }
-                
-            }
-            else if cluster.getClusterType().isPhrase()
-            {
-                switch cluster.getClusterType(){
-                case .NP:
-                    let c = cluster as! dNounPhrase
-                    wordList = c.getWordList(inputWordList: wordList)
-                case .VP:
-                    let c = cluster as! dVerbPhrase
-                    wordList = c.getWordList(inputWordList: wordList)
-                case .PP:
-                    let c = cluster as! dPrepositionPhrase
-                    wordList = c.getWordList(inputWordList: wordList)
-                default: break
-                }
+    func processInfo(){
+
+        print("ClusterType: \(getClusterType().rawValue): clusterCount = \(getClusterList().count)")
+        
+        if getClusterType() == .NP {
+            let np = self as! dNounPhrase
+            let ns = np.getNounSingle()
+            np.setNumber(value: ns.getNumber())
+            np.setGender(value: ns.getGender())
+        }
+        let gender = getGender()
+        let number = getNumber()
+        
+        for cluster in getClusterList() {
+            let clusterType = cluster.getClusterType()
+            switch clusterType {
+            case .Art:
+                let c = cluster as! dArticleSingle
+                c.setGender(value: gender)
+                c.setNumber(value: number)
+                c.setProcessWordInWordStateData(str: c.getWordString())
+            case .Adj:
+                let c = cluster as! dAdjectiveSingle
+                c.setGender(value: gender)
+                c.setNumber(value: number)
+                c.setProcessWordInWordStateData(str: c.getWordString())
+            case .Num:
+                let c = cluster as! dNumberSingle
+                setNumber(value: c.getNumber())
+            case .SubjP:
+                let c = cluster as! dSubjectPronounSingle
+                //if c.getPronounType() == .SUBJECT {m_isSubject = true}
+            case .N:
+                setPerson(value: cluster.getPerson())
+                setGender(value: cluster.getGender())
+                setNumber(value: cluster.getNumber())
+            case .NP:
+                setPerson(value: cluster.getPerson())
+                setGender(value: cluster.getGender())
+                setNumber(value: cluster.getNumber())
+                let c = cluster as! dNounPhrase
+                c.processInfo()
+            case .PP:
+                setPerson(value: cluster.getPerson())
+                setGender(value: cluster.getGender())
+                setNumber(value: cluster.getNumber())
+                let c = cluster as! dPrepositionPhrase
+                c.processInfo()
+            case .VP:
+                let c = cluster as! dVerbPhrase
+                c.processInfo()
+            default:
+                setTense(value: .present)
             }
         }
-        return wordList
+        //if ( m_nounCount > 1){setNumber(value: .plural)}
     }
     
     func getString( )->String{
         var str = ""
-        var tempStr = ""
+        //var tempStr = ""
         
         for cluster in getClusterList(){
             let type = cluster.getClusterType()
@@ -176,8 +234,17 @@ class dPhrase : dCluster {
                     c.setProcessWordInWordStateData(str: c.getString())
                 }
                 else if ( type == .V){
-                    let c = cluster as! dVerbSingle
-                    str += c.getString() + " "
+                    var c = cluster as! dVerbSingle
+                    switch getSentenceData().language{
+                    case .Spanish:
+                        c = cluster as! dSpanishVerbSingle
+                        str += c.getString() + " "
+                    case .French:
+                        c = cluster as! dFrenchVerbSingle
+                        str += c.getString() + " "
+                    default:
+                        str += "unknown language in dPhrase"
+                    }
                     c.setProcessWordInWordStateData(str: c.getString())
 
                 }
@@ -191,7 +258,7 @@ class dPhrase : dCluster {
                     let singleStr = single.getString()
                     str += singleStr + " "
                     single.setProcessWordInWordStateData(str: singleStr)
-                    tempStr = single.getProcessWordInWordStateData()
+                    //tempStr = single.getProcessWordInWordStateData()
                 }
                 
             }
@@ -213,15 +280,6 @@ class dPhrase : dCluster {
             }
         }
         
-        /*
-        var wsdStr = ""
-        for cluster in getClusterList(){
-            if cluster.getClusterType().isSingle() {
-                wsdStr += cluster.getProcessWordInWordStateData() + " "
-            }
-        }
-        print(wsdStr)
- */
         return str
     }
 

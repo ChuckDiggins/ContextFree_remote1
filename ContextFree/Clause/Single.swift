@@ -24,6 +24,10 @@ class dSingle  : dCluster
         super.init(word: Word(), clusterType: .UNK)
     }
     
+    static func ==(lhs: dSingle, rhs: dSingle) -> Bool {
+        return lhs.getClusterWord() == rhs.getClusterWord() && lhs.getSentenceData() == rhs.getSentenceData()
+    }
+
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     
     var m_originalString = ""
@@ -31,12 +35,18 @@ class dSingle  : dCluster
     var m_inputInfo = WordStateData()
     var m_outputInfo = WordStateData()
     var m_clusterList = Array<dCluster>()
+    
+    func copyGuts(newSingle: dSingle){
+        putClusterWord(word: newSingle.getClusterWord())
+        setSentenceData(data: newSingle.getSentenceData())
+    }
+    
     func getClusterCount()->Int{return m_clusterList.count}
     func getClusterList()->[dCluster]{ return m_clusterList}
     func appendCluster(cluster: dCluster){m_clusterList.append(cluster)}
     func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
     func insertCluster(index: Int, cluster : dCluster){m_clusterList.insert(cluster, at: index)}
-
+    
     func replaceClusterRange(firstIndex: Int, lastIndex: Int, cluster: dCluster){
         for _ in firstIndex...lastIndex {
             deleteCluster(index: firstIndex)
@@ -135,12 +145,7 @@ class dAdjectiveSingle :dSingle
     }
     
     func setState(gender: Gender, number: Number){
-        var sd = getSentenceData()
-        let w = getClusterWord()
-        let sw = sd.word
-        let g = sd.gender
-        let n = sd.number
-        //print("dAdjectiveSingle: \(w.word): \(sw.word): \(g) :\(n)")
+        let sd = getSentenceData()
         sd.gender = gender
         sd.number = number
         setSentenceData(data: sd)

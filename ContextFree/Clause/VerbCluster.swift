@@ -32,7 +32,7 @@ class dVerbPhrase : dPhrase {
     func getSubjectCluster()->dCluster{return m_subjectCluster}
     
     override func setPerson(value: Person){
-        //print ("dVerbPhrase.setPerson")
+        getSentenceData().person = value
         for cluster in getClusterList(){
             if cluster.getClusterType() == .V {
                 let v = cluster as! dVerbSingle
@@ -42,7 +42,6 @@ class dVerbPhrase : dPhrase {
                 let vp = cluster as! dVerbPhrase
                 vp.setPerson(value: value)
             }
-            
         }
     }
     
@@ -128,6 +127,19 @@ class dVerbSingle : dSingle
     func    getBestPrep()->String{return m_bestPreposition}
     func    setVerbType (type: VerbType){m_verbType = type}
     func    getVerbType ()->VerbType{return m_verbType}
+    
+    func    setBVerb(bVerb: BVerb)
+    {
+        let bv = getClusterWord() as! Verb
+        bv.setBVerb(bVerb: bVerb)
+    }
+    
+    func    getBVerb(bVerb: BVerb)->BVerb
+    {
+        let bv = getClusterWord() as! Verb
+        return bv.getBVerb()
+    }
+    
     
     func    getWordString()->String{
         let sd = getSentenceData()

@@ -139,53 +139,26 @@ struct RandomSentence {
     }
     
     mutating func createComplexNounPhrase()->dPhrase{
-        /*
-        let single1 = m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false)
-        let single2 = m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false)
-        let adj1 = single1 as! dAdjectiveSingle
-        let adj2 = single2 as! dAdjectiveSingle
-        adj1.setState(gender: .feminine, number: .singular)
-        adj2.setState(gender: .masculine, number: .plural)
-        var adjStr1 = adj1.getWordString()
-        var adjStr2 = adj2.getWordString()
-        print("Before ... Adj1 = \(adjStr1), Adj2 = \(adjStr2)")
-        
-        adj2.setState(gender: .feminine, number: .singular)
-        adjStr1 = adj1.getWordString()
-        adjStr2 = adj2.getWordString()
-        print("After 1 ... Adj1 = \(adjStr1), Adj2 = \(adjStr2)")
-        
-        adj1.setState(gender: .masculine, number: .plural)
-        adjStr1 = adj1.getWordString()
-        adjStr2 = adj2.getWordString()
-        print("After 2 ... Adj1 = \(adjStr1), Adj2 = \(adjStr2)")
-        */
         
         let NP1 = dNounPhrase()
         NP1.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .article, isSubject:false))
         NP1.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .noun, isSubject:true))
-        var single1 = m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false)
+        let single1 = m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false)
         NP1.appendCluster(cluster: single1)
         
         
         let NP2 = dNounPhrase()
         NP2.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .article, isSubject:false))
         NP2.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .noun, isSubject:false))
-        var single2 = m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false)
+        let single2 = m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false)
         NP2.appendCluster(cluster: single2)
         
         let adj1 = single1 as! dAdjectiveSingle
         let adj2 = single2 as! dAdjectiveSingle
         adj1.setState(gender: .feminine, number: .singular)
         adj2.setState(gender: .masculine, number: .plural)
-        let adjStr1 = adj1.getWordString()
-        let adjStr2 = adj2.getWordString()
-        print("Before ... Adj1 = \(adjStr1), Adj2 = \(adjStr2)")
         NP1.processInfo()
         NP2.processInfo()
-        print("After processInfo ... Adj1 = \(adjStr1), Adj2 = \(adjStr2)")
-        let sd1 = adj1.getWordStateData()
-        let sd2 = adj2.getWordStateData()
         
         let PP1 = dPrepositionPhrase()
         PP1.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .preposition, isSubject:false))
@@ -252,7 +225,8 @@ struct RandomSentence {
         NP3.processInfo()
         
         let VP = dVerbPhrase()
-        VP.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .verb, isSubject:false))
+        let vs = m_randomWord.getRandomWordAsSingle(wordType: .verb, isSubject:false)
+        VP.appendCluster(cluster: vs )
         VP.appendCluster(cluster: NP3)
         VP.appendCluster(cluster: PP1)
         let clause = dIndependentClause(language: m_wsp.getLanguage())

@@ -21,8 +21,8 @@ struct TenseManager {
         }
         //turn on all simple indicative tenses and all simple subjunctive tenses
         toggleAllSimpleIndicativeTenses()
-        toggleTense(tense: .presentPerfect)
-        toggleAllSimpleSubjunctiveTenses()
+        //toggleTense(tense: .presentPerfect)
+        //toggleAllSimpleSubjunctiveTenses()
     }
 
     func isActivated(tense: Tense)->Bool{

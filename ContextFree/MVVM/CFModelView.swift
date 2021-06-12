@@ -20,6 +20,30 @@ class CFModelView: ObservableObject {
         cfModel = CFModel(language: language)
     }
     
+    func getVerbModel(language: LanguageType)->RomanceVerbModelConjugation{
+        return (cfModel?.getVerbModel(language: language))!
+    }
+    
+    func analyzeAndCreateNewBVerb(verbPhrase: String)->(isValid: Bool, verb: BVerb){
+        return cfModel!.analyzeAndCreateNewBVerb(verbPhrase: verbPhrase)
+    }
+    
+    func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
+        return cfModel!.analyzeAndCreateBVerb_SPIFE(language: language, verbPhrase: verbPhrase)
+    }
+    
+    func  getWordCount(wordType: WordType)->Int{
+        return cfModel!.getWordCount(wordType: wordType)
+    }
+    
+    func getListWord(index: Int, wordType: WordType)->Word{
+        return  cfModel!.getListWord(index: index, wordType: wordType)
+    }
+    
+    func append(language: LanguageType, romanceVerb: RomanceVerb)->Int{
+        return cfModel!.append(language: language, romanceVerb: romanceVerb)
+    }
+    
     func getCurrentLanguage()->LanguageType{
         return cfModel!.m_currentLanguage
     }
@@ -36,8 +60,12 @@ class CFModelView: ObservableObject {
         return cfModel!.getNounList()
     }
     
-    func getVerbList()->Array<VerbComponent>{
+    func getVerbList()->Array<Word>{
         return cfModel!.getVerbList()
+    }
+    
+    func getVerbCount()->Int{
+        return cfModel!.getVerbCount()
     }
     
     func getRandomPhraseForAdjectives(type: AdjectiveType)->dIndependentClause{

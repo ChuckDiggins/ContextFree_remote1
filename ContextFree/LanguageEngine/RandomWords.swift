@@ -122,12 +122,12 @@ struct RandomWordLists{
         case .English:
             for verb in m_wsp!.getEnglishWords().verbList{
                 let sv = verb as! EnglishVerb
-                if (sv.type == .normal ){m_verbs.append(verb)}
+                if (sv.typeList[0] == .normal ){m_verbs.append(verb)}
             }
         case .French:
             for verb in m_wsp!.getFrenchWords().verbList{
                 let sv = verb as! FrenchVerb
-                if (sv.type == .normal ){m_verbs.append(verb)}
+                if (sv.typeList[0] == .normal ){m_verbs.append(verb)}
             }
         case .Italian: break
         case .Portuguese: break
@@ -184,7 +184,7 @@ struct RandomWordLists{
         
         switch wordType{
         case .article:
-            var wsd = WordStateData()
+            let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_articles.count)
             word = m_articles[i]
@@ -209,7 +209,7 @@ struct RandomWordLists{
             }
         case .adjective:
             i = Int.random(in: 0 ..< m_adjectives.count)
-            var wsd = WordStateData()
+            let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             word = m_adjectives[i]
             let adj = word as! Adjective
@@ -223,7 +223,7 @@ struct RandomWordLists{
                 
         case .preposition:
             i = Int.random(in: 0 ..< m_prepositions.count)
-            var wsd = WordStateData()
+            let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             word = m_prepositions[i]
             wsd.word = word
@@ -232,7 +232,7 @@ struct RandomWordLists{
             wsd.wordType = .preposition
             single = dPrepositionSingle(word: word, data: wsd)
         case .noun:
-            var wsd = WordStateData()
+            let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             if isSubject {
                 i = Int.random(in: 0 ..< m_subjects.count)
@@ -242,8 +242,16 @@ struct RandomWordLists{
                 word = m_objects[i]
             }
             let number = Int.random(in: 1 ..< 3)
-            if ( number == 1 ) { wsd.number = .singular}
-            else {wsd.number = .plural}
+            
+            if ( number == 1 ) {
+                wsd.number = .singular
+                wsd.person = .S3
+            }
+            else {
+                wsd.number = .plural
+                wsd.person = .P3
+            }
+            
             wsd.word = word
             let noun = word as! RomanceNoun
             wsd.nounType = noun.type
@@ -251,7 +259,7 @@ struct RandomWordLists{
             wsd.wordType = .noun
             single = dNounSingle(word: word, data: wsd)
         case .pronoun:
-            var wsd = WordStateData()
+            let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_pronouns.count)
             word = m_pronouns[i]
@@ -261,15 +269,19 @@ struct RandomWordLists{
             wsd.wordType = .pronoun
             single = dSubjectPronounSingle(word: word, data: wsd)
         case .verb:
-            var wsd = WordStateData()
+            let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_verbs.count)
             word = m_verbs[i]
             wsd.word = word
             let verb = word as! Verb
-            wsd.verbType = verb.type
+            wsd.verbType = verb.typeList[0]
             wsd.wordType = .verb
-            single = dVerbSingle(word: word, data: wsd)
+            switch wsd.language {
+            case .Spanish: single = dSpanishVerbSingle(word: word, data: wsd)
+            case .French: single = dFrenchVerbSingle(word: word, data: wsd)
+            default: single = dVerbSingle(word: word, data: wsd)
+            }
         default:
             break
         }

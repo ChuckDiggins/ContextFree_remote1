@@ -23,12 +23,33 @@ class dClause : dCluster {
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     //var m_clusterList = [dCluster]()
     var m_clusterList = Array<dCluster>()
+    var m_singleList = Array<dSingle>()
     
     func clearClusterList(){m_clusterList.removeAll()}
     func getClusterList()->[dCluster]{ return m_clusterList}
     func appendCluster(cluster: dCluster){m_clusterList.append(cluster)}
     func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
-    func insertCluster(index: Int, cluster : dCluster){m_clusterList.insert(cluster, at: index)}
+    func insertCluster(index: Int, cluster : dCluster){
+        if ( index < m_clusterList.count ){
+            m_clusterList.insert(cluster, at: index)
+        }
+    }
+
+    func appendSingle(single: dSingle){
+        m_singleList.append(single)
+    }
+    
+    func insertSingle(index: Int, single : dSingle){
+        if ( index < m_singleList.count ){
+            m_singleList.insert(single, at: index)
+        }
+    }
+    
+    func replaceSingle(index: Int, single : dSingle){
+        if ( index < m_singleList.count ){
+            m_singleList[index] = single
+        }
+    }
     
     func replaceClusterRange(firstIndex: Int, lastIndex: Int, cluster: dCluster){
         for _ in firstIndex...lastIndex {

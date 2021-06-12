@@ -358,29 +358,7 @@ enum WordType : String {
     case unknown
 }
 
-enum NounType  : String  {
-    case agent
-    case person     //person type
-    case animal      //dog, cat, horse type
-    case vehicle        //plane, train, car, etc
-    case plant       //tree, bush, grass, etc
-    case electonic  //computer, telephone, television, etc
-    case concept    //idea, thought, emotion, etc
-    case place       //place type
-    case thing     //neutral type
-    case bodyPart  //body part
-    case any
-    
-    static var animate =
-        [NounType.person, .animal, .vehicle, .agent]
-}
 
-enum NounSubjectivity  //LOL
-{
-    case goodSubject
-    case goodObject
-    case either
-}
 
 enum PunctuationType  : String {
     case period
@@ -396,10 +374,11 @@ enum PunctuationType  : String {
     case none
 }
 
-enum VerbTransitivity  : String {
+enum VerbTransitivity : Int, Codable {
     case transitive     //can take direct object "I see the house"
+    case ditransitive     //can take two objects "I gave her the ball"
     case intransitive   //cannot take a direct object "I sleep"
-    case ditransitive   //can be both transitive and intransitive
+    case ambitransitive   //can be both transitive and intransitive
     case ergative        //takes nothing after verb - "the ship sank"
 }
 
@@ -411,9 +390,20 @@ enum VerbModality  : String {
     case notModal
 }
 
-enum VerbPassivity  : String {
-    case passive    //gustar
+enum VerbPassivity : Int, Codable {
     case active
+    case passive    //gustar
+    case both
+    
+    
+}
+
+func getPassivity(index:Int)->VerbPassivity{
+    switch (index){
+    case 0: return .active
+    case 1: return .passive
+    default: return .both
+    }
 }
 
 enum VerbPronomality {
@@ -422,14 +412,81 @@ enum VerbPronomality {
     case notPronominal
 }
 
-enum VerbType  : String {
+enum VerbType : Int, Codable{
     case normal
-    case auxiliary
-    case idiom
-    case defective
+    case auxiliary  //haber, esta
+    case copulative //ser, estar, to be,
+    case helping   //poder, querer saber
+    case modal   //poder, querer saber
+    case phrasal
+    case phrasalSeparable
+    case impersonal //weather stuff:  orvallar(drizzle), llover(rain)
+    case defective //
+    
+   
 }
 
-enum  VerbPreference   : String  //for subject and/or  object
+func getVerbType(index:Int)->VerbType{
+    switch (index){
+    case 0: return .normal
+    case 1: return .auxiliary
+    case 2: return .copulative
+    case 3: return .helping
+    case 4: return .modal
+    case 5: return .phrasal
+    case 6: return .phrasalSeparable
+    case 7: return .defective
+    case 8: return .impersonal //weather stuff:  orvallar(drizzle), llover(rain)
+    default: return .normal
+    }
+}
+
+func getVerbTypesAsStringList()->[String]{
+    var strList = [String]()
+    strList.append("N")
+    strList.append("A")
+    strList.append("C")
+    strList.append("H")
+    strList.append("M")
+    strList.append("P")
+    strList.append("S")
+    strList.append("D")
+    strList.append("I")
+    return strList
+}
+
+func getVerbTypeAsLetter(index:Int)->String{
+    switch (index){
+    case 0: return "N"
+    case 1: return "A"
+    case 2: return "C"
+    case 3: return "H"
+    case 4: return "M"
+    case 5: return "P"
+    case 6: return "S"
+    case 7: return "D"
+    case 8: return "I"
+    default: return "N"
+    }
+}
+
+func getVerbTypeFromLetter(letter: String)->VerbType{
+    switch (letter){
+    case "N": return .normal
+    case "A": return .auxiliary
+    case "C": return .copulative
+    case "H": return .helping
+    case "M": return .modal
+    case "P": return .phrasal
+    case "S": return .phrasalSeparable
+    case "D": return .defective
+    case "I": return .impersonal
+    default:  return .normal
+    }
+}
+
+
+enum  VerbPreference   //for subject and/or  object
 {
     case animate       //person, animal
     case inanimate    //object
@@ -440,6 +497,73 @@ enum  VerbPreference   : String  //for subject and/or  object
     case structure   //building
     case any
 }
+
+
+enum NounSubjectivity  //LOL
+{
+    case goodSubject
+    case goodObject
+    case either
+}
+enum NounType : Int {
+    case person  //= "Pr"   //person type
+    case animal   //= "An"   //dog, cat, horse, insect type
+    case place     //= "Pl"   //place type
+    case furniture  //= "Fn"      //plane, train, car, etc
+    case concept   //= "Cp" //idea, thought, emotion, etc
+    case plant     // = "Pt"    //tree, bush, grass, etc
+    case thing      //    = "Th" //neutral type
+    case legalEntity  // = "Le"    //city, corporation, country
+    case activity //= "Ac"
+    case any //non-specific
+    static var animate =
+        [NounType.person, .animal]
+}
+
+func getNounTypeFromString(str: String)->NounType{
+    switch(str){
+    case "Pr": return .person
+    case "An": return .animal
+    case "Pl": return .place
+    case "Fn": return .furniture
+    case "Cp": return .concept
+    case "Pt": return .plant
+    case "Th": return .thing
+    case "Le": return .legalEntity
+    case "Ac": return .activity
+    default: return .person
+    }
+}
+
+func getNounTypeStringAtIndex(index: Int)->String{
+    switch(index){
+    case 0: return "Pr"
+    case 1: return "An"
+    case 2: return "Pl"
+    case 3: return "Fn"
+    case 4: return "Cp"
+    case 5: return "Pt"
+    case 6: return "Th"
+    case 7: return "Le"
+    case 8: return "Ac"
+    default: return "Pr"
+    }
+}
+
+func getNounTypesAsStringList()->[String]{
+    var strList = [String]()
+    strList.append("Pr")
+    strList.append("An")
+    strList.append("Pl")
+    strList.append("Fn")
+    strList.append("Cp")
+    strList.append("Pt")
+    strList.append("Th")
+    strList.append("Le")
+    strList.append("Ac")
+    return strList
+}
+
 
 enum PrepositionType  : String
 {

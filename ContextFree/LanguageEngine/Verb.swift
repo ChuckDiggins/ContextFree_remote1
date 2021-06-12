@@ -1,5 +1,5 @@
 //
-//  ViperVerb.swift
+//  Verb.swift
 //  ContextFree
 //
 //  Created by Charles Diggins on 4/4/21.
@@ -7,36 +7,216 @@
 
 import Foundation
 
+
+//----------------------------------------------------------------------------------------
+
 class Verb : Word {
-    var type: VerbType
+    var bVerb = BVerb()
+    var typeList = [VerbType]()
     var transitivity =  VerbTransitivity.transitive
     var passivity =  VerbPassivity.active
-    var modality = VerbModality.notModal
+    var favoriteSubjects = [NounType]()
+    var favoriteObjects = [NounType]()
+    //var verbSemantics =  [VerbType]()
+    //var typeListAsInt = [Int]()
+    //var favoriteSubjectsAsInt = [Int]()
+    //var favoriteObjectsAsInt = [Int]()
+    //var verbSemanticsAsInt = [Int]()
     var tense = Tense.present
     var person = Person.S1
     var tensePersonSet = false
+    var english = ""
+    var spanish = ""
+    var french = ""
+    
+    override init(){
+        super.init(word: "", def : "", wordType : .verb)
+    }
     
     init(word: String, def: String, type : VerbType){
-        self.type = type
+        typeList.append(type)
         super.init(word: word, def: def, wordType: .verb)
     }
     
-    /*init(word: String, def: String, type : VerbType, tense: Tense, person: Person){
-        self.type = type
+    init(word: String, def: String, type : VerbType, tense: Tense, person: Person){
+        typeList.append(type)
         self.person = person
         self.tense = tense
         super.init(word: word, def: def, wordType: .verb)
-     }
-    */
+    }
     
     init(word: String, def: String, wsd: WordStateData){
-        self.type = wsd.verbType
+        typeList.append(wsd.verbType)
         self.person = wsd.person
         self.tense = wsd.tense
         self.transitivity = wsd.verbTransitivity
         self.passivity = wsd.verbPassivity
-        self.modality = wsd.verbModality
         super.init(word: word, def: def, wordType: .verb)
+    }
+    
+    init(jsonVerb: JsonVerb, language: LanguageType){
+        self.english = jsonVerb.english
+        self.french = jsonVerb.french
+        self.spanish = jsonVerb.spanish
+        self.transitivity = jsonVerb.transitivity
+        self.passivity = jsonVerb.passivity ?? VerbPassivity.passive
+        switch(language){
+        case .Spanish:  super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
+        case .French:  super.init(word: jsonVerb.french, def: jsonVerb.english, wordType: .verb)
+        case .English:  super.init(word: jsonVerb.english, def: jsonVerb.english, wordType: .verb)
+        default:
+            super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
+        }
+        
+        convertVerbTypeStringToVerbTypes(inputString: jsonVerb.verbType)
+        convertFavoriteSubjectStringToFavoriteNouns(inputString: jsonVerb.subjectLikes)
+        convertFavoriteObjectStringToFavoriteNouns(inputString: jsonVerb.objectLikes)
+    }
+    
+    func setBVerb(bVerb: BVerb){
+        self.bVerb = bVerb
+    }
+    
+    func getBVerb()->BVerb{
+        return bVerb
+    }
+    
+    func updateInfo(jsonVerb: JsonVerb){
+        self.english = jsonVerb.english
+        self.french = jsonVerb.french
+        self.spanish = jsonVerb.spanish
+        self.transitivity = jsonVerb.transitivity
+        self.passivity = jsonVerb.passivity!
+        convertVerbTypeStringToVerbTypes(inputString: jsonVerb.verbType)
+        convertFavoriteSubjectStringToFavoriteNouns(inputString: jsonVerb.subjectLikes)
+        convertFavoriteObjectStringToFavoriteNouns(inputString: jsonVerb.objectLikes)
+        
+    }
+    
+    func updateWords(english: String, french: String){
+        self.english = english
+        self.french = french
+        self.spanish = word
+    }
+    
+    func updateTransitivity(trans : VerbTransitivity){
+        transitivity = trans
+    }
+    
+    func updatePassivity(pass : VerbPassivity){
+        passivity = pass
+    }
+    
+    func updateVariables( vType: [String], subj : [String], obj : [String])
+    {
+        typeList.removeAll()
+        for f in vType {
+            typeList.append(getVerbTypeFromLetter(letter: f))
+        }
+        
+        favoriteSubjects.removeAll()
+        for f in subj {
+            favoriteSubjects.append(getNounTypeFromString(str: f))
+        }
+
+        favoriteObjects.removeAll()
+        for f in obj {
+            favoriteObjects.append(getNounTypeFromString(str: f))
+        }
+    }
+
+    func getWordAtLanguage(language: LanguageType)->String{
+        switch(language){
+        case .Spanish: return spanish
+        case .English: return english
+        case .French: return french
+        default:
+            return english
+        }
+    }
+    
+    func convertVerbTypeStringToVerbTypes(inputString: String){
+        let util = VerbUtilities()
+        let strList = getVerbTypesAsStringList()
+        for str in strList {
+            if util.doesWordContainLetter(inputString: inputString, letter: str) {
+                typeList.append(getVerbTypeFromLetter(letter: str))
+            }
+        }
+    }
+    
+    func convertFavoriteSubjectStringToFavoriteNouns(inputString: String){
+        let util = VerbUtilities()
+        let strList = getNounTypesAsStringList()
+        for str in strList {
+            if util.doesWordContainLetter(inputString: inputString, letter: str) {
+                favoriteSubjects.append(getNounTypeFromString(str: str))}
+        }
+    }
+    
+    func convertFavoriteObjectStringToFavoriteNouns(inputString: String){
+        let util = VerbUtilities()
+        let strList = getNounTypesAsStringList()
+        for str in strList {
+            if util.doesWordContainLetter(inputString: inputString, letter: str) {
+                favoriteObjects.append(getNounTypeFromString(str: str))}
+        }
+    }
+    
+    func getFavoriteSubjects()->[NounType]{
+        return favoriteSubjects
+    }
+    
+    func getFavoriteObjects()->[NounType]{
+        return favoriteObjects
+    }
+    
+    func getVerbTypes()->[VerbType]{
+        return typeList
+    }
+    
+    func convertFavoriteSubjectsToCompositeString()->String{
+        var compositeString = ""
+        for nt in favoriteSubjects{
+            let fav = getNounTypeStringAtIndex(index: nt.rawValue)
+                compositeString.append(fav)
+        }
+        return compositeString
+    }
+    
+    func convertFavoriteObjectsToCompositeString()->String{
+        var compositeString = ""
+        for nt in favoriteObjects{
+            compositeString.append(getNounTypeStringAtIndex(index: nt.rawValue))
+        }
+        return compositeString
+    }
+    
+    func convertVerbTypesToCompositeString()->String{
+        var compositeString = ""
+        for vt in typeList{
+            compositeString.append(getVerbTypeAsLetter(index: vt.rawValue))
+        }
+        return compositeString
+    }
+    
+    func createJsonVerb(bNumber: Int)->JsonVerb{
+        let jv : JsonVerb
+        if ( passivity == .passive ){
+            jv = JsonVerb(spanish: word, english: def, french: french, bNumber: bNumber, subjectLikes: convertFavoriteSubjectsToCompositeString())
+        }
+        else {
+            jv = JsonVerb(spanish: word, english: def, french: french,   bNumber: bNumber, transitivity: transitivity, verbType : convertVerbTypesToCompositeString(),  passivity: passivity, subjectLikes: convertFavoriteSubjectsToCompositeString(), objectLikes: convertFavoriteObjectsToCompositeString())
+        }
+        return jv
+    }
+    
+    
+    func isNormal()->Bool{
+        for vt in typeList{
+            if vt == .normal { return true}
+        }
+        return false
     }
     
     func isTensePersonSet()->Bool {
@@ -60,35 +240,22 @@ class Verb : Word {
 }
 
 class RomanceVerb : Verb {
-    var bVerb : BVerb
+    
     var verbForm = Array<String>()
-    /*
+    var pastParticiple = ""
+    var presentParticiple = ""
+    
+    override init(jsonVerb: JsonVerb, language: LanguageType){
+        super.init(jsonVerb: jsonVerb, language: language)
+    }
+    
     override init(word: String, def: String, type: VerbType, tense: Tense, person: Person){
         super.init(word: word, def: def, type : type)
         setTensePerson(tense: tense, person: person)
     }
-    */
-    init(bVerb: BVerb){
-        self.bVerb = bVerb
-        super.init(word: bVerb.m_verbWord, def: "", type : VerbType.normal)
-    }
     
-    func setBVerb(bVerb : BVerb){
-        self.bVerb = bVerb
-    }
-    
-    func getBVerb()->BVerb{
-        return bVerb
-    }
-    
-    func setSimplePresentForms(s1: String, s2: String, s3: String, p1: String, p2:String, p3:String){
-        verbForm.removeAll()
-        verbForm.append(s1)
-        verbForm.append(s2)
-        verbForm.append(s3)
-        verbForm.append(p1)
-        verbForm.append(p2)
-        verbForm.append(p3)
+    override init(word: String, def: String, type: VerbType){
+        super.init(word: word, def: def, type : type)
     }
     
     func getConjugateForm()->String{
@@ -107,12 +274,19 @@ class RomanceVerb : Verb {
     
 }
 
-class FrenchVerb : RomanceVerb {
-    init(bVerb: BFrenchVerb){
-        super.init(bVerb: bVerb)
-        var test = getConjugateForm(tense: .preterite, person : .S3)
+
+class FrenchVerb : RomanceVerb {   
+    init(){
+        super.init(word: "", def: "", type : .normal)
     }
     
+    init(jsonVerb: JsonVerb){
+        super.init(jsonVerb: jsonVerb, language: .French)
+    }
+    
+    override init(word: String, def: String, type: VerbType){
+        super.init(word: word, def: def, type : type)
+    }
     
     func conjugateAndSetSimplePresentForms(){
         let bFrVerb = bVerb as! BFrenchVerb
@@ -135,18 +309,17 @@ class FrenchVerb : RomanceVerb {
 }
 
 class SpanishVerb : RomanceVerb {
-    override init(bVerb: BVerb){
-        super.init(bVerb: bVerb)
-        var test = getConjugateForm(tense: .preterite, person : .S3)
+    
+    init(){
+        super.init(word: "", def: "", type : .normal)
     }
     
-    func conjugateAndSetSimplePresentForms(){
-        let bSpVerb = bVerb as! BSpanishVerb
-        for p in 0..<6 {
-            let person = Person.allCases[p]
-            _ = bSpVerb.getConjugatedMorphStruct(tense: .present, person: person, conjugateEntirePhrase : false )
-            verbForm.append(bSpVerb.getFinalVerbForm(person : person))
-        }
+    init(jsonVerb: JsonVerb){
+        super.init(jsonVerb: jsonVerb, language: .Spanish)
+    }
+    
+    override init(word: String, def: String, type: VerbType){
+        super.init(word: word, def: def, type : type)
     }
     
     override func getConjugateForm(tense: Tense, person : Person)->String{

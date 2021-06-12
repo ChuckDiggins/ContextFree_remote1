@@ -245,10 +245,10 @@ struct SpanishWords {
         createNounAndAppend(word: "cocina", def: "kitchen", type: .place, gender: .feminine)
         createNounAndAppend(word: "mesa", def: "table", type: .place, gender: .feminine)
         createNounAndAppend(word: "libro", def: "book", type: .thing, gender: .masculine)
-        createNounAndAppend(word: "brazo", def: "arm", type: .bodyPart, gender: .masculine)
+        createNounAndAppend(word: "brazo", def: "arm", type: .any, gender: .masculine)
         createNounAndAppend(word: "ciudad", def: "city", type: .place, gender: .feminine)
         createNounAndAppend(word: "cama", def: "bed", type: .place, gender: .feminine)
-        createNounAndAppend(word: "corazón", def: "heart", type: .bodyPart, gender: .feminine)
+        createNounAndAppend(word: "corazón", def: "heart", type: .any, gender: .feminine)
     }
     
     /*

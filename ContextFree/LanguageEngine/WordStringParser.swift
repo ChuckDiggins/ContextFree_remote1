@@ -12,6 +12,7 @@ struct WordStringParser {
     private var spanishWords = SpanishWords()
     private var frenchWords = FrenchWords()
     private var englishWords = EnglishWords()
+    private var romanceWords = RomanceWords()  //general purpose ... will replace spanish, french and english words
     private var m_language : LanguageType
     
     init(language: LanguageType){
@@ -21,6 +22,10 @@ struct WordStringParser {
     
     func getLanguage()->LanguageType{
         return m_language
+    }
+    
+    func getRomancWords()->RomanceWords{
+        return romanceWords
     }
     
     func getSpanishWords()->SpanishWords{
@@ -67,14 +72,60 @@ struct WordStringParser {
         }
     }
     
-    mutating func addSpanishVerbToDictionary(verb: Verb){
+    func isNewVerb(language: LanguageType, verb: Verb)->Bool{
+        switch language {
+        case .Spanish:
+            for word in spanishWords.verbList {
+                if verb.word == word.word {
+                    return false
+                }
+            }
+        case .French:
+            for word in frenchWords.verbList {
+                if verb.word == word.word {
+                    return false
+                }
+            }
+        default: return true
+        }
+        return true
+    }
+    
+    func getVerbList(language: LanguageType)->Array<Word>{
+        switch language {
+        case .Spanish:  return spanishWords.verbList
+        case .French: return frenchWords.verbList
+        case .English:  return englishWords.verbList
+        default: return englishWords.verbList
+        }
+    }
+    
+    func getVerbListCount(language: LanguageType)->Int{
+        switch language {
+        case .Spanish:  return spanishWords.verbList.count
+        case .French: return frenchWords.verbList.count
+        case .English:  return englishWords.verbList.count
+        default: return englishWords.verbList.count
+        }
+    }
+    
+    mutating func addSpanishVerbToDictionary(verb: Verb)->Int{
         spanishWords.verbList.append(verb)
+        return spanishWords.verbList.count
     }
     
-    mutating func addFrenchVerbToDictionary(verb: Verb){
+    mutating func addFrenchVerbToDictionary(verb: Verb)->Int{
         frenchWords.verbList.append(verb)
+        return frenchWords.verbList.count
     }
     
+    func getSpanishVerbCount()->Int{
+        return spanishWords.verbList.count
+    }
+    
+    func getFrenchVerbCount()->Int{
+        return frenchWords.verbList.count
+    }
     
     func convertWordToSentenceData(word: Word, wordType: WordType)->SentenceData{
         var sentenceData = SentenceData()

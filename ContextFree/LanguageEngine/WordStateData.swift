@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WordStateData : Hashable, Equatable {
+class WordStateData : Hashable, Equatable {
     var title: String = ""
     func hash(into hasher: inout Hasher){
         hasher.combine(title)
@@ -59,7 +59,7 @@ struct WordStateData : Hashable, Equatable {
         return wordType.rawValue
     }
     
-    mutating func setProcessedWord(str: String){
+   func setProcessedWord(str: String){
         processedWord = str
     }
     
