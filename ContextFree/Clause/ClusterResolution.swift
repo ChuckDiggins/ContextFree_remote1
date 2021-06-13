@@ -12,7 +12,7 @@ struct ClusterResolution {
     let m_wsp : WordStringParser
     
     func resolveObjectAndReflexivePronouns (sentenceData: Array<SentenceData>)->Array<SentenceData>{
-        var sentenceCopy = sentenceData
+        let sentenceCopy = sentenceData
         
         //look for consecutive object pronouns "los hombres se nos dieron el libro" -
         // ella me lo ha dado  - she has given it to me -

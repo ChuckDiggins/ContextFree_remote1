@@ -47,9 +47,10 @@ struct CFModel{
     
     init(language: LanguageType){
         m_currentLanguage = language
-        m_wsp = WordStringParser(language:m_currentLanguage)
+        
         m_spanishVerbModelConjugation.setLanguage(language: .Spanish)
         m_frenchVerbModelConjugation.setLanguage(language: .French)
+        m_wsp = WordStringParser(language:m_currentLanguage, span:m_spanishVerbModelConjugation, french:m_frenchVerbModelConjugation)
         m_disambiguation.setWordStringParser(wsp: m_wsp)
         createVerbModels()
         buildSomeStuff()
@@ -89,9 +90,7 @@ struct CFModel{
         jsonVerbManager.decodeVerbs()
         print("Json verb count = \(jsonVerbManager.getVerbCount())")
         createVerbDictionaryFromJsonVerbs()
-        print("Spanish dictionary verb count = \(m_wsp.getSpanishVerbCount())")
-        print("French dictionary verb count = \(m_wsp.getFrenchVerbCount())")
-        
+        print("Dictionary verb count = \(m_wsp.getVerbCount())")
     }
     
     mutating func createJsonVerb(verb: Verb, bNumber: Int){
@@ -127,19 +126,18 @@ struct CFModel{
         default: break
         }
         
-        let verbStuff = analyzeAndCreateNewBVerb(verbPhrase: bVerbString)
-        if ( verbStuff.isValid ){
-            let bVerb = verbStuff.verb
-            
+        let spanishVerbStuff = analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: jv.spanish)
+        let frenchVerbStuff = analyzeAndCreateBVerb_SPIFE(language: .French, verbPhrase: jv.french)
+        if ( spanishVerbStuff.isValid && frenchVerbStuff.isValid ){
             switch m_currentLanguage {
             case .Spanish:
                 let verb = SpanishVerb(jsonVerb: jv)
-                verb.setBVerb(bVerb: bVerb)
-                verbListCount = m_wsp.addSpanishVerbToDictionary(verb: verb)
+                //verb.setBVerb(bVerb: bVerb)
+                verbListCount = m_wsp.addVerbToDictionary(verb: verb)
             case .French:
                 let verb = FrenchVerb(jsonVerb: jv)
-                verb.setBVerb(bVerb: bVerb)
-                verbListCount = m_wsp.addFrenchVerbToDictionary(verb: verb)
+                //verb.setBVerb(bVerb: bVerb)
+                verbListCount = m_wsp.addVerbToDictionary(verb: verb)
             default:
                 break
             }
@@ -181,14 +179,8 @@ struct CFModel{
     mutating func append(language: LanguageType, romanceVerb: RomanceVerb)->Int{
         var verbListCount = 0
         
-        switch language {
-        case .Spanish:
-            if ( m_wsp.isNewVerb(language: language, verb: romanceVerb) ){ verbListCount = m_wsp.addSpanishVerbToDictionary(verb: romanceVerb)}
-        case .French:
-            if ( m_wsp.isNewVerb(language: language, verb: romanceVerb) ){ verbListCount =  m_wsp.addSpanishVerbToDictionary(verb: romanceVerb)}
-        default:
-            break
-        }
+        if m_wsp.isNewVerb(verb: romanceVerb) { verbListCount = m_wsp.addVerbToDictionary(verb: romanceVerb)}
+        
         return verbListCount
     }
     
@@ -279,11 +271,11 @@ struct CFModel{
     }
     
     func getVerbList()->Array<Word>{
-        return m_wsp.getVerbList(language: m_currentLanguage)
+        return m_wsp.getVerbList()
     }
     
     func getVerbCount()->Int{
-        return m_wsp.getVerbListCount(language: m_currentLanguage)
+        return m_wsp.getVerbCount()
     }
     
     /*
@@ -565,10 +557,10 @@ struct CFModel{
         let wordIndex = index % wordList.count
         word = wordList[wordIndex]
         
-        let spVerb = word as! Verb
-        let span = spVerb.getWordAtLanguage(language: .Spanish)
-        let fr = spVerb.getWordAtLanguage(language: .French)
-        let eng = spVerb.getWordAtLanguage(language: .English)
+        let v = word as! Verb
+        let span = v.getWordAtLanguage(language: .Spanish)
+        let fr = v.getWordAtLanguage(language: .French)
+        let eng = v.getWordAtLanguage(language: .English)
         print("\(span) - \(fr) - \(eng)")
        
         return word
@@ -614,7 +606,7 @@ struct CFModel{
             case .Portuguese: break
             }
         case .verb:
-            return m_wsp.getVerbList(language: m_currentLanguage)
+            return m_wsp.getVerbList()
         case .adverb:
             switch m_currentLanguage {
             case .Spanish:

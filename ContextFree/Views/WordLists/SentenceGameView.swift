@@ -48,7 +48,6 @@ struct SentenceGameView: View {
                 m_clause = dIndependentClause(language: currentLanguage)
                 cfModelView.createNewModel(language: currentLanguage)
                 sentenceString = ""
-                //currentLanguageString = "Spanish"
                 createRandomClause()
             }){
                 Text("Spanish")
@@ -59,7 +58,6 @@ struct SentenceGameView: View {
                 m_clause = dIndependentClause(language: currentLanguage)
                 cfModelView.createNewModel(language: currentLanguage)
                 sentenceString = ""
-                //currentLanguageString = "French"
                 createRandomClause()
             }){
                 Text("French")
@@ -73,6 +71,7 @@ struct SentenceGameView: View {
             Text("Random sentence:")
             
             VStack {
+                //part 1
                 HStack{
                     ForEach(singleIndexList1, id: \.self){index in
                         Button(action: {
@@ -81,11 +80,12 @@ struct SentenceGameView: View {
                             wordSelected ? wordSurgery(single: singleList[index]) : changeWord()
                         }){
                             Text(singleList[index].getProcessWordInWordStateData())
-                                .font(.callout)
-                                .foregroundColor(index == currentSingleIndex ? .purple : .black)
+                                .font(.subheadline)
+                                .foregroundColor(index == currentSingleIndex ? .orange : .black)
                         }
                     }
                 }
+                //part2
                 HStack{
                     ForEach(singleIndexList2, id: \.self){index in
                         Button(action: {
@@ -94,8 +94,8 @@ struct SentenceGameView: View {
                             wordSelected ? wordSurgery(single: singleList[index]) : changeWord()
                         }){
                             Text(singleList[index].getProcessWordInWordStateData())
-                                .font(.callout)
-                                .foregroundColor(index == currentSingleIndex ? .purple : .black)
+                                .font(.subheadline)
+                                .foregroundColor(index == currentSingleIndex ? .orange : .black)
                         }
                     }
                 }
@@ -159,9 +159,9 @@ struct SentenceGameView: View {
         VStack(alignment: .center){
             Text("Word surgery").font(.headline)
             Text(surgicalMessage).font(.caption).foregroundColor(.red)
-            Text(surgicalWord)
+            Text(surgicalWord).font(Font.body.bold())
+            Text(surgicalProcessedWord).font(Font.body.bold())
             Text(surgicalEnglish)
-            Text(surgicalProcessedWord)
             Text(surgicalLine1)
             Text(surgicalLine2)
             Text(surgicalLine3)

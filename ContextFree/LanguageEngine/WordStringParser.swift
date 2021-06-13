@@ -14,9 +14,13 @@ struct WordStringParser {
     private var englishWords = EnglishWords()
     private var romanceWords = RomanceWords()  //general purpose ... will replace spanish, french and english words
     private var m_language : LanguageType
+    private var spanVerbModel : RomanceVerbModelConjugation
+    private var frenchVerbModel : RomanceVerbModelConjugation
     
-    init(language: LanguageType){
+    init(language: LanguageType, span: RomanceVerbModelConjugation, french: RomanceVerbModelConjugation){
         m_language = language
+        spanVerbModel = span
+        frenchVerbModel = french
         createDictionaries()
     }
     
@@ -72,6 +76,50 @@ struct WordStringParser {
         }
     }
     
+    func isNewVerb(verb: Verb)->Bool{
+        for word in romanceWords.verbList {
+            if verb.word == word.word {
+                return false
+            }
+        }
+        return true
+    }
+
+    func getVerbList()->Array<Word>{
+        return romanceWords.verbList
+    }
+    
+    func getVerbCount()->Int{
+        return romanceWords.verbList.count
+    }
+    
+    mutating func addVerbToDictionary(verb: Verb)->Int{
+        romanceWords.verbList.append(verb)
+        return romanceWords.verbList.count
+    }
+    
+    mutating func getVerbFromDictionary(language: LanguageType, index: Int)->Verb{
+        var verb = Verb()
+        switch language {
+        case .Spanish:
+            verb = romanceWords.verbList[index] as! SpanishVerb
+            let bv = BSpanishVerb(verbPhrase: verb.spanish)
+            let verbModel = spanVerbModel.getVerbModel(verbWord: bv.m_verbWord)
+            bv.setPatterns(verbModel : verbModel)
+            verb.setBVerb(bVerb: bv)
+        case .French:
+            verb = romanceWords.verbList[index] as! FrenchVerb
+            let bv = BFrenchVerb(verbPhrase: verb.french)
+            let verbModel = frenchVerbModel.getVerbModel(verbWord: bv.m_verbWord)
+            bv.setPatterns(verbModel : verbModel)
+            verb.setBVerb(bVerb: bv)
+        default:
+            break
+        }
+        return verb
+    }
+    
+    /*
     func isNewVerb(language: LanguageType, verb: Verb)->Bool{
         switch language {
         case .Spanish:
@@ -126,7 +174,18 @@ struct WordStringParser {
     func getFrenchVerbCount()->Int{
         return frenchWords.verbList.count
     }
-    
+     
+     func getVerbCount()->Int{
+         switch(m_language){
+         case .Spanish:
+             return spanishWords.verbList.count
+         case .French:
+             return frenchWords.verbList.count
+         default:
+             return 0
+         }
+     }
+    */
     func convertWordToSentenceData(word: Word, wordType: WordType)->SentenceData{
         var sentenceData = SentenceData()
         sentenceData.word = word
@@ -134,16 +193,7 @@ struct WordStringParser {
         return sentenceData
     }
     
-    func getVerbCount()->Int{
-        switch(m_language){
-        case .Spanish:
-            return spanishWords.verbList.count
-        case .French:
-            return frenchWords.verbList.count
-        default:
-            return 0
-        }
-    }
+    
     
     func getPrepositions()->Array<Word>{
         switch(m_language){

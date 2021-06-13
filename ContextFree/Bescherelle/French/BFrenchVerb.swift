@@ -49,6 +49,10 @@ class BFrenchVerb : BRomanceVerb {
     
     var m_verbModelParseList = [ParsedExceptionStruct]()
     
+    init(verbPhrase: String){
+        super.init(verbPhrase: verbPhrase, language: .French)
+    }
+    
     init(verbPhrase: String, verbWord: String, verbEnding : VerbEnding, languageType : LanguageType, preposition: String, isReflexive: Bool){
         
         super.init(verbPhrase: verbPhrase, verbWord: verbWord, verbEnding : verbEnding, languageType: languageType, isReflexive : isReflexive, preposition : preposition)

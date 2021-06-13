@@ -41,6 +41,17 @@ class BRomanceVerb: BVerb {
     var dropLettersList = [DropLettersForm]()
     var replaceEndingList = [ReplaceEndingForm]()
     
+    init(verbPhrase: String, language: LanguageType){
+        let verbStuff = VerbUtilities().analyzeWordPhrase(testString: verbPhrase)
+        self.verbEnding = verbStuff.verbEnding
+        self.m_isReflexive = verbStuff.isReflexive
+        self.m_preposition = ""
+        var constructedVerbPhrase = verbStuff.verbWord
+        if ( verbStuff.isReflexive){constructedVerbPhrase += "se"}
+        if verbStuff.residualPhrase.count>0 { constructedVerbPhrase += " " + verbStuff.residualPhrase  }
+        super.init(verbPhrase: constructedVerbPhrase, verbWord: verbStuff.verbWord, languageType: language)
+    }
+        
     init(verbPhrase: String, verbWord: String, verbEnding: VerbEnding, languageType: LanguageType, isReflexive: Bool, preposition : String){
         self.verbEnding = verbEnding
         self.m_isReflexive = isReflexive

@@ -113,26 +113,10 @@ struct RandomWordLists{
     }
     
     mutating func createListOfVerbs(){
-        switch m_language {
-        case .Spanish:
-            for verb in m_wsp!.getSpanishWords().verbList{
-                //let sv = verb as! SpanishVerb
-                m_verbs.append(verb)
-            }
-        case .English:
-            for verb in m_wsp!.getEnglishWords().verbList{
-                let sv = verb as! EnglishVerb
-                if (sv.typeList[0] == .normal ){m_verbs.append(verb)}
-            }
-        case .French:
-            for verb in m_wsp!.getFrenchWords().verbList{
-                let sv = verb as! FrenchVerb
-                if (sv.typeList[0] == .normal ){m_verbs.append(verb)}
-            }
-        case .Italian: break
-        case .Portuguese: break
+        for i in 0 ..< m_wsp!.getVerbCount() {
+            //get language-converted verb from dictionary
+            m_verbs.append(m_wsp!.getVerbFromDictionary(language: m_language, index: i))
         }
-
     }
     
     mutating func createListOfObjects(){
@@ -278,7 +262,8 @@ struct RandomWordLists{
             wsd.verbType = verb.typeList[0]
             wsd.wordType = .verb
             switch wsd.language {
-            case .Spanish: single = dSpanishVerbSingle(word: word, data: wsd)
+            case .Spanish:
+                single = dSpanishVerbSingle(word: word, data: wsd)
             case .French: single = dFrenchVerbSingle(word: word, data: wsd)
             default: single = dVerbSingle(word: word, data: wsd)
             }
