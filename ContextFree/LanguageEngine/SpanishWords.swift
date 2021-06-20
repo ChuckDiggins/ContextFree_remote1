@@ -12,7 +12,7 @@ struct SpanishWords {
     
     var adjectiveList = Array<Word>()
     var adverbList = Array<Word>()
-    var articleList = Array<Word>()
+    //var articleList = Array<Word>()
     var conjunctionList = Array<Word>()
     var determinerList = Array<Word>()
     var nounList = Array<Noun>()
@@ -44,20 +44,24 @@ struct SpanishWords {
         return ""
     }
     
+    /*
     mutating func createSomeSpanishDeterminers(){
         createDeterminerAndAppend(word: "esto", def: "this", type: .definite, femWord: "esta", mascPlural: "estos", femPlural: "estas")
         createDeterminerAndAppend(word: "eso", def: "that", type: .definite, femWord: "esa", mascPlural: "esos", femPlural: "esas")
     }
+    */
     
     mutating func createSomeAmbiguousWords(){
         createAmbiguousAndAppend(word: "", def: "", type: .general)
         createAmbiguousAndAppend(word: "", def: "", type: .pronoun)
     }
     
+    /*
     mutating func createSomeSpanishArticles(){
         createArticleAndAppend(word: "el", def: "the", type: .definite)
         createArticleAndAppend(word: "un", def: "a", type: .indefinite)
     }
+    */
     
     mutating func createSomeSpanishPronouns(){
         createPronounAndAppend(word: "yo", def: "I", type: .SUBJECT)
@@ -66,17 +70,7 @@ struct SpanishWords {
         createPronounAndAppend(word: "me", def: "me", type: .DIRECT_OBJECT)
     }
     
-    
-    /*
-    enum PrepositionType
-    {
-        case spatial        //behind, around, between, inside, etc.
-        case temporal      //after, before, until, during
-        case possessive    //of
-        case assignment   //to, for, with, from
-        case general     //about, without
-    }
-*/
+
     
     mutating func createSomeAdverbs(){
         createAdverbAndAppend(word: "mas", def: "more", type: .comparing)
@@ -111,6 +105,7 @@ struct SpanishWords {
         createConjunctionAndAppend(word: "a fin de que", def: "as long as", type: .condition)
     }
     
+    /*
     mutating func createSomePrepositions(){
         createPrepositionAndAppend(word: "a", def: "to", type: .assignment)
         createPrepositionAndAppend(word: "con", def: "with", type: .assignment)
@@ -178,7 +173,8 @@ struct SpanishWords {
         createPrepositionAndAppend(word: "al pie de", def: "at the foot of", type: .general)
         
     }
-    
+    */
+    /*
     mutating func createSomeAdjectives(){
         var adj : SpanishAdjective
         adj = SpanishAdjective(word: "rojo", def: "red", type: .color)
@@ -213,7 +209,8 @@ struct SpanishWords {
         createAdjectiveAndAppend(word: "bueno", def: "good", type: .condition, position: .both)
         
     }
-    
+    */
+    /*
     mutating func createSomeNouns(){
         createNounAndAppend(word: "agua", def: "water", type: .thing, gender: .feminine)
         createNounAndAppend(word: "casa", def: "house", type: .place, gender: .feminine)
@@ -250,7 +247,7 @@ struct SpanishWords {
         createNounAndAppend(word: "cama", def: "bed", type: .place, gender: .feminine)
         createNounAndAppend(word: "corazón", def: "heart", type: .any, gender: .feminine)
     }
-    
+*/
     /*
     mutating func createSomeVerbsA(){
         var verb : RomanceVerb
@@ -302,10 +299,13 @@ struct SpanishWords {
         let pos = Ambiguous(word: word, def: def, type: type)
         ambiguousList.append(pos)
     }
+    
+    /*
     mutating func createArticleAndAppend (word : String, def: String, type : ArticleType){
         let pos = SpanishArticle()
-        articleList.append(pos)
+        //articleList.append(pos)
     }
+    */
     
   
     mutating func createConjunctionAndAppend (word : String, def: String, type : ConjunctionType){

@@ -326,9 +326,10 @@ struct NewCFVerbProperties: View {
         //currentVerb.updateTransitivity(trans : getTransitivity(index: transitivityIndex))
         currentVerb.updatePassivity(pass : getPassivity(index: passivityIndex))
         currentVerb.updateVariables(vType: verbTypeList, subj : subj, obj : obj)
-        let jsonVerb = currentVerb.createJsonVerb(bNumber: patternNumber)
+        let jsonVerb = currentVerb.createJsonVerb()
         print(jsonVerb)
-        //cfModelView.appendJsonVerb(jsonVerb: jsonVerb)
+        verbCount = cfModelView.appendJsonVerb(jsonVerb: jsonVerb)
+        wordIsChanged = false
     }
     
     func showCurrentWordInfo(){

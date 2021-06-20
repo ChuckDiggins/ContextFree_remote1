@@ -7,11 +7,10 @@
 
 import Foundation
 
-struct RomanceWords {
+struct GeneralWords {
     
     var adjectiveList = Array<Word>()
     var adverbList = Array<Word>()
-    var articleList = Array<Word>()
     var conjunctionList = Array<Word>()
     var determinerList = Array<Word>()
     var nounList = Array<Noun>()

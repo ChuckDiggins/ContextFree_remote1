@@ -24,7 +24,6 @@ class dNounSingle : dSingle
     
     var      m_isSubject = false
     var      m_nounType = NounType.any
-    
     func    setNounType (type : NounType){m_nounType = type}
     func    getNounType ()->NounType{return m_nounType}
     func    setIsSubject(flag:Bool){m_isSubject = flag}
@@ -67,6 +66,10 @@ class dNounPhrase : dPhrase {
         super.init(word: word, clusterType: type, data: data)
     }
     
+    func startsWithVowelSound()->Bool{
+        return getNounSingle().startsWithVowelSound()
+    }
+    
     func getNounSingle()->dNounSingle{
         let nounSingle = dNounSingle()
         for cluster in getClusterList(){
@@ -88,7 +91,7 @@ class dNounPhrase : dPhrase {
                 if sym == .Art {
                     let art = cluster as! dArticleSingle
                     sd.setProcessedWord(str: art.getWordString())
-                    print("dNounPhrase:reconcile article \(art.getWordString()) .. ")
+                    //print("dNounPhrase:reconcile article \(art.getWordString()) .. ")
                 }
                 else if sym == .Adj {
                     let adj = cluster as! dAdjectiveSingle
@@ -96,7 +99,7 @@ class dNounPhrase : dPhrase {
                     let now = Date()
                     adjStr = now.description
                     sd.setProcessedWord(str: adjStr)
-                    print("dNounPhrase:reconcile adjective \(adj.getWordString()) .. \(adjStr) .. ")
+                    //print("dNounPhrase:reconcile adjective \(adj.getWordString()) .. \(adjStr) .. ")
                 }
                 cluster.setSentenceData(data: sd)
                 //print(cluster.getSentenceData().getProcessedWord())

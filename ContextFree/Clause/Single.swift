@@ -27,7 +27,11 @@ class dSingle  : dCluster
     static func ==(lhs: dSingle, rhs: dSingle) -> Bool {
         return lhs.getClusterWord() == rhs.getClusterWord() && lhs.getSentenceData() == rhs.getSentenceData()
     }
-
+    
+    func startsWithVowelSound()->Bool{
+        return VerbUtilities().startsWithVowelSound(characterArray: getClusterWord().word)
+    }
+    
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     
     var m_originalString = ""
@@ -229,20 +233,6 @@ class dArticleSingle :  dSingle{
         super.init(word: word, clusterType: type, data: data)
     }
     
-    /*
-    override func getClusterWord()->Word {
-        switch m_sentenceData.language {
-        case .Spanish:
-            return Word(word: "el", def: "the", wordType: WordType.article)
-        case .French:
-            return Word(word: "le", def: "the", wordType: WordType.article)
-        default:
-            return Word()
-        }
-    }
-    */
-    
-
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()

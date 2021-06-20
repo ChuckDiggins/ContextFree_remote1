@@ -12,6 +12,7 @@ struct RandomWordLists{
     var m_language = LanguageType.Spanish
     var m_subjects = Array<Word>()
     var m_verbs = Array<Word>()
+    var m_nouns = Array<Word>()
     var m_objects = Array<Word>()
     
     var m_articles = Array<Word>()
@@ -34,83 +35,75 @@ struct RandomWordLists{
     }
     
     mutating func createListOfAdjectives(){
-        switch m_language {
-        case .Spanish:
-            for word in m_wsp!.getSpanishWords().adjectiveList{
-                let adj = word as! Adjective
-                if (adj.preferredPosition == .following ){m_adjectives.append(adj)}
+        m_adjectives.removeAll()
+        for i in 0 ..< m_wsp!.getAdjectiveCount() {
+            //get language-converted noun from dictionary
+            let adj = m_wsp!.getAdjectiveFromDictionary(language: m_language, index: i)
+            switch m_language {
+            case .Spanish:
+                let sa = adj as! SpanishAdjective
+                sa.createOtherForms()
+            case .French:
+                let sa = adj as! FrenchAdjective
+                sa.createOtherForms()
+                print("createListOfAdjectives: sa.plural = \(sa.plural)")
+            case .English, .Italian, .Portuguese:
+                break
             }
-        case .English:
-            for adj in m_wsp!.getEnglishWords().adjectiveList{
-                m_adjectives.append(adj)
-            }
-        case .French:
-            for word in m_wsp!.getFrenchWords().adjectiveList{
-                let adj = word as! Adjective
-                if (adj.preferredPosition == .following ){m_adjectives.append(adj)}
-            }
-        case .Italian: break
-        case .Portuguese: break
+            m_adjectives.append(adj)
         }
     }
     
     mutating func createListOfArticles(){
-        switch m_language {
-        case .Spanish:
-            for art in m_wsp!.getSpanishWords().articleList{
-                m_articles.append(art)
+        m_articles.removeAll()
+        for i in 0 ..< m_wsp!.getDeterminerCount() {
+            //get language-converted noun from dictionary
+            let det = m_wsp!.getDeterminerFromDictionary(language: m_language, index: i)
+            switch m_language {
+            case .Spanish:
+                let sa = det as! SpanishDeterminer
+            case .French:
+                let sa = det as! FrenchDeterminer
+            case .English, .Italian, .Portuguese:
+                break
             }
-        case .English:
-            for art in m_wsp!.getEnglishWords().articleList{
-                m_articles.append(art)
-            }
-        case .French:
-            for art in m_wsp!.getFrenchWords().articleList{
-                m_articles.append(art)
-            }
-        case .Italian: break
-        case .Portuguese: break
+            m_articles.append(det)
         }
+
     }
     
     mutating func createListOfPrepositions(){
-        switch m_language {
-        case .Spanish:
-            for prep in m_wsp!.getSpanishWords().prepositionList{
-                m_prepositions.append(prep)
-            }
-        case .English:
-            for prep in m_wsp!.getEnglishWords().prepositionList{
-                m_prepositions.append(prep)
-            }
-        case .French:
-            for prep in m_wsp!.getFrenchWords().prepositionList{
-                m_prepositions.append(prep)
-            }
-        case .Italian: break
-        case .Portuguese: break
+        m_prepositions.removeAll()
+        for i in 0 ..< m_wsp!.getPrepositionCount() {
+            //get language-converted noun from dictionary
+            m_prepositions.append(m_wsp!.getPrepositionFromDictionary(language: m_language, index: i))
         }
     }
     
     mutating func createListOfSubjects(){
-        switch m_language {
-        case .Spanish:
-            for noun in m_wsp!.getSpanishWords().nounList{
-                if (noun.type == .person || noun.type == .animal){m_subjects.append(noun)}
+        m_subjects.removeAll()
+        for i in 0 ..< m_wsp!.getNounCount() {
+            //get language-converted noun from dictionary
+            let noun = m_wsp!.getNounFromDictionary(language: m_language, index: i)
+            if (noun.nounType == .person || noun.nounType == .animal ){
+                m_subjects.append(noun)
             }
-        case .English:
-            for noun in m_wsp!.getEnglishWords().nounList{
-                if (noun.type == .person || noun.type == .animal){m_subjects.append(noun)}
-            }
-        case .French:
-            for noun in m_wsp!.getFrenchWords().nounList{
-                if (noun.type == .person || noun.type == .animal){m_subjects.append(noun)}
-            }
-        case .Italian: break
-        case .Portuguese: break
         }
 
     }
+    
+    mutating func createListOfObjects(){
+        m_objects.removeAll()
+        for i in 0 ..< m_wsp!.getNounCount() {
+            //get language-converted noun from dictionary
+            let noun = m_wsp!.getNounFromDictionary(language: m_language, index: i)
+            if (noun.nounType == .plant || noun.nounType == .thing || noun.nounType == .place){
+                m_objects.append(noun)
+            }
+        }
+
+    }
+    
     
     mutating func createListOfVerbs(){
         for i in 0 ..< m_wsp!.getVerbCount() {
@@ -119,26 +112,8 @@ struct RandomWordLists{
         }
     }
     
-    mutating func createListOfObjects(){
-        switch m_language {
-        case .Spanish:
-            for noun in m_wsp!.getSpanishWords().nounList{
-                if (noun.type == .plant || noun.type == .thing || noun.type == .place){m_objects.append(noun)}
-            }
-        case .English:
-            for noun in m_wsp!.getEnglishWords().nounList{
-                if (noun.type == .plant || noun.type == .thing){m_objects.append(noun)}
-            }
-        case .French:
-            for noun in m_wsp!.getFrenchWords().nounList{
-                if (noun.type == .plant || noun.type == .thing){m_objects.append(noun)}
-            }
-        case .Italian: break
-        case .Portuguese: break
-        }
-    }
-    
     mutating func createListOfPronouns(){
+        m_pronouns.removeAll()
         switch m_language {
         case .Spanish:
             for pronoun in m_wsp!.getSpanishWords().pronounList{
@@ -201,7 +176,7 @@ struct RandomWordLists{
             wsd.adjectiveType = adj.type
             wsd.wordType = .adjective
             
-            //create a new instance of this adjective
+            //create a new instance of this adjective single
 
             single = dAdjectiveSingle(word: word, data: wsd)
                 
@@ -225,6 +200,10 @@ struct RandomWordLists{
                 i = Int.random(in: 0 ..< m_objects.count)
                 word = m_objects[i]
             }
+            
+            //for testing
+            //word = m_subjects[0]
+            
             let number = Int.random(in: 1 ..< 3)
             
             if ( number == 1 ) {
@@ -238,10 +217,13 @@ struct RandomWordLists{
             
             wsd.word = word
             let noun = word as! RomanceNoun
-            wsd.nounType = noun.type
+            
+            wsd.nounType = noun.nounType
             wsd.gender = noun.gender
             wsd.wordType = .noun
             single = dNounSingle(word: word, data: wsd)
+            let ns = single as! dNounSingle
+            ns.setIsSubject(flag: isSubject)
         case .pronoun:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()

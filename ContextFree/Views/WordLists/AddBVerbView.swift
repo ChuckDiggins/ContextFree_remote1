@@ -74,13 +74,13 @@ struct AddBVerbView: View {
                                 patternString = bSpanishVerb.getBescherelleInfo()
                                 let spanishVerb = SpanishVerb(word: bSpanishVerb.m_verbWord, def: "", type: VerbType.normal)
                                 spanishVerb.setBVerb(bVerb: bSpanishVerb)
-                                verbCount = cfModelView.append(language: currentLanguage, romanceVerb: spanishVerb )
+                                //verbCount = cfModelView.append(language: currentLanguage, romanceVerb: spanishVerb )
                             case .French:
                                 let bFrenchVerb = verb as! BFrenchVerb
                                 patternString = bFrenchVerb.getBescherelleInfo()
                                 let frenchVerb = FrenchVerb(word: bFrenchVerb.m_verbWord, def: "", type: VerbType.normal)
                                 frenchVerb.setBVerb(bVerb: bFrenchVerb)
-                                verbCount = cfModelView.append(language: currentLanguage, romanceVerb: frenchVerb )
+                                //verbCount = cfModelView.append(language: currentLanguage, romanceVerb: frenchVerb )
                             default: break
                             }
                         }

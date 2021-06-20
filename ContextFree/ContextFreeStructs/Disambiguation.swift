@@ -7,6 +7,14 @@
 
 import Foundation
 
+enum ContractionType{
+    case conmigo
+    case del
+    case al
+    case je    //j'aime
+    case le    //l'aime
+}
+
 //mutating func parseWordListIntoWordObjects(wordList: Array<String>)->Array<Word>{
 //    return getWordObjects(language: .Spanish, wordList: wordList)
 //}
@@ -18,10 +26,53 @@ struct Disambiguation {
         m_wsp = wsp
     }
     
+    mutating func findContraction(language: LanguageType, singleList : Array<dSingle>, contractionType: ContractionType)->Array<dSingle>{
+        var newSingleList = singleList
+        switch contractionType {
+        case .conmigo:
+            break
+        case .del:
+            break
+        case .al:
+            break
+        case .je:
+            break
+        case .le:
+            newSingleList = findLeContraction(singleList: singleList)
+        }
+        return  newSingleList
+        
+    }
+
+    mutating func findLeContraction(singleList : Array<dSingle>)->Array<dSingle>{
+        //var newSingleList = singleList
+        //no contraction will start with the last single
+        for i in 0 ..< singleList.count-1 {
+            let single = singleList[i]
+            let wsd = single.getSentenceData()
+            switch wsd.wordType {
+            case .article:
+                if wsd.gender == .masculine && wsd.number == .singular && wsd.articleType == .definite  {
+                    let nextSingle = singleList[i+1]
+                    print("next single = \(nextSingle.getClusterWord().word) -- starts with a vowel \(nextSingle.startsWithVowelSound() )")
+                    if nextSingle.startsWithVowelSound() {
+                        single.setProcessWordInWordStateData(str: "l'")
+                    } else {
+                        single.setProcessWordInWordStateData(str: "le")
+                    }
+                }
+            case .subjectPronoun:
+                break
+            default: break
+            }
+        }
+        return  singleList
+    }
+    
     mutating func prescreen(sdList : Array<SentenceData>)->Array<SentenceData>{
         var sentenceDataList = sdList
         
-        sentenceDataList = lookForProgressivePlusattachedPronouns(sdList: sdList)
+        sentenceDataList = lookForProgressivePlusAttachedPronouns(sdList: sdList)
         
         //printSentenceDataList(msg: "After prescreen", sdList : sentenceDataList)
         return sentenceDataList
@@ -81,7 +132,7 @@ struct Disambiguation {
         return sentenceDataList
     }
     
-    mutating func lookForProgressivePlusattachedPronouns(sdList : Array<SentenceData>)->Array<SentenceData>{
+    mutating func lookForProgressivePlusAttachedPronouns(sdList : Array<SentenceData>)->Array<SentenceData>{
         var sentenceDataList = sdList
         //handle object pronouns of various sorts, detaching them from other words
         //such as vendiéndomelos = viendo + me + los

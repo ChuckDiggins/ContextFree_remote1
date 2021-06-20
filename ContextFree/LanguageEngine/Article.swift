@@ -147,7 +147,6 @@ class SpanishArticle : RomanceArticle {
         definitePluralMasc = "los"
         definitePluralFem = "las"
     }
-    
 }
 
 class FrenchArticle : RomanceArticle {

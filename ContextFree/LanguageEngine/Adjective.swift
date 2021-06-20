@@ -8,14 +8,61 @@
 import Foundation
 
 class Adjective : Word {
+    var english = ""
+    var spanish = ""
+    var french = ""
+    var plural = ""
     var type : AdjectiveType
     var preferredPosition = AdjectivePositionType.preceding
+    
+    override init(){
+        self.type = AdjectiveType.any
+        super.init(word: "", def: "", wordType: .adjective)
+    }
     
     init(word: String, def: String, type : AdjectiveType){
         self.type = type
         super.init(word: word, def: def, wordType: .adjective)
     }
 
+    init(jsonAdjective: JsonAdjective, language: LanguageType){
+        self.english = jsonAdjective.english
+        self.french = jsonAdjective.french
+        self.spanish = jsonAdjective.spanish
+        self.type = AdjectiveType.any
+        
+        switch(language){
+        case .Spanish:  super.init(word: spanish, def: english, wordType: .noun)
+        case .French:  super.init(word: french, def: english, wordType: .noun)
+        case .English:  super.init(word: english, def: english, wordType: .noun)
+        default:
+            super.init(word: spanish, def: english, wordType: .adjective)
+        }
+        
+        convertAdjectiveTypeStringToAdjectiveTypes(inputString: jsonAdjective.adjectiveType)
+        convertFavoriteNounStringToFavoriteNouns(inputString: jsonAdjective.nounLikes)
+    }
+    
+    func convertAdjectiveTypeStringToAdjectiveTypes(inputString: String){
+        type = .any
+        if ( inputString == "C" ){type = .color}
+        if ( inputString == "D" ){type = .demonstrative}
+        if ( inputString == "P" ){type = .possessive}
+        if ( inputString == "T" ){type = .nationality}
+    }
+    
+    func convertFavoriteNounStringToFavoriteNouns(inputString: String){
+        /*let util = VerbUtilities()
+        let strList = getNounTypesAsStringList()
+        for str in strList {
+            if util.doesWordContainLetter(inputString: inputString, letter: str) {
+                print(str)
+                //favoriteSubjects.append(getNounTypeFromString(str: str))}
+            }
+        }
+ */
+    }
+    
     func setPreferredPosition(position: AdjectivePositionType){
         preferredPosition = position
     }
@@ -38,6 +85,10 @@ class RomanceAdjective : Adjective {
     {
         super.init(word: word, def: def, type: type)
         super.setPreferredPosition(position: .following)
+    }
+    
+    override init(jsonAdjective: JsonAdjective, language: LanguageType){
+        super.init(jsonAdjective: jsonAdjective, language: language)
     }
     
     func getForm(gender: Gender, number: Number)->String{
@@ -108,6 +159,10 @@ class FrenchAdjective : RomanceAdjective {
         self.createSuperlatives()
     }
     
+    init(jsonAdjective: JsonAdjective){
+        super.init(jsonAdjective: jsonAdjective, language: .French)
+    }
+    
     func isAdjective(word: String) -> (Bool, Gender, Number)
     {
         if ( word == self.word ){return (true, .masculine, .singular) }
@@ -152,7 +207,11 @@ class FrenchAdjective : RomanceAdjective {
     }
     
     func createSuperlatives(){
-        
+        createFemaleForms()
+    }
+    
+    func createOtherForms(){
+        createFemaleForms()
     }
     
     func createFemaleForms(){
@@ -308,6 +367,10 @@ class SpanishAdjective : RomanceAdjective {
     {
         super.init(word: word, def: def, type: type)
         self.createOtherForms()
+    }
+    
+    init(jsonAdjective: JsonAdjective){
+        super.init(jsonAdjective: jsonAdjective, language: .Spanish)
     }
     
     func determineAdjectiveEnding()->SpanishAdjectiveEndingType{

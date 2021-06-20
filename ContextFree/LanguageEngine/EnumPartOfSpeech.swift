@@ -249,9 +249,9 @@ enum Number : String
 
 enum Gender : String
 {
-    case masculine
-    case feminine
-    case either
+    case masculine = "M"
+    case feminine = "F"
+    case either = "E"
 }
 
 enum Mood : String {
@@ -274,6 +274,7 @@ enum AdjectiveType : String {
     case color
     case size
     case age
+    case nationality
     case condition
     case any
     
@@ -300,6 +301,9 @@ enum  AdjectivePositionType  : String
 enum DeterminerType  : String {
     case definite
     case indefinite
+    case possessive
+    case demonstrative
+    case interrogative
     case partative   //french - du, de la, de l', des
 }
 
@@ -397,6 +401,17 @@ enum VerbPassivity : Int, Codable {
     
     
 }
+
+func getTransitivity(index:Int)->VerbTransitivity{
+    switch (index){
+    case 0: return .transitive
+    case 1: return .ditransitive
+    case 2: return .intransitive
+    case 3: return .ambitransitive
+    default: return .ergative
+    }
+}
+
 
 func getPassivity(index:Int)->VerbPassivity{
     switch (index){

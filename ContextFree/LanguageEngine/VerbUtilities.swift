@@ -42,7 +42,7 @@ struct VerbUtilities {
         if (letter == "a" || letter == "e" || letter == "i" || letter == "o" || letter == "u" ){return true}
         if (letter == "á" || letter == "é" || letter == "í" || letter == "ó" || letter == "ú" ){return true}
         if (letter == "ü" || letter == "û") {return true}
-        if (letter == "É") {return true}
+        if (letter == "É" || letter == "Ê" || letter == "ê") {return true}
         return false
     }
 
@@ -129,6 +129,7 @@ struct VerbUtilities {
         for i in 0..<copyCount{
             newString.append(inputStringReversed[inputStringReversed.index(inputStringReversed.startIndex, offsetBy: i)])
         }
+        newString = String(newString.reversed())
         return newString
     }
     
@@ -344,11 +345,27 @@ struct VerbUtilities {
         return ss
     }//func removeLeadingOrFollowingBlanks
     
+    func startsWithVowelSound(characterArray: String)->Bool{
+        for c in characterArray
+        {
+            //separate it by blanks
+            
+            if isVowel(letter: String(c)){
+                return true
+            }
+            if c == "h" {return true}
+            
+            return false
+        }
         
+        return false
+    }
+    
     func isCharacter(input: Character)->Bool {
-        if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z"
+        if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
-            || input == "ü" || input == "ñ") {
+            || input == "ü" || input == "ñ"
+            || input == "ç" || input == "è"  || input == "ê" {
            return true
         }
      return false
@@ -358,7 +375,7 @@ struct VerbUtilities {
         if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
             || input == "ü" || input == "ñ"
-            || input == "ç" || input == "è"
+            || input == "ç" || input == "è"  || input == "ê"
         { return true }
         if isPunctuation(input: input)
         { return true }

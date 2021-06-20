@@ -20,13 +20,15 @@ class CFModelView: ObservableObject {
         cfModel = CFModel(language: language)
     }
     
-    func getVerbModel(language: LanguageType)->RomanceVerbModelConjugation{
+    func getVerbModel(language: LanguageType)->VerbModelConjugation{
         return (cfModel?.getVerbModel(language: language))!
     }
     
+    /*
     func analyzeAndCreateNewBVerb(verbPhrase: String)->(isValid: Bool, verb: BVerb){
         return cfModel!.analyzeAndCreateNewBVerb(verbPhrase: verbPhrase)
     }
+    */
     
     func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
         return cfModel!.analyzeAndCreateBVerb_SPIFE(language: language, verbPhrase: verbPhrase)
@@ -40,9 +42,15 @@ class CFModelView: ObservableObject {
         return  cfModel!.getListWord(index: index, wordType: wordType)
     }
     
-    func append(language: LanguageType, romanceVerb: RomanceVerb)->Int{
-        return cfModel!.append(language: language, romanceVerb: romanceVerb)
+    func appendJsonVerb(jsonVerb: JsonVerb)->Int{
+        return cfModel!.appendJsonVerb(jsonVerb: jsonVerb)
     }
+ 
+    func append(spanishVerb : RomanceVerb, frenchVerb: RomanceVerb )->Int{
+        return cfModel!.append(spanishVerb: spanishVerb, frenchVerb : frenchVerb)
+    }
+
+
     
     func getCurrentLanguage()->LanguageType{
         return cfModel!.m_currentLanguage

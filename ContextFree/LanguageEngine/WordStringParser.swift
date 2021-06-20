@@ -12,7 +12,7 @@ struct WordStringParser {
     private var spanishWords = SpanishWords()
     private var frenchWords = FrenchWords()
     private var englishWords = EnglishWords()
-    private var romanceWords = RomanceWords()  //general purpose ... will replace spanish, french and english words
+    private var generalWords = GeneralWords()  //general purpose ... will replace spanish, french and english words
     private var m_language : LanguageType
     private var spanVerbModel : RomanceVerbModelConjugation
     private var frenchVerbModel : RomanceVerbModelConjugation
@@ -28,8 +28,8 @@ struct WordStringParser {
         return m_language
     }
     
-    func getRomancWords()->RomanceWords{
-        return romanceWords
+    func getGeneralWords()->GeneralWords{
+        return generalWords
     }
     
     func getSpanishWords()->SpanishWords{
@@ -49,35 +49,33 @@ struct WordStringParser {
         switch (m_language ){
         case .Spanish:
             spanishWords.createSomeAmbiguousWords()
-            spanishWords.createSomeAdjectives()
-            spanishWords.createSomeSpanishArticles()
+            //spanishWords.createSomeAdjectives()
+            //spanishWords.createSomeSpanishArticles()
             spanishWords.createSomeAdverbs()
             spanishWords.createSomeConjunctions()
-            spanishWords.createSomeNouns()
+            //spanishWords.createSomeNouns()
             //spanishWords.createSomeSpanishPunctuations()
-            spanishWords.createSomePrepositions()
+            //spanishWords.createSomePrepositions()
             spanishWords.createSomeSpanishPronouns()
-            //verbs are constructed elsewhere using BSpanishVerbs
         case .French:
             frenchWords.createSomeAmbiguousWords()
             frenchWords.createSomePossessiveAdjectives()
             frenchWords.createSomeInterrogativeAdjectives()
             frenchWords.createSomeDemonstrativeAdjectives()
-            frenchWords.createSomeArticles()
-            frenchWords.createSomeAdjectives()
+            //frenchWords.createSomeArticles()
+            //frenchWords.createSomeAdjectives()
             frenchWords.createSomeAdverbs()
             frenchWords.createSomeConjunctions()
-            frenchWords.createSomeNouns()
-            frenchWords.createSomePrepositions()
+            //frenchWords.createSomeNouns()
+            //frenchWords.createSomePrepositions()
             frenchWords.createSomePronouns()
-            //verbs are constructed elsewhere using BFrenchVerbs
         default:
             break
         }
     }
     
     func isNewVerb(verb: Verb)->Bool{
-        for word in romanceWords.verbList {
+        for word in generalWords.verbList {
             if verb.word == word.word {
                 return false
             }
@@ -86,29 +84,60 @@ struct WordStringParser {
     }
 
     func getVerbList()->Array<Word>{
-        return romanceWords.verbList
+        return generalWords.verbList
     }
     
     func getVerbCount()->Int{
-        return romanceWords.verbList.count
+        return generalWords.verbList.count
     }
     
-    mutating func addVerbToDictionary(verb: Verb)->Int{
-        romanceWords.verbList.append(verb)
-        return romanceWords.verbList.count
+    func getNounList()->Array<Word>{
+        return generalWords.nounList
     }
     
+    func getNounCount()->Int{
+        return generalWords.nounList.count
+    }
+    
+    func getAdjectiveList()->Array<Word>{
+        return generalWords.adjectiveList
+    }
+    
+    func getAdjectiveCount()->Int{
+        return generalWords.adjectiveList.count
+    }
+    
+    func getDeterminerList()->Array<Word>{
+        return generalWords.determinerList
+    }
+    
+    func getDeterminerCount()->Int{
+        return generalWords.determinerList.count
+    }
+    
+    func getPrepositionCount()->Int{
+        return generalWords.prepositionList.count
+    }
+    
+    /*
+    mutating func appendJsonVerbToDictionary()->Int{
+        //romanceWords.verbList.append(verb)
+        return romanceWords.verbList.count
+    }
+    */
+    
+    //create the correct verb just in time
     mutating func getVerbFromDictionary(language: LanguageType, index: Int)->Verb{
         var verb = Verb()
         switch language {
         case .Spanish:
-            verb = romanceWords.verbList[index] as! SpanishVerb
+            verb = generalWords.verbList[index] as! SpanishVerb
             let bv = BSpanishVerb(verbPhrase: verb.spanish)
             let verbModel = spanVerbModel.getVerbModel(verbWord: bv.m_verbWord)
             bv.setPatterns(verbModel : verbModel)
             verb.setBVerb(bVerb: bv)
         case .French:
-            verb = romanceWords.verbList[index] as! FrenchVerb
+            verb = generalWords.verbList[index] as! FrenchVerb
             let bv = BFrenchVerb(verbPhrase: verb.french)
             let verbModel = frenchVerbModel.getVerbModel(verbWord: bv.m_verbWord)
             bv.setPatterns(verbModel : verbModel)
@@ -119,82 +148,109 @@ struct WordStringParser {
         return verb
     }
     
-    /*
-    func isNewVerb(language: LanguageType, verb: Verb)->Bool{
+    //create the correct verb just in time
+    mutating func getNounFromDictionary(language: LanguageType, index: Int)->Noun{
+        var noun  = Noun()
         switch language {
         case .Spanish:
-            for word in spanishWords.verbList {
-                if verb.word == word.word {
-                    return false
-                }
-            }
+            noun = generalWords.nounList[index] as! SpanishNoun
         case .French:
-            for word in frenchWords.verbList {
-                if verb.word == word.word {
-                    return false
-                }
-            }
-        default: return true
+            noun = generalWords.nounList[index] as! FrenchNoun
+        default:
+            break
         }
-        return true
+        return noun
     }
     
-    func getVerbList(language: LanguageType)->Array<Word>{
+    //create the correct verb just in time
+    mutating func getAdjectiveFromDictionary(language: LanguageType, index: Int)->Adjective{
+        var adj  = Adjective()
         switch language {
-        case .Spanish:  return spanishWords.verbList
-        case .French: return frenchWords.verbList
-        case .English:  return englishWords.verbList
-        default: return englishWords.verbList
+        case .Spanish:
+            adj = generalWords.adjectiveList[index] as! SpanishAdjective
+        case .French:
+            adj = generalWords.adjectiveList[index] as! FrenchAdjective
+        default:
+            break
         }
+        return adj
     }
     
-    func getVerbListCount(language: LanguageType)->Int{
+    //create the correct verb just in time
+    mutating func getPrepositionFromDictionary(language: LanguageType, index: Int)->Preposition{
+        var prep  = Preposition()
         switch language {
-        case .Spanish:  return spanishWords.verbList.count
-        case .French: return frenchWords.verbList.count
-        case .English:  return englishWords.verbList.count
-        default: return englishWords.verbList.count
+        case .Spanish:
+            prep = generalWords.prepositionList[index] as! SpanishPreposition
+        case .French:
+            prep = generalWords.prepositionList[index] as! FrenchPreposition
+        default:
+            break
         }
+        return prep
     }
     
-    mutating func addSpanishVerbToDictionary(verb: Verb)->Int{
-        spanishWords.verbList.append(verb)
-        return spanishWords.verbList.count
+    //create the correct verb just in time
+    mutating func getDeterminerFromDictionary(language: LanguageType, index: Int)->Determiner{
+        var det  = Determiner()
+        switch language {
+        case .Spanish:
+            det = generalWords.determinerList[index] as! SpanishDeterminer
+        case .French:
+            det = generalWords.determinerList[index] as! FrenchDeterminer
+        default:
+            break
+        }
+        return det
     }
     
-    mutating func addFrenchVerbToDictionary(verb: Verb)->Int{
-        frenchWords.verbList.append(verb)
-        return frenchWords.verbList.count
+
+    mutating func addAdjectiveToDictionary(adj: Adjective)->Int{
+        generalWords.adjectiveList.append(adj)
+        return generalWords.adjectiveList.count
     }
     
-    func getSpanishVerbCount()->Int{
-        return spanishWords.verbList.count
+    mutating func addAdverbToDictionary(adj: Adjective)->Int{
+        generalWords.adverbList.append(adj)
+        return generalWords.adverbList.count
     }
     
-    func getFrenchVerbCount()->Int{
-        return frenchWords.verbList.count
+    mutating func addConjuctionToDictionary(adj: Conjunction)->Int{
+        generalWords.conjunctionList.append(adj)
+        return generalWords.conjunctionList.count
     }
-     
-     func getVerbCount()->Int{
-         switch(m_language){
-         case .Spanish:
-             return spanishWords.verbList.count
-         case .French:
-             return frenchWords.verbList.count
-         default:
-             return 0
-         }
-     }
-    */
+    
+    mutating func addDeterminerToDictionary(wd: Determiner)->Int{
+        generalWords.determinerList.append(wd)
+        return generalWords.determinerList.count
+    }
+    
+    mutating func addNounToDictionary(noun: Noun)->Int{
+        generalWords.nounList.append(noun)
+        return generalWords.nounList.count
+    }
+    
+    mutating func addPrepositionToDictionary(wd: Preposition)->Int{
+        generalWords.prepositionList.append(wd)
+        return generalWords.prepositionList.count
+    }
+    
+    mutating func addVerbToDictionary(verb: Verb)->Int{
+        generalWords.verbList.append(verb)
+        return generalWords.verbList.count
+    }
+    
+    
+   
+
+    
     func convertWordToSentenceData(word: Word, wordType: WordType)->SentenceData{
         var sentenceData = SentenceData()
         sentenceData.word = word
         sentenceData.data.wordType = wordType
         return sentenceData
     }
-    
-    
-    
+
     func getPrepositions()->Array<Word>{
         switch(m_language){
         case .Spanish:
@@ -355,42 +411,35 @@ struct WordStringParser {
         
         switch m_language {
         case .Spanish:
-            for word in spanishWords.articleList {
-                let article = word as! SpanishArticle
-                let result = article.isArticle(word: wordString)
-                if result.0 {
-                    sd.word = word
-                    sd.data.wordType = .article
-                    sd.data.articleType = result.1
-                    sd.data.gender = result.2
-                    sd.data.number = result.3
-                    return sd
+            for word in spanishWords.determinerList {
+                let determiner = word as! SpanishDeterminer
+                sd.word = word
+                sd.data.wordType = .determiner
+                sd.data.determinerType = .definite
+                sd.data.gender = .either
+                sd.data.number = .singular
+                return sd
                 }
-            }
         case .French:
-            for word in frenchWords.articleList {
-                let article = word as! FrenchArticle
-                let result = article.isArticle(word: wordString)
-                if result.0 {
-                    sd.word = word
-                    sd.data.wordType = .article
-                    sd.data.articleType = result.1
-                    sd.data.gender = result.2
-                    sd.data.number = result.3
-                    return sd
+            for word in frenchWords.determinerList {
+                let determiner = word as! FrenchDeterminer
+                sd.word = word
+                sd.data.wordType = .determiner
+                sd.data.determinerType = .definite
+                sd.data.gender = .either
+                sd.data.number = .singular
+                return sd
                 }
-            }
         case .English:
-            for word in englishWords.articleList {
-                let article = word as! EnglishArticle
-                let result = article.isArticle(word: wordString)
-                if result.0 {
-                    sd.word = word
-                    sd.data.wordType = .article
-                    sd.data.articleType = result.1
-                    sd.data.number = result.2
+            for word in englishWords.determinerList {
+                let determiner = word as! EnglishDeterminer
+                sd.word = word
+                sd.data.wordType = .determiner
+                sd.data.determinerType = .definite
+                sd.data.gender = .either
+                sd.data.number = .singular
+                return sd
                 }
-            }
         case .Italian,.Portuguese:
             return sd
         }

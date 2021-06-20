@@ -11,8 +11,23 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-
+            
             List {
+                NavigationLink(destination: AddVerbToDictionary()){
+                    Text("Verb Dictionary")
+                }.frame(width: 200, height: 50)
+                .foregroundColor(.black)
+                .padding(.leading, 10)
+                .background(Color(UIColor(named: "Color1")!))
+                .cornerRadius(25)
+                
+                NavigationLink(destination: MultiVerbConjugation()){
+                    Text("Multi Verbs")
+                }.frame(width: 200, height: 50)
+                .foregroundColor(.black)
+                .padding(.leading, 10)
+                .background(Color(UIColor(named: "Color1")!))
+                .cornerRadius(25)
                 
                 NavigationLink(destination: SentenceParserView()){
                     Text("Sentence Parser")

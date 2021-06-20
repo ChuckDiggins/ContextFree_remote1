@@ -51,11 +51,13 @@
 		6E6A494A264591F20096C36F /* ConciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A4949264591F20096C36F /* ConciseListView.swift */; };
 		6E6A494C26459A3E0096C36F /* ExpandedAdjectiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A494B26459A3E0096C36F /* ExpandedAdjectiveView.swift */; };
 		6E6A494F2645CC7C0096C36F /* WordComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A494E2645CC7C0096C36F /* WordComponent.swift */; };
-		6E7A3E972672B3AF0070364C /* AddBVerbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3E962672B3AF0070364C /* AddBVerbView.swift */; };
 		6E7A3E9B2672D8560070364C /* NewCFVerbProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3E9A2672D8560070364C /* NewCFVerbProperties.swift */; };
 		6E7A3E9D267413700070364C /* AddVerbToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3E9C267413700070364C /* AddVerbToDictionary.swift */; };
 		6E7A3E9F2674F9770070364C /* Disambiguation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3E9E2674F9770070364C /* Disambiguation.swift */; };
-		6E7A3EA126752F6B0070364C /* RomanceWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3EA026752F6B0070364C /* RomanceWords.swift */; };
+		6E7A3EA126752F6B0070364C /* GeneralWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3EA026752F6B0070364C /* GeneralWords.swift */; };
+		6E7A3EA32678094E0070364C /* JSONNouns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3EA22678094E0070364C /* JSONNouns.swift */; };
+		6E7A3EA5267A582D0070364C /* ContextFreeMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3EA4267A582C0070364C /* ContextFreeMapping.swift */; };
+		6E7A3EA7267A64620070364C /* EnglishCreateVerbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A3EA6267A64620070364C /* EnglishCreateVerbModel.swift */; };
 		6EAD8E0C2667E46800ADC6F3 /* RomanceVerbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E0B2667E46800ADC6F3 /* RomanceVerbModel.swift */; };
 		6EAD8E102667E6A800ADC6F3 /* RegularFrenchVerb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E0D2667E6A800ADC6F3 /* RegularFrenchVerb.swift */; };
 		6EAD8E112667E6A800ADC6F3 /* ActiveVerbConjugationFrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E0E2667E6A800ADC6F3 /* ActiveVerbConjugationFrench.swift */; };
@@ -66,6 +68,12 @@
 		6EAD8E1C2667EEF600ADC6F3 /* VerbModelJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E1B2667EEF600ADC6F3 /* VerbModelJson.swift */; };
 		6EAD8E222667F50000ADC6F3 /* Pronoun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E212667F50000ADC6F3 /* Pronoun.swift */; };
 		6EAD8E26266C2D4900ADC6F3 /* WordStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E25266C2D4800ADC6F3 /* WordStateData.swift */; };
+		6EC671A1267D356800AEBE31 /* MultiVerbConjugation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC671A0267D356800AEBE31 /* MultiVerbConjugation.swift */; };
+		6EC671A3267E93D800AEBE31 /* JsonAdjectives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC671A2267E93D800AEBE31 /* JsonAdjectives.swift */; };
+		6EC671A5267EDAA300AEBE31 /* JSONPrepositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC671A4267EDAA300AEBE31 /* JSONPrepositions.swift */; };
+		6EC671A7267F8AAE00AEBE31 /* JsonDeterminers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC671A6267F8AAE00AEBE31 /* JsonDeterminers.swift */; };
+		6ECCB6CB267BA20200B24C00 /* BEnglishVerb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCB6CA267BA20200B24C00 /* BEnglishVerb.swift */; };
+		6ECCB6CF267BC63700B24C00 /* EnglishVerbModelConjugation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCB6CE267BC63700B24C00 /* EnglishVerbModelConjugation.swift */; };
 		6EE7BD742618C01A00840EB7 /* ContextFreeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD732618C01A00840EB7 /* ContextFreeApp.swift */; };
 		6EE7BD762618C01A00840EB7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD752618C01A00840EB7 /* ContentView.swift */; };
 		6EE7BD782618C02400840EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7BD772618C02400840EB7 /* Assets.xcassets */; };
@@ -143,11 +151,13 @@
 		6E6A4949264591F20096C36F /* ConciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConciseListView.swift; sourceTree = "<group>"; };
 		6E6A494B26459A3E0096C36F /* ExpandedAdjectiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedAdjectiveView.swift; sourceTree = "<group>"; };
 		6E6A494E2645CC7C0096C36F /* WordComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordComponent.swift; sourceTree = "<group>"; };
-		6E7A3E962672B3AF0070364C /* AddBVerbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBVerbView.swift; sourceTree = "<group>"; };
 		6E7A3E9A2672D8560070364C /* NewCFVerbProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCFVerbProperties.swift; sourceTree = "<group>"; };
 		6E7A3E9C267413700070364C /* AddVerbToDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVerbToDictionary.swift; sourceTree = "<group>"; };
 		6E7A3E9E2674F9770070364C /* Disambiguation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disambiguation.swift; sourceTree = "<group>"; };
-		6E7A3EA026752F6B0070364C /* RomanceWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanceWords.swift; sourceTree = "<group>"; };
+		6E7A3EA026752F6B0070364C /* GeneralWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralWords.swift; sourceTree = "<group>"; };
+		6E7A3EA22678094E0070364C /* JSONNouns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONNouns.swift; sourceTree = "<group>"; };
+		6E7A3EA4267A582C0070364C /* ContextFreeMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextFreeMapping.swift; sourceTree = "<group>"; };
+		6E7A3EA6267A64620070364C /* EnglishCreateVerbModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishCreateVerbModel.swift; sourceTree = "<group>"; };
 		6EAD8E0B2667E46800ADC6F3 /* RomanceVerbModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RomanceVerbModel.swift; path = "../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /Bescherelle Book verb model/RomanceVerbModel.swift"; sourceTree = "<group>"; };
 		6EAD8E0D2667E6A800ADC6F3 /* RegularFrenchVerb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegularFrenchVerb.swift; path = "../../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /French/RegularFrenchVerb.swift"; sourceTree = "<group>"; };
 		6EAD8E0E2667E6A800ADC6F3 /* ActiveVerbConjugationFrench.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActiveVerbConjugationFrench.swift; path = "../../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /French/ActiveVerbConjugationFrench.swift"; sourceTree = "<group>"; };
@@ -158,6 +168,12 @@
 		6EAD8E1B2667EEF600ADC6F3 /* VerbModelJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VerbModelJson.swift; path = "../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/JSON/VerbModelJson.swift"; sourceTree = "<group>"; };
 		6EAD8E212667F50000ADC6F3 /* Pronoun.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pronoun.swift; sourceTree = "<group>"; };
 		6EAD8E25266C2D4800ADC6F3 /* WordStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordStateData.swift; sourceTree = "<group>"; };
+		6EC671A0267D356800AEBE31 /* MultiVerbConjugation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiVerbConjugation.swift; sourceTree = "<group>"; };
+		6EC671A2267E93D800AEBE31 /* JsonAdjectives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonAdjectives.swift; sourceTree = "<group>"; };
+		6EC671A4267EDAA300AEBE31 /* JSONPrepositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrepositions.swift; sourceTree = "<group>"; };
+		6EC671A6267F8AAE00AEBE31 /* JsonDeterminers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonDeterminers.swift; sourceTree = "<group>"; };
+		6ECCB6CA267BA20200B24C00 /* BEnglishVerb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BEnglishVerb.swift; sourceTree = "<group>"; };
+		6ECCB6CE267BC63700B24C00 /* EnglishVerbModelConjugation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishVerbModelConjugation.swift; sourceTree = "<group>"; };
 		6EE7BD702618C01A00840EB7 /* ContextFree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContextFree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EE7BD732618C01A00840EB7 /* ContextFreeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextFreeApp.swift; sourceTree = "<group>"; };
 		6EE7BD752618C01A00840EB7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -230,12 +246,14 @@
 				6E046422262E286F009A0937 /* BVerb.swift */,
 				6E046425262E28BC009A0937 /* BRomanceVerb.swift */,
 				6EAD8E0B2667E46800ADC6F3 /* RomanceVerbModel.swift */,
+				6ECCB6CE267BC63700B24C00 /* EnglishVerbModelConjugation.swift */,
 				6EAD8E152667ED7600ADC6F3 /* RomanceVerbModelConjugation.swift */,
 				6E046429262E2974009A0937 /* Morph.swift */,
 				6E04642D262E2CEC009A0937 /* CreateVerbModel.swift */,
 				6E046430262E2D32009A0937 /* VerbModel.swift */,
 				6E04644B262F80D7009A0937 /* TenseManager.swift */,
 				6E046437262F2E3E009A0937 /* Spanish */,
+				6ECCB6C9267BA1BA00B24C00 /* English */,
 				6E046458263727AE009A0937 /* French */,
 			);
 			path = Bescherelle;
@@ -272,6 +290,10 @@
 			children = (
 				6EAD8E1B2667EEF600ADC6F3 /* VerbModelJson.swift */,
 				6E1A08C826700D1A00917E81 /* JSONVerbs.swift */,
+				6E7A3EA22678094E0070364C /* JSONNouns.swift */,
+				6EC671A2267E93D800AEBE31 /* JsonAdjectives.swift */,
+				6EC671A4267EDAA300AEBE31 /* JSONPrepositions.swift */,
+				6EC671A6267F8AAE00AEBE31 /* JsonDeterminers.swift */,
 			);
 			path = JSON;
 			sourceTree = "<group>";
@@ -294,12 +316,12 @@
 			children = (
 				6E6A494726458D470096C36F /* AdjectiveListView.swift */,
 				6EE7BD90261901E700840EB7 /* SentenceGameView.swift */,
-				6E7A3E962672B3AF0070364C /* AddBVerbView.swift */,
 				6E7A3E9A2672D8560070364C /* NewCFVerbProperties.swift */,
 				6EE7BD942619029100840EB7 /* SentenceParserView.swift */,
 				6E6A494D26459B4F0096C36F /* Components */,
 				6E6A494E2645CC7C0096C36F /* WordComponent.swift */,
 				6E7A3E9C267413700070364C /* AddVerbToDictionary.swift */,
+				6EC671A0267D356800AEBE31 /* MultiVerbConjugation.swift */,
 			);
 			path = WordLists;
 			sourceTree = "<group>";
@@ -312,6 +334,15 @@
 				6E6A494B26459A3E0096C36F /* ExpandedAdjectiveView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		6ECCB6C9267BA1BA00B24C00 /* English */ = {
+			isa = PBXGroup;
+			children = (
+				6E7A3EA6267A64620070364C /* EnglishCreateVerbModel.swift */,
+				6ECCB6CA267BA20200B24C00 /* BEnglishVerb.swift */,
+			);
+			path = English;
 			sourceTree = "<group>";
 		};
 		6EE7BD672618C01A00840EB7 = {
@@ -384,7 +415,7 @@
 				6EEAF2A62620E6CC0085E3C6 /* Punctuation.swift */,
 				6EE7BDBA261A2ED500840EB7 /* Verb.swift */,
 				6EEAF288261A9E230085E3C6 /* VerbUtilities.swift */,
-				6E7A3EA026752F6B0070364C /* RomanceWords.swift */,
+				6E7A3EA026752F6B0070364C /* GeneralWords.swift */,
 				6EEAF295261DF54F0085E3C6 /* SpanishWords.swift */,
 				6E04644E2631D16E009A0937 /* FrenchWords.swift */,
 				6EEAF298261DF6100085E3C6 /* EnglishWords.swift */,
@@ -416,6 +447,7 @@
 				6EEAF2B426222FC10085E3C6 /* CFGrammarLibrary.swift */,
 				6E6A492A263F08B20096C36F /* CFSentenceGeneratorRule.swift */,
 				6E7A3E9E2674F9770070364C /* Disambiguation.swift */,
+				6E7A3EA4267A582C0070364C /* ContextFreeMapping.swift */,
 			);
 			path = ContextFreeStructs;
 			sourceTree = "<group>";
@@ -492,7 +524,6 @@
 				6EEAF29D261E59460085E3C6 /* Preposition.swift in Sources */,
 				6EE7BD9D261912AE00840EB7 /* Sentence.swift in Sources */,
 				6EEAF2A0261E60340085E3C6 /* Adverb.swift in Sources */,
-				6E7A3E972672B3AF0070364C /* AddBVerbView.swift in Sources */,
 				6EE7BD8E2619019900840EB7 /* WordGames.swift in Sources */,
 				6E046431262E2D32009A0937 /* VerbModel.swift in Sources */,
 				6E046401262641F3009A0937 /* Clause.swift in Sources */,
@@ -502,6 +533,7 @@
 				6E6A493526446FF50096C36F /* AdjectiveGames.swift in Sources */,
 				6E6A494626457E8D0096C36F /* CategoryView.swift in Sources */,
 				6EEAF299261DF6100085E3C6 /* EnglishWords.swift in Sources */,
+				6EC671A3267E93D800AEBE31 /* JsonAdjectives.swift in Sources */,
 				6E0463FE26263D34009A0937 /* SentenceWordList.swift in Sources */,
 				6EEAF2A4261F7DC40085E3C6 /* WordStringParser.swift in Sources */,
 				6EE7BDC3261A464D00840EB7 /* CFModelView.swift in Sources */,
@@ -512,17 +544,23 @@
 				6E046443262F2F1D009A0937 /* BSpanishVerb.swift in Sources */,
 				6EEAF2A72620E6CC0085E3C6 /* Punctuation.swift in Sources */,
 				6E04642E262E2CEC009A0937 /* CreateVerbModel.swift in Sources */,
+				6E7A3EA5267A582D0070364C /* ContextFreeMapping.swift in Sources */,
 				6E0463FB26262E54009A0937 /* DtsInfo.swift in Sources */,
 				6E046423262E2870009A0937 /* BVerb.swift in Sources */,
 				6EE7BD742618C01A00840EB7 /* ContextFreeApp.swift in Sources */,
 				6EAD8E192667ED9E00ADC6F3 /* FrenchCreateVerbModel.swift in Sources */,
 				6E0464072626448D009A0937 /* Correction.swift in Sources */,
+				6ECCB6CF267BC63700B24C00 /* EnglishVerbModelConjugation.swift in Sources */,
 				6EE7BDB5261A1E2400840EB7 /* CFModel.swift in Sources */,
 				6E046442262F2F1D009A0937 /* SpanishVerbList.swift in Sources */,
 				6EAD8E102667E6A800ADC6F3 /* RegularFrenchVerb.swift in Sources */,
+				6E7A3EA32678094E0070364C /* JSONNouns.swift in Sources */,
+				6EC671A5267EDAA300AEBE31 /* JSONPrepositions.swift in Sources */,
 				6E6A4929263C69A40096C36F /* RandomWords.swift in Sources */,
 				6E046444262F2F1D009A0937 /* StemChangingConjugation.swift in Sources */,
+				6EC671A7267F8AAE00AEBE31 /* JsonDeterminers.swift in Sources */,
 				6EAD8E1A2667ED9E00ADC6F3 /* SpanishCreateVerbModel.swift in Sources */,
+				6EC671A1267D356800AEBE31 /* MultiVerbConjugation.swift in Sources */,
 				6E0463F726262814009A0937 /* Cluster.swift in Sources */,
 				6E6A4927263A1F820096C36F /* WordStringResolution.swift in Sources */,
 				6E04640A262769E9009A0937 /* NounCluster.swift in Sources */,
@@ -562,14 +600,16 @@
 				6E046426262E28BC009A0937 /* BRomanceVerb.swift in Sources */,
 				6E046445262F2F1D009A0937 /* BSpanishVerbExtras.swift in Sources */,
 				6EAD8E122667E6A800ADC6F3 /* IrregularVerbsFrench.swift in Sources */,
+				6ECCB6CB267BA20200B24C00 /* BEnglishVerb.swift in Sources */,
 				6E6A49252639B3000096C36F /* ClusterResolution.swift in Sources */,
 				6EAD8E0C2667E46800ADC6F3 /* RomanceVerbModel.swift in Sources */,
-				6E7A3EA126752F6B0070364C /* RomanceWords.swift in Sources */,
+				6E7A3EA126752F6B0070364C /* GeneralWords.swift in Sources */,
 				6E6A494826458D470096C36F /* AdjectiveListView.swift in Sources */,
 				6EEAF296261DF54F0085E3C6 /* SpanishWords.swift in Sources */,
 				6E1A08C926700D1A00917E81 /* JSONVerbs.swift in Sources */,
 				6EE7BD882618C08300840EB7 /* ContextFreeGrammar.swift in Sources */,
 				6E6A494F2645CC7C0096C36F /* WordComponent.swift in Sources */,
+				6E7A3EA7267A64620070364C /* EnglishCreateVerbModel.swift in Sources */,
 				6E04644F2631D16E009A0937 /* FrenchWords.swift in Sources */,
 				6EEAF28D261B76750085E3C6 /* Word.swift in Sources */,
 				6EE7BDAB261A177200840EB7 /* Article.swift in Sources */,

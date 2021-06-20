@@ -9,16 +9,54 @@ import Foundation
 
 class Determiner : Word {
     var type: DeterminerType
+    var english = ""
+    var spanish = ""
+    var french = ""
+    
+    override init(){
+        self.type = .definite
+        super.init(word: "", def: "", wordType: .determiner) 
+    }
     
     init(word: String, def: String, type : DeterminerType){
         self.type = type
         super.init(word: word, def: def, wordType: .determiner)
     }
+    
+    init(json: JsonDeterminer, language: LanguageType){
+        self.english = json.english
+        self.french = json.french
+        self.spanish = json.spanish
+        self.type = DeterminerType.indefinite
+        
+        switch(language){
+        case .Spanish:  super.init(word: spanish, def: english, wordType: .noun)
+        case .French:  super.init(word: french, def: english, wordType: .noun)
+        case .English:  super.init(word: english, def: english, wordType: .noun)
+        default:
+            super.init(word: spanish, def: english, wordType: .adjective)
+            
+            convertDeterminerTypeStringToDeterminerType(inputString: json.determinerType)
+        }
+    }
+    
+    func convertDeterminerTypeStringToDeterminerType(inputString: String){
+        type = .partative
+        if ( inputString == "I" ){type = .indefinite}
+        if ( inputString == "D" ){type = .definite}
+        if ( inputString == "P" ){type = .possessive}
+        if ( inputString == "N" ){type = .interrogative}
+        if ( inputString == "M" ){type = .demonstrative}
+    }
 }
 
 class EnglishDeterminer : Determiner {
-                        //this
-    var plural: String   //these
+    override init(json: JsonDeterminer, language: LanguageType){
+        super.init(json: json, language: language)
+    }
+    
+    //this
+    var plural = ""   //these
     
     init(word:String, def: String, type : DeterminerType, plural: String){
         self.plural = plural
@@ -43,15 +81,19 @@ class EnglishDeterminer : Determiner {
 
 class RomanceDeterminer : Determiner {
                              //eso
-    var femWord: String      //esa
-    var mascPlural: String   //esos
-    var femPlural: String    //esas
+    var femWord = ""      //esa
+    var mascPlural = ""   //esos
+    var femPlural = ""    //esas
     
     init(word:String, def:String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String ){
         self.femWord = femWord
         self.mascPlural = mascPlural
         self.femPlural = femPlural
         super.init(word: word, def: def, type : type)
+    }
+    
+    override init(json: JsonDeterminer, language: LanguageType){
+        super.init(json: json, language: language)
     }
     
     func getForm(gender: Gender, number: Number)->String{
@@ -81,4 +123,186 @@ class RomanceDeterminer : Determiner {
         return (false, type, .masculine, .singular)
     }
     
+    
+}
+
+class SpanishDeterminer : RomanceDeterminer {
+    init(json: JsonDeterminer){
+        super.init(json: json, language: .Spanish)
+    }
+    
+    override func getForm(gender: Gender, number: Number)->String{
+        switch type{
+        case .indefinite:
+            return getIndefiniteForm(gender: gender, number : number)
+        case .definite:
+            return getDefiniteForm(gender: gender, number : number)
+        case .demonstrative:
+            return getDemonstrativeForm(gender: gender, number : number)
+        case .interrogative:
+            return getInterrogativeForm(gender: gender, number : number)
+        default:
+            return ""
+        }
+    }
+    
+    
+    func getIndefiniteForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "una"
+            case .plural:
+                return "unas"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "un"
+            case .plural:
+                return "unos"
+            }
+        }
+    }
+    
+    func getDefiniteForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "la"
+            case .plural:
+                return "las"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "el"
+            case .plural:
+                return "los"
+            }
+        }
+    }
+    
+    func getPossessiveForm( person: Person, gender : Gender, number : Number)->String{
+        if gender == .masculine && number == .singular { return getSingularMasculinePossessiveForm(person: person)}
+        if gender == .masculine && number == .plural { return getPluralMasculinePossessiveForm(person: person)}
+        if gender == .feminine && number == .singular { return getSingularFemininePossessiveForm(person: person)}
+        if gender == .feminine && number == .plural { return getPluralFemininePossessiveForm(person: person)}
+        return "unknown possessive form"
+    }
+    
+    func getSingularMasculinePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mi"
+        case .S2:
+            return "tu"
+        case .S3:
+            return "su"
+        case .P1:
+            return "nuestro"
+        case .P2:
+            return "vuestro"
+        case .P3:
+            return "su"
+        }
+    }
+    
+    func getPluralMasculinePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mis"
+        case .S2:
+            return "tus"
+        case .S3:
+            return "sus"
+        case .P1:
+            return "nuestros"
+        case .P2:
+            return "vuestros"
+        case .P3:
+            return "sus"
+        }
+    }
+    
+    func getSingularFemininePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mi"
+        case .S2:
+            return "tu"
+        case .S3:
+            return "su"
+        case .P1:
+            return "nuestra"
+        case .P2:
+            return "vuestra"
+        case .P3:
+            return "su"
+        }
+    }
+    
+    func getPluralFemininePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mis"
+        case .S2:
+            return "tus"
+        case .S3:
+            return "sus"
+        case .P1:
+            return "nuestras"
+        case .P2:
+            return "vuestras"
+        case .P3:
+            return "sus"
+        }
+    }
+    
+    func getInterrogativeForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "la"
+            case .plural:
+                return "las"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "el"
+            case .plural:
+                return "los"
+            }
+        }
+    }
+    
+    func getDemonstrativeForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "la"
+            case .plural:
+                return "las"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "el"
+            case .plural:
+                return "los"
+            }
+        }
+    }
+    
+}
+
+class FrenchDeterminer : RomanceDeterminer {
+    init(json: JsonDeterminer){
+        super.init(json: json, language: .French)
+    }
 }

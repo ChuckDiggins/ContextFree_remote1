@@ -41,6 +41,7 @@ struct FrenchWords{
         createDemonstrativeAdjectiveAndAppend(word: "ce", def: "what", type: .demonstrative)
     }
     
+    /*
     mutating func createSomeAdjectives(){
         createAdjectiveAndAppend(word: "ce", def: "this", type: .demonstrative, position: .preceding)
         createAdjectiveAndAppend(word: "mon", def: "my", type: .possessive, position: .preceding)
@@ -55,7 +56,7 @@ struct FrenchWords{
         createAdjectiveAndAppend(word: "ennuyé", def: "annoyed", type: .any, position: .following)
         createAdjectiveAndAppend(word: "fâché", def: "angry", type: .any, position: .following)
     }
-    
+    */
     
     mutating func createSomeAmbiguousWords(){
         createAmbiguousAndAppend(word: "", def: "", type: .general)
@@ -104,6 +105,7 @@ struct FrenchWords{
         createPronounAndAppend(word: "me", def: "me", type : .DIRECT_OBJECT)
     }
     
+    /*
     mutating func createSomeNouns(){
         createNounAndAppend(word: "homme", def: "man", type: .person, gender: .masculine)
         createNounAndAppend(word: "femme", def: "woman", type: .person, gender: .feminine)
@@ -130,6 +132,7 @@ struct FrenchWords{
         createNounAndAppend(word: "carte de débit", def: "money", type: .thing, gender: .masculine)
         createNounAndAppend(word: "carte de crédit", def: "money", type: .thing, gender: .masculine)
     }
+    */
     
     mutating func createSomeVerbsA(){
         /*
@@ -222,11 +225,12 @@ struct FrenchWords{
         pronounList.append(pos)
     }
     
+    /*
     mutating func createNounAndAppend (word : String, def: String, type : NounType, gender: Gender){
         let pos = FrenchNoun(word: word, def: def, type: type, gender: gender )
         nounList.append(pos)
     }
-    
+    */
     mutating func createPrepositionAndAppend (word : String, def: String, type : PrepositionType){
         let pos = RomancePreposition(word: word, def: def, type: type)
         prepositionList.append(pos)

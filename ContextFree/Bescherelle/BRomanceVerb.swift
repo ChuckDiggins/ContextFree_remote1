@@ -209,7 +209,7 @@ class BRomanceVerb: BVerb {
 
     }
     func getBescherelleInfo()->String {
-        return "Bescherelle \(bVerbModel.id) - model verb = \(bVerbModel.modelVerb)"
+        return "Besch #\(bVerbModel.id) (\(bVerbModel.modelVerb))"
     }
     
     func hasReplaceForm (tense: Tense, person: Person)->(String, String){

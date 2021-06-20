@@ -32,6 +32,13 @@ class Verb : Word {
     override init(){
         super.init(word: "", def : "", wordType : .verb)
     }
+     
+    init(spanish: String, french: String, english: String){
+        self.spanish = spanish
+        self.french = french
+        self.english = english
+        super.init(word: spanish, def: "", wordType: .verb)
+    }
     
     init(word: String, def: String, type : VerbType){
         typeList.append(type)
@@ -200,13 +207,13 @@ class Verb : Word {
         return compositeString
     }
     
-    func createJsonVerb(bNumber: Int)->JsonVerb{
+    func createJsonVerb()->JsonVerb{
         let jv : JsonVerb
         if ( passivity == .passive ){
-            jv = JsonVerb(spanish: word, english: def, french: french, bNumber: bNumber, subjectLikes: convertFavoriteSubjectsToCompositeString())
+            jv = JsonVerb(spanish: word, english: english, french: french, subjectLikes: convertFavoriteSubjectsToCompositeString())
         }
         else {
-            jv = JsonVerb(spanish: word, english: def, french: french,   bNumber: bNumber, transitivity: transitivity, verbType : convertVerbTypesToCompositeString(),  passivity: passivity, subjectLikes: convertFavoriteSubjectsToCompositeString(), objectLikes: convertFavoriteObjectsToCompositeString())
+            jv = JsonVerb(spanish: word, english: english, french: french,   transitivity: transitivity, verbType : convertVerbTypesToCompositeString(),  passivity: passivity, subjectLikes: convertFavoriteSubjectsToCompositeString(), objectLikes: convertFavoriteObjectsToCompositeString())
         }
         return jv
     }
@@ -335,6 +342,15 @@ class SpanishVerb : RomanceVerb {
 
 class EnglishVerb : Verb {
     var singularForm = ""
+    
+    override init(){
+        super.init(word: "", def: "", type : .normal)
+    }
+    
+    init(jsonVerb: JsonVerb){
+        super.init(jsonVerb: jsonVerb, language: .English)
+    }
+    
     override init(word: String, def: String, type: VerbType){
         super.init(word: word, def: def, type : type)
         singularForm = word + "s"
@@ -345,5 +361,16 @@ class EnglishVerb : Verb {
         if ( word == self.word ){return (true, .present, .S1)}
         return (false, .present, .S1)
     }
+    
+    func getConjugateForm(tense: Tense, person : Person)->String{
+        let bEnglishVerb = bVerb as! BEnglishVerb
+        switch tense {
+        case .pastParticiple: return bEnglishVerb.getPastParticiple()
+        case .presentParticiple: return bEnglishVerb.getPresentParticiple()
+        case .infinitive: return bEnglishVerb.m_verbWord
+        default:  return bEnglishVerb.getConjugateForm(tense: tense, person: person)
+        }
+    }
+    
 }
 
