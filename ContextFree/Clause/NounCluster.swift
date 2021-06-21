@@ -40,8 +40,17 @@ class dNounSingle : dSingle
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
-        let noun = word as! RomanceNoun
-        return noun.getNounString(number: sd.number)
+        
+        switch sd.language {
+        case .Spanish, .French:
+            let noun = word as! RomanceNoun
+            return noun.getNounString(number: sd.number)
+        case .English:
+            let noun = word as! EnglishNoun
+            return noun.getString(number: sd.number)
+        default:
+            return ""
+        }
     }
     
     override func getString()->String

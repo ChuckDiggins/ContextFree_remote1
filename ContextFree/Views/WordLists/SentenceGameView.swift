@@ -36,7 +36,7 @@ struct SentenceGameView: View {
     @State private var m_clause = dIndependentClause(language: .Spanish)
     @State private var newWordSelected = false
     @State private var newWordSelected1 = [Bool]()
-
+    @State var m_randomSentence : RandomSentence!
     
     var s1 = 0
     var s2 = 0
@@ -52,6 +52,7 @@ struct SentenceGameView: View {
                 cfModelView.createNewModel(language: currentLanguage)
                 sentenceString = ""
                 createRandomClause()
+                m_randomSentence = cfModelView.getRandomSentenceObject()
             }){
                 Text("Spanish")
             }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
@@ -62,9 +63,21 @@ struct SentenceGameView: View {
                 cfModelView.createNewModel(language: currentLanguage)
                 sentenceString = ""
                 createRandomClause()
+                m_randomSentence = cfModelView.getRandomSentenceObject()
             }){
                 Text("French")
             }.font(currentLanguage == .Spanish ? .system(size: 20) : .title)
+            .foregroundColor(currentLanguage == .Spanish ? Color(UIColor(named: "SurgeryBackground")!) : Color.red)
+            Button(action: {
+                currentLanguage = .English
+                m_clause = dIndependentClause(language: currentLanguage)
+                cfModelView.createNewModel(language: currentLanguage)
+                sentenceString = ""
+                createRandomClause()
+                m_randomSentence = cfModelView.getRandomSentenceObject()
+            }){
+                Text("English")
+            }.font(currentLanguage == .English ? .system(size: 20) : .title)
             .foregroundColor(currentLanguage == .Spanish ? Color(UIColor(named: "SurgeryBackground")!) : Color.red)
         }.onAppear{
             currentLanguage = cfModelView.getCurrentLanguage()
@@ -85,7 +98,7 @@ struct SentenceGameView: View {
                         }){
                             Text(singleList[index].getProcessWordInWordStateData())
                                 .font(.subheadline)
-                                .foregroundColor(index == currentSingleIndex ? .orange : .black)
+                                .foregroundColor(index == currentSingleIndex ? .red : .black)
                         }
                     }
                 }
@@ -99,11 +112,12 @@ struct SentenceGameView: View {
                         }){
                             Text(singleList[index].getProcessWordInWordStateData())
                                 .font(.subheadline)
-                                .foregroundColor(index == currentSingleIndex ? .orange : .black)
+                                .foregroundColor(index == currentSingleIndex ? .red : .black)
                         }
                     }
                 }
             }.border(Color.green)
+            .background(Color.white)
             .padding(10)
             VStack{
                 HStack(alignment: .center){
@@ -126,8 +140,9 @@ struct SentenceGameView: View {
                 }
             }
             .padding()
-            .onAppear{currentLanguage = .Spanish
+            .onAppear{currentLanguage = .English
                 cfModelView.createNewModel(language: currentLanguage)
+                m_randomSentence = cfModelView.getRandomSentenceObject()
                 createRandomClause()
             }
             
@@ -136,8 +151,8 @@ struct SentenceGameView: View {
                     generateRandomTense()
                 }){
                     HStack {
-                        Text("Tense: \(currentTense.rawValue)").background(Color.yellow).foregroundColor(.black).frame(width: 200, height: 50)
-                            .cornerRadius(10).padding(10)
+                        Text("Tense: \(currentTense.rawValue)").background(Color.yellow).foregroundColor(.black).frame(width: 250, height: 80)
+                            .cornerRadius(10).padding(25)
                         
                     }
                 }
@@ -175,23 +190,36 @@ struct SentenceGameView: View {
         var wsd = single.getSentenceData()
         switch wsd.wordType {
         case .verb:
-            let newSingle = RandomWordLists(wsp: cfModelView.getParser()).getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
-            single.copyGuts(newSingle: newSingle)
-            let newVerbSingle = newSingle as! dVerbSingle
-            var spVerb = newVerbSingle.getClusterWord() as! RomanceVerb
-            let bVerb = spVerb.getBVerb()
-            let verbSingle = single as! dVerbSingle
-            spVerb = verbSingle.getClusterWord() as! RomanceVerb
-            spVerb.setBVerb(bVerb: bVerb)
+            switch currentLanguage{
+            case .Spanish, .French:
+                let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+                single.copyGuts(newSingle: newSingle)
+                let newVerbSingle = newSingle as! dVerbSingle
+                var spVerb = newVerbSingle.getClusterWord() as! RomanceVerb
+                let bVerb = spVerb.getBVerb()
+                let verbSingle = single as! dVerbSingle
+                spVerb = verbSingle.getClusterWord() as! RomanceVerb
+                spVerb.setBVerb(bVerb: bVerb)
+            case .English:
+                let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+                single.copyGuts(newSingle: newSingle)
+                let newVerbSingle = newSingle as! dVerbSingle
+                var spVerb = newVerbSingle.getClusterWord() as! EnglishVerb
+                let bVerb = spVerb.getBVerb()
+                let verbSingle = single as! dVerbSingle
+                spVerb = verbSingle.getClusterWord() as! EnglishVerb
+                spVerb.setBVerb(bVerb: bVerb)
+            default: break
+            }
         case .adjective, .article:
-            let newSingle = RandomWordLists(wsp: cfModelView.getParser()).getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+            let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
         case .noun:
             let nounSingle = single as! dNounSingle
-            let newSingle = RandomWordLists(wsp: cfModelView.getParser()).getRandomWordAsSingle(wordType : wsd.wordType, isSubject:nounSingle.isSubject())
+            let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:nounSingle.isSubject())
             nounSingle.copyGuts(newSingle: newSingle)
         case .preposition:
-            let newSingle = RandomWordLists(wsp: cfModelView.getParser()).getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+            let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
         default: break
         }
@@ -243,13 +271,28 @@ struct SentenceGameView: View {
             surgicalTitle = "Verb"
             surgicalProcessedWord = "Conjugated: \(wsd.getProcessedWord())"
             surgicalEnglish = "English: \(wsd.word.def)"
-            let verb = wsd.word as! RomanceVerb
-            let bVerb = verb.getBVerb() as! BRomanceVerb
-            if currentLanguage == .Spanish {  surgicalLine1 = "French:  \(verb.french)" }
-            else { surgicalLine1 = "Spanish: \(verb.spanish)"    }
+            switch currentLanguage{
+            case .Spanish:
+                let verb = wsd.word as! RomanceVerb
+                let bVerb = verb.getBVerb() as! BRomanceVerb
+                surgicalLine1 = "French:  \(verb.french)"
+                surgicalLine3 = "Verb model: \(bVerb.getBescherelleInfo())"
+            case .French:
+                let verb = wsd.word as! RomanceVerb
+                let bVerb = verb.getBVerb() as! BRomanceVerb
+                surgicalLine1 = "Spanish:  \(verb.spanish)"
+                surgicalLine3 = "Verb model: \(bVerb.getBescherelleInfo())"
+            case .English:
+                let verb = wsd.word as! EnglishVerb
+                let bVerb = verb.getBVerb() as! BEnglishVerb
+                surgicalLine1 = "English:  \(verb.english)"
+                surgicalLine3 = "Verb model: \(bVerb.getBescherelleInfo())"
+            default: break
+            }
+            
             surgicalLine2 = "Tense:      \(currentTense.rawValue)"
             surgicalLine3 = "Person:     \(currentPerson.getEnumString())"
-            surgicalLine3 = "Verb model: \(bVerb.getBescherelleInfo())"
+            
             surgicalLine5 = ""
             surgicalLine6 = ""
         case .preposition:
@@ -279,7 +322,7 @@ struct SentenceGameView: View {
     }
     
     func createRandomClause(){
-        if ( currentLanguage == .French || currentLanguage == .Spanish ){
+        if currentLanguage == .French || currentLanguage == .Spanish || currentLanguage == .English {
             let tense = currentTense
             while tense == currentTense {
                 currentTense = cfModelView.getRandomTense()

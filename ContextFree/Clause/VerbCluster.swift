@@ -144,8 +144,16 @@ class dVerbSingle : dSingle
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
-        let verb = word as! RomanceVerb
-        return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+        switch sd.language {
+        case .Spanish, .French:
+            let verb = word as! RomanceVerb
+            return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+        case .English:
+            let verb = word as! EnglishVerb
+            return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+        default:
+            return ""
+        }
     }
     
     override func getString()->String

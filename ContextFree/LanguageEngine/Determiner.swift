@@ -54,6 +54,9 @@ class EnglishDeterminer : Determiner {
     override init(json: JsonDeterminer, language: LanguageType){
         super.init(json: json, language: language)
     }
+    override init(){
+        super.init(word: "", def: "", type : .definite)
+    }
     
     //this
     var plural = ""   //these
@@ -84,6 +87,10 @@ class RomanceDeterminer : Determiner {
     var femWord = ""      //esa
     var mascPlural = ""   //esos
     var femPlural = ""    //esas
+    
+    override init(){
+        super.init(word: "", def: "", type : .definite)
+    }
     
     init(word:String, def:String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String ){
         self.femWord = femWord
@@ -127,6 +134,10 @@ class RomanceDeterminer : Determiner {
 }
 
 class SpanishDeterminer : RomanceDeterminer {
+    override init(){
+        super.init()
+    }
+    
     init(json: JsonDeterminer){
         super.init(json: json, language: .Spanish)
     }
@@ -305,4 +316,10 @@ class FrenchDeterminer : RomanceDeterminer {
     init(json: JsonDeterminer){
         super.init(json: json, language: .French)
     }
+    
+    override init(){
+        super.init()
+    }
+    
 }
+

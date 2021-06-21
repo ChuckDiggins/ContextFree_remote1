@@ -511,6 +511,10 @@ class EnglishAdjective : Adjective {
         super.init(word: word, def: def, type: type)
     }
     
+    override init(jsonAdjective: JsonAdjective, language: LanguageType){
+        super.init(jsonAdjective: jsonAdjective, language: language)
+    }
+    
     func getForm(gender: Gender, number: Number)->String{
         return word
     }

@@ -24,11 +24,9 @@ class CFModelView: ObservableObject {
         return (cfModel?.getVerbModel(language: language))!
     }
     
-    /*
-    func analyzeAndCreateNewBVerb(verbPhrase: String)->(isValid: Bool, verb: BVerb){
-        return cfModel!.analyzeAndCreateNewBVerb(verbPhrase: verbPhrase)
+    func getRandomSentenceObject()->RandomSentence{
+        return (cfModel?.getRandomSentenceObject())!
     }
-    */
     
     func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
         return cfModel!.analyzeAndCreateBVerb_SPIFE(language: language, verbPhrase: verbPhrase)
@@ -74,10 +72,6 @@ class CFModelView: ObservableObject {
     
     func getVerbCount()->Int{
         return cfModel!.getVerbCount()
-    }
-    
-    func getRandomPhraseForAdjectives(type: AdjectiveType)->dIndependentClause{
-    return cfModel!.getRandomPhraseForAdjectives(type: type)
     }
     
     func getRandomSubjPronounSentence()->dIndependentClause{

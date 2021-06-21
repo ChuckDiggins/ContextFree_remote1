@@ -16,11 +16,13 @@ struct WordStringParser {
     private var m_language : LanguageType
     private var spanVerbModel : RomanceVerbModelConjugation
     private var frenchVerbModel : RomanceVerbModelConjugation
+    private var englishVerbModel : EnglishVerbModelConjugation
     
-    init(language: LanguageType, span: RomanceVerbModelConjugation, french: RomanceVerbModelConjugation){
+    init(language: LanguageType, span: RomanceVerbModelConjugation, french: RomanceVerbModelConjugation, english : EnglishVerbModelConjugation){
         m_language = language
         spanVerbModel = span
         frenchVerbModel = french
+        englishVerbModel = english
         createDictionaries()
     }
     
@@ -142,6 +144,12 @@ struct WordStringParser {
             let verbModel = frenchVerbModel.getVerbModel(verbWord: bv.m_verbWord)
             bv.setPatterns(verbModel : verbModel)
             verb.setBVerb(bVerb: bv)
+        case .English:
+            verb = generalWords.verbList[index] as! EnglishVerb
+            let brv = BEnglishVerb(verbPhrase : verb.english, verbWord: verb.english)
+            let verbModel = englishVerbModel.getVerbModel(verbWord: verb.english)
+            brv.setModel(verbModel : verbModel)
+            verb.setBVerb(bVerb: brv)
         default:
             break
         }
@@ -156,6 +164,8 @@ struct WordStringParser {
             noun = generalWords.nounList[index] as! SpanishNoun
         case .French:
             noun = generalWords.nounList[index] as! FrenchNoun
+        case .English:
+            noun = generalWords.nounList[index] as! EnglishNoun
         default:
             break
         }
@@ -170,6 +180,8 @@ struct WordStringParser {
             adj = generalWords.adjectiveList[index] as! SpanishAdjective
         case .French:
             adj = generalWords.adjectiveList[index] as! FrenchAdjective
+        case .English:
+            adj = generalWords.adjectiveList[index] as! EnglishAdjective
         default:
             break
         }
@@ -184,6 +196,8 @@ struct WordStringParser {
             prep = generalWords.prepositionList[index] as! SpanishPreposition
         case .French:
             prep = generalWords.prepositionList[index] as! FrenchPreposition
+        case .English:
+            prep = generalWords.prepositionList[index] as! EnglishPreposition
         default:
             break
         }
@@ -198,6 +212,8 @@ struct WordStringParser {
             det = generalWords.determinerList[index] as! SpanishDeterminer
         case .French:
             det = generalWords.determinerList[index] as! FrenchDeterminer
+        case .English:
+            det = generalWords.determinerList[index] as! EnglishDeterminer
         default:
             break
         }
@@ -412,7 +428,7 @@ struct WordStringParser {
         switch m_language {
         case .Spanish:
             for word in spanishWords.determinerList {
-                let determiner = word as! SpanishDeterminer
+                //let determiner = word as! SpanishDeterminer
                 sd.word = word
                 sd.data.wordType = .determiner
                 sd.data.determinerType = .definite
@@ -422,7 +438,7 @@ struct WordStringParser {
                 }
         case .French:
             for word in frenchWords.determinerList {
-                let determiner = word as! FrenchDeterminer
+                //let determiner = word as! FrenchDeterminer
                 sd.word = word
                 sd.data.wordType = .determiner
                 sd.data.determinerType = .definite
@@ -432,7 +448,7 @@ struct WordStringParser {
                 }
         case .English:
             for word in englishWords.determinerList {
-                let determiner = word as! EnglishDeterminer
+                //let determiner = word as! EnglishDeterminer
                 sd.word = word
                 sd.data.wordType = .determiner
                 sd.data.determinerType = .definite

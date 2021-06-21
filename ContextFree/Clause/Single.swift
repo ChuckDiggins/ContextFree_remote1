@@ -158,8 +158,17 @@ class dAdjectiveSingle :dSingle
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
-        let adj = word as! RomanceAdjective
-        return adj.getForm(gender: sd.gender, number: sd.number)
+        switch sd.language {
+        case .Spanish, .French:
+            let adj = word as! RomanceAdjective
+            return adj.getForm(gender: sd.gender, number: sd.number)
+        case .English:
+            let adj = word as! EnglishAdjective
+            return adj.getForm()
+        default:
+            return ""
+        }
+        
     }
     
     override func getString()->String
@@ -236,8 +245,17 @@ class dArticleSingle :  dSingle{
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
-        let art = word as! RomanceArticle
-        return art.getDefiniteForm(gender: sd.gender, number: sd.number)
+        switch sd.language {
+        case .Spanish, .French:
+            let art = word as! RomanceArticle
+            return art.getDefiniteForm(gender: sd.gender, number: sd.number)
+        case .English:
+            //let det = word as! EnglishDeterminer
+            return "the"
+        default:
+            return ""
+        }
+        
     }
     
     override func getString()->String
@@ -270,6 +288,13 @@ class dDeterminerSingle :  dSingle{
     
     init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
+    }
+    
+    func getWordString()->String{
+        let sd = getSentenceData()
+        let word = getClusterWord()
+        let det = word as! RomanceDeterminer
+        return ""
     }
     
     

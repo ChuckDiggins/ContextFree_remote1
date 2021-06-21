@@ -16,8 +16,10 @@ class EnglishVerbModelConjugation : VerbModelConjugation{
     var verbModels = [EnglishVerbModel]()
     
     func createVerbModels(){
-        verbModels = createEnglishVerbModels()
-        test()
+        if verbModels.count == 0 {
+            verbModels = createEnglishVerbModels()
+            test()
+        }
     }
     
     func loadVerbModels(){

@@ -12,6 +12,7 @@ class Noun : Word {
     var spanish = ""
     var french = ""
     var plural = ""
+    var englishPlural = ""
     var spanishGender = Gender.masculine
     var frenchGender = Gender.masculine
     var nounType: NounType
@@ -34,7 +35,10 @@ class Noun : Word {
         switch(language){
         case .Spanish:  super.init(word: spanish, def: english, wordType: .noun)
         case .French:  super.init(word: french, def: english, wordType: .noun)
-        case .English:  super.init(word: english, def: english, wordType: .noun)
+        case .English:
+            super.init(word: english, def: english, wordType: .noun)
+            plural = jsonNoun.englishPlural
+            englishPlural = jsonNoun.englishPlural
         default:
             super.init(word: spanish, def: english, wordType: .noun)
         }
@@ -53,7 +57,7 @@ class Noun : Word {
     }
     
     func createJsonNoun()->JsonNoun{
-        return JsonNoun(spanish: word, english: english, french: french,  spanishGender: spanishGender.rawValue, frenchGender: frenchGender.rawValue, nounType : "",
+        return JsonNoun(spanish: word, english: english, french: french,  spanishGender: spanishGender.rawValue, frenchGender: frenchGender.rawValue, englishPlural: englishPlural, nounType : "",
                         verbLikes: "", adjLikes: "")
     }
     
@@ -187,15 +191,75 @@ class SpanishNoun : RomanceNoun {
 
 
 class EnglishNoun : Noun {
+    var m_baseString = ""
+    var endsInY = false
+    var endsInE = false
+        
     override init(word: String, def: String, type: NounType ){
         super.init(word:word, def: def, type:type)
-        //super.constructPlural()
+        constructPlural()
+    }
+    
+    init(jsonNoun: JsonNoun){
+        super.init(jsonNoun: jsonNoun, language: .English)
+        constructPlural()
     }
     
     func isNoun(word: String)->(Bool, NounType, Number){
         if word == word { return (true, nounType, .singular)}
         if word == plural { return (true, nounType, .plural)}
         return (false, nounType, .plural)
+    }
+    
+    func constructPlural(){
+        if plural.count > 0 {return}
+        let util = VerbUtilities()
+        var root = word
+        root.removeLast()
+        
+        var stem = prepareStem()
+        if endsInY {plural = stem + "ies"}
+        else if endsInE {
+            plural = stem + "es"
+        }
+        else { plural = stem + "s" }
+    }
+    
+    func prepareStem()->String{
+        let util = VerbUtilities()
+        m_baseString = word
+        var stem = word
+        let last = util.getLastNCharactersInString(inputString: stem, copyCount: 1)
+        
+        if util.isVowel(letter: last){
+            stem = word
+        }
+        else if last == "y" {
+            endsInY = true
+            //only remove the y if preceded by a consonant - eg, "hurry" -> "hurries", but not "pray" -> "prays"
+            var nextToLast = util.getLastNCharactersInString(inputString: word, copyCount: 2)
+            nextToLast.removeLast()
+            if !util.isVowel(letter: nextToLast){
+                stem.removeLast()
+            }
+        }
+        else {
+            // boxes, approaches,
+            let last2 = util.getLastNCharactersInString(inputString: stem, copyCount: 2)
+            if last == "e" || last == "x" || last2 == "ch" || last2 == "sh" {
+                endsInE = true
+            }
+        }
+        return stem
+    }
+    
+    func getString(number: Number)->String{
+        switch number {
+        case .singular:
+            return word
+        case .plural:
+            return plural
+        }
     }
 }
 

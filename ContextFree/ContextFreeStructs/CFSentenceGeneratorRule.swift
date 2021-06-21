@@ -49,6 +49,7 @@ enum RandomPhraseType{
     case simpleVerbPhrase
     case complexNounPhrase
     case simpleClause
+    case simpleEnglishClause
     case simpleAdjectiveRegular
     case simpleAdjectivePossessive
     case simpleAdjectiveInterrogative
@@ -67,9 +68,12 @@ struct RandomSentence {
         self.m_rft = rft
     }
     
+    mutating func setRandomPhraseType(rft: RandomPhraseType){
+        m_rft = rft
+    }
+
     mutating func createRandomSentenceNew()->dIndependentClause{
         return createRandomPhrase(phraseType: m_rft)
-
     }
     
     mutating func createRandomPhrase(phraseType: RandomPhraseType)->dIndependentClause {
@@ -96,6 +100,8 @@ struct RandomSentence {
             phrase = createComplexNounPhrase()
         case .simpleClause:
             return createSimpleClause()
+        case .simpleEnglishClause:
+            return createSimpleEnglishClause()
         case .subjectPronounVerb:
             return createSubjectPronounVerbClause()
         }
@@ -241,6 +247,48 @@ struct RandomSentence {
         return clause
     }
     
+    mutating func createSimpleEnglishClause()->dIndependentClause{
+        let NP1 = dNounPhrase()
+        NP1.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .article, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .noun, isSubject:true))
+        NP1.setPerson(value: .S3)
+        NP1.processInfo()
+        
+        let NP2 = dNounPhrase()
+        NP2.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .article, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .noun, isSubject:false))
+        NP2.setPerson(value: .S3)
+        NP2.processInfo()
+        
+        let PP1 = dPrepositionPhrase()
+        PP1.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .preposition, isSubject:false))
+        PP1.appendCluster(cluster: NP2)
+        
+        let NP3 = dNounPhrase()
+        NP3.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .article, isSubject:false))
+        NP3.appendCluster(cluster: m_randomWord.getRandomWordAsSingle(wordType: .noun, isSubject:false))
+        NP3.setPerson(value: .S3)
+        NP3.processInfo()
+        
+        let VP = dVerbPhrase()
+        let vs = m_randomWord.getRandomWordAsSingle(wordType: .verb, isSubject:false)
+        VP.appendCluster(cluster: vs )
+        VP.appendCluster(cluster: NP3)
+        VP.appendCluster(cluster: PP1)
+        let clause = dIndependentClause(language: m_wsp.getLanguage())
+        clause.appendCluster(cluster: NP1)
+        clause.appendCluster(cluster: VP)
+        
+        // should be like "la hombre alto comer el perro de la casa negro"
+        
+        clause.setHeadNounAndHeadVerb()
+        
+        
+        return clause
+    }
+
     
     
 }

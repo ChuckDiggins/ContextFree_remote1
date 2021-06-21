@@ -69,7 +69,6 @@ struct RandomWordLists{
             }
             m_articles.append(det)
         }
-
     }
     
     mutating func createListOfPrepositions(){
@@ -166,6 +165,38 @@ struct RandomWordLists{
                 let newArt = FrenchArticle()
                 single = dArticleSingle(word: newArt, data: wsd)
             }
+            else if wsd.language == .English {
+                let newArt = EnglishArticle(word: word.word, def: "", type: .definite)
+                single = dArticleSingle(word: newArt, data: wsd)
+            }
+        case .determiner:
+            let wsd = WordStateData()
+            wsd.language = m_wsp!.getLanguage()
+            i = Int.random(in: 0 ..< m_articles.count)
+            word = m_articles[i]
+            wsd.word = word
+            wsd.articleType = .definite
+            var number = Int.random(in: 1 ..< 3)
+            if ( number == 1 ) { wsd.gender = .masculine}
+            else {wsd.gender = .feminine}
+            wsd.gender = .masculine
+            number = Int.random(in: 1 ..< 3)
+            if ( number == 1 ) { wsd.number = .singular}
+            else {wsd.number = .plural}
+            wsd.wordType = .determiner
+            //create a new instance of this article
+            if wsd.language == .Spanish {
+                let newDet = SpanishDeterminer()
+                single = dDeterminerSingle(word: newDet, data: wsd)
+            }
+            else if wsd.language == .French {
+                let newDet = FrenchDeterminer()
+                single = dDeterminerSingle(word: newDet, data: wsd)
+            }
+            else if wsd.language == .English {
+                let newDet = EnglishDeterminer()
+                single = dDeterminerSingle(word: newDet, data: wsd)
+            }
         case .adjective:
             i = Int.random(in: 0 ..< m_adjectives.count)
             let wsd = WordStateData()
@@ -216,10 +247,17 @@ struct RandomWordLists{
             }
             
             wsd.word = word
-            let noun = word as! RomanceNoun
+            if wsd.language == .Spanish || wsd.language == .French  {
+                let noun = word as! RomanceNoun
+                wsd.gender = noun.gender
+                wsd.nounType = noun.nounType
+            } else {
+                let noun = word as! EnglishNoun
+                wsd.nounType = noun.nounType
+            }
             
-            wsd.nounType = noun.nounType
-            wsd.gender = noun.gender
+            print("getRandomWordAsSingle: new noun: \(wsd.word.word)")
+            
             wsd.wordType = .noun
             single = dNounSingle(word: word, data: wsd)
             let ns = single as! dNounSingle
@@ -247,6 +285,7 @@ struct RandomWordLists{
             case .Spanish:
                 single = dSpanishVerbSingle(word: word, data: wsd)
             case .French: single = dFrenchVerbSingle(word: word, data: wsd)
+            case .English: single = dVerbSingle(word: word, data: wsd)
             default: single = dVerbSingle(word: word, data: wsd)
             }
         default:
