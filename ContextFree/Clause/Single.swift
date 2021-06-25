@@ -161,6 +161,15 @@ class dAdjectiveSingle :dSingle
         switch sd.language {
         case .Spanish, .French:
             let adj = word as! RomanceAdjective
+            if adj.plural.isEmpty {
+                if sd.language == .Spanish {
+                    let spa = word as! SpanishAdjective
+                    spa.createOtherForms()
+                } else if sd.language == .French {
+                    let spa = word as! FrenchAdjective
+                    spa.createOtherForms()
+                }
+            }
             return adj.getForm(gender: sd.gender, number: sd.number)
         case .English:
             let adj = word as! EnglishAdjective
@@ -290,11 +299,25 @@ class dDeterminerSingle :  dSingle{
         super.init(word: word, clusterType: type, data: data)
     }
     
+    func setState(gender: Gender, number: Number){
+        let sd = getSentenceData()
+        sd.gender = gender
+        sd.number = number
+        setSentenceData(data: sd)
+    }
+    
     func getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
-        let det = word as! RomanceDeterminer
-        return ""
+        switch sd.language{
+        case .Spanish, .French:
+            let det = word as! RomanceDeterminer
+            return det.getForm(gender: sd.gender, number: sd.number)
+        case .English:
+            let det = word as! EnglishDeterminer
+            return det.getForm(number: sd.number)
+        default: return ""
+        }
     }
     
     

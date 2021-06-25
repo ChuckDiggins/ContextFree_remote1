@@ -91,16 +91,16 @@ class dNounPhrase : dPhrase {
         let npSentenceData = getSentenceData()
         for cluster in getClusterList(){
             let sym = cluster.getClusterType()
-            if ( sym == .Art || sym == .Adj ){
-                //cluster.setGender(value: npSentenceData.gender)
-                //cluster.setNumber(value: npSentenceData.number)
-                let sd = cluster.getSentenceData()
+            if ( sym == .Det ){
+                var sd = cluster.getSentenceData()
                 sd.gender = npSentenceData.gender
                 sd.number = npSentenceData.number
-                if sym == .Art {
-                    let art = cluster as! dArticleSingle
-                    sd.setProcessedWord(str: art.getWordString())
-                    //print("dNounPhrase:reconcile article \(art.getWordString()) .. ")
+                if sym == .Det {
+                    let det = cluster as! dDeterminerSingle
+                    let ds = det.getWordString()
+                    sd.setProcessedWord(str: ds)
+                    sd = cluster.getSentenceData()
+                    print("ds: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
                 }
                 else if sym == .Adj {
                     let adj = cluster as! dAdjectiveSingle
@@ -108,10 +108,8 @@ class dNounPhrase : dPhrase {
                     let now = Date()
                     adjStr = now.description
                     sd.setProcessedWord(str: adjStr)
-                    //print("dNounPhrase:reconcile adjective \(adj.getWordString()) .. \(adjStr) .. ")
                 }
                 cluster.setSentenceData(data: sd)
-                //print(cluster.getSentenceData().getProcessedWord())
             }
             else if sym == .NP {
                 let np = cluster as! dNounPhrase
@@ -120,6 +118,34 @@ class dNounPhrase : dPhrase {
             else if sym == .PP {
                 let pp = cluster as! dPrepositionPhrase
                 pp.reconcile()
+            }
+        }
+    }
+    
+    func dumpClusterInfo(str: String){
+        print(str)
+        
+        let npSentenceData = getSentenceData()
+        for cluster in getClusterList(){
+            let sym = cluster.getClusterType()
+            if ( sym == .Det  ){
+                var sd = cluster.getSentenceData()
+                if sym == .Det {
+                    let det = cluster as! dDeterminerSingle
+                    let ds = det.getWordString()
+                    print("dumpClusterInfo:  determiner: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
+                }
+                if sym == .Adj {
+                    let det = cluster as! dAdjectiveSingle
+                    let ds = det.getWordString()
+                    print("dumpClusterInfo:  adjective: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
+                }
+
+                if sym == .N {
+                    let n = cluster as! dNounSingle
+                    let ds = n.getWordString()
+                    print("adjective: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
+                }
             }
         }
     }

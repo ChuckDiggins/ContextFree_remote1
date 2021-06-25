@@ -67,13 +67,16 @@ class Verb : Word {
         self.spanish = jsonVerb.spanish
         self.transitivity = jsonVerb.transitivity
         self.passivity = jsonVerb.passivity ?? VerbPassivity.passive
-        switch(language){
+        super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
+/*      switch(language){
         case .Spanish:  super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
         case .French:  super.init(word: jsonVerb.french, def: jsonVerb.english, wordType: .verb)
         case .English:  super.init(word: jsonVerb.english, def: jsonVerb.english, wordType: .verb)
+        case .Agnostic:  super.init(word: jsonVerb.english, def: jsonVerb.english, wordType: .verb)
         default:
             super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
         }
+ */
         
         convertVerbTypeStringToVerbTypes(inputString: jsonVerb.verbType)
         convertFavoriteSubjectStringToFavoriteNouns(inputString: jsonVerb.subjectLikes)
@@ -295,16 +298,13 @@ class FrenchVerb : RomanceVerb {
         super.init(word: word, def: def, type : type)
     }
     
-    func conjugateAndSetSimplePresentForms(){
-        let bFrVerb = bVerb as! BFrenchVerb
-        for p in 0..<6 {
-            let person = Person.allCases[p]
-            _ = bFrVerb.getConjugatedMorphStruct(tense: .present, person: person, conjugateEntirePhrase : false )
-            verbForm.append(bFrVerb.getFinalVerbForm(person : person))
-        }
-    }
-    
     override func getConjugateForm(tense: Tense, person : Person)->String{
+        if ( bVerb.m_verbWord.count == 0){
+            let bv = BFrenchVerb(verbPhrase: french)
+            let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
+            bv.setPatterns(verbModel : verbModel)
+            setBVerb(bVerb: bv)
+        }
         let bFrVerb = bVerb as! BFrenchVerb
         switch tense {
         case .pastParticiple: return bFrVerb.getPastParticiple()
@@ -330,6 +330,12 @@ class SpanishVerb : RomanceVerb {
     }
     
     override func getConjugateForm(tense: Tense, person : Person)->String{
+        if ( bVerb.m_verbWord.count == 0){
+            let bv = BSpanishVerb(verbPhrase: spanish)
+            let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
+            bv.setPatterns(verbModel : verbModel)
+            setBVerb(bVerb: bv)
+        }
         let bSpVerb = bVerb as! BSpanishVerb
         switch tense {
         case .pastParticiple: return bSpVerb.getPastParticiple()

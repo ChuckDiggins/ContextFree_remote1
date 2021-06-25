@@ -134,7 +134,7 @@ class dPhrase : dCluster {
                     //let c = cluster as! dSubjectPronounSingle
                     wordList.append(cluster.getSentenceData())
                 }
-                else if ( type == .Art){
+                else if ( type == .Det){
                     //let c = cluster as! dArticleSingle
                     wordList.append(cluster.getSentenceData())
                 }
@@ -178,8 +178,8 @@ class dPhrase : dCluster {
         for cluster in getClusterList() {
             let clusterType = cluster.getClusterType()
             switch clusterType {
-            case .Art:
-                let c = cluster as! dArticleSingle
+            case .Det:
+                let c = cluster as! dDeterminerSingle
                 c.setGender(value: gender)
                 c.setNumber(value: number)
                 c.setProcessWordInWordStateData(str: c.getWordString())
@@ -247,6 +247,24 @@ class dPhrase : dCluster {
                     }
                     c.setProcessWordInWordStateData(str: c.getString())
 
+                }
+                else if ( type == .Det){
+                    let c = cluster as! dDeterminerSingle
+                    str += c.getWordString() + " "
+                    /*
+                    switch getSentenceData().language{
+                    case .Spanish:
+                        str += c.getWordString() + " "
+                    case .French:
+                        str += c.getWordString() + " "
+                    case .English:
+                        str += c.getWordString() + " "
+                    default:
+                        str += "unknown language in dPhrase"
+                    }
+ */
+                    
+                    c.setProcessWordInWordStateData(str: c.getWordString())
                 }
                 else if ( type == .SubjP){
                     let c = cluster as! dSubjectPronounSingle

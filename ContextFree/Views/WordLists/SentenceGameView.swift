@@ -140,7 +140,7 @@ struct SentenceGameView: View {
                 }
             }
             .padding()
-            .onAppear{currentLanguage = .English
+            .onAppear{currentLanguage = .Spanish
                 cfModelView.createNewModel(language: currentLanguage)
                 m_randomSentence = cfModelView.getRandomSentenceObject()
                 createRandomClause()
@@ -192,7 +192,7 @@ struct SentenceGameView: View {
         case .verb:
             switch currentLanguage{
             case .Spanish, .French:
-                let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+                let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
                 single.copyGuts(newSingle: newSingle)
                 let newVerbSingle = newSingle as! dVerbSingle
                 var spVerb = newVerbSingle.getClusterWord() as! RomanceVerb
@@ -201,7 +201,7 @@ struct SentenceGameView: View {
                 spVerb = verbSingle.getClusterWord() as! RomanceVerb
                 spVerb.setBVerb(bVerb: bVerb)
             case .English:
-                let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+                let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
                 single.copyGuts(newSingle: newSingle)
                 let newVerbSingle = newSingle as! dVerbSingle
                 var spVerb = newVerbSingle.getClusterWord() as! EnglishVerb
@@ -211,22 +211,24 @@ struct SentenceGameView: View {
                 spVerb.setBVerb(bVerb: bVerb)
             default: break
             }
-        case .adjective, .article:
-            let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+        case .adjective, .determiner:
+            let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
         case .noun:
             let nounSingle = single as! dNounSingle
-            let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:nounSingle.isSubject())
+            let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:nounSingle.isSubject())
             nounSingle.copyGuts(newSingle: newSingle)
         case .preposition:
-            let newSingle = m_randomSentence.m_randomWord.getRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+            let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
         default: break
         }
         wsd = single.getSentenceData()
         m_clause.processInfo()
         currentPerson = m_clause.getPerson()
+        //m_clause.dumpNounPhraseData()
         sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(tense: currentTense, person: currentPerson)
+        //m_clause.dumpNounPhraseData()
         handleFrenchContractions()
         updateCurrentSentenceViewStuff()
         wordSurgery(single: singleList[currentSingleIndex])
@@ -257,11 +259,11 @@ struct SentenceGameView: View {
             surgicalLine4 = ""
             surgicalLine5 = ""
             surgicalLine6 = ""
-        case .article:
-            surgicalTitle = "Article"
+        case .determiner:
+            surgicalTitle = "Determiner"
             surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
             surgicalEnglish = "English: \(wsd.word.def)"
-            surgicalLine1 = "Article type: \(wsd.articleType.rawValue)"
+            surgicalLine1 = "Determiner type: \(wsd.determinerType.rawValue)"
             surgicalLine2 = "Gender:       \(wsd.gender.rawValue)"
             surgicalLine3 = "Number:       \(wsd.number.rawValue)"
             surgicalLine4 = ""
@@ -373,6 +375,12 @@ struct SentenceGameView: View {
         singleList = m_clause.getSingleList()
         
         for single in singleList {
+            if single.getWordType() == .determiner {
+                let det = single as! dDeterminerSingle
+                let sd = det.getSentenceData()
+                let detWord = det.getSentenceData().getProcessedWord()
+                print ("\(detWord)")
+            }
             let wsd = single.getSentenceData()
             letterCount += wsd.word.word.count + 1
             wordCount += 1

@@ -128,6 +128,21 @@ struct WordStringParser {
     }
     */
     
+    mutating func getAgnosticWordFromDictionary(wordType:WordType, index:Int)->Word{
+        switch wordType {
+        case .determiner: return generalWords.determinerList[index]
+        case .adjective: return generalWords.adjectiveList[index]
+        case .adverb: return generalWords.adverbList[index]
+        case .conjunction: return generalWords.conjunctionList[index]
+        case .noun: return generalWords.nounList[index]
+        case .verb: return generalWords.verbList[index]
+        case .preposition: return generalWords.prepositionList[index]
+        case .pronoun: return generalWords.pronounList[index]
+        //case .punctuation: return generalWords.punctuationList[index]
+        default: return Word()
+        }
+    }
+    
     //create the correct verb just in time
     mutating func getVerbFromDictionary(language: LanguageType, index: Int)->Verb{
         var verb = Verb()
@@ -456,7 +471,7 @@ struct WordStringParser {
                 sd.data.number = .singular
                 return sd
                 }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd
@@ -504,7 +519,7 @@ struct WordStringParser {
                 }
                 
             }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd
@@ -554,7 +569,7 @@ struct WordStringParser {
                     return sd
                 }
             }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd
@@ -600,7 +615,7 @@ struct WordStringParser {
                     }
                 }
             }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd
@@ -647,7 +662,7 @@ struct WordStringParser {
                     }
                 }
             }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd
@@ -781,7 +796,7 @@ struct WordStringParser {
                     return sd
                 }
             }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd
@@ -945,7 +960,7 @@ struct WordStringParser {
                     sd.data.person = result.2
                 }
             }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd
@@ -980,7 +995,7 @@ struct WordStringParser {
                     return sd
                 }
             }
-        case .Italian,.Portuguese:
+        case .Italian,.Portuguese, .Agnostic:
             return sd
         }
         return sd

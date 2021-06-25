@@ -115,7 +115,7 @@ class BEnglishVerb : BVerb {
     }
     
     func getBeForm(tense : Tense, person : Person)->String {
-        var stem = m_verbWord
+        let stem = m_verbWord
         switch tense {
         case .present:
             switch person{
@@ -159,7 +159,7 @@ class BEnglishVerb : BVerb {
     }
     
     func getRegularForm(tense : Tense, person : Person)->String {
-        var stem = m_verbWord
+        let stem = m_verbWord
         switch tense {
         case .present:
             if person == .S3 { return m_presentS3Form }

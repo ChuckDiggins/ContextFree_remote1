@@ -209,6 +209,7 @@ struct ClusterResolution {
             wd = sd
         case .Italian, .Portuguese:
             wd = sd
+        case .Agnostic: wd = sd
         }
         return wd
     }

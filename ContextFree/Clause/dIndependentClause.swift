@@ -121,7 +121,7 @@ class dIndependentClause : dClause {
     }
     
     func setHeadNounAndHeadVerb(){
-
+        
         for cluster in sentence.getClusterList(){
             
             //for now assume that the first NP is the head noun
@@ -152,7 +152,7 @@ class dIndependentClause : dClause {
         }
         return createNewSentenceString()
     }
-        
+    
     func createNewSentenceString()->String{
         var sentenceString = getReconstructedSentenceString()
         sentenceString = VerbUtilities().makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: sentenceString)
@@ -381,7 +381,7 @@ class dIndependentClause : dClause {
         case .Italian:
             // break up don'ts and won'ts, etc
             contractionFound = false
-        case .Portuguese:
+        case .Portuguese, .Agnostic:
             // break up don'ts and won'ts, etc
             contractionFound = false
         }
@@ -429,7 +429,7 @@ class dIndependentClause : dClause {
                     single = dSpanishVerbSingle(word: word, data: data.data)
                 case .French:
                     single = dFrenchVerbSingle(word: word, data: data.data)
-                case .Italian, .English, .Portuguese:
+                case .Italian, .English, .Portuguese, .Agnostic:
                     single = dVerbSingle(word: word, data: data.data)
                 }
                 
@@ -486,8 +486,22 @@ class dIndependentClause : dClause {
         }
         return wordStateList
     }
-   
+    
+    func dumpNounPhraseData(){
+        for cluster in sentence.getClusterList(){
+            switch cluster.getClusterType() {
+            case .NP:
+                let c = cluster as! dNounPhrase
+                c.dumpClusterInfo(str: "dumpNounPhraseData:")
+            default: break
+            }
+        }
+    }
+    
     func getSingleList()->[dSingle]{
+        
+        dumpNounPhraseData()
+        
         var singleList = [dSingle]()
         for cluster in sentence.getClusterList(){
             switch cluster.getClusterType() {
@@ -497,6 +511,7 @@ class dIndependentClause : dClause {
                 singleList.append(single)
             case .NP:
                 let c = cluster as! dNounPhrase
+                c.dumpClusterInfo(str: "getSingleList NP:")
                 singleList = c.getSingleList(inputSingleList: singleList)
             case .PP:
                 let c = cluster as! dPrepositionPhrase
@@ -509,12 +524,12 @@ class dIndependentClause : dClause {
         }
         return singleList
     }
-   
+    
     func getReconstructedSentenceString()->String {
         var ss = ""
         var str = ""
         //print ("getReconstructedSentenceString - dataList count = \(dataList.count)")
-
+        
         for cluster in sentence.getClusterList() {
             
             switch cluster.getClusterType() {
@@ -533,7 +548,7 @@ class dIndependentClause : dClause {
             case .AdvP:
                 let c = cluster as! dAdverbPhrase
                 str = c.getString()
- //               c.getSentenceData().processedWord = c.getString()
+            //               c.getSentenceData().processedWord = c.getString()
             case .AMB:
                 let c = cluster as! dAmbiguousSingle
                 str = c.getString()

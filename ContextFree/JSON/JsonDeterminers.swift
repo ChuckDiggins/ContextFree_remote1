@@ -39,9 +39,9 @@ var myMultiLingualDeterminerList: [JsonDeterminer] = [
     JsonDeterminer(spanish: "un", english: "a",    french: "un", determinerType : "I"),
     JsonDeterminer(spanish: "el", english: "the",    french: "le", determinerType : "D"),
     JsonDeterminer(spanish: "mi", english: "my",    french: "mon", determinerType : "P"),
-    JsonDeterminer(spanish: "este", english: "this",    french: "ce", determinerType : "M"),
-    JsonDeterminer(spanish: "ese", english: "that",    french: "ce", determinerType : "M"),
-    JsonDeterminer(spanish: "que", english: "what",    french: "que", determinerType : "N"),
+    //JsonDeterminer(spanish: "este", english: "this",    french: "ce", determinerType : "M"),
+    //JsonDeterminer(spanish: "ese", english: "that",    french: "ce", determinerType : "M"),
+    //JsonDeterminer(spanish: "que", english: "what",    french: "que", determinerType : "N"),
     ]
 
 

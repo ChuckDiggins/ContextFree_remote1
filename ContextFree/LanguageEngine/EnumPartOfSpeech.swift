@@ -8,7 +8,7 @@
 import Foundation
 
 enum  LanguageType{
-    case English, Spanish, French, Italian, Portuguese
+    case English, Spanish, French, Italian, Portuguese, Agnostic
 }
 
 enum  VerbEnding : String

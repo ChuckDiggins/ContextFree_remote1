@@ -17,9 +17,7 @@ struct CFModel{
     var m_currentLanguage : LanguageType
     
     var tenseManager = TenseManager()
-    private var m_spanishVerbModelConjugation = RomanceVerbModelConjugation()
-    private var m_frenchVerbModelConjugation = RomanceVerbModelConjugation()
-    private var m_englishVerbModelConjugation = EnglishVerbModelConjugation()
+    
     private var m_disambiguation = Disambiguation()
     private var m_tenseList = Array<Tense>()
     private var m_verbStringList: [String] = []
@@ -140,6 +138,7 @@ struct CFModel{
         }
         else {
             m_randomSentence.setRandomPhraseType(rft: .simpleClause)
+            //m_randomSentence.setRandomPhraseType(rft: .simpleVerbPhrase)
             return m_randomSentence.createRandomSentenceNew()
         }
     }
@@ -256,8 +255,7 @@ struct CFModel{
     }
    
     mutating func createJsonNoun(noun: Noun){
-        let jn = noun.createJsonNoun()
-        appendJsonNoun(jsonNoun: jn)
+        appendJsonNoun(jsonNoun: noun.createJsonNoun())
     }
 
     mutating func appendJsonNoun(jsonNoun: JsonNoun)->Int{
@@ -268,8 +266,7 @@ struct CFModel{
     }
     
     mutating func createJsonVerb(verb: Verb){
-        let jv = verb.createJsonVerb()
-        appendJsonVerb(jsonVerb: jv)
+        appendJsonVerb(jsonVerb: verb.createJsonVerb())
     }
 
     mutating func appendJsonVerb(jsonVerb: JsonVerb)->Int{
@@ -309,12 +306,18 @@ struct CFModel{
             switch m_currentLanguage {
             case .Spanish:
                 let verb = SpanishVerb(jsonVerb: jv)
+                verb.setBVerb(bVerb: spanishVerbStuff.verb)
                 verbListCount = m_wsp.addVerbToDictionary(verb: verb)
             case .French:
                 let verb = FrenchVerb(jsonVerb: jv)
+                verb.setBVerb(bVerb: frenchVerbStuff.verb)
                 verbListCount = m_wsp.addVerbToDictionary(verb: verb)
             case .English:
                 let verb = EnglishVerb(jsonVerb: jv)
+                verb.setBVerb(bVerb: englishVerbStuff.verb)
+                verbListCount = m_wsp.addVerbToDictionary(verb: verb)
+            case .Agnostic:
+                let verb = Verb(jsonVerb: jv, language: .Agnostic)
                 verbListCount = m_wsp.addVerbToDictionary(verb: verb)
             default:
                 break
@@ -388,6 +391,7 @@ struct CFModel{
             return m_wsp.getFrenchWords().adjectiveList
         case .Italian: break
         case .Portuguese: break
+        case .Agnostic: break
         }
         return Array<Word>()
     }
@@ -727,6 +731,7 @@ struct CFModel{
                 return m_wsp.getFrenchWords().adjectiveList
             case .Italian: break
             case .Portuguese: break
+            case .Agnostic: break
             }
         case .noun:
             switch m_currentLanguage {
@@ -738,6 +743,7 @@ struct CFModel{
                 return m_wsp.getFrenchWords().nounList
             case .Italian: break
             case .Portuguese: break
+            case .Agnostic: break
             }
         case .preposition:
             switch m_currentLanguage {
@@ -749,6 +755,7 @@ struct CFModel{
                 return m_wsp.getFrenchWords().prepositionList
             case .Italian: break
             case .Portuguese: break
+            case .Agnostic: break
             }
         case .verb:
             return m_wsp.getVerbList()
@@ -762,6 +769,7 @@ struct CFModel{
                 return m_wsp.getFrenchWords().adverbList
             case .Italian: break
             case .Portuguese: break
+            case .Agnostic: break
             }
         default:
             break

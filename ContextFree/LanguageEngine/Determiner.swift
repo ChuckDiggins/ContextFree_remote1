@@ -71,6 +71,11 @@ class EnglishDeterminer : Determiner {
         case .singular:
             return word
         case .plural:
+            if plural.count == 0 {
+                if type == .definite {plural = "the"}
+                else if type == .indefinite {plural = "some"}
+                else if type == .possessive {plural = "my"}
+            }
             return plural
         }
     }
@@ -148,6 +153,8 @@ class SpanishDeterminer : RomanceDeterminer {
             return getIndefiniteForm(gender: gender, number : number)
         case .definite:
             return getDefiniteForm(gender: gender, number : number)
+        case .possessive:
+            return getPossessiveForm( person: .S3, gender : gender, number : number)
         case .demonstrative:
             return getDemonstrativeForm(gender: gender, number : number)
         case .interrogative:
@@ -277,16 +284,16 @@ class SpanishDeterminer : RomanceDeterminer {
         case .feminine:
             switch number {
             case .singular:
-                return "la"
+                return "xxx"
             case .plural:
-                return "las"
+                return "xxx"
             }
         case .masculine, .either:
             switch number {
             case .singular:
-                return "el"
+                return "xxx"
             case .plural:
-                return "los"
+                return "xxx"
             }
         }
     }
@@ -296,16 +303,16 @@ class SpanishDeterminer : RomanceDeterminer {
         case .feminine:
             switch number {
             case .singular:
-                return "la"
+                return "xxx"
             case .plural:
-                return "las"
+                return "xxx"
             }
         case .masculine, .either:
             switch number {
             case .singular:
-                return "el"
+                return "xxx"
             case .plural:
-                return "los"
+                return "xxx"
             }
         }
     }
@@ -320,6 +327,177 @@ class FrenchDeterminer : RomanceDeterminer {
     override init(){
         super.init()
     }
+    
+    override func getForm(gender: Gender, number: Number)->String{
+        switch type{
+        case .indefinite:
+            return getIndefiniteForm(gender: gender, number : number)
+        case .definite:
+            return getDefiniteForm(gender: gender, number : number)
+        case .possessive:
+            return getPossessiveForm( person: .S3, gender : gender, number : number)
+        case .demonstrative:
+            return getDemonstrativeForm(gender: gender, number : number)
+        case .interrogative:
+            return getInterrogativeForm(gender: gender, number : number)
+        default:
+            return ""
+        }
+    }
+    
+    
+    func getIndefiniteForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "un"
+            case .plural:
+                return "des"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "une"
+            case .plural:
+                return "des"
+            }
+        }
+    }
+    
+    func getDefiniteForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "le"
+            case .plural:
+                return "les"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "la"
+            case .plural:
+                return "les"
+            }
+        }
+    }
+    
+    func getPossessiveForm( person: Person, gender : Gender, number : Number)->String{
+        if gender == .masculine && number == .singular { return getSingularMasculinePossessiveForm(person: person)}
+        if gender == .masculine && number == .plural { return getPluralMasculinePossessiveForm(person: person)}
+        if gender == .feminine && number == .singular { return getSingularFemininePossessiveForm(person: person)}
+        if gender == .feminine && number == .plural { return getPluralFemininePossessiveForm(person: person)}
+        return "unknown possessive form"
+    }
+    
+    func getSingularMasculinePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mon"
+        case .S2:
+            return "ton"
+        case .S3:
+            return "son"
+        case .P1:
+            return "notre"
+        case .P2:
+            return "votre"
+        case .P3:
+            return "leur"
+        }
+    }
+    
+    func getPluralMasculinePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mes"
+        case .S2:
+            return "tes"
+        case .S3:
+            return "ses"
+        case .P1:
+            return "nos"
+        case .P2:
+            return "vos"
+        case .P3:
+            return "leurs"
+        }
+    }
+    
+    func getSingularFemininePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mon"
+        case .S2:
+            return "ton"
+        case .S3:
+            return "son"
+        case .P1:
+            return "notre"
+        case .P2:
+            return "votre"
+        case .P3:
+            return "leur"
+        }
+    }
+    
+    func getPluralFemininePossessiveForm(person : Person)->String{
+        switch person {
+        case .S1:
+            return "mes"
+        case .S2:
+            return "tes"
+        case .S3:
+            return "ses"
+        case .P1:
+            return "nos"
+        case .P2:
+            return "vos"
+        case .P3:
+            return "leurs"
+        }
+    }
+    //need to be corrected
+    func getInterrogativeForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "xxx"
+            case .plural:
+                return "xxx"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "xxx"
+            case .plural:
+                return "xxx"
+            }
+        }
+    }
+    
+    func getDemonstrativeForm( gender: Gender, number: Number)->String{
+        switch gender {
+        case .feminine:
+            switch number {
+            case .singular:
+                return "xxx"
+            case .plural:
+                return "xxx"
+            }
+        case .masculine, .either:
+            switch number {
+            case .singular:
+                return "xxx"
+            case .plural:
+                return "xxx"
+            }
+        }
+    }
+
     
 }
 
