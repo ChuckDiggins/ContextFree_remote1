@@ -12,10 +12,17 @@ class Word : Hashable, Equatable {
     let def : String
     let wordType : WordType
     
+    var english = ""
+    var spanish = ""
+    var french = ""
+    
     init(word: String, def: String, wordType: WordType){
         self.word = word
         self.def = def
         self.wordType = wordType
+        self.english = ""
+        self.spanish = ""
+        self.french = ""
     }
     
     init(){
@@ -44,4 +51,17 @@ class Word : Hashable, Equatable {
         if wordType == .unknown{return true}
         return false
     }
+    
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        switch language{
+        case .Spanish:
+            return spanish
+        case .French:
+            return french
+        case .English:
+            return english
+        default: return ""
+        }
+    }
+    
 }

@@ -9,9 +9,6 @@ import Foundation
 
 class Determiner : Word {
     var type: DeterminerType
-    var english = ""
-    var spanish = ""
-    var french = ""
     
     override init(){
         self.type = .definite
@@ -24,20 +21,19 @@ class Determiner : Word {
     }
     
     init(json: JsonDeterminer, language: LanguageType){
-        self.english = json.english
-        self.french = json.french
-        self.spanish = json.spanish
         self.type = DeterminerType.indefinite
         
         switch(language){
-        case .Spanish:  super.init(word: spanish, def: english, wordType: .noun)
-        case .French:  super.init(word: french, def: english, wordType: .noun)
-        case .English:  super.init(word: english, def: english, wordType: .noun)
+        case .Spanish:  super.init(word: json.spanish, def: json.english, wordType: .noun)
+        case .French:  super.init(word: json.french, def: json.english, wordType: .noun)
+        case .English:  super.init(word: json.english, def: json.english, wordType: .noun)
         default:
-            super.init(word: spanish, def: english, wordType: .adjective)
-            
-            convertDeterminerTypeStringToDeterminerType(inputString: json.determinerType)
+            super.init(word: json.spanish, def: json.english, wordType: .adjective)
         }
+        self.spanish = json.spanish
+        self.french = json.french
+        self.english = json.english
+        convertDeterminerTypeStringToDeterminerType(inputString: json.determinerType)
     }
     
     func convertDeterminerTypeStringToDeterminerType(inputString: String){
@@ -51,11 +47,17 @@ class Determiner : Word {
 }
 
 class EnglishDeterminer : Determiner {
+    
     override init(json: JsonDeterminer, language: LanguageType){
         super.init(json: json, language: language)
     }
+    
     override init(){
         super.init(word: "", def: "", type : .definite)
+    }
+    
+    override init(word: String, def: String, type: DeterminerType){
+        super.init(word: word, def: def, type: type)
     }
     
     //this
@@ -95,6 +97,10 @@ class RomanceDeterminer : Determiner {
     
     override init(){
         super.init(word: "", def: "", type : .definite)
+    }
+    
+    override init(word:String, def:String, type : DeterminerType){
+        super.init(word: word, def: def, type : type)
     }
     
     init(word:String, def:String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String ){
@@ -141,6 +147,10 @@ class RomanceDeterminer : Determiner {
 class SpanishDeterminer : RomanceDeterminer {
     override init(){
         super.init()
+    }
+    
+    override init(word: String, def: String, type: DeterminerType){
+        super.init(word: word, def: def, type: type)
     }
     
     init(json: JsonDeterminer){
@@ -324,6 +334,10 @@ class FrenchDeterminer : RomanceDeterminer {
         super.init(json: json, language: .French)
     }
     
+    override init(word: String, def: String, type: DeterminerType){
+        super.init(word: word, def: def, type: type)
+    }
+    
     override init(){
         super.init()
     }
@@ -351,14 +365,14 @@ class FrenchDeterminer : RomanceDeterminer {
         case .feminine:
             switch number {
             case .singular:
-                return "un"
+                return "une"
             case .plural:
                 return "des"
             }
         case .masculine, .either:
             switch number {
             case .singular:
-                return "une"
+                return "un"
             case .plural:
                 return "des"
             }
@@ -370,14 +384,14 @@ class FrenchDeterminer : RomanceDeterminer {
         case .feminine:
             switch number {
             case .singular:
-                return "le"
+                return "la"
             case .plural:
                 return "les"
             }
         case .masculine, .either:
             switch number {
             case .singular:
-                return "la"
+                return "le"
             case .plural:
                 return "les"
             }

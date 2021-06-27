@@ -25,19 +25,17 @@ class Verb : Word {
     var tense = Tense.present
     var person = Person.S1
     var tensePersonSet = false
-    var english = ""
-    var spanish = ""
-    var french = ""
+
     
     override init(){
         super.init(word: "", def : "", wordType : .verb)
     }
      
     init(spanish: String, french: String, english: String){
+        super.init(word: spanish, def: "", wordType: .verb)
         self.spanish = spanish
         self.french = french
         self.english = english
-        super.init(word: spanish, def: "", wordType: .verb)
     }
     
     init(word: String, def: String, type : VerbType){
@@ -62,13 +60,10 @@ class Verb : Word {
     }
     
     init(jsonVerb: JsonVerb, language: LanguageType){
-        self.english = jsonVerb.english
-        self.french = jsonVerb.french
-        self.spanish = jsonVerb.spanish
         self.transitivity = jsonVerb.transitivity
         self.passivity = jsonVerb.passivity ?? VerbPassivity.passive
-        super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
-/*      switch(language){
+        //super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
+        switch(language){
         case .Spanish:  super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
         case .French:  super.init(word: jsonVerb.french, def: jsonVerb.english, wordType: .verb)
         case .English:  super.init(word: jsonVerb.english, def: jsonVerb.english, wordType: .verb)
@@ -76,7 +71,9 @@ class Verb : Word {
         default:
             super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
         }
- */
+        self.spanish = jsonVerb.spanish
+        self.french = jsonVerb.french
+        self.english = jsonVerb.english
         
         convertVerbTypeStringToVerbTypes(inputString: jsonVerb.verbType)
         convertFavoriteSubjectStringToFavoriteNouns(inputString: jsonVerb.subjectLikes)

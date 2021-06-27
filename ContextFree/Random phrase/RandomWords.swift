@@ -265,13 +265,7 @@ struct RandomWordLists{
             let verb = word as! Verb
             wsd.verbType = verb.typeList[0]
             wsd.wordType = .verb
-            switch wsd.language {
-            case .Spanish:
-                single = dSpanishVerbSingle(word: word, data: wsd)
-            case .French: single = dFrenchVerbSingle(word: word, data: wsd)
-            case .English: single = dVerbSingle(word: word, data: wsd)
-            default: single = dVerbSingle(word: word, data: wsd)
-            }
+            single = dVerbSingle(word: word, data: wsd)
         default:
             break
         }

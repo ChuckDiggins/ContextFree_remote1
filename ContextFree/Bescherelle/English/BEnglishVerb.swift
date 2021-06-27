@@ -12,9 +12,12 @@ class BEnglishVerb : BVerb {
     var verbModel = EnglishVerbModel()
     var m_presentS3Form = ""
     var m_preteriteForm = ""
-    var m_suffix = ""
+    var m_suffix1 = ""
+    var m_suffix2 = ""
     var endsInE = false
+    var endsInConsonant = true
     var endsInY = false
+    var endsInN = false
     var m_baseString = ""
     
     init(verbPhrase: String, verbWord: String){
@@ -27,6 +30,37 @@ class BEnglishVerb : BVerb {
         return "Besch #\(verbModel.id) (\(verbModel.infinitive))"
     }
     
+    func prepareStemNew()->String{
+        let util = VerbUtilities()
+        m_baseString = m_verbWord
+        var stem = m_verbWord
+        m_suffix1 = util.getLastNCharactersInString(inputString: stem, copyCount: 1)
+        m_suffix2 = util.getLastNCharactersInString(inputString: stem, copyCount: 2)
+        
+        if util.isVowel(letter: m_suffix1){
+            endsInConsonant = false
+            stem = m_verbWord
+        }
+        else if m_suffix1 == "y" {
+            endsInConsonant = false
+            endsInY = true
+            //only remove the y if preceded by a consonant - eg, "hurry" -> "hurries", but not "pray" -> "prays"
+            var nextToLast = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 2)
+            nextToLast.removeLast()
+            if !util.isVowel(letter: nextToLast){
+                stem.removeLast()
+            }
+        }
+        else {
+            // boxes, approaches,
+            if m_suffix1 == "e" || m_suffix1 == "x" || m_suffix2 == "ch" || m_suffix2 == "sh" {
+                endsInE = true
+                endsInConsonant = false
+            }
+        }
+        return stem
+    }
+    
     func prepareStem()->String{
         let util = VerbUtilities()
         m_baseString = m_verbWord
@@ -34,9 +68,11 @@ class BEnglishVerb : BVerb {
         let last = util.getLastNCharactersInString(inputString: stem, copyCount: 1)
         
         if util.isVowel(letter: last){
+            endsInConsonant = false
             stem = m_verbWord
         }
         else if last == "y" {
+            endsInConsonant = false
             endsInY = true
             //only remove the y if preceded by a consonant - eg, "hurry" -> "hurries", but not "pray" -> "prays"
             var nextToLast = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 2)
@@ -50,6 +86,7 @@ class BEnglishVerb : BVerb {
             let last2 = util.getLastNCharactersInString(inputString: stem, copyCount: 2)
             if last == "e" || last == "x" || last2 == "ch" || last2 == "sh" {
                 endsInE = true
+                endsInConsonant = false
             }
         }
         return stem
@@ -62,6 +99,7 @@ class BEnglishVerb : BVerb {
         m_gerund = m_verbWord + "ing"
         if endsInY {m_presentS3Form = stem + "ies"}
         else if endsInE {
+            m_gerund = stem + "ing"
             m_presentS3Form = stem + "es"
             m_preteriteForm = stem + "ed"
         }
@@ -74,6 +112,7 @@ class BEnglishVerb : BVerb {
     
     func setModel(verbModel: EnglishVerbModel){
         self.verbModel = verbModel
+       
         
         //if verbModel.id == 0 {
         //     createRegularDefaultForms()
@@ -87,11 +126,15 @@ class BEnglishVerb : BVerb {
         if verbModel.id > 1 {
             m_pastParticiple = verbModel.pastPart
             m_preteriteForm = verbModel.preterite
+            m_gerund = verbModel.gerund
             m_verbWord = verbModel.infinitive
             let stem = prepareStem()
             if endsInY {m_presentS3Form = stem + "ies"}
             else if endsInE {
                 m_presentS3Form = stem + "es"
+                m_preteriteForm = stem + "ed"
+            }
+            else if endsInConsonant {
                 m_preteriteForm = stem + "ed"
             }
             else { m_presentS3Form = stem + "s" }

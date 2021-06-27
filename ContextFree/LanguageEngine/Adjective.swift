@@ -8,9 +8,7 @@
 import Foundation
 
 class Adjective : Word {
-    var english = ""
-    var spanish = ""
-    var french = ""
+
     var plural = ""
     var type : AdjectiveType
     var preferredPosition = AdjectivePositionType.preceding
@@ -26,18 +24,18 @@ class Adjective : Word {
     }
 
     init(jsonAdjective: JsonAdjective, language: LanguageType){
-        self.english = jsonAdjective.english
-        self.french = jsonAdjective.french
-        self.spanish = jsonAdjective.spanish
         self.type = AdjectiveType.any
         
         switch(language){
-        case .Spanish:  super.init(word: spanish, def: english, wordType: .noun)
-        case .French:  super.init(word: french, def: english, wordType: .noun)
-        case .English:  super.init(word: english, def: english, wordType: .noun)
+        case .Spanish:  super.init(word: jsonAdjective.spanish, def: jsonAdjective.english, wordType: .noun)
+        case .French:  super.init(word: jsonAdjective.french, def: jsonAdjective.english, wordType: .noun)
+        case .English:  super.init(word: jsonAdjective.english, def: jsonAdjective.english, wordType: .noun)
         default:
-            super.init(word: spanish, def: english, wordType: .adjective)
+            super.init(word: jsonAdjective.spanish, def: jsonAdjective.english, wordType: .adjective)
         }
+        self.spanish = jsonAdjective.spanish
+        self.french = jsonAdjective.french
+        self.english = jsonAdjective.english
         
         convertAdjectiveTypeStringToAdjectiveTypes(inputString: jsonAdjective.adjectiveType)
         convertFavoriteNounStringToFavoriteNouns(inputString: jsonAdjective.nounLikes)

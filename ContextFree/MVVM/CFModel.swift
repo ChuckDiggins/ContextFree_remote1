@@ -65,7 +65,6 @@ struct CFModel{
         m_tenseList = tenseManager.getActiveTenseList()
         loadJsonWords()
         m_randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleClause)
-        //m_cfcg = ContextFreeConstructionGrammar(wsp: m_wsp)
 
         for tense in m_tenseList {
             print("active tense: \(tense.rawValue)")
@@ -126,6 +125,35 @@ struct CFModel{
         return m_randomSentence
     }
     
+    mutating func getAgnosticRandomSubjPronounSentence()->dIndependentAgnosticClause{
+        m_randomSentence = RandomSentence(wsp: m_wsp, rft: .subjectPronounVerb)
+        return m_randomSentence.createAgnosticSubjectPronounVerbClause()
+    }
+    
+    
+    mutating func getRandomSubjPronounSentence()->dIndependentClause{
+        m_randomSentence = RandomSentence(wsp: m_wsp, rft: .subjectPronounVerb)
+        return m_randomSentence.createRandomSentenceNew()
+    }
+    
+    mutating func getRandomAgnosticSentence()->dIndependentAgnosticClause{
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .twoArticles)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simplePrepositionPhrase)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleVerbPhrase)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .complexNounPhrase)
+        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleNounPhrase)
+        if m_currentLanguage == .English {
+            m_randomSentence.setRandomPhraseType(rft: .simpleEnglishClause)
+            return m_randomSentence.createRandomAgnosticPhrase(phraseType: .simpleEnglishClause)
+        }
+        else {
+            //m_randomSentence.setRandomPhraseType(rft: .simpleClause)
+            //m_randomSentence.setRandomPhraseType(rft: .simpleNounPhrase)
+            return m_randomSentence.createRandomAgnosticPhrase(phraseType: .simpleClause)
+        }
+    }
+
+
     mutating func getRandomSentence()->dIndependentClause{
         //var randomSentence = RandomSentence(wsp: m_wsp, rft: .twoArticles)
         //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simplePrepositionPhrase)
@@ -138,16 +166,12 @@ struct CFModel{
         }
         else {
             m_randomSentence.setRandomPhraseType(rft: .simpleClause)
-            //m_randomSentence.setRandomPhraseType(rft: .simpleVerbPhrase)
+            //m_randomSentence.setRandomPhraseType(rft: .simpleClause)
             return m_randomSentence.createRandomSentenceNew()
         }
     }
 
-    mutating func getRandomSubjPronounSentence()->dIndependentClause{
-        m_randomSentence = RandomSentence(wsp: m_wsp, rft: .subjectPronounVerb)
-        return m_randomSentence.createRandomSentenceNew()
-    }
-    
+   
     
     mutating func createDictionaryFromJsonWords(wordType: WordType){
         switch wordType{
@@ -194,6 +218,9 @@ struct CFModel{
         case .English:
             let noun = EnglishNoun(jsonNoun: jn)
             nounListCount = m_wsp.addNounToDictionary(noun: noun)
+        case .Agnostic:
+            let noun = Noun(jsonNoun: jn, language: .Agnostic)
+            nounListCount = m_wsp.addNounToDictionary(noun: noun)
         default:
             break
         }
@@ -211,6 +238,9 @@ struct CFModel{
             adjListCount = m_wsp.addAdjectiveToDictionary(adj: adj)
         case .English:
             let adj = EnglishAdjective(jsonAdjective: jn, language: .English)
+            adjListCount = m_wsp.addAdjectiveToDictionary(adj: adj)
+        case .Agnostic:
+            let adj = Adjective(jsonAdjective: jn, language: .Agnostic)
             adjListCount = m_wsp.addAdjectiveToDictionary(adj: adj)
         default:
             break
@@ -230,6 +260,9 @@ struct CFModel{
         case .English:
             let p = EnglishPreposition(json: jn, language: .English)
             listCount = m_wsp.addPrepositionToDictionary(wd: p)
+        case .Agnostic:
+            let p = Preposition(json: jn, language: .Agnostic)
+            listCount = m_wsp.addPrepositionToDictionary(wd: p)
         default:
             break
         }
@@ -247,6 +280,9 @@ struct CFModel{
             listCount = m_wsp.addDeterminerToDictionary(wd: p)
         case .English:
             let p = EnglishDeterminer(json: jn, language: .English)
+            listCount = m_wsp.addDeterminerToDictionary(wd: p)
+        case .Agnostic:
+            let p = Determiner(json: jn, language: .Agnostic)
             listCount = m_wsp.addDeterminerToDictionary(wd: p)
         default:
             

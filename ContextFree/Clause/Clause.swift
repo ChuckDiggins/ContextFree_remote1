@@ -184,8 +184,6 @@ class dRelativePronounClause: dClause {
     
     
 }
-
-
 class dDependentClause : dClause {
     override init(){
         super.init(word: Word(), clusterType: .RelP)
@@ -198,72 +196,22 @@ class dDependentClause : dClause {
     
 }
 
-/*
-class dIndependentClause : dClause {
-    override init(){
-        super.init(word: Word(), clusterType: .RelP)
-    }
-    
-    init(word: Word){
-        super.init(word: word, clusterType: .RelP)
-    }
-    
-    var headNoun = dCluster(word: Word(), clusterType: .N)
-    var headVerb = dCluster(word: Word(), clusterType: .V)
-    
-    
-    func informHeadVerb(){
-        var hv = headVerb as! dVerbSingle
-        let hn = headNoun as! dNounSingle
-        hv.setGender(value: hn.getGender())
-        hv.setPerson(value: hn.getPerson())
-        hv.setNumber(value: hn.getNumber())
-    }
-}
-*/
-
 class dSentence : dClause {
     
-    /*
-    init(word: Word, mainClause: dIndependentClause){
-        self.mainClause = mainClause
-        super.init(word: word, clusterType: .S)
-    }
-    */
     override init(){
-        //mainClause = dIndependentClause(sentenceString: "", data: Array<SentenceData>())
         super.init(word: Word(), clusterType: .S)
     }
     
     init(word: Word){
-        //mainClause = dIndependentClause(sentenceString: word.word, data: Array<SentenceData>())
         super.init(word: word, clusterType: .S)
     }
     
-    //var mainClause : dIndependentClause
     var subClauseList = Array<dClause>()
-    /*
-    func setMainClause(clause : dIndependentClause){
-        mainClause = clause
-    }
-    func getMainClause()->dIndependentClause{
-        return mainClause
-    }
-    */
     
     func appendNounClause(conj: Conjunction, clause: dNounClause){
         //var conj = conj
         subClauseList.append(clause)
     }
-
-    
-    /*
-     func appendAdjectiveClause(pro: RelativePronoun, clause: dAdjectiveClause){
-     var conj = conj
-     subClauseList.append(clause)
-     }
-     
-     */
     
     func appendAdverbialClause(conj: Conjunction, clause: dAdverbialClause){
         //let conj = conj

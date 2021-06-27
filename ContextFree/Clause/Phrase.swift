@@ -88,7 +88,10 @@ class dPhrase : dCluster {
                 else if ( type == .SubjP){
                     singleList.append(single)
                 }
-                else if ( type == .Art){
+                else if ( type == .Det){
+                    singleList.append(single)
+                }
+                else if ( type == .Adj){
                     singleList.append(single)
                 }
                 else
@@ -220,6 +223,110 @@ class dPhrase : dCluster {
         //if ( m_nounCount > 1){setNumber(value: .plural)}
     }
     
+    func getStringAtLanguage(language: LanguageType )->String{
+        var str = ""
+        //var tempStr = ""
+        
+        for cluster in getClusterList(){
+            let type = cluster.getClusterType()
+            if cluster.getClusterType().isSingle()
+            {
+                if ( type == .N){
+                    let c = cluster as! dNounSingle
+                    let ns = c.getWordStringAtLanguage(language: language)
+                    str += ns + " "
+                    c.setProcessWordInWordStateData(language: language, str: ns)
+                }
+                else if ( type == .V){
+                    var conjStr = ""
+                    let c = cluster as! dVerbSingle
+                    let sd = c.getSentenceData()
+                    switch language{
+                    case .Spanish:
+                        let v = c.getClusterWord()
+                        let fv = SpanishVerb(word:  v.spanish, def: "", type: sd.verbType)
+                        let bv = BSpanishVerb(verbPhrase: v.spanish)
+                        let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
+                        bv.setPatterns(verbModel : verbModel)
+                        fv.setBVerb(bVerb: bv)
+                        conjStr = fv.getConjugateForm(tense: sd.tense, person: sd.person)
+                        str += conjStr + " "
+                    case .French:
+                        let v = c.getClusterWord()
+                        let fv = FrenchVerb(word:  v.french, def: "", type: sd.verbType)
+                        let bv = BFrenchVerb(verbPhrase: v.french)
+                        let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
+                        bv.setPatterns(verbModel : verbModel)
+                        fv.setBVerb(bVerb: bv)
+                        conjStr = fv.getConjugateForm(tense: sd.tense, person: sd.person)
+                        str += conjStr + " "
+                    case .English:
+                        let v = c.getClusterWord()
+                        let ev = EnglishVerb(word:  v.french, def: "", type: sd.verbType)
+                        let bv = BEnglishVerb(verbPhrase: v.english, verbWord: v.english)
+                        let verbModel = m_englishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
+                        bv.setModel(verbModel : verbModel)
+                        ev.setBVerb(bVerb: bv)
+                        conjStr = ev.getConjugateForm(tense: sd.tense, person: sd.person)
+                        str += conjStr + " "
+                    default:
+                        str += "unknown language in dPhrase"
+                    }
+                    c.setProcessWordInWordStateData(language: language, str: conjStr)
+
+                }
+                else if ( type == .Det){
+                    let c = cluster as! dDeterminerSingle
+                    let ds = c.getWordStringAtLanguage(language: language)
+                    str +=  ds + " "
+                    c.setProcessWordInWordStateData(language: language, str: ds)
+                }
+                else if ( type == .Adj){
+                    let c = cluster as! dAdjectiveSingle
+                    let adjStr = c.getWordStringAtLanguage(language: language)
+                    str += adjStr + " "
+                    c.setProcessWordInWordStateData(language: language, str: adjStr)
+                }
+                else if ( type == .P){
+                    let c = cluster as! dPrepositionSingle
+                    let prepStr = c.getWordStringAtLanguage(language: language)
+                    str += prepStr + " "
+                    c.setProcessWordInWordStateData(language: language, str: prepStr)
+                }
+                else if ( type == .SubjP){
+                    let c = cluster as! dSubjectPronounSingle
+                    str += c.getString() + " "
+                    c.setProcessWordInWordStateData(language: language, str: c.getString())
+                }
+                else {
+                    let single = cluster as! dSingle
+                    let singleStr = single.getString()
+                    str += singleStr + " "
+                    single.setProcessWordInWordStateData(language: language, str: singleStr)
+                }
+                
+            }
+            else if cluster.getClusterType().isPhrase()
+            {
+                switch cluster.getClusterType(){
+                case .NP:
+                    let c = cluster as! dNounPhrase
+                    str += c.getStringAtLanguage(language: language) + " "
+                case .VP:
+                    let c = cluster as! dVerbPhrase
+                    str += c.getStringAtLanguage(language: language) + " "
+                case .PP:
+                    let c = cluster as! dPrepositionPhrase
+                    str += c.getStringAtLanguage(language: language) + " "
+                default:
+                    str += ""
+                }
+            }
+        }
+        
+        return str
+    }
+
     func getString( )->String{
         var str = ""
         //var tempStr = ""
@@ -251,19 +358,6 @@ class dPhrase : dCluster {
                 else if ( type == .Det){
                     let c = cluster as! dDeterminerSingle
                     str += c.getWordString() + " "
-                    /*
-                    switch getSentenceData().language{
-                    case .Spanish:
-                        str += c.getWordString() + " "
-                    case .French:
-                        str += c.getWordString() + " "
-                    case .English:
-                        str += c.getWordString() + " "
-                    default:
-                        str += "unknown language in dPhrase"
-                    }
- */
-                    
                     c.setProcessWordInWordStateData(str: c.getWordString())
                 }
                 else if ( type == .SubjP){
@@ -276,7 +370,6 @@ class dPhrase : dCluster {
                     let singleStr = single.getString()
                     str += singleStr + " "
                     single.setProcessWordInWordStateData(str: singleStr)
-                    //tempStr = single.getProcessWordInWordStateData()
                 }
                 
             }
@@ -346,6 +439,29 @@ class dPrepositionPhrase : dPhrase {
     func getIsPossessive()->Bool{return isPossessive}
     func setIsSuppressPrep (flag : Bool){isSuppressPrep = flag}
     func getIsSuppressPrep()->Bool{return isSuppressPrep}
+    
+    func reconcileForLanguage(language: LanguageType){
+        for cluster in getClusterList(){
+            let sym = cluster.getClusterType()
+            if ( sym == .Art || sym == .Adj ){
+                let data = getSentenceData()
+                cluster.setGender(value: data.gender)
+                cluster.setNumber(value: data.number)
+                var sd = cluster.getSentenceData()
+                sd.gender = data.gender
+                sd.number = data.number
+                cluster.setSentenceData(data: sd)
+            }
+            else if sym == .NP {
+                let np = cluster as! dNounPhrase
+                np.reconcileForLanguage(language: language)
+            }
+            else if sym == .PP {
+                let pp = cluster as! dPrepositionPhrase
+                pp.reconcileForLanguage(language: language)
+            }
+        }
+    }
     
     func reconcile(){
         for cluster in getClusterList(){

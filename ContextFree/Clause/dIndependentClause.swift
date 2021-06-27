@@ -22,6 +22,14 @@ class dIndependentClause : dClause {
     //var wordObjectList = Array<Word>()
     //var sentenceWordData = Array<SentenceWordData>()  //current information about each word
     
+    /*
+     Agnostic Clause Stuff here
+     */
+    
+    func createAgnosticClauses(){
+        
+    }
+    
     init(language: LanguageType, sentenceString: String, data: Array<SentenceData>){
         self.originalSentenceString = sentenceString
         self.dataList = data
@@ -38,6 +46,7 @@ class dIndependentClause : dClause {
         self.m_language = language
         getSentenceData().language = language
     }
+    
     
     func setGrammarLibrary(cfLib : CFGrammarLibrary){
         grammarLibrary = cfLib

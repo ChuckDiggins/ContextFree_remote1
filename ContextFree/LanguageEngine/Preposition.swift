@@ -8,9 +8,6 @@
 import Foundation
 
 class Preposition : Word {
-    var english = ""
-    var spanish = ""
-    var french = ""
     var type: PrepositionType
     
     override init(){
@@ -24,20 +21,19 @@ class Preposition : Word {
     }
     
     init(json: JsonPreposition, language: LanguageType){
-        self.english = json.english
-        self.french = json.french
-        self.spanish = json.spanish
         self.type = PrepositionType.general
         
         switch(language){
-        case .Spanish:  super.init(word: spanish, def: english, wordType: .noun)
-        case .French:  super.init(word: french, def: english, wordType: .noun)
-        case .English:  super.init(word: english, def: english, wordType: .noun)
+        case .Spanish:  super.init(word: json.spanish, def: json.english, wordType: .noun)
+        case .French:  super.init(word: json.french, def: json.english, wordType: .noun)
+        case .English:  super.init(word: json.english, def: json.english, wordType: .noun)
         default:
-            super.init(word: spanish, def: english, wordType: .adjective)
-            
-            convertPrepositionTypeStringToPrepositionType(inputString: json.prepositionType)
+            super.init(word: json.spanish, def: json.english, wordType: .adjective)
         }
+        convertPrepositionTypeStringToPrepositionType(inputString: json.prepositionType)
+        self.spanish = json.spanish
+        self.french = json.french
+        self.english = json.english
     }
     
     func convertPrepositionTypeStringToPrepositionType(inputString: String){

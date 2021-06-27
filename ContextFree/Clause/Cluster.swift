@@ -39,10 +39,19 @@ class dCluster {
         m_sentenceData.processedWord = str
     }
     
+    func setProcessWordInWordStateData(language: LanguageType, str: String){
+        m_sentenceData.setProcessedWord(language: language, str: str)
+    }
+    
     func getProcessWordInWordStateData()->String{
         return m_sentenceData.processedWord
     }
     
+    func getProcessWordInWordStateData(language: LanguageType)->String{
+        return m_sentenceData.getProcessedWord(language: language)
+    }
+    
+
     func setClusterType(type: ContextFreeSymbol){m_clusterType = type}
     func getClusterType()->ContextFreeSymbol{return m_clusterType}
     
@@ -57,6 +66,7 @@ class dCluster {
     func setTense(value : Tense){
         m_sentenceData.tense = value
     }
+    
     func getTense()->Tense{return m_sentenceData.tense}
 
     func setNumber(value : Number){m_sentenceData.number = value}

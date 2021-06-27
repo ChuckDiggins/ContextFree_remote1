@@ -43,11 +43,12 @@ struct ContentView: View {
                 .background(Color.purple)
                 .cornerRadius(10)
                 
-                NavigationLink(destination: WordGames()){
-                    Text("Word Games")
+                NavigationLink(destination: AgnosticSentenceView()){
+                    Text("Agnostic Sentences")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
-                .background(Color.blue)
+                .background(Color.red)
+                .foregroundColor(.black)
                 .cornerRadius(10)
                 
                 NavigationLink(destination: SentenceGameView()){

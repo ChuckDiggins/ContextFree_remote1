@@ -179,6 +179,23 @@ class dAdjectiveSingle :dSingle
         }
         
     }
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        let sd = getSentenceData()
+        let word = getClusterWord()
+        let an = word as! Adjective
+        switch language{
+        case .Spanish:
+            let adj = SpanishAdjective(word: an.spanish, def: "", type: sd.adjectiveType)
+            return adj.getForm(gender: sd.gender, number: sd.number)
+        case .French:
+            let adj = FrenchAdjective(word: an.french, def: "", type: sd.adjectiveType)
+            return adj.getForm(gender: sd.gender, number: sd.number)
+        case .English:
+            let adj = EnglishAdjective(word: an.english, def: "", type: sd.adjectiveType)
+            return adj.getForm(gender: .masculine, number: sd.number)
+        default: return ""
+        }
+    }
     
     override func getString()->String
     {
@@ -286,6 +303,18 @@ class dConjunctionSingle :  dSingle{
     
     func getConjunctionType ()->ConjunctionType{return getSentenceData().conjunctionType }
     
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        let word = getClusterWord()
+        switch language{
+        case .Spanish:
+            return word.spanish
+        case .French:
+            return word.french
+        case .English:
+            return word.english
+        default: return ""
+        }
+    }
 } //dConjunctionSingle
 
 
@@ -315,6 +344,23 @@ class dDeterminerSingle :  dSingle{
             return det.getForm(gender: sd.gender, number: sd.number)
         case .English:
             let det = word as! EnglishDeterminer
+            return det.getForm(number: sd.number)
+        default: return ""
+        }
+    }
+    
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        let sd = getSentenceData()
+        let word = getClusterWord()
+        switch language{
+        case .Spanish:
+            let det = SpanishDeterminer(word: word.spanish, def: "", type: sd.determinerType)
+            return det.getForm(gender: sd.gender, number: sd.number)
+        case .French:
+            let det = FrenchDeterminer(word: word.french, def: "", type: sd.determinerType)
+            return det.getForm(gender: sd.gender, number: sd.number)
+        case .English:
+            let det = EnglishDeterminer(word: word.english, def: "", type: sd.determinerType)
             return det.getForm(number: sd.number)
         default: return ""
         }
@@ -366,6 +412,19 @@ class dPrepositionSingle : dSingle
     
     init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
+    }
+    
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        let word = getClusterWord()
+        switch language{
+        case .Spanish:
+            return word.spanish
+        case .French:
+            return word.french
+        case .English:
+            return word.english
+        default: return ""
+        }
     }
     
     var m_prepositionType = PrepositionType.general

@@ -58,6 +58,14 @@ class CFModelView: ObservableObject {
         return cfModel!.getRandomSentence()
     }
     
+    func getRandomAgnosticSentence()->dIndependentAgnosticClause{
+        return cfModel!.getRandomAgnosticSentence()
+    }
+    
+    func getAgnosticRandomSubjPronounSentence()->dIndependentAgnosticClause{
+        return cfModel!.getAgnosticRandomSubjPronounSentence()
+    }
+    
     func getModifierList(wordType: WordType)->Array<Word>{
         return cfModel!.getModifierList(wordType: wordType)
     }

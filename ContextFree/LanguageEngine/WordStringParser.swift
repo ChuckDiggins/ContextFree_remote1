@@ -143,7 +143,7 @@ struct WordStringParser {
         }
     }
     
-    //create the correct verb just in time
+    //create the correct verb on the fly
     mutating func getVerbFromDictionary(language: LanguageType, index: Int)->Verb{
         var verb = Verb()
         switch language {

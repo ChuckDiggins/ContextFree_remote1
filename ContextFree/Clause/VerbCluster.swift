@@ -140,6 +140,20 @@ class dVerbSingle : dSingle
         return bv.getBVerb()
     }
     
+    func getLanguageString(language: LanguageType)->String{
+        
+        let v = getClusterWord() as! Verb
+        switch language{
+        case .Spanish:
+            return v.spanish
+        case .French:
+            return v.french
+        case .English:
+            return v.english
+        default:
+            return ""
+        }
+    }
     
     func    getWordString()->String{
         let sd = getSentenceData()

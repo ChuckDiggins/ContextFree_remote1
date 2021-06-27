@@ -36,7 +36,7 @@ class dNounSingle : dSingle
         print("in dNounSingle: \(sd.word.word):  \(sd.gender), \(sd.number)")
     }
     
-
+    
     func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
@@ -47,6 +47,26 @@ class dNounSingle : dSingle
             return noun.getNounString(number: sd.number)
         case .English:
             let noun = word as! EnglishNoun
+            return noun.getString(number: sd.number)
+        default:
+            return ""
+        }
+    }
+    
+    func    getWordStringAtLanguage(language: LanguageType)->String{
+        let sd = getSentenceData()
+        let word = getClusterWord()
+        let cn = word as! Noun
+        switch language {
+        case .Spanish:
+            let noun = SpanishNoun(word: cn.spanish, def: "", type: sd.nounType, gender: sd.gender)
+            return noun.getNounString(number: sd.number)
+        case .French:
+            let noun = FrenchNoun(word: cn.french, def: "", type: sd.nounType, gender: sd.gender)
+            return noun.getNounString(number: sd.number)
+        case .English:
+            let englishPlural = cn.englishPlural
+            let noun = EnglishNoun(word: cn.english, def: "", type: sd.nounType, englishPlural: englishPlural)
             return noun.getString(number: sd.number)
         default:
             return ""
@@ -65,7 +85,7 @@ class dNounPhrase : dPhrase {
     var      m_nounType  = NounType.any
     var      m_nounCount = 0   //can we use cluster.number for this?
     var      m_isPlural  = false
-
+    
     var type = ContextFreeSymbol.NP
     override init(){
         super.init(word: Word(), clusterType: type, data: WordStateData())
@@ -85,6 +105,38 @@ class dNounPhrase : dPhrase {
             if cluster.getClusterType() == .N {return cluster as! dNounSingle}
         }
         return nounSingle
+    }
+    
+    func reconcileForLanguage(language: LanguageType){
+        let npSentenceData = getSentenceData()
+        for cluster in getClusterList(){
+            let sym = cluster.getClusterType()
+            switch sym {
+            case .Det:
+                var sd = cluster.getSentenceData()
+                sd.gender = npSentenceData.gender
+                sd.number = npSentenceData.number
+                let det = cluster as! dDeterminerSingle
+                let ds = det.getWordStringAtLanguage(language: language)
+                sd.setProcessedWord(language: language, str: ds)
+                print("ds: \(ds) - sd.processedWord: \(sd.getProcessedWord(language: language))")
+            case .Adj:
+                var sd = cluster.getSentenceData()
+                sd.gender = npSentenceData.gender
+                sd.number = npSentenceData.number
+                let adj = cluster as! dAdjectiveSingle
+                var adjStr = adj.getWordStringAtLanguage(language: language)
+                sd.setProcessedWord(language: language, str: adjStr)
+                print("ds: \(adjStr) - sd.processedWord: \(sd.getProcessedWord(language: language))")
+            case .NP:
+                let np = cluster as! dNounPhrase
+                np.reconcileForLanguage(language: language)
+            case .PP :
+                let pp = cluster as! dPrepositionPhrase
+                pp.reconcile()
+            default: break
+            }
+        }
     }
     
     func reconcile(){
@@ -140,7 +192,7 @@ class dNounPhrase : dPhrase {
                     let ds = det.getWordString()
                     print("dumpClusterInfo:  adjective: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
                 }
-
+                
                 if sym == .N {
                     let n = cluster as! dNounSingle
                     let ds = n.getWordString()

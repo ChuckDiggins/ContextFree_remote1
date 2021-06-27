@@ -15,6 +15,9 @@ class WordStateData : Hashable, Equatable {
     
     var word = Word()
     var processedWord = ""  //this will show the current state of this word
+    var processedSpanishWord = "psw"
+    var processedFrenchWord = "pfw"
+    var processedEnglishWord = "pew"
     
     //states
     var language = LanguageType.Spanish
@@ -63,8 +66,34 @@ class WordStateData : Hashable, Equatable {
         processedWord = str
     }
     
+    func setProcessedWord(language: LanguageType, str: String){
+        switch language{
+        case .Spanish:
+            processedSpanishWord = str
+        case .French:
+            processedFrenchWord = str
+        case .English:
+            processedEnglishWord = str
+        default:
+            break
+        }
+     }
+     
     func getProcessedWord()->String{
         return processedWord
+    }
+    
+    func getProcessedWord(language: LanguageType)->String{
+        switch language{
+        case .Spanish:
+            return processedSpanishWord
+        case .French:
+            return processedFrenchWord
+        case .English:
+            return processedEnglishWord
+        default:
+            return "NA"
+        }
     }
 
 }

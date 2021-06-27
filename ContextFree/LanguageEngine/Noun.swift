@@ -8,9 +8,7 @@
 import Foundation
 
 class Noun : Word {
-    var english = ""
-    var spanish = ""
-    var french = ""
+
     var plural = ""
     var englishPlural = ""
     var spanishGender = Gender.masculine
@@ -29,19 +27,22 @@ class Noun : Word {
     
     init(jsonNoun: JsonNoun, language: LanguageType){
         self.nounType = NounType.any
-        self.english = jsonNoun.english
-        self.french = jsonNoun.french
-        self.spanish = jsonNoun.spanish
+
         switch(language){
-        case .Spanish:  super.init(word: spanish, def: english, wordType: .noun)
-        case .French:  super.init(word: french, def: english, wordType: .noun)
+        case .Spanish:  super.init(word: jsonNoun.spanish, def: jsonNoun.english, wordType: .noun)
+        case .French:  super.init(word: jsonNoun.french, def: jsonNoun.english, wordType: .noun)
         case .English:
-            super.init(word: english, def: english, wordType: .noun)
+            super.init(word: jsonNoun.english, def: jsonNoun.english, wordType: .noun)
             plural = jsonNoun.englishPlural
             englishPlural = jsonNoun.englishPlural
+        case .Agnostic:  super.init(word: jsonNoun.spanish, def: jsonNoun.english, wordType: .noun)
+            englishPlural = jsonNoun.englishPlural
         default:
-            super.init(word: spanish, def: english, wordType: .noun)
+            super.init(word: jsonNoun.spanish, def: jsonNoun.english, wordType: .noun)
         }
+        english = jsonNoun.english
+        french = jsonNoun.french
+        spanish = jsonNoun.spanish
         spanishGender = .masculine
         if ( jsonNoun.spanishGender == "F" ){
             spanishGender = .feminine
@@ -60,6 +61,7 @@ class Noun : Word {
         return JsonNoun(spanish: word, english: english, french: french,  spanishGender: spanishGender.rawValue, frenchGender: frenchGender.rawValue, englishPlural: englishPlural, nounType : "",
                         verbLikes: "", adjLikes: "")
     }
+    
     
     func convertNounTypeStringToNounTypes(inputString: String){
         nounType = .person
@@ -152,6 +154,12 @@ class FrenchNoun : RomanceNoun {
         gender = frenchGender
     }
     
+    override init(word: String, def: String, type: NounType, gender: Gender ){
+        super.init(word:word, def: def, type:type, gender: gender)
+        constructPlural()
+    }
+    
+    
     override func constructPlural(){
         let util = VerbUtilities()
         var root = word
@@ -169,6 +177,12 @@ class FrenchNoun : RomanceNoun {
 }
 
 class SpanishNoun : RomanceNoun {
+    
+    override init(word: String, def: String, type: NounType, gender: Gender ){
+        super.init(word:word, def: def, type:type, gender: gender)
+        constructPlural()
+    }
+    
     init(jsonNoun: JsonNoun){
         super.init(jsonNoun: jsonNoun, language: .Spanish)
         constructPlural()
@@ -182,7 +196,7 @@ class SpanishNoun : RomanceNoun {
         
         let suffix = util.getLastNCharactersInString(inputString: word, copyCount: 1)
         
-        if ( suffix == "l" || suffix == "n" ){ plural = root + "es" }
+        if ( suffix == "l" || suffix == "n" || suffix == "r" ){ plural = root + "es" }
         if ( suffix == "s" ){ plural = root}
         else{ plural = word + "s" }
     }
@@ -195,6 +209,11 @@ class EnglishNoun : Noun {
     var endsInY = false
     var endsInE = false
         
+    init(word: String, def: String, type: NounType, englishPlural: String ){
+        super.init(word:word, def: def, type:type)
+        plural = englishPlural
+    }
+    
     override init(word: String, def: String, type: NounType ){
         super.init(word:word, def: def, type:type)
         constructPlural()
@@ -212,7 +231,7 @@ class EnglishNoun : Noun {
     }
     
     func constructPlural(){
-        if plural.count > 0 {return}
+        if englishPlural.count > 0 {return}
         let util = VerbUtilities()
         var root = word
         root.removeLast()
@@ -244,9 +263,9 @@ class EnglishNoun : Noun {
             }
         }
         else {
-            // boxes, approaches,
+            // boxes, approaches, bosses
             let last2 = util.getLastNCharactersInString(inputString: stem, copyCount: 2)
-            if last == "e" || last == "x" || last2 == "ch" || last2 == "sh" {
+            if last == "e" || last == "x" || last2 == "ch" || last2 == "sh" || last2 == "ss"  {
                 endsInE = true
             }
         }
