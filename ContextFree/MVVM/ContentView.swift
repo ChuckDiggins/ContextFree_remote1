@@ -13,14 +13,6 @@ struct ContentView: View {
         NavigationView {
             
             List {
-                NavigationLink(destination: AddVerbToDictionary()){
-                    Text("Verb Dictionary")
-                }.frame(width: 200, height: 50)
-                .foregroundColor(.black)
-                .padding(.leading, 10)
-                .background(Color(UIColor(named: "Color1")!))
-                .cornerRadius(25)
-                
                 NavigationLink(destination: MultiVerbConjugation()){
                     Text("Multi Verbs")
                 }.frame(width: 200, height: 50)
@@ -36,15 +28,15 @@ struct ContentView: View {
                 .background(Color.orange)
                 .cornerRadius(10)
                 
-                NavigationLink(destination: AdjectiveListView(m_words: Array<Word>())){
-                    Text("Word Lists")
+                NavigationLink(destination: PersonalPronounGames()){
+                    Text("Personal Pronouns Play")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
                 .background(Color.purple)
                 .cornerRadius(10)
                 
                 NavigationLink(destination: AgnosticSentenceView()){
-                    Text("Agnostic Sentences")
+                    Text("Phrases in 3 Languages")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
                 .background(Color.red)
@@ -52,7 +44,7 @@ struct ContentView: View {
                 .cornerRadius(10)
                 
                 NavigationLink(destination: SentenceGameView()){
-                    Text("Sentence Games")
+                    Text("Phrases in 1 Language")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
                 .background(Color.yellow)

@@ -125,9 +125,21 @@ struct MultiVerbConjugation: View {
                         .frame(width: 100, height: 30, alignment: .leading)
                         .background(Color.yellow)
                         .foregroundColor(.black)
-                }
+                }.font(.system(size: 12))
             }
         }.font(.system(size: 16))
+        
+        VStack(alignment: .center){
+            Button(action: {
+                getNextTense()
+            }){
+                HStack {
+                    Text("Tense: \(currentTense.rawValue)").background(Color.yellow).foregroundColor(.black).frame(width: 250, height: 80)
+                        .cornerRadius(10).padding(25)
+                    
+                }
+            }
+        }
         .onAppear(){
             cfModelView.createNewModel(language: .Spanish)
             currentIndex = cfModelView.getWordCount(wordType:  .verb)-1
@@ -181,6 +193,10 @@ struct MultiVerbConjugation: View {
         
     }
     
+    func getNextTense(){
+        currentTense = cfModelView.getNextTense()
+        showCurrentWordInfo()
+    }
     
     func getNextVerb(){
         currentIndex += 1

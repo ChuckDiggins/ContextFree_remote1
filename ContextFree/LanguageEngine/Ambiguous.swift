@@ -14,9 +14,9 @@ class Ambiguous : Word {
     var wordList = Array<Word>()
     var pronounList = Array<PronounType>()
     
-    init(word: String, def: String, type : AmbiguousType){
+    init(word: String,type : AmbiguousType){
         self.type =  type
-        super.init(word: word, def: def, wordType: .ambiguous)
+        super.init(word: word, wordType: .ambiguous)
     }
     
     func setAmbiguousType(type: AmbiguousType){

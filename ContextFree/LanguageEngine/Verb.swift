@@ -28,11 +28,11 @@ class Verb : Word {
 
     
     override init(){
-        super.init(word: "", def : "", wordType : .verb)
+        super.init(word: "", wordType : .verb)
     }
      
     init(spanish: String, french: String, english: String){
-        super.init(word: spanish, def: "", wordType: .verb)
+        super.init(word: spanish, wordType: .verb)
         self.spanish = spanish
         self.french = french
         self.english = english
@@ -40,14 +40,14 @@ class Verb : Word {
     
     init(word: String, def: String, type : VerbType){
         typeList.append(type)
-        super.init(word: word, def: def, wordType: .verb)
+        super.init(word: word, wordType: .verb)
     }
     
     init(word: String, def: String, type : VerbType, tense: Tense, person: Person){
         typeList.append(type)
         self.person = person
         self.tense = tense
-        super.init(word: word, def: def, wordType: .verb)
+        super.init(word: word, wordType: .verb)
     }
     
     init(word: String, def: String, wsd: WordStateData){
@@ -56,20 +56,19 @@ class Verb : Word {
         self.tense = wsd.tense
         self.transitivity = wsd.verbTransitivity
         self.passivity = wsd.verbPassivity
-        super.init(word: word, def: def, wordType: .verb)
+        super.init(word: word, wordType: .verb)
     }
     
     init(jsonVerb: JsonVerb, language: LanguageType){
         self.transitivity = jsonVerb.transitivity
         self.passivity = jsonVerb.passivity ?? VerbPassivity.passive
-        //super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
         switch(language){
-        case .Spanish:  super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
-        case .French:  super.init(word: jsonVerb.french, def: jsonVerb.english, wordType: .verb)
-        case .English:  super.init(word: jsonVerb.english, def: jsonVerb.english, wordType: .verb)
-        case .Agnostic:  super.init(word: jsonVerb.english, def: jsonVerb.english, wordType: .verb)
+        case .Spanish:  super.init(word: jsonVerb.spanish, wordType: .verb)
+        case .French:  super.init(word: jsonVerb.french, wordType: .verb)
+        case .English:  super.init(word: jsonVerb.english, wordType: .verb)
+        case .Agnostic:  super.init(word: jsonVerb.english, wordType: .verb)
         default:
-            super.init(word: jsonVerb.spanish, def: jsonVerb.english, wordType: .verb)
+            super.init(word: jsonVerb.spanish, wordType: .verb)
         }
         self.spanish = jsonVerb.spanish
         self.french = jsonVerb.french

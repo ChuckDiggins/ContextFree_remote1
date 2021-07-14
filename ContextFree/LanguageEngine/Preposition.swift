@@ -12,23 +12,23 @@ class Preposition : Word {
     
     override init(){
         self.type = .general
-        super.init(word: "", def: "", wordType: .preposition)
+        super.init(word: "", wordType: .preposition)
     }
     
-    init(word: String, def: String, type : PrepositionType){
+    init(word: String, type : PrepositionType){
         self.type = type
-        super.init(word: word, def: def, wordType: .preposition)
+        super.init(word: word, wordType: .preposition)
     }
     
     init(json: JsonPreposition, language: LanguageType){
         self.type = PrepositionType.general
         
         switch(language){
-        case .Spanish:  super.init(word: json.spanish, def: json.english, wordType: .noun)
-        case .French:  super.init(word: json.french, def: json.english, wordType: .noun)
-        case .English:  super.init(word: json.english, def: json.english, wordType: .noun)
+        case .Spanish:  super.init(word: json.spanish, wordType: .noun)
+        case .French:  super.init(word: json.french, wordType: .noun)
+        case .English:  super.init(word: json.english, wordType: .noun)
         default:
-            super.init(word: json.spanish, def: json.english, wordType: .adjective)
+            super.init(word: json.spanish, wordType: .adjective)
         }
         convertPrepositionTypeStringToPrepositionType(inputString: json.prepositionType)
         self.spanish = json.spanish
@@ -47,8 +47,8 @@ class Preposition : Word {
 }
 
 class RomancePreposition : Preposition {
-    override init(word: String, def: String, type : PrepositionType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type : PrepositionType){
+        super.init(word: word, type: type)
     }
     
     override init(json: JsonPreposition, language: LanguageType){
@@ -67,8 +67,8 @@ class RomancePreposition : Preposition {
 }
 
 class SpanishPreposition : RomancePreposition {
-    override init(word: String, def: String, type : PrepositionType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type : PrepositionType){
+        super.init(word: word, type: type)
     }
     
     init(json: JsonPreposition){
@@ -78,8 +78,8 @@ class SpanishPreposition : RomancePreposition {
 }
 
 class FrenchPreposition : RomancePreposition {
-    override init(word: String, def: String, type : PrepositionType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type : PrepositionType){
+        super.init(word: word, type: type)
     }
     
     init(json: JsonPreposition){
@@ -89,8 +89,8 @@ class FrenchPreposition : RomancePreposition {
 }
 
 class EnglishPreposition : Preposition {
-    override init(word: String, def: String, type : PrepositionType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type : PrepositionType){
+        super.init(word: word, type: type)
     }
     
     override init(json: JsonPreposition, language: LanguageType){

@@ -297,7 +297,7 @@ struct Sentence  {
             case .number:
                 single = dAdjectiveSingle(word: word, data: data.data)
             case .pronoun:
-                single = dSubjectPronounSingle(word: word, data: data.data)
+                single = dPersonalPronounSingle(word: word, data: data.data)
             case .preposition:
                 single = dPrepositionSingle(word: word, data: data.data)
             case .verb:
@@ -372,8 +372,8 @@ struct Sentence  {
             case .PP:
                 let c = cluster as! dPrepositionPhrase
                 str = c.getString()
-            case .SubjP:
-                let c = cluster as! dSubjectPronounSingle
+            case .PersPro:
+                let c = cluster as! dPersonalPronounSingle
                 str = c.getString()
             case .V:
                 let c = cluster as! dVerbSingle

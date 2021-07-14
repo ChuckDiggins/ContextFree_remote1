@@ -10,6 +10,7 @@ import Foundation
 //handles create templates that will guide
 //  in creating sentences of various complexity of random words
 
+/*
 struct ContextFreeConstructionGrammar {
     var m_wsp : WordStringParser?
     var name = ""
@@ -40,6 +41,7 @@ struct ContextFreeConstructionGrammar {
     }
     
 }
+*/
 
 enum RandomPhraseType{
     case twoArticles
@@ -48,6 +50,7 @@ enum RandomPhraseType{
     case simpleNounPhrase
     case simplePrepositionPhrase
     case simpleVerbPhrase
+    case simpleVerbAdverbPhrase
     case complexNounPhrase
     case simpleClause
     case simpleEnglishClause
@@ -73,47 +76,6 @@ struct RandomSentence {
         m_rft = rft
     }
 
-    mutating func createRandomSentenceNew()->dIndependentClause{
-        return createRandomPhrase(phraseType: m_rft)
-    }
-    
-    mutating func createRandomPhrase(phraseType: RandomPhraseType)->dIndependentClause {
-        var phrase = dPhrase()
-        
-        switch phraseType{
-        case .twoArticles:
-            phrase = createTwoArticles()
-        case .articleNoun:
-            phrase = createArticleNoun()
-        case .simpleAdjectiveRegular:
-            phrase = createSimpleNounPhrase()
-        case .simpleAdjectivePossessive:
-            phrase = createSimpleNounPhrase()
-        case .simpleAdjectiveInterrogative:
-            phrase = createSimpleNounPhrase()
-        case .simpleAdjectiveDemonstrative:
-            phrase = createSimpleNounPhrase()
-        case .simpleNounPhrase:
-            phrase = createSimpleNounPhrase()
-        case .simplePrepositionPhrase:
-            phrase = createSimplePrepositionPhrase()
-        case .simpleVerbPhrase:
-            phrase = createSimpleVerbPhrase()
-        case .complexNounPhrase:
-            phrase = createComplexNounPhrase()
-        case .simpleClause:
-            return createSimpleClause()
-        case .simpleEnglishClause:
-            return createSimpleEnglishClause()
-        case .subjectPronounVerb:
-            return createSubjectPronounVerbClause()
-        }
-        
-        let clause = dIndependentClause(language: m_wsp.getLanguage())
-        clause.appendCluster(cluster: phrase)
-        clause.setHeadNounAndHeadVerb()
-        return clause
-    }
     
     mutating func createRandomAgnosticPhrase(phraseType: RandomPhraseType)->dIndependentAgnosticClause {
         var phrase = dPhrase()
@@ -137,6 +99,8 @@ struct RandomSentence {
             phrase = createSimplePrepositionPhrase()
         case .simpleVerbPhrase:
             phrase = createSimpleVerbPhrase()
+        case .simpleVerbAdverbPhrase:
+            phrase = createSimpleVerbAdverbPhrase()
         case .complexNounPhrase:
             phrase = createComplexNounPhrase()
         case .simpleClause:
@@ -230,10 +194,25 @@ struct RandomSentence {
         let NP1 = dNounPhrase()
         NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
         NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
-        //NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
         NP1.processInfo()
         let VP = dVerbPhrase()
         VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false))
+        VP.appendCluster(cluster: NP1)
+        return VP
+    }
+    
+    mutating func createSimpleVerbAdverbPhrase()->dPhrase{
+        let NP1 = dNounPhrase()
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.processInfo()
+        let VP = dVerbPhrase()
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adverb, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .conjunction, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adverb, isSubject:false))
         VP.appendCluster(cluster: NP1)
         return VP
     }
@@ -439,7 +418,7 @@ struct RandomSentence {
 
     mutating func createAgnosticSubjectPronounVerbClause()->dIndependentAgnosticClause{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .pronoun, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .pronoun, isSubject:true))
         let VP = dVerbPhrase()
         VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false))
         

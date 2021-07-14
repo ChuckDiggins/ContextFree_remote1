@@ -13,11 +13,11 @@ class dClause : dCluster {
         super.init(word: word, clusterType: clusterType)
     }
     
-    init(){
+    override init(){
         super.init(word: Word(), clusterType: .UNK)
     }
     
-    var m_headSubjectCluster = dCluster(word: Word(), clusterType: .SubjP)
+    var m_headSubjectCluster = dCluster(word: Word(), clusterType: .PersPro)
     var m_headNounCluster = dCluster(word: Word(), clusterType: .N)
     var m_headVerbCluster = dCluster(word: Word(), clusterType: .V)
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())

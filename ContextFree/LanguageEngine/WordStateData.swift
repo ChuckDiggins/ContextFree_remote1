@@ -29,7 +29,7 @@ class WordStateData : Hashable, Equatable {
     //identity
     var wordType = WordType.unknown
     var ambiguousType = AmbiguousType.general
-    var adverbType = AdverbType.when
+    var adverbType = AdverbType.manner
     var articleType = ArticleType.definite
     var conjunctionType = ConjunctionType.coordinating
     var determinerType = DeterminerType.definite

@@ -245,6 +245,7 @@ enum Number : String
 {
     case singular
     case plural
+    static var all = [singular, plural]
 }
 
 enum Gender : String
@@ -252,6 +253,8 @@ enum Gender : String
     case masculine = "M"
     case feminine = "F"
     case either = "E"
+    
+    static var all = [masculine, feminine, either]
 }
 
 enum Mood : String {
@@ -309,12 +312,13 @@ enum DeterminerType  : String {
 
 enum  AdverbType  : String
 {
-    case comparing      //mas or menos
-    case modifying      //mucho, muy
-    case negating       //no, jam·s, nunca
-    case when
-    case WHERE
-    case verbAssociated      //lentamente - associated with verbs
+    case manner // M = manner - bien, así, mejor
+    case place // P = place - aquí, arriba, dónde
+    case time // T = time - hoy, ahora,
+    case intensity // I = intensity - poco, más, cuanto
+    case doubt // D = doubt - posiblemente, tal vez
+    case affirmation // A = affirmation - ciertamente
+    case exclusion // E = exclusion - apenas
 }
 
 enum ArticleType  : String
@@ -335,6 +339,7 @@ enum  ConjunctionType  : String
     case explanatory    //esto es, es decir
     case reason  //porque, puesto que
     case condition //si, con tal de que
+    case subordinating
 }
 
 enum WordType : String {

@@ -14,15 +14,18 @@ class BEnglishVerb : BVerb {
     var m_preteriteForm = ""
     var m_suffix1 = ""
     var m_suffix2 = ""
+    var m_preteriteStem = ""
+    var m_presentS3Stem = ""
     var endsInE = false
     var endsInConsonant = true
+    var endsInDKNRT = false
     var endsInY = false
     var endsInN = false
     var m_baseString = ""
     
     init(verbPhrase: String, verbWord: String){
         super.init(verbPhrase: verbPhrase, verbWord: verbWord, languageType: .English)
-        createRegularDefaultForms()
+        createRegularDefaultForms()  //these will be overridden later if there is a model for this verb
     }
     
     func getBescherelleInfo()->String {
@@ -30,80 +33,106 @@ class BEnglishVerb : BVerb {
         return "Besch #\(verbModel.id) (\(verbModel.infinitive))"
     }
     
-    func prepareStemNew()->String{
+    func prepareStemNew(){
         let util = VerbUtilities()
         m_baseString = m_verbWord
-        var stem = m_verbWord
-        m_suffix1 = util.getLastNCharactersInString(inputString: stem, copyCount: 1)
-        m_suffix2 = util.getLastNCharactersInString(inputString: stem, copyCount: 2)
+        m_presentS3Stem = m_verbWord
+        m_preteriteStem = m_verbWord
+        var prev1 = ""
+        var prev2 = ""
+        m_suffix1 = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 1)
+        m_suffix2 = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 2)
+        var m_suffix3 = ""
+        if m_verbWord.count > 3 {m_suffix3 = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 3)}
         
         if util.isVowel(letter: m_suffix1){
             endsInConsonant = false
-            stem = m_verbWord
+            m_presentS3Stem = m_verbWord
+            m_preteriteStem = m_verbWord
+            // boxes, approaches,
+            if m_suffix1 == "e" {
+                m_presentS3Stem.removeLast()
+                m_preteriteStem.removeLast()
+                endsInE = true
+            }
         }
         else if m_suffix1 == "y" {
             endsInConsonant = false
             endsInY = true
-            //only remove the y if preceded by a consonant - eg, "hurry" -> "hurries", but not "pray" -> "prays"
+            //only remove the y if preceded by a consonant - "hurry" -> "hurries", but not "pray" -> "prays"
             var nextToLast = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 2)
             nextToLast.removeLast()
+            //if letter previous to y is a consonant, then remove the "y" so we can add "ies" and "ied"
             if !util.isVowel(letter: nextToLast){
-                stem.removeLast()
+                m_presentS3Stem.removeLast()
+                m_preteriteStem.removeLast()
             }
         }
-        else {
-            // boxes, approaches,
-            if m_suffix1 == "e" || m_suffix1 == "x" || m_suffix2 == "ch" || m_suffix2 == "sh" {
-                endsInE = true
-                endsInConsonant = false
-            }
-        }
-        return stem
-    }
-    
-    func prepareStem()->String{
-        let util = VerbUtilities()
-        m_baseString = m_verbWord
-        var stem = m_verbWord
-        let last = util.getLastNCharactersInString(inputString: stem, copyCount: 1)
+        //at this point, the last letter must be a consonant
         
-        if util.isVowel(letter: last){
-            endsInConsonant = false
-            stem = m_verbWord
-        }
-        else if last == "y" {
-            endsInConsonant = false
-            endsInY = true
-            //only remove the y if preceded by a consonant - eg, "hurry" -> "hurries", but not "pray" -> "prays"
-            var nextToLast = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 2)
-            nextToLast.removeLast()
-            if !util.isVowel(letter: nextToLast){
-                stem.removeLast()
+        else
+        {
+            if m_suffix3.count > 2 {
+                //strip off the final consonant
+                m_suffix3.removeLast()
+                //if previous 2 letters are both vowels, then do not double the final consonant ( need-needed, peep-peeped )
+                prev1 = util.getLastNCharactersInString(inputString: m_suffix3, copyCount: 1)
+                m_suffix3.removeLast()
+                prev2 = util.getLastNCharactersInString(inputString: m_suffix3, copyCount: 1)
+            }
+            //if only one vowel preceding the consonant, then final consonant will double for past and gerund (admit - admitted, flap - flapped)
+            
+            //if only a single vowel, then double up the final consonant ( permit -> permitt )
+            if util.isVowel(letter: prev1){
+                m_preteriteStem += m_suffix1
+                if ( m_verbWord == "open" ){ m_preteriteStem.removeLast() }  //exception for "open"
+            }
+            //if both previous letters are vowels, then forget the double consonant
+            if util.isVowel(letter: prev1) && util.isVowel(letter: prev2){
+                m_preteriteStem.removeLast()
+            }
+            if m_suffix1 == "d" || m_suffix1 == "k" || m_suffix1 == "n" || m_suffix1 == "r" || m_suffix1 == "t" {
+                endsInDKNRT = true   //mar = marred, marring
+                if ( m_suffix2 == "er"){
+                    m_preteriteStem.removeLast()
+                }  //considered. considers.
             }
         }
-        else {
-            // boxes, approaches,
-            let last2 = util.getLastNCharactersInString(inputString: stem, copyCount: 2)
-            if last == "e" || last == "x" || last2 == "ch" || last2 == "sh" {
-                endsInE = true
-                endsInConsonant = false
-            }
-        }
-        return stem
     }
     
     func createRegularDefaultForms(){
-        let stem = prepareStem()
-        m_pastParticiple = stem + "d"
-        m_preteriteForm = stem + "d"
+        prepareStemNew()
+        m_pastParticiple = m_preteriteStem + "d"
+        m_preteriteForm = m_preteriteStem + "d"
+        m_presentS3Form = m_presentS3Stem + "s"
+        
         m_gerund = m_verbWord + "ing"
-        if endsInY {m_presentS3Form = stem + "ies"}
-        else if endsInE {
-            m_gerund = stem + "ing"
-            m_presentS3Form = stem + "es"
-            m_preteriteForm = stem + "ed"
+        if endsInY {
+            m_presentS3Form = m_presentS3Stem + "ies"
+            m_preteriteForm = m_preteriteStem + "ied"
         }
-        else { m_presentS3Form = stem + "s" }
+        else if endsInE {
+            m_gerund = m_preteriteStem + "ing"
+            m_presentS3Form = m_presentS3Stem + "es"
+            m_preteriteForm = m_preteriteStem + "ed"
+        }
+        
+        if endsInConsonant {
+            m_gerund = m_preteriteStem + "ing"
+            m_presentS3Form = m_presentS3Stem + "es"
+            m_preteriteForm = m_preteriteStem + "ed"
+        }
+        if endsInDKNRT {
+            m_gerund = m_preteriteStem + "ing"
+            m_presentS3Form = m_presentS3Stem + "s"
+            m_preteriteForm = m_preteriteStem + "ed"
+        }
+        
+        
+        //exception
+        if m_verbWord == "have" {
+            m_presentS3Form = "has"
+        }
     }
     
     func createGerund(){
@@ -128,21 +157,13 @@ class BEnglishVerb : BVerb {
             m_preteriteForm = verbModel.preterite
             m_gerund = verbModel.gerund
             m_verbWord = verbModel.infinitive
-            let stem = prepareStem()
-            if endsInY {m_presentS3Form = stem + "ies"}
+            prepareStemNew()
+            if endsInY {m_presentS3Form = m_presentS3Stem + "ies"}
             else if endsInE {
-                m_presentS3Form = stem + "es"
-                m_preteriteForm = stem + "ed"
+                m_presentS3Form = m_presentS3Stem + "es"
+                if m_verbWord == "have" {m_presentS3Form="has"}
             }
-            else if endsInConsonant {
-                m_preteriteForm = stem + "ed"
-            }
-            else { m_presentS3Form = stem + "s" }
-            
-            //irregular forms
-            if m_verbWord == "go" {m_presentS3Form = "goes"; m_preteriteForm = "went"}
-            if m_verbWord == "do" {m_presentS3Form = "does"; m_preteriteForm = "did"}
-            if m_verbWord == "have" {m_presentS3Form = "has"; m_preteriteForm = "had"}
+            else { m_presentS3Form = m_presentS3Stem + "s" }
         }
     }
     
@@ -179,17 +200,30 @@ class BEnglishVerb : BVerb {
             case .P3: return "were"
             }
         case .imperfect:
-            if person == .S1 { return "was " + m_gerund }
-            else { return "were " + m_gerund}
+            switch person{
+            case .S1: return "was " + m_gerund
+            case .S2: return "were " + m_gerund
+            case .S3: return "was " + m_gerund
+            case .P1: return "were " + m_gerund
+            case .P2: return "were " + m_gerund
+            case .P3: return "were " + m_gerund
+            }
         case .future:
             return "will " + m_verbWord
         case .conditional:
             return "would " + m_verbWord
         case .presentPerfect:
-            if person == .S1 || person == .P1  { return "have " + m_pastParticiple }
-            else { return "has " + stem}
+            if person == .S3 { return "has " + m_pastParticiple }
+            else { return "have " + stem}
         case .pastPerfect:
-            return "was having " + m_pastParticiple
+            switch person{
+            case .S1: return "was having " + m_gerund
+            case .S2: return "were having " + m_gerund
+            case .S3: return "was having " + m_gerund
+            case .P1: return "were having " + m_gerund
+            case .P2: return "were having " + m_gerund
+            case .P3: return "were having " + m_gerund
+            }
         case .preteritePerfect:
             return "had " + m_pastParticiple
         case .futurePerfect:
@@ -202,25 +236,27 @@ class BEnglishVerb : BVerb {
     }
     
     func getRegularForm(tense : Tense, person : Person)->String {
-        let stem = m_verbWord
         switch tense {
         case .present:
-            if person == .S3 { return m_presentS3Form }
+            if person == .S3 {
+                return m_presentS3Form
+            }
             else {return m_verbWord}
         case .preterite:
             return m_preteriteForm
         case .imperfect:
-            if person == .S1 { return "was " + m_gerund }
+            if person == .S1 || person == .S3 { return "was " + m_gerund }
             else { return "were " + m_gerund}
         case .future:
             return "will " + m_verbWord
         case .conditional:
             return "would " + m_verbWord
         case .presentPerfect:
-            if person == .S1 || person == .P1  { return "have " + m_pastParticiple }
-            else { return "has " + stem}
+            if person == .S3  { return "has " + m_pastParticiple }
+            else { return "have " + m_pastParticiple}
         case .pastPerfect:
-            return "was having " + m_pastParticiple
+            if person == .S1 || person == .S3 { return "was having " + m_pastParticiple }
+            else { return "were having " + m_pastParticiple}
         case .preteritePerfect:
             return "had " + m_pastParticiple
         case .futurePerfect:

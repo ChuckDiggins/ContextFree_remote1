@@ -13,12 +13,10 @@ struct AgnosticSentenceView: View {
     @State private var currentTense = Tense.preterite
     @State private var currentPerson = Person.S3
     @State private var sentenceString: String = ""
-    //@State private var wsdList = [WordStateData]()
     @State private var singleList = [dSingle]()
-    @State private var currentWordIndex = 0
+    @State private var englishSingleList = [dSingle]()
     @State private var singleIndexList1 = [Int]()
     @State private var singleIndexList2 = [Int]()
-    //@State private var currentWsd = WordStateData()
     @State private var currentSingleIndex = 0
     @State private var surgicalTitle = "Word surgery"
     @State private var surgicalWord = ""
@@ -35,11 +33,37 @@ struct AgnosticSentenceView: View {
     @State private var surgicalLine5 = ""
     @State private var surgicalLine6 = ""
     @State private var m_clause = dIndependentAgnosticClause()
+    @State private var m_englishClause = dIndependentAgnosticClause()
     @State private var newWordSelected = false
     @State private var newWordSelected1 = [Bool]()
     @State var m_randomSentence : RandomSentence!
+    
+    var phraseType = ["Subject pronoun / Verb",
+                       "Simple noun phrase",
+                       "Complex preposition phrase",
+                       "Verb-adverb phrase",
+                       "Simple clause"
+                    ]
+    @State private var selectedPhraseIndex = 0
+    @State var m_randomPhraseType = RandomPhraseType.subjectPronounVerb
+    
     var body: some View {
         VStack{
+            VStack{
+                Picker("Phrase type picker:", selection: $selectedPhraseIndex, content: {
+                    Text(phraseType[0]).tag(0).font(.subheadline)
+                    Text(phraseType[1]).tag(1).font(.subheadline)
+                    Text(phraseType[2]).tag(2).font(.subheadline)
+                    Text(phraseType[3]).tag(3).font(.subheadline)
+                    Text(phraseType[4]).tag(4).font(.subheadline)
+                }
+                )
+                //processPhraseSelection()
+                Text("Selected phrase: \(phraseType[selectedPhraseIndex])").font(.subheadline)
+            }
+            .labelsHidden()
+            .font(.subheadline)
+            .padding(10)
             Text("Random sentence:")
             VStack {
                 //part 1
@@ -57,7 +81,7 @@ struct AgnosticSentenceView: View {
                                 Text(singleList[index].getProcessWordInWordStateData(language: .French))
                                     .font(.subheadline)
                                     .foregroundColor(index == currentSingleIndex ? .red : .black)
-                                Text(singleList[index].getProcessWordInWordStateData(language: .English))
+                                Text(englishSingleList[index].getProcessWordInWordStateData(language: .English))
                                     .font(.subheadline)
                                     .foregroundColor(index == currentSingleIndex ? .red : .black)
                             }
@@ -81,7 +105,7 @@ struct AgnosticSentenceView: View {
                                 Text(singleList[index].getProcessWordInWordStateData(language: .French))
                                     .font(.subheadline)
                                     .foregroundColor(index == currentSingleIndex ? .red : .black)
-                                Text(singleList[index].getProcessWordInWordStateData(language: .English))
+                                Text(englishSingleList[index].getProcessWordInWordStateData(language: .English))
                                     .font(.subheadline)
                                     .foregroundColor(index == currentSingleIndex ? .red : .black)
                             }
@@ -128,8 +152,6 @@ struct AgnosticSentenceView: View {
     }
 
     func changeWord(){
-        
-        let language = LanguageType.Spanish
         let single = singleList[currentSingleIndex]
         var wsd = single.getSentenceData()
         
@@ -137,7 +159,7 @@ struct AgnosticSentenceView: View {
         case .verb:
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle) 
-        case .adjective, .determiner:
+        case .adjective, .determiner, .adverb, .conjunction:
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
         case .noun:
@@ -162,95 +184,38 @@ struct AgnosticSentenceView: View {
         wordSurgery(single: singleList[currentSingleIndex])
     }
     
-    func wordSurgery(single: dSingle){
-        let wsd = single.getSentenceData()
-        surgicalMessage = "Click on another word to examine"
-        surgicalWord =         "\(wsd.wordType.rawValue): \(wsd.word.word)"
-        switch wsd.wordType {
-        case .noun:
-            surgicalTitle = "Noun"
-            surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
-            surgicalEnglish = "English: \(wsd.word.def)"
-            surgicalLine1 = "Noun type: \(wsd.nounType.rawValue)"
-            surgicalLine2 = "Gender:    \(wsd.gender.rawValue)"
-            surgicalLine3 = "Number:    \(wsd.number.rawValue)"
-            surgicalLine4 = ""
-            surgicalLine5 = ""
-            surgicalLine6 = ""
-        case .adjective:
-            surgicalTitle = "Adjective"
-            surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
-            surgicalEnglish = "English: \(wsd.word.def)"
-            surgicalLine1 = "Adjective type: \(wsd.adjectiveType.rawValue)"
-            surgicalLine2 = "Gender:         \(wsd.gender.rawValue)"
-            surgicalLine3 = "Number:         \(wsd.number.rawValue)"
-            surgicalLine4 = ""
-            surgicalLine5 = ""
-            surgicalLine6 = ""
-        case .determiner:
-            surgicalTitle = "Determiner"
-            surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
-            surgicalEnglish = "English: \(wsd.word.def)"
-            surgicalLine1 = "Determiner type: \(wsd.determinerType.rawValue)"
-            surgicalLine2 = "Gender:       \(wsd.gender.rawValue)"
-            surgicalLine3 = "Number:       \(wsd.number.rawValue)"
-            surgicalLine4 = ""
-            surgicalLine5 = ""
-            surgicalLine6 = ""
-        case .verb:
-            surgicalTitle = "Verb"
-            surgicalProcessedWord = "Conjugated: \(wsd.getProcessedWord())"
-            
-            let verb = wsd.word as! Verb
-            surgicalSpanish = "Spanish: \(verb.spanish)"
-            surgicalFrench = "French: \(verb.french)"
-            surgicalEnglish = "English: \(verb.english)"
-            surgicalLine2 = "Tense:      \(currentTense.rawValue)"
-            surgicalLine3 = "Person:     \(currentPerson.getEnumString())"
-            
-            surgicalLine5 = ""
-            surgicalLine6 = ""
-        case .preposition:
-            surgicalTitle = "Preposition"
-            surgicalEnglish = "English: \(wsd.word.def)"
-            surgicalLine1 = "Preposition type: \(wsd.prepositionType.rawValue)"
-            surgicalLine2 = ""
-            surgicalLine3 = ""
-            surgicalLine4 = ""
-            surgicalLine5 = ""
-            surgicalLine6 = ""
-        default: break
+    func processPhraseSelection(){
+        switch selectedPhraseIndex{
+        case 0: m_randomPhraseType = RandomPhraseType.subjectPronounVerb
+        case 1: m_randomPhraseType = RandomPhraseType.simpleNounPhrase
+        case 2: m_randomPhraseType = RandomPhraseType.simplePrepositionPhrase
+        case 3: m_randomPhraseType = RandomPhraseType.simpleVerbAdverbPhrase
+        case 4: m_randomPhraseType = RandomPhraseType.simpleClause
+        default:
+            m_randomPhraseType = RandomPhraseType.subjectPronounVerb
         }
+    }
         
-    }
-    
-    func clearWordSurgery(){
-        surgicalMessage = "Click on word in sentence to perform surgery"
-        surgicalWord = ""
-        surgicalProcessedWord = ""
-        surgicalLine1 = ""
-        surgicalLine2 = ""
-        surgicalLine3 = ""
-        surgicalLine4 = ""
-        surgicalLine5 = ""
-        surgicalLine6 = ""
-    }
-    
     func createRandomClause(){
         let tense = currentTense
         while tense == currentTense {
             currentTense = cfModelView.getRandomTense()
         }
-        m_clause = cfModelView.getRandomAgnosticSentence()
+        
+        //m_clause = cfModelView.getRandomAgnosticSentence()
+        processPhraseSelection()
+        m_clause = cfModelView.getRandomAgnosticSentence(rft: m_randomPhraseType)
         currentPerson = m_clause.getPerson()
         let fs  = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: currentTense, person: currentPerson)
         print("French phrase: \(fs)")
         let ss  = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .Spanish, tense: currentTense, person: currentPerson)
         print("Spanish phrase: \(ss)")
-        let es  = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: currentTense, person: currentPerson)    
+        
+        m_englishClause = dIndependentAgnosticClause()
+        m_englishClause.copy(inClause: m_clause)
+        m_englishClause.convertRomancePhraseOrderToEnglishPhraseOrder()
+        let es  = m_englishClause.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: currentTense, person: currentPerson)
         print("English phrase: \(es)")
-        
-        
         
         //handleFrenchContractions()
         updateCurrentSentenceViewStuff()
@@ -288,12 +253,14 @@ struct AgnosticSentenceView: View {
     }
     */
     
+
     func updateCurrentSentenceViewStuff(){
         clearWordSurgery()
         var letterCount = 0
         var wordCount = 0
         singleList.removeAll()
         singleList = m_clause.getSingleList()
+        englishSingleList = m_englishClause.getSingleList()
         
         for single in singleList {
             let wsd = single.getSentenceData()
@@ -305,6 +272,10 @@ struct AgnosticSentenceView: View {
         
         singleIndexList1.removeAll()
         singleIndexList2.removeAll()
+        
+        singleIndexList1.removeAll()
+        singleIndexList2.removeAll()
+        
         newWordSelected1.removeAll()
         print("\nWordStateData ... processed words")
         for i in 0 ..< wordCount {
@@ -345,6 +316,81 @@ struct AgnosticSentenceView: View {
         updateCurrentSentenceViewStuff()
         wordSurgery(single: singleList[currentSingleIndex])
     }
+    
+    func wordSurgery(single: dSingle){
+        let wsd = single.getSentenceData()
+        surgicalMessage = "Click on another word to examine"
+        surgicalWord =         "\(wsd.wordType.rawValue): \(wsd.word.word)"
+        switch wsd.wordType {
+        case .noun:
+            surgicalTitle = "Noun"
+            surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
+            surgicalEnglish = "English: \("")"
+            surgicalLine1 = "Noun type: \(wsd.nounType.rawValue)"
+            surgicalLine2 = "Gender:    \(wsd.gender.rawValue)"
+            surgicalLine3 = "Number:    \(wsd.number.rawValue)"
+            surgicalLine4 = ""
+            surgicalLine5 = ""
+            surgicalLine6 = ""
+        case .adjective:
+            surgicalTitle = "Adjective"
+            surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
+            surgicalEnglish = "English: \("")"
+            surgicalLine1 = "Adjective type: \(wsd.adjectiveType.rawValue)"
+            surgicalLine2 = "Gender:         \(wsd.gender.rawValue)"
+            surgicalLine3 = "Number:         \(wsd.number.rawValue)"
+            surgicalLine4 = ""
+            surgicalLine5 = ""
+            surgicalLine6 = ""
+        case .determiner:
+            surgicalTitle = "Determiner"
+            surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
+            surgicalEnglish = "English: \("")"
+            surgicalLine1 = "Determiner type: \(wsd.determinerType.rawValue)"
+            surgicalLine2 = "Gender:       \(wsd.gender.rawValue)"
+            surgicalLine3 = "Number:       \(wsd.number.rawValue)"
+            surgicalLine4 = ""
+            surgicalLine5 = ""
+            surgicalLine6 = ""
+        case .verb:
+            surgicalTitle = "Verb"
+            surgicalProcessedWord = "Conjugated: \(wsd.getProcessedWord())"
+            
+            let verb = wsd.word as! Verb
+            surgicalSpanish = "Spanish: \(verb.spanish)"
+            surgicalFrench = "French: \(verb.french)"
+            surgicalEnglish = "English: \(verb.english)"
+            surgicalLine2 = "Tense:      \(currentTense.rawValue)"
+            surgicalLine3 = "Person:     \(currentPerson.getEnumString())"
+            
+            surgicalLine5 = ""
+            surgicalLine6 = ""
+        case .preposition:
+            surgicalTitle = "Preposition"
+            surgicalEnglish = "English: \("")"
+            surgicalLine1 = "Preposition type: \(wsd.prepositionType.rawValue)"
+            surgicalLine2 = ""
+            surgicalLine3 = ""
+            surgicalLine4 = ""
+            surgicalLine5 = ""
+            surgicalLine6 = ""
+        default: break
+        }
+        
+    }
+    
+    func clearWordSurgery(){
+        surgicalMessage = "Click on word in sentence to perform surgery"
+        surgicalWord = ""
+        surgicalProcessedWord = ""
+        surgicalLine1 = ""
+        surgicalLine2 = ""
+        surgicalLine3 = ""
+        surgicalLine4 = ""
+        surgicalLine5 = ""
+        surgicalLine6 = ""
+    }
+
     
 }
 

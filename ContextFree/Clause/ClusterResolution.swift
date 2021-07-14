@@ -168,13 +168,13 @@ struct ClusterResolution {
             var p : FrenchPronoun
             switch newType {
             case .subjectPronoun:
-                p = FrenchPronoun(word: wd.word.word, def: "", type: .SUBJECT)
+                p = FrenchPronoun(word: wd.word.word, type: .SUBJECT)
                 pronounResult = p.isSubjectPronoun(word: wd.word.word)
             case  .prepositionalPronoun:
-                p = FrenchPronoun(word: wd.word.word, def: "", type: .PREPOSITIONAL)
+                p = FrenchPronoun(word: wd.word.word, type: .PREPOSITIONAL)
                 pronounResult = p.isPrepositionalPronoun(word: wd.word.word)
             default:
-                p = FrenchPronoun(word: wd.word.word, def: "", type: .NON_PRONOUN)
+                p = FrenchPronoun(word: wd.word.word, type: .NON_PRONOUN)
                 pronounResult = p.isPrepositionalPronoun(word: wd.word.word)
             }
             
@@ -188,11 +188,11 @@ struct ClusterResolution {
         case .Spanish:
             var p : SpanishPronoun
             if  newType == .subjectPronoun{
-                p = SpanishPronoun(word: wd.word.word, def: "", type: .SUBJECT)
+                p = SpanishPronoun(word: wd.word.word, type: .SUBJECT)
                 pronounResult = p.isSubjectPronoun(word: wd.word.word)
             }
             else { //if newType == .prepositionalPronoun{
-                p = SpanishPronoun(word: wd.word.word, def: "", type: .PREPOSITIONAL)
+                p = SpanishPronoun(word: wd.word.word, type: .PREPOSITIONAL)
                 pronounResult = p.isPrepositionalPronoun(word: wd.word.word)
             }
             

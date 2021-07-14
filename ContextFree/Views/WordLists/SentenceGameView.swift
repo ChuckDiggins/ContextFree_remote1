@@ -33,7 +33,7 @@ struct SentenceGameView: View {
     @State private var surgicalLine4 = ""
     @State private var surgicalLine5 = ""
     @State private var surgicalLine6 = ""
-    @State private var m_clause = dIndependentClause(language: .Spanish)
+    @State private var m_clause = dIndependentAgnosticClause()
     @State private var newWordSelected = false
     @State private var newWordSelected1 = [Bool]()
     @State var m_randomSentence : RandomSentence!
@@ -48,7 +48,6 @@ struct SentenceGameView: View {
         HStack{
             Button(action: {
                 currentLanguage = .Spanish
-                m_clause = dIndependentClause(language: currentLanguage)
                 cfModelView.createNewModel(language: currentLanguage)
                 sentenceString = ""
                 createRandomClause()
@@ -59,7 +58,6 @@ struct SentenceGameView: View {
             .foregroundColor(currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
             Button(action: {
                 currentLanguage = .French
-                m_clause = dIndependentClause(language: currentLanguage)
                 cfModelView.createNewModel(language: currentLanguage)
                 sentenceString = ""
                 createRandomClause()
@@ -70,7 +68,6 @@ struct SentenceGameView: View {
             .foregroundColor(currentLanguage == .Spanish ? Color(UIColor(named: "SurgeryBackground")!) : Color.red)
             Button(action: {
                 currentLanguage = .English
-                m_clause = dIndependentClause(language: currentLanguage)
                 cfModelView.createNewModel(language: currentLanguage)
                 sentenceString = ""
                 createRandomClause()
@@ -95,7 +92,7 @@ struct SentenceGameView: View {
                             newWordSelected1[currentSingleIndex].toggle()
                             newWordSelected1[currentSingleIndex] ? wordSurgery(single: singleList[index]) : changeWord()
                         }){
-                            Text(singleList[index].getProcessWordInWordStateData())
+                            Text(singleList[index].getProcessWordInWordStateData(language: currentLanguage))
                                 .font(.subheadline)
                                 .foregroundColor(index == currentSingleIndex ? .red : .black)
                         }
@@ -109,7 +106,7 @@ struct SentenceGameView: View {
                             newWordSelected1[currentSingleIndex].toggle()
                             newWordSelected1[currentSingleIndex] ? wordSurgery(single: singleList[index]) : changeWord()
                         }){
-                            Text(singleList[index].getProcessWordInWordStateData())
+                            Text(singleList[index].getProcessWordInWordStateData(language: currentLanguage))
                                 .font(.subheadline)
                                 .foregroundColor(index == currentSingleIndex ? .red : .black)
                         }
@@ -217,6 +214,9 @@ struct SentenceGameView: View {
             let nounSingle = single as! dNounSingle
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:nounSingle.isSubject())
             nounSingle.copyGuts(newSingle: newSingle)
+            if nounSingle.isSubject() {
+                m_clause.setPerson(value: nounSingle.getPerson())
+            }
         case .preposition:
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
@@ -226,7 +226,7 @@ struct SentenceGameView: View {
         m_clause.processInfo()
         currentPerson = m_clause.getPerson()
         //m_clause.dumpNounPhraseData()
-        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(tense: currentTense, person: currentPerson)
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
         //m_clause.dumpNounPhraseData()
         handleFrenchContractions()
         updateCurrentSentenceViewStuff()
@@ -241,7 +241,7 @@ struct SentenceGameView: View {
         case .noun:
             surgicalTitle = "Noun"
             surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
-            surgicalEnglish = "English: \(wsd.word.def)"
+            surgicalEnglish = "English: \("")"
             surgicalLine1 = "Noun type: \(wsd.nounType.rawValue)"
             surgicalLine2 = "Gender:    \(wsd.gender.rawValue)"
             surgicalLine3 = "Number:    \(wsd.number.rawValue)"
@@ -251,7 +251,7 @@ struct SentenceGameView: View {
         case .adjective:
             surgicalTitle = "Adjective"
             surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
-            surgicalEnglish = "English: \(wsd.word.def)"
+            surgicalEnglish = "English: \("")"
             surgicalLine1 = "Adjective type: \(wsd.adjectiveType.rawValue)"
             surgicalLine2 = "Gender:         \(wsd.gender.rawValue)"
             surgicalLine3 = "Number:         \(wsd.number.rawValue)"
@@ -261,7 +261,7 @@ struct SentenceGameView: View {
         case .determiner:
             surgicalTitle = "Determiner"
             surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
-            surgicalEnglish = "English: \(wsd.word.def)"
+            surgicalEnglish = "English: \("")"
             surgicalLine1 = "Determiner type: \(wsd.determinerType.rawValue)"
             surgicalLine2 = "Gender:       \(wsd.gender.rawValue)"
             surgicalLine3 = "Number:       \(wsd.number.rawValue)"
@@ -271,7 +271,7 @@ struct SentenceGameView: View {
         case .verb:
             surgicalTitle = "Verb"
             surgicalProcessedWord = "Conjugated: \(wsd.getProcessedWord())"
-            surgicalEnglish = "English: \(wsd.word.def)"
+            surgicalEnglish = "English: \("")"
             switch currentLanguage{
             case .Spanish:
                 let verb = wsd.word as! RomanceVerb
@@ -298,7 +298,7 @@ struct SentenceGameView: View {
             surgicalLine6 = ""
         case .preposition:
             surgicalTitle = "Preposition"
-            surgicalEnglish = "English: \(wsd.word.def)"
+            surgicalEnglish = "English: \("")"
             surgicalLine1 = "Preposition type: \(wsd.prepositionType.rawValue)"
             surgicalLine2 = ""
             surgicalLine3 = ""
@@ -323,46 +323,45 @@ struct SentenceGameView: View {
     }
     
     func createRandomClause(){
-        if currentLanguage == .French || currentLanguage == .Spanish || currentLanguage == .English {
-            let tense = currentTense
-            while tense == currentTense {
-                currentTense = cfModelView.getRandomTense()
-            }
-            m_clause = cfModelView.getRandomSentence()
-            currentPerson = m_clause.getPerson()
-            sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(tense: currentTense, person: currentPerson)
-            handleFrenchContractions()
-            updateCurrentSentenceViewStuff()
-            clearWordSurgery()
+        let tense = currentTense
+        while tense == currentTense {
+            currentTense = cfModelView.getRandomTense()
         }
+        m_clause = cfModelView.getRandomAgnosticSentence(rft: .simpleClause)
+        
+        currentPerson = m_clause.getPerson()
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+        if currentLanguage == .French {handleFrenchContractions()}
+        if currentLanguage == .English {m_clause.convertRomancePhraseOrderToEnglishPhraseOrder()}
+        updateCurrentSentenceViewStuff()
+        clearWordSurgery()
     }
-    
+
     func handleFrenchContractions(){
-        if currentLanguage == .French {
-            //singleList = m_clause.getSingleList()
-            
-            //never check last word, because there can't be a phonetic contraction
-            
-            for i in 0 ..< singleList.count-1 {
-                let single = singleList[i]
-                let wsd = single.getSentenceData()
-                switch wsd.wordType {
-                case .article:
-                    if wsd.gender == .masculine && wsd.number == .singular && wsd.articleType == .definite  {
-                        let nextSingle = singleList[i+1]
-                        print("next single = \(nextSingle.getClusterWord().word) -- starts with a vowel \(nextSingle.startsWithVowelSound() )")
-                        if nextSingle.startsWithVowelSound() {
-                            single.setProcessWordInWordStateData(str: "l'")
-                        } else {
-                            single.setProcessWordInWordStateData(str: "le")
-                        }
+        
+        //singleList = m_clause.getSingleList()
+        
+        //never check last word, because there can't be a phonetic contraction
+        
+        for i in 0 ..< singleList.count-1 {
+            let single = singleList[i]
+            let wsd = single.getSentenceData()
+            switch wsd.wordType {
+            case .article:
+                if wsd.gender == .masculine && wsd.number == .singular && wsd.articleType == .definite  {
+                    let nextSingle = singleList[i+1]
+                    print("next single = \(nextSingle.getClusterWord().word) -- starts with a vowel \(nextSingle.startsWithVowelSound() )")
+                    if nextSingle.startsWithVowelSound() {
+                        single.setProcessWordInWordStateData(str: "l'")
+                    } else {
+                        single.setProcessWordInWordStateData(str: "le")
                     }
-                case .subjectPronoun:
-                    break
-                default: break
                 }
-                
+            case .subjectPronoun:
+                break
+            default: break
             }
+            
         }
     }
     
@@ -376,7 +375,7 @@ struct SentenceGameView: View {
         for single in singleList {
             if single.getWordType() == .determiner {
                 let det = single as! dDeterminerSingle
-                let sd = det.getSentenceData()
+                //let sd = det.getSentenceData()
                 let detWord = det.getSentenceData().getProcessedWord()
                 print ("\(detWord)")
             }
@@ -403,8 +402,8 @@ struct SentenceGameView: View {
     
     func processSentence2(){
         if ( currentLanguage == .French || currentLanguage == .Spanish ){
-            m_clause = cfModelView.getRandomSubjPronounSentence()
-            sentenceString = m_clause.createNewSentenceString()
+            //m_clause = cfModelView.getRandomSubjPronounSentence()
+            sentenceString = m_clause.createNewSentenceString(language: currentLanguage)
             singleList = m_clause.getSingleList()
         }
     }
@@ -414,7 +413,7 @@ struct SentenceGameView: View {
         while tense == currentTense {
             currentTense = cfModelView.getRandomTense()
         }
-        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(tense: currentTense, person: currentPerson)
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
         updateCurrentSentenceViewStuff()
         wordSurgery(single: singleList[currentSingleIndex])
     }
@@ -425,7 +424,7 @@ struct SentenceGameView: View {
             let i = Int.random(in: 0 ..< 6)
             currentPerson = Person.all[i]
         }
-        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(tense: currentTense, person: currentPerson)
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
         updateCurrentSentenceViewStuff()
         wordSurgery(single: singleList[currentSingleIndex])
     }

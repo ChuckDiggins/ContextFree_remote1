@@ -14,10 +14,9 @@ class dPhrase : dCluster {
         super.init(word: word, clusterType: clusterType, data: data)
     }
     
-    init(){
+    override init(){
         super.init(word: Word(), clusterType: .UNK)
     }
-    
     
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     var m_clusterList = Array<dCluster>()
@@ -30,6 +29,13 @@ class dPhrase : dCluster {
         }
         m_clusterList.append(cluster)
         if m_clusterList.count == 1 {m_sentenceData.language = cluster.getSentenceData().language}
+    }
+    
+    func getClusterAtFunction(fn: ContextFreeFunction)->dCluster{
+        for cluster in getClusterList(){
+            if cluster.getClusterFunction() == fn {return cluster}
+        }
+        return dCluster()
     }
     
     func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
@@ -72,9 +78,146 @@ class dPhrase : dCluster {
         return wordListCopy.getString()
     }
 
+    override func hasClusterFunction(fn: ContextFreeFunction) -> Bool {
+        for cluster in getClusterList(){
+            if cluster.getClusterFunction() == fn {return true}
+        }
+        return false
+    }
+    
+    func getEquivalentPronounString(language: LanguageType, fn: ContextFreeFunction)->String{
+        switch fn {
+        case .Subject: return getEquivalentSubjectPronounString(language: language)
+        case .DirectObject: return getEquivalentDirectObjectPronounString(language: language)
+        case .IndirectObject: return getEquivalentIndirectObjectPronounString(language: language)
+        case .Prepositional: return getEquivalentPrepositionalPronounString(language: language)
+        default: return ""
+        }
+    }
+    
+    func getEquivalentPronoun(language: LanguageType, fn: ContextFreeFunction)->Pronoun{
+        switch fn {
+        case .Subject: return getEquivalentSubjectPronoun(language: language)
+        case .DirectObject: return getEquivalentDirectObjectPronoun(language: language)
+        case .IndirectObject: return getEquivalentIndirectObjectPronoun(language: language)
+        case .Prepositional: return getEquivalentPrepositionalPronoun(language: language)
+        default: return Pronoun()
+        }
+    }
+    
+
+    func getEquivalentSubjectPronounString(language: LanguageType)->String{
+        switch language{
+        case .Spanish:
+            let p = SpanishPronoun(word: "", type: .SUBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .French:
+            let p = FrenchPronoun(word: "", type: .SUBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .English:
+            let p = EnglishPronoun(word: "", type: .SUBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        default: return ""
+        }
+    }
+    
+    func getEquivalentSubjectPronoun(language: LanguageType)-> Pronoun {
+        switch language{
+        case .Spanish:
+             return SpanishPronoun(word: "", type: .SUBJECT)
+        case .French:
+            return FrenchPronoun(word: "", type: .SUBJECT)
+        case .English:
+            return EnglishPronoun(word: "", type: .SUBJECT)
+        default: return Pronoun()
+        }
+    }
+    
+    func getEquivalentDirectObjectPronoun(language: LanguageType)-> Pronoun {
+        switch language{
+        case .Spanish:
+             return SpanishPronoun(word: "", type: .DIRECT_OBJECT)
+        case .French:
+            return FrenchPronoun(word: "", type: .DIRECT_OBJECT)
+        case .English:
+            return EnglishPronoun(word: "", type: .DIRECT_OBJECT)
+        default: return Pronoun()
+        }
+    }
+    
+    func getEquivalentIndirectObjectPronoun(language: LanguageType)-> Pronoun {
+        switch language{
+        case .Spanish:
+             return SpanishPronoun(word: "", type: .INDIRECT_OBJECT)
+        case .French:
+            return FrenchPronoun(word: "", type: .INDIRECT_OBJECT)
+        case .English:
+            return EnglishPronoun(word: "", type: .INDIRECT_OBJECT)
+        default: return Pronoun()
+        }
+    }
+    
+    func getEquivalentPrepositionalPronoun(language: LanguageType)-> Pronoun {
+        switch language{
+        case .Spanish:
+             return SpanishPronoun(word: "", type: .PREPOSITIONAL)
+        case .French:
+            return FrenchPronoun(word: "", type: .PREPOSITIONAL)
+        case .English:
+            return EnglishPronoun(word: "", type: .PREPOSITIONAL)
+        default: return Pronoun()
+        }
+    }
+    
+    func getEquivalentDirectObjectPronounString(language: LanguageType)->String{
+        switch language{
+        case .Spanish:
+            let p = SpanishPronoun(word: "", type: .DIRECT_OBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .French:
+            let p = FrenchPronoun(word: "", type: .DIRECT_OBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .English:
+            let p = EnglishPronoun(word: "", type: .DIRECT_OBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        default: return ""
+        }
+    }
+    
+    func getEquivalentIndirectObjectPronounString(language: LanguageType)->String{
+        switch language{
+        case .Spanish:
+            let p = SpanishPronoun(word: "", type: .INDIRECT_OBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .French:
+            let p = FrenchPronoun(word: "", type: .INDIRECT_OBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .English:
+            let p = EnglishPronoun(word: "", type: .INDIRECT_OBJECT)
+            return p.getForm(gender: getGender(), person: getPerson())
+        default: return ""
+        }
+    }
+    
+    func getEquivalentPrepositionalPronounString(language: LanguageType)->String{
+        switch language{
+        case .Spanish:
+            let p = SpanishPronoun(word: "", type: .PREPOSITIONAL)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .French:
+            let p = FrenchPronoun(word: "", type: .PREPOSITIONAL)
+            return p.getForm(gender: getGender(), person: getPerson())
+        case .English:
+            let p = EnglishPronoun(word: "", type: .PREPOSITIONAL)
+            return p.getForm(gender: getGender(), person: getPerson())
+        default: return ""
+        }
+    }
+    
+
     func getSingleList(inputSingleList: [dSingle])->[dSingle]{
         var singleList = inputSingleList
-        for cluster in getClusterList(){         
+        for cluster in getClusterList(){
             let type = cluster.getClusterType()
             if cluster.getClusterType().isSingle()
             {
@@ -85,7 +228,7 @@ class dPhrase : dCluster {
                 else if ( type == .V){
                     singleList.append(single)
                 }
-                else if ( type == .SubjP){
+                else if ( type == .PersPro){
                     singleList.append(single)
                 }
                 else if ( type == .Det){
@@ -133,8 +276,8 @@ class dPhrase : dCluster {
                     let sd = cluster.getSentenceData()
                     wordList.append(sd)
                 }
-                else if ( type == .SubjP){
-                    //let c = cluster as! dSubjectPronounSingle
+                else if ( type == .PersPro){
+                    let c = cluster as! dPersonalPronounSingle
                     wordList.append(cluster.getSentenceData())
                 }
                 else if ( type == .Det){
@@ -167,7 +310,7 @@ class dPhrase : dCluster {
     
     func processInfo(){
 
-        print("ClusterType: \(getClusterType().rawValue): clusterCount = \(getClusterList().count)")
+        //print("ClusterType: \(getClusterType().rawValue): clusterCount = \(getClusterList().count)")
         
         if getClusterType() == .NP {
             let np = self as! dNounPhrase
@@ -185,18 +328,15 @@ class dPhrase : dCluster {
                 let c = cluster as! dDeterminerSingle
                 c.setGender(value: gender)
                 c.setNumber(value: number)
-                c.setProcessWordInWordStateData(str: c.getWordString())
             case .Adj:
                 let c = cluster as! dAdjectiveSingle
                 c.setGender(value: gender)
                 c.setNumber(value: number)
-                c.setProcessWordInWordStateData(str: c.getWordString())
             case .Num:
                 let c = cluster as! dNumberSingle
                 setNumber(value: c.getNumber())
-            case .SubjP:
-                let c = cluster as! dSubjectPronounSingle
-                //if c.getPronounType() == .SUBJECT {m_isSubject = true}
+            case .PersPro:
+                let c = cluster as! dPersonalPronounSingle
             case .N:
                 setPerson(value: cluster.getPerson())
                 setGender(value: cluster.getGender())
@@ -287,16 +427,29 @@ class dPhrase : dCluster {
                     str += adjStr + " "
                     c.setProcessWordInWordStateData(language: language, str: adjStr)
                 }
+                else if ( type == .Adv){
+                    let c = cluster as! dAdverbSingle
+                    let advStr = c.getWordStringAtLanguage(language: language)
+                    str += advStr + " "
+                    c.setProcessWordInWordStateData(language: language, str: advStr)
+                }
+                else if ( type == .C){
+                    let c = cluster as! dConjunctionSingle
+                    let conjStr = c.getWordStringAtLanguage(language: language)
+                    str += conjStr + " "
+                    c.setProcessWordInWordStateData(language: language, str: conjStr)
+                }
                 else if ( type == .P){
                     let c = cluster as! dPrepositionSingle
                     let prepStr = c.getWordStringAtLanguage(language: language)
                     str += prepStr + " "
                     c.setProcessWordInWordStateData(language: language, str: prepStr)
                 }
-                else if ( type == .SubjP){
-                    let c = cluster as! dSubjectPronounSingle
-                    str += c.getString() + " "
-                    c.setProcessWordInWordStateData(language: language, str: c.getString())
+                else if ( type == .PersPro){
+                    let c = cluster as! dPersonalPronounSingle
+                    let pronounStr = c.getWordStringAtLanguage(language: language)
+                    str += pronounStr + " "
+                    c.setProcessWordInWordStateData(language: language, str: pronounStr)
                 }
                 else {
                     let single = cluster as! dSingle
@@ -360,8 +513,8 @@ class dPhrase : dCluster {
                     str += c.getWordString() + " "
                     c.setProcessWordInWordStateData(str: c.getWordString())
                 }
-                else if ( type == .SubjP){
-                    let c = cluster as! dSubjectPronounSingle
+                else if ( type == .PersPro){
+                    let c = cluster as! dPersonalPronounSingle
                     str += c.getString() + " "
                     c.setProcessWordInWordStateData(str: c.getString())
                 }
@@ -407,7 +560,7 @@ class dAdverbPhrase : dPhrase {
         super.init(word: word, clusterType: type, data: data)
     }
     
-    var m_adverbType = AdverbType.modifying
+    var m_adverbType = AdverbType.manner
     func setAdverbType(type: AdverbType){m_adverbType = type}
     func getAdverbType()->AdverbType{return m_adverbType}
 }
@@ -447,7 +600,7 @@ class dPrepositionPhrase : dPhrase {
                 let data = getSentenceData()
                 cluster.setGender(value: data.gender)
                 cluster.setNumber(value: data.number)
-                var sd = cluster.getSentenceData()
+                let sd = cluster.getSentenceData()
                 sd.gender = data.gender
                 sd.number = data.number
                 cluster.setSentenceData(data: sd)
@@ -470,7 +623,7 @@ class dPrepositionPhrase : dPhrase {
                 let data = getSentenceData()
                 cluster.setGender(value: data.gender)
                 cluster.setNumber(value: data.number)
-                var sd = cluster.getSentenceData()
+                let sd = cluster.getSentenceData()
                 sd.gender = data.gender
                 sd.number = data.number
                 cluster.setSentenceData(data: sd)

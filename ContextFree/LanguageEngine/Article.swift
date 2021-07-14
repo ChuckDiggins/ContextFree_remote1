@@ -12,7 +12,7 @@ class Article : Word {
     
     init(word: String, def: String, type : ArticleType){
         self.type = type
-        super.init(word: word, def: def, wordType: .article)
+        super.init(word: word, wordType: .article)
     }
 }
 

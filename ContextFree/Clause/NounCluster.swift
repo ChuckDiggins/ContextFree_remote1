@@ -59,14 +59,14 @@ class dNounSingle : dSingle
         let cn = word as! Noun
         switch language {
         case .Spanish:
-            let noun = SpanishNoun(word: cn.spanish, def: "", type: sd.nounType, gender: sd.gender)
+            let noun = SpanishNoun(word: cn.spanish, type: sd.nounType, gender: sd.gender)
             return noun.getNounString(number: sd.number)
         case .French:
-            let noun = FrenchNoun(word: cn.french, def: "", type: sd.nounType, gender: sd.gender)
+            let noun = FrenchNoun(word: cn.french,  type: sd.nounType, gender: sd.gender)
             return noun.getNounString(number: sd.number)
         case .English:
             let englishPlural = cn.englishPlural
-            let noun = EnglishNoun(word: cn.english, def: "", type: sd.nounType, englishPlural: englishPlural)
+            let noun = EnglishNoun(word: cn.english,  type: sd.nounType, englishPlural: englishPlural)
             return noun.getString(number: sd.number)
         default:
             return ""
@@ -99,6 +99,7 @@ class dNounPhrase : dPhrase {
         return getNounSingle().startsWithVowelSound()
     }
     
+    
     func getNounSingle()->dNounSingle{
         let nounSingle = dNounSingle()
         for cluster in getClusterList(){
@@ -113,7 +114,7 @@ class dNounPhrase : dPhrase {
             let sym = cluster.getClusterType()
             switch sym {
             case .Det:
-                var sd = cluster.getSentenceData()
+                let sd = cluster.getSentenceData()
                 sd.gender = npSentenceData.gender
                 sd.number = npSentenceData.number
                 let det = cluster as! dDeterminerSingle
@@ -121,11 +122,11 @@ class dNounPhrase : dPhrase {
                 sd.setProcessedWord(language: language, str: ds)
                 print("ds: \(ds) - sd.processedWord: \(sd.getProcessedWord(language: language))")
             case .Adj:
-                var sd = cluster.getSentenceData()
+                let sd = cluster.getSentenceData()
                 sd.gender = npSentenceData.gender
                 sd.number = npSentenceData.number
                 let adj = cluster as! dAdjectiveSingle
-                var adjStr = adj.getWordStringAtLanguage(language: language)
+                let adjStr = adj.getWordStringAtLanguage(language: language)
                 sd.setProcessedWord(language: language, str: adjStr)
                 print("ds: \(adjStr) - sd.processedWord: \(sd.getProcessedWord(language: language))")
             case .NP:
@@ -177,11 +178,11 @@ class dNounPhrase : dPhrase {
     func dumpClusterInfo(str: String){
         print(str)
         
-        let npSentenceData = getSentenceData()
+        //let npSentenceData = getSentenceData()
         for cluster in getClusterList(){
             let sym = cluster.getClusterType()
             if ( sym == .Det  ){
-                var sd = cluster.getSentenceData()
+                let sd = cluster.getSentenceData()
                 if sym == .Det {
                     let det = cluster as! dDeterminerSingle
                     let ds = det.getWordString()
@@ -205,8 +206,8 @@ class dNounPhrase : dPhrase {
     override func getPerson()->Person{
         for cluster in getClusterList() {
             let clusterType = cluster.getClusterType()
-            if clusterType == .SubjP {
-                let c = cluster as! dSubjectPronounSingle
+            if clusterType == .PersPro {
+                let c = cluster as! dPersonalPronounSingle
                 let person = c.getPerson()
                 getSentenceData().person = person
                 if c.getPronounType() == .SUBJECT {m_isSubject = true}
@@ -232,8 +233,8 @@ class dNounPhrase : dPhrase {
     override func setPerson(value: Person){
         for cluster in getClusterList() {
             let clusterType = cluster.getClusterType()
-            if clusterType == .SubjP {
-                let c = cluster as! dSubjectPronounSingle
+            if clusterType == .PersPro {
+                let c = cluster as! dPersonalPronounSingle
                 c.setPerson(value: value)
                 if c.getPronounType() == .SUBJECT {m_isSubject = true}
             }

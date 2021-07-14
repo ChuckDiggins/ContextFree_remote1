@@ -59,14 +59,14 @@ class BVerb : Word, Identifiable {
         self.m_verbPhrase = ""
         self.m_verbWord = ""
         self.languageType = LanguageType.Spanish
-        super.init(word: m_verbWord, def: "", wordType: .verb)
+        super.init(word: m_verbWord, wordType: .verb)
     }
     
     init(verbPhrase: String, verbWord: String, languageType: LanguageType){
         self.m_verbPhrase = verbPhrase
         self.m_verbWord = verbWord
         self.languageType = languageType
-        super.init(word: m_verbWord, def: "", wordType: .verb)
+        super.init(word: m_verbWord, wordType: .verb)
     }
 
     func getInfinitiveAndParticiples()->(String, String, String){

@@ -13,7 +13,7 @@ class Punctuation : Word {
     
     init(word: String, def: String, type : PunctuationType){
         self.type = type
-        super.init(word: word, def: def, wordType: .punctuation)
+        super.init(word: word, wordType: .punctuation)
     }
     
     func isPunctuation(word: String)->PunctuationType {

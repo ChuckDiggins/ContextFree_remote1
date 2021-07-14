@@ -23,7 +23,7 @@ struct WordStringParser {
         spanVerbModel = span
         frenchVerbModel = french
         englishVerbModel = english
-        createDictionaries()
+        //createDictionaries()
     }
     
     func getLanguage()->LanguageType{
@@ -46,35 +46,38 @@ struct WordStringParser {
         return englishWords
     }
     
+    /*
     mutating func createDictionaries(){
 
         switch (m_language ){
         case .Spanish:
-            spanishWords.createSomeAmbiguousWords()
+            //spanishWords.createSomeAmbiguousWords()
             //spanishWords.createSomeAdjectives()
             //spanishWords.createSomeSpanishArticles()
-            spanishWords.createSomeAdverbs()
-            spanishWords.createSomeConjunctions()
+            //spanishWords.createSomeAdverbs()
+            //spanishWords.createSomeConjunctions()
             //spanishWords.createSomeNouns()
             //spanishWords.createSomeSpanishPunctuations()
             //spanishWords.createSomePrepositions()
-            spanishWords.createSomeSpanishPronouns()
+            //spanishWords.createSomeSpanishPronouns()
         case .French:
-            frenchWords.createSomeAmbiguousWords()
-            frenchWords.createSomePossessiveAdjectives()
-            frenchWords.createSomeInterrogativeAdjectives()
-            frenchWords.createSomeDemonstrativeAdjectives()
+           // frenchWords.createSomeAmbiguousWords()
+            //frenchWords.createSomePossessiveAdjectives()
+            //frenchWords.createSomeInterrogativeAdjectives()
+            //frenchWords.createSomeDemonstrativeAdjectives()
             //frenchWords.createSomeArticles()
             //frenchWords.createSomeAdjectives()
-            frenchWords.createSomeAdverbs()
-            frenchWords.createSomeConjunctions()
+            //frenchWords.createSomeAdverbs()
+            //frenchWords.createSomeConjunctions()
             //frenchWords.createSomeNouns()
             //frenchWords.createSomePrepositions()
-            frenchWords.createSomePronouns()
+            //frenchWords.createSomePronouns()
         default:
             break
         }
     }
+ */
+    
     
     func isNewVerb(verb: Verb)->Bool{
         for word in generalWords.verbList {
@@ -91,6 +94,34 @@ struct WordStringParser {
     
     func getVerbCount()->Int{
         return generalWords.verbList.count
+    }
+    
+    func getWordCount(wordType: WordType)->Int{
+        switch wordType{
+        case .adjective: return generalWords.adjectiveList.count
+        case .adverb: return generalWords.adverbList.count
+        case .conjunction: return generalWords.conjunctionList.count
+        case .determiner: return generalWords.determinerList.count
+        case .noun: return generalWords.nounList.count
+        case .preposition: return generalWords.prepositionList.count
+        case .pronoun: return generalWords.pronounList.count
+        case .verb: return generalWords.verbList.count
+        default: return 0
+        }
+    }
+    
+    func getWordList(wordType: WordType)->Array<Word>{
+        switch wordType{
+        case .adjective: return generalWords.adjectiveList
+        case .adverb: return generalWords.adverbList
+        case .conjunction: return generalWords.conjunctionList
+        case .determiner: return generalWords.determinerList
+        case .noun: return generalWords.nounList
+        case .preposition: return generalWords.prepositionList
+        case .pronoun: return generalWords.pronounList
+        case .verb: return generalWords.verbList
+        default: return Array<Word>()
+        }
     }
     
     func getNounList()->Array<Word>{
@@ -236,39 +267,36 @@ struct WordStringParser {
     }
     
 
-    mutating func addAdjectiveToDictionary(adj: Adjective)->Int{
+    mutating func addAdjectiveToDictionary(adj: Adjective){
         generalWords.adjectiveList.append(adj)
-        return generalWords.adjectiveList.count
     }
     
-    mutating func addAdverbToDictionary(adj: Adjective)->Int{
-        generalWords.adverbList.append(adj)
-        return generalWords.adverbList.count
+    mutating func addAdverbToDictionary(wd: Adverb){
+        generalWords.adverbList.append(wd)
     }
     
-    mutating func addConjuctionToDictionary(adj: Conjunction)->Int{
-        generalWords.conjunctionList.append(adj)
-        return generalWords.conjunctionList.count
+    mutating func addConjuctionToDictionary(wd: Conjunction){
+        generalWords.conjunctionList.append(wd)
     }
     
-    mutating func addDeterminerToDictionary(wd: Determiner)->Int{
+    mutating func addDeterminerToDictionary(wd: Determiner){
         generalWords.determinerList.append(wd)
-        return generalWords.determinerList.count
     }
     
-    mutating func addNounToDictionary(noun: Noun)->Int{
+    mutating func addNounToDictionary(noun: Noun){
         generalWords.nounList.append(noun)
-        return generalWords.nounList.count
     }
     
-    mutating func addPrepositionToDictionary(wd: Preposition)->Int{
+    mutating func addPrepositionToDictionary(wd: Preposition){
         generalWords.prepositionList.append(wd)
-        return generalWords.prepositionList.count
     }
     
-    mutating func addVerbToDictionary(verb: Verb)->Int{
+    mutating func addPronounToDictionary(wd: Pronoun){
+        generalWords.pronounList.append(wd)
+    }
+    
+    mutating func addVerbToDictionary(verb: Verb){
         generalWords.verbList.append(verb)
-        return generalWords.verbList.count
     }
     
     
@@ -341,8 +369,8 @@ struct WordStringParser {
                     //if is contraction, then remove it and replace it
                     if result.0 {
                         wordListCopy.remove(at: i)
-                        let word1 = Word(word: result.2, def: "", wordType : .unknown)
-                        let word2 = Word(word: result.1, def: "", wordType : .unknown)
+                        let word1 = Word(word: result.2, wordType : .unknown)
+                        let word2 = Word(word: result.1, wordType : .unknown)
                         wordListCopy.insert(word2, at:i)
                         wordListCopy.insert(word1, at:i)
                         contractionFound = true
@@ -379,7 +407,7 @@ struct WordStringParser {
                     i += 1
                 }
                 inputString = VerbUtilities().removeLeadingOrFollowingBlanks(characterArray: inputString)
-                let inputWord = Word(word: inputString, def: "", wordType : wordType)
+                let inputWord = Word(word: inputString, wordType : wordType)
                 wordListCopy.insert(inputWord, at: wordIndex)
                 i=0
                 inputString = ""
@@ -807,11 +835,11 @@ struct WordStringParser {
         let result : (PronounType, Gender, Person)
         switch m_language {
         case .Spanish:
-            let pronoun = SpanishPronoun(word: wordString, def: "", type: type)
+            let pronoun = SpanishPronoun(word: wordString, type: type)
             if ( type == .DIRECT_OBJECT ){ result = pronoun.isDirectObjectPronoun(word: wordString) }
             else { result = pronoun.isIndirectObjectPronoun(word: wordString)}
             if result.0 != .none {
-                sd.word = Pronoun(word: wordString, def: "", type: type)
+                sd.word = Pronoun(word: wordString, type: type)
                 sd.data.wordType = .pronoun
                 sd.data.pronounType = result.0
                 sd.data.gender = result.1
@@ -836,7 +864,7 @@ struct WordStringParser {
                 let pronoun = word as! SpanishPronoun
                 let pronounList = pronoun.isPronoun(word: wordString)
                 if pronounList.count > 1 {
-                    let amb = Ambiguous(word: wordString, def: word.def, type: .pronoun)
+                    let amb = Ambiguous(word: wordString, type: .pronoun)
                     amb.setPronounList(list: pronounList)
                     sd.word = amb
                     sd.data.wordType = .ambiguous
@@ -845,7 +873,7 @@ struct WordStringParser {
                 }
                 var result = pronoun.isSubjectPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .SUBJECT)
+                    sd.word = Pronoun(word: wordString, type: .SUBJECT)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -854,7 +882,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isReflexivePronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .REFLEXIVE)
+                    sd.word = Pronoun(word: wordString, type: .REFLEXIVE)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -863,7 +891,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isIndirectObjectPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .INDIRECT_OBJECT)
+                    sd.word = Pronoun(word: wordString, type: .INDIRECT_OBJECT)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -872,7 +900,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isDirectObjectPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .DIRECT_OBJECT)
+                    sd.word = Pronoun(word: wordString, type: .DIRECT_OBJECT)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -881,7 +909,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isPrepositionalPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .PREPOSITIONAL)
+                    sd.word = Pronoun(word: wordString,type: .PREPOSITIONAL)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -894,7 +922,7 @@ struct WordStringParser {
                 let pronoun = word as! FrenchPronoun
                 let pronounList = pronoun.isPronoun(word: wordString)
                 if pronounList.count > 1 {
-                    let amb = Ambiguous(word: wordString, def: word.def, type: .pronoun)
+                    let amb = Ambiguous(word: wordString, type: .pronoun)
                     amb.setPronounList(list: pronounList)
                     sd.word = amb
                     sd.data.wordType = .ambiguous
@@ -903,7 +931,7 @@ struct WordStringParser {
                 }
                 var result = pronoun.isSubjectPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .SUBJECT)
+                    sd.word = Pronoun(word: wordString, type: .SUBJECT)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -912,7 +940,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isReflexivePronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .REFLEXIVE)
+                    sd.word = Pronoun(word: wordString, type: .REFLEXIVE)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -921,7 +949,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isIndirectObjectPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .INDIRECT_OBJECT)
+                    sd.word = Pronoun(word: wordString, type: .INDIRECT_OBJECT)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -930,7 +958,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isDirectObjectPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .DIRECT_OBJECT)
+                    sd.word = Pronoun(word: wordString, type: .DIRECT_OBJECT)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
@@ -939,7 +967,7 @@ struct WordStringParser {
                 }
                 result = pronoun.isPrepositionalPronoun(word: wordString)
                 if result.0 != .none {
-                    sd.word = Pronoun(word: wordString, def: "", type: .PREPOSITIONAL)
+                    sd.word = Pronoun(word: wordString, type: .PREPOSITIONAL)
                     sd.data.wordType = .pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1

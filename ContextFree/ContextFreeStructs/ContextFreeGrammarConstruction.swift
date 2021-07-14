@@ -14,7 +14,7 @@ struct ContextFreeGrammarConstruction{
         var cfr : ContextFreeRule
         
         cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .SubjP, word: Word(), isHead: true))
+        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .PersPro, word: Word(), isHead: true))
         grammar.addRule(cfr: cfr)
         
         cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
@@ -24,7 +24,7 @@ struct ContextFreeGrammarConstruction{
         grammar.addRule(cfr: cfr)
         
         cfr = ContextFreeRule(start: ContextFreeSymbolStruct(cfs: .NP, word: Word()))
-        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .SubjP, word: Word(), isHead: true))
+        cfr.appendSymbolStruct(sym: ContextFreeSymbolStruct(cfs: .PersPro, word: Word(), isHead: true))
         grammar.addRule(cfr: cfr)
         
 

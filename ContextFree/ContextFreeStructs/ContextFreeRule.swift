@@ -25,7 +25,6 @@ enum ContextFreeSymbolType : String, CaseIterable {
     case noun = "N"
     case properNoun = "PropN"
     case personalPronoun = "PersPro"
-    case subjectPronoun = "SubjP"
     case objectPronounn = "ObjP"
     case indirectObjectPronoun = "IndObjP"
     case reflexivePronoun = "ReflP"
@@ -54,6 +53,13 @@ enum ContextFreeSymbolType : String, CaseIterable {
     
 }
 */
+enum ContextFreeFunction : String, CaseIterable {
+    case Subject = "Subject"
+    case DirectObject = "DirectObject"
+    case IndirectObject = "IndirectObject"
+    case Prepositional = "Prepositional"
+    case Undefined = "Undefined"
+}
 
 enum ContextFreeSymbol : String, CaseIterable {
     case arrow = "->"
@@ -69,11 +75,9 @@ enum ContextFreeSymbol : String, CaseIterable {
     case exclamationMark = "!"
     
     case N = "N"
-    case PropN = "PropN"
+    case ProperName = "PropN"
     case PersPro = "PersPro"
-    case SubjP = "SubjP"
-    case ObjP = "ObjP"
-    case IObjP = "IndObjP"
+
     case ReflP = "ReflP"
     case ImpP = "ImpP"
     case RelP = "RelP"
@@ -118,7 +122,7 @@ enum ContextFreeSymbol : String, CaseIterable {
     
     func isSingle()->Bool{
         switch self{
-        case .N, .PropN, .PersPro, .SubjP, .ObjP, .IObjP, .ReflP, .ImpP, .RelP, .IntP, .DemP:return true
+        case .N, .ProperName, .PersPro, .ReflP, .ImpP, .RelP, .IntP, .DemP:return true
         case .V, .AuxV, .PerfV, .ProgV, .PastPV, .GV, .SV: return true
         case .Art, .Det, .Adj, .Num, .Adv, .P, .PrepToA, .C: return true
         default: return false

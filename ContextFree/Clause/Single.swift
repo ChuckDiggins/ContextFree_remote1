@@ -20,7 +20,7 @@ class dSingle  : dCluster
         super.init(word: word, clusterType: clusterType, data: data)
     }
     
-    init(){
+    override init(){
         super.init(word: Word(), clusterType: .UNK)
     }
     
@@ -185,13 +185,13 @@ class dAdjectiveSingle :dSingle
         let an = word as! Adjective
         switch language{
         case .Spanish:
-            let adj = SpanishAdjective(word: an.spanish, def: "", type: sd.adjectiveType)
+            let adj = SpanishAdjective(word: an.spanish, type: sd.adjectiveType)
             return adj.getForm(gender: sd.gender, number: sd.number)
         case .French:
-            let adj = FrenchAdjective(word: an.french, def: "", type: sd.adjectiveType)
+            let adj = FrenchAdjective(word: an.french, type: sd.adjectiveType)
             return adj.getForm(gender: sd.gender, number: sd.number)
         case .English:
-            let adj = EnglishAdjective(word: an.english, def: "", type: sd.adjectiveType)
+            let adj = EnglishAdjective(word: an.english, type: sd.adjectiveType)
             return adj.getForm(gender: .masculine, number: sd.number)
         default: return ""
         }
@@ -218,8 +218,21 @@ class dAdverbSingle : dSingle
         super.init(word: word, clusterType: .Adv, data: data)
     }
     
-    var   m_adverbType = AdverbType.negating
+    var   m_adverbType = AdverbType.manner
     func aetAdverbType (advType: AdverbType){m_adverbType = advType}
+    
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        let word = getClusterWord()
+        switch language{
+        case .Spanish:
+            return word.spanish
+        case .French:
+            return word.french
+        case .English:
+            return word.english
+        default: return ""
+        }
+    }
     
     // void    GetAssociateString(dSentenceWordList*  clusterString);
     
@@ -312,9 +325,11 @@ class dConjunctionSingle :  dSingle{
             return word.french
         case .English:
             return word.english
-        default: return ""
+        default:
+            return ""
         }
     }
+    
 } //dConjunctionSingle
 
 
@@ -354,13 +369,13 @@ class dDeterminerSingle :  dSingle{
         let word = getClusterWord()
         switch language{
         case .Spanish:
-            let det = SpanishDeterminer(word: word.spanish, def: "", type: sd.determinerType)
+            let det = SpanishDeterminer(word: word.spanish, type: sd.determinerType)
             return det.getForm(gender: sd.gender, number: sd.number)
         case .French:
-            let det = FrenchDeterminer(word: word.french, def: "", type: sd.determinerType)
+            let det = FrenchDeterminer(word: word.french, type: sd.determinerType)
             return det.getForm(gender: sd.gender, number: sd.number)
         case .English:
-            let det = EnglishDeterminer(word: word.english, def: "", type: sd.determinerType)
+            let det = EnglishDeterminer(word: word.english, type: sd.determinerType)
             return det.getForm(number: sd.number)
         default: return ""
         }
@@ -448,84 +463,33 @@ class dPersonalPronounSingle : dSingle
         super.init(word: word, clusterType: type, data: data)
     }
     
+    func isSubject()->Bool{
+        if getPronounType() == .SUBJECT {return true}
+        return false
+    }
     
-    var m_person = Person.S1
-    var m_pronounType = PronounType.PERSONAL
-    
-    func getPronounType()->PronounType{return m_pronounType}
-    
-    func    setPronounType(type: PronounType){m_pronounType = type}
+    func setPronounType(pronounType: PronounType){getSentenceData().pronounType = pronounType}
+    func getPronounType()->PronounType{return getSentenceData().pronounType}
+        
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        let word = getClusterWord()
+        let sd = getSentenceData()
+        switch language{
+        case .Spanish:
+            let p = SpanishPronoun(word: word.word, type: sd.pronounType)
+            return p.getForm(gender:sd.gender, person: sd.person)
+        case .French:
+            let p = FrenchPronoun(word: word.word, type: sd.pronounType)
+            return p.getForm(gender:sd.gender, person: sd.person)
+        case .English:
+            let p = EnglishPronoun(word: word.word,type: sd.pronounType)
+            return p.getForm(gender:sd.gender, person: sd.person)
+        default: return ""
+        }
+    }
     
 } //dPersonalPronounSingle
 
-class dSubjectPronounSingle : dSingle
-/*------------------------------------------------------------------
- Purpose: provide a phrase for handling pronoun single.
- ------------------------------------------------------------------*/
-{
-    var type = ContextFreeSymbol.SubjP
-    var m_language : LanguageType
-    
-    init(language: LanguageType){
-        m_language = language
-        super.init(word: Word(), clusterType: type, data: WordStateData())
-    }
-    
-    init(word: Word, data: WordStateData ){
-        m_language = data.language
-        super.init(word: word, clusterType: type, data: data)
-    }
-    
-    
-    var m_person = Person.S1
-    var m_pronounType = PronounType.SUBJECT
-    
-    func getPronounType()->PronounType{return m_pronounType}
-
-    override func getString()->String{
-        switch m_language {
-        case .Spanish: return getSpanishString()
-        case .French: return getFrenchString()
-        default:
-            return "HeSheIt"
-        }
-    }
-        
-    func    getSpanishString()->String{
-        let sd = getSentenceData()
-        let word = getClusterWord()
-        let sp = word as! SpanishPronoun
-        return sp.getSubject(gender:sd.gender, person: sd.person, formal: true)
-    }
-    
-    func    getFrenchString()->String{
-        let sd = getSentenceData()
-        let word = getClusterWord()
-        let sp = word as! FrenchPronoun
-        return sp.getSubject(gender:sd.gender, person: sd.person, formal: true)
-    }
-    
-} //dSubjectPronounSingle
-
-class dImpersonalPronounSingle :  dSingle
-/*------------------------------------------------------------------
- Purpose: provide a phrase for handling pronoun single.
- ------------------------------------------------------------------*/
-{
-    var type = ContextFreeSymbol.ObjP
-    override init(){
-        super.init(word: Word(), clusterType: type, data: WordStateData())
-    }
-    
-    init(word: Word, data: WordStateData ){
-        super.init(word: word, clusterType: type, data: data)
-    }
-    
-    
-    func getPronounType()->PronounType{return PronounType.PERSONAL}
-    
-    var m_person = Person.S1
-} //dImpersonalPronounSingle
 
 class dPunctuationSingle :  dSingle
 /*------------------------------------------------------------------

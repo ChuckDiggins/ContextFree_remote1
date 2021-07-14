@@ -15,23 +15,23 @@ class Adjective : Word {
     
     override init(){
         self.type = AdjectiveType.any
-        super.init(word: "", def: "", wordType: .adjective)
+        super.init(word: "",  wordType: .adjective)
     }
     
-    init(word: String, def: String, type : AdjectiveType){
+    init(word: String, type : AdjectiveType){
         self.type = type
-        super.init(word: word, def: def, wordType: .adjective)
+        super.init(word: word, wordType: .adjective)
     }
 
     init(jsonAdjective: JsonAdjective, language: LanguageType){
         self.type = AdjectiveType.any
         
         switch(language){
-        case .Spanish:  super.init(word: jsonAdjective.spanish, def: jsonAdjective.english, wordType: .noun)
-        case .French:  super.init(word: jsonAdjective.french, def: jsonAdjective.english, wordType: .noun)
-        case .English:  super.init(word: jsonAdjective.english, def: jsonAdjective.english, wordType: .noun)
+        case .Spanish:  super.init(word: jsonAdjective.spanish, wordType: .noun)
+        case .French:  super.init(word: jsonAdjective.french, wordType: .noun)
+        case .English:  super.init(word: jsonAdjective.english, wordType: .noun)
         default:
-            super.init(word: jsonAdjective.spanish, def: jsonAdjective.english, wordType: .adjective)
+            super.init(word: jsonAdjective.spanish, wordType: .adjective)
         }
         self.spanish = jsonAdjective.spanish
         self.french = jsonAdjective.french
@@ -79,9 +79,9 @@ class RomanceAdjective : Adjective {
     var mascPlural : String = ""
     var femPlural : String = ""
     
-    override init(word: String, def: String, type: AdjectiveType)
+    override init(word: String, type: AdjectiveType)
     {
-        super.init(word: word, def: def, type: type)
+        super.init(word: word, type: type)
         super.setPreferredPosition(position: .following)
     }
     
@@ -150,9 +150,9 @@ enum FrenchAdjectiveEndingType : String{
 
 
 class FrenchAdjective : RomanceAdjective {
-    override init(word: String, def: String, type: AdjectiveType)
+    override init(word: String, type: AdjectiveType)
     {
-        super.init(word: word, def: def, type: type)
+        super.init(word: word, type: type)
         self.createFemaleForms()
         self.createSuperlatives()
     }
@@ -291,9 +291,9 @@ class FrenchAdjective : RomanceAdjective {
 
 class FrenchPossessiveAdjective : RomanceAdjective {
     
-    override init(word: String, def: String, type: AdjectiveType)
+    override init(word: String, type: AdjectiveType)
     {
-        super.init(word: "mon", def: "my", type: type)
+        super.init(word: "mon", type: type)
     }
     
     func getForm(person : Person, gender: Gender)->String{
@@ -331,9 +331,9 @@ class FrenchPossessiveAdjective : RomanceAdjective {
 
 class FrenchInterrogativeAdjective : RomanceAdjective {
     
-    override init(word: String, def: String, type: AdjectiveType)
+    override init(word: String, type: AdjectiveType)
     {
-        super.init(word: "quel", def: "what", type: type)
+        super.init(word: "quel", type: type)
         femWord = "quelle"
         mascPlural = "quels"
         femPlural = "quelles"
@@ -343,9 +343,9 @@ class FrenchInterrogativeAdjective : RomanceAdjective {
 
 class FrenchDemonstrativeAdjective : RomanceAdjective {
     
-    override init(word: String, def: String, type: AdjectiveType)
+    override init(word: String, type: AdjectiveType)
     {
-        super.init(word: "ce", def: "what", type: type)
+        super.init(word: "ce", type: type)
         femWord = "cette"
         mascPlural = "ces"
         femPlural = "ces"
@@ -361,9 +361,9 @@ class FrenchDemonstrativeAdjective : RomanceAdjective {
 
 
 class SpanishAdjective : RomanceAdjective {
-    override init(word: String, def: String, type: AdjectiveType )
+    override init(word: String, type: AdjectiveType )
     {
-        super.init(word: word, def: def, type: type)
+        super.init(word: word, type: type)
         self.createOtherForms()
     }
     
@@ -505,8 +505,8 @@ class SpanishAdjective : RomanceAdjective {
 
 class EnglishAdjective : Adjective {
     
-    override init(word: String, def: String, type: AdjectiveType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type: AdjectiveType){
+        super.init(word: word, type: type)
     }
     
     override init(jsonAdjective: JsonAdjective, language: LanguageType){

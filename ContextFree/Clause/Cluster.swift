@@ -9,6 +9,13 @@ import Foundation
 
 class dCluster {
     var m_clusterType : ContextFreeSymbol
+    var m_clusterFunction = ContextFreeFunction.Undefined
+    
+    init(){
+        m_clusterWord = Word()
+        m_clusterType = ContextFreeSymbol.UNK
+    }
+    
     init(word : Word, clusterType: ContextFreeSymbol){
         m_clusterWord = word
         m_clusterType = clusterType
@@ -51,7 +58,18 @@ class dCluster {
         return m_sentenceData.getProcessedWord(language: language)
     }
     
+    func setClusterFunction(fn: ContextFreeFunction){
+        m_clusterFunction = fn
+    }
 
+    func hasClusterFunction(fn: ContextFreeFunction)->Bool{
+        if fn == m_clusterFunction {return true}
+        return false
+    }
+    func getClusterFunction()->ContextFreeFunction{
+        return m_clusterFunction
+    }
+    
     func setClusterType(type: ContextFreeSymbol){m_clusterType = type}
     func getClusterType()->ContextFreeSymbol{return m_clusterType}
     

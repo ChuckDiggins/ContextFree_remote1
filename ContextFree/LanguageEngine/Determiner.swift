@@ -12,23 +12,23 @@ class Determiner : Word {
     
     override init(){
         self.type = .definite
-        super.init(word: "", def: "", wordType: .determiner) 
+        super.init(word: "", wordType: .determiner)
     }
     
-    init(word: String, def: String, type : DeterminerType){
+    init(word: String, type : DeterminerType){
         self.type = type
-        super.init(word: word, def: def, wordType: .determiner)
+        super.init(word: word, wordType: .determiner)
     }
     
     init(json: JsonDeterminer, language: LanguageType){
         self.type = DeterminerType.indefinite
         
         switch(language){
-        case .Spanish:  super.init(word: json.spanish, def: json.english, wordType: .noun)
-        case .French:  super.init(word: json.french, def: json.english, wordType: .noun)
-        case .English:  super.init(word: json.english, def: json.english, wordType: .noun)
+        case .Spanish:  super.init(word: json.spanish, wordType: .noun)
+        case .French:  super.init(word: json.french, wordType: .noun)
+        case .English:  super.init(word: json.english, wordType: .noun)
         default:
-            super.init(word: json.spanish, def: json.english, wordType: .adjective)
+            super.init(word: json.spanish, wordType: .adjective)
         }
         self.spanish = json.spanish
         self.french = json.french
@@ -53,11 +53,11 @@ class EnglishDeterminer : Determiner {
     }
     
     override init(){
-        super.init(word: "", def: "", type : .definite)
+        super.init(word: "", type : .definite)
     }
     
-    override init(word: String, def: String, type: DeterminerType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type: DeterminerType){
+        super.init(word: word, type: type)
     }
     
     //this
@@ -65,7 +65,7 @@ class EnglishDeterminer : Determiner {
     
     init(word:String, def: String, type : DeterminerType, plural: String){
         self.plural = plural
-        super.init(word: word, def: def, type : type)
+        super.init(word: word, type : type)
     }
     
     func getForm(number: Number)->String{
@@ -96,18 +96,18 @@ class RomanceDeterminer : Determiner {
     var femPlural = ""    //esas
     
     override init(){
-        super.init(word: "", def: "", type : .definite)
+        super.init(word: "", type : .definite)
     }
     
-    override init(word:String, def:String, type : DeterminerType){
-        super.init(word: word, def: def, type : type)
+    override init(word:String, type : DeterminerType){
+        super.init(word: word, type : type)
     }
     
-    init(word:String, def:String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String ){
+    init(word:String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String ){
         self.femWord = femWord
         self.mascPlural = mascPlural
         self.femPlural = femPlural
-        super.init(word: word, def: def, type : type)
+        super.init(word: word, type : type)
     }
     
     override init(json: JsonDeterminer, language: LanguageType){
@@ -149,8 +149,8 @@ class SpanishDeterminer : RomanceDeterminer {
         super.init()
     }
     
-    override init(word: String, def: String, type: DeterminerType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type: DeterminerType){
+        super.init(word: word, type: type)
     }
     
     init(json: JsonDeterminer){
@@ -334,8 +334,8 @@ class FrenchDeterminer : RomanceDeterminer {
         super.init(json: json, language: .French)
     }
     
-    override init(word: String, def: String, type: DeterminerType){
-        super.init(word: word, def: def, type: type)
+    override init(word: String, type: DeterminerType){
+        super.init(word: word, type: type)
     }
     
     override init(){

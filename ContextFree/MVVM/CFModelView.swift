@@ -24,6 +24,19 @@ class CFModelView: ObservableObject {
         return (cfModel?.getVerbModel(language: language))!
     }
     
+    func getWordStringParser()->WordStringParser{
+        return (cfModel?.getWordStringParser())!
+    }
+    
+    func getRandomAgnosticSentence(rft: RandomPhraseType)->dIndependentAgnosticClause{
+        return (cfModel?.getRandomAgnosticSentence(rft: rft))!
+    }
+
+    func getRandomAgnosticPronounPhrase(rft: RandomPhraseType)->dIndependentAgnosticClause{
+        return (cfModel?.getRandomAgnosticSentence(rft: rft))!
+    }
+
+ 
     func getRandomSentenceObject()->RandomSentence{
         return (cfModel?.getRandomSentenceObject())!
     }
@@ -44,8 +57,8 @@ class CFModelView: ObservableObject {
         return cfModel!.appendJsonVerb(jsonVerb: jsonVerb)
     }
  
-    func append(spanishVerb : RomanceVerb, frenchVerb: RomanceVerb )->Int{
-        return cfModel!.append(spanishVerb: spanishVerb, frenchVerb : frenchVerb)
+    func append(spanishVerb : RomanceVerb, frenchVerb: RomanceVerb ){
+       cfModel!.append(spanishVerb: spanishVerb, frenchVerb : frenchVerb)
     }
 
 
@@ -54,10 +67,11 @@ class CFModelView: ObservableObject {
         return cfModel!.m_currentLanguage
     }
     
+    /*
     func getRandomSentence()->dIndependentClause{
         return cfModel!.getRandomSentence()
     }
-    
+    */
     func getRandomAgnosticSentence()->dIndependentAgnosticClause{
         return cfModel!.getRandomAgnosticSentence()
     }
@@ -82,12 +96,22 @@ class CFModelView: ObservableObject {
         return cfModel!.getVerbCount()
     }
     
+    /*
     func getRandomSubjPronounSentence()->dIndependentClause{
         return cfModel!.getRandomSubjPronounSentence()
     }
+    */
     
     func getRandomTense()->Tense{
         return cfModel!.getRandomTense()
+    }
+    
+    func getNextTense()->Tense{
+        return cfModel!.getNextTense()
+    }
+    
+    func getPreviousTense()->Tense{
+        return cfModel!.getPreviousTense()
     }
     
     func getGrammarLibrary()->CFGrammarLibrary{

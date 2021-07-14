@@ -503,7 +503,7 @@ struct AddVerbToDictionary: View {
     }
     
     func addVerbsToDictionary(){
-        verbCount = cfModelView.append(spanishVerb : spanishVerb, frenchVerb : frenchVerb )
+        cfModelView.append(spanishVerb : spanishVerb, frenchVerb : frenchVerb )
     }
     
     func saveCompositeWord(){

@@ -50,45 +50,51 @@ class JsonNoun: Codable, CustomStringConvertible {
 }
 
 var myMultiLingualWordList: [JsonNoun] = [
-    JsonNoun(spanish: "oreja", english: "ear",    french: "oreille", spanishGender : "F", frenchGender : "F", englishPlural: "ears", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "mano", english: "hand",    french: "main", spanishGender : "M", frenchGender : "M", englishPlural: "ears", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "pie", english: "foot",    french: "pied", spanishGender : "M", frenchGender : "M", englishPlural: "feet", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "cara", english: "face",    french: "visage", spanishGender : "F", frenchGender : "F", englishPlural: "visages", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "familia", english: "family",    french: "famille", spanishGender : "M", frenchGender : "F", englishPlural: "families", nounType : "Any", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "tio", english: "uncle",    french: "uncle", spanishGender : "M", frenchGender : "M", englishPlural: "uncles", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "amigo", english: "friend",    french: "ami", spanishGender : "M", frenchGender : "M", englishPlural: "friends", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "auto", english: "car",    french: "voiture", spanishGender : "M", frenchGender : "M", englishPlural: "cars", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "autobús", english: "bus",    french: "bus", spanishGender : "M", frenchGender : "M", englishPlural: "buses", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "bebé", english: "baby",    french: "bebe", spanishGender : "M", frenchGender : "M", englishPlural: "babies", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "bicicleta", english: "bike",    french: "bicyclette", spanishGender : "F", frenchGender : "F", englishPlural: "bicycles", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "camisa", english: "shirt",    french: "chemise", spanishGender : "F", frenchGender : "M", englishPlural: "shirts", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "cara", english: "face",    french: "visage", spanishGender : "F", frenchGender : "F", englishPlural: "faces", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "carta", english: "letter",    french: "lettre", spanishGender : "F", frenchGender : "F", englishPlural: "letters", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "casa", english: "house",    french: "maison", spanishGender : "F", frenchGender : "F", englishPlural: "houses", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "comida", english: "meal",    french: "repas", spanishGender : "F", frenchGender : "M", englishPlural: "meals", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "cuenta", english: "story",    french: "compte", spanishGender : "F", frenchGender : "F", englishPlural: "stories", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "dinero", english: "money ",    french: "argent", spanishGender : "M", frenchGender : "M", englishPlural: "money", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "enfermedad", english: "illness",    french: "maladie", spanishGender : "F", frenchGender : "M", englishPlural: "illnesses", nounType : "T", verbLikes: "", adjLikes: ""),
     JsonNoun(spanish: "esposo", english: "husband",    french: "mari", spanishGender : "M", frenchGender : "M", englishPlural: "husbands", nounType : "P", verbLikes: "", adjLikes: ""),
     JsonNoun(spanish: "esposa", english: "wife",    french: "femme", spanishGender : "F", frenchGender : "F", englishPlural: "wives", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "familia", english: "family",    french: "famille", spanishGender : "F", frenchGender : "F", englishPlural: "families", nounType : "Any", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "foto", english: "photo",    french: "photo", spanishGender : "F", frenchGender : "F", englishPlural: "photos", nounType : "T", verbLikes: "", adjLikes: ""),
     JsonNoun(spanish: "hija", english: "daughter",    french: "fille", spanishGender : "F", frenchGender : "F", englishPlural: "daughters", nounType : "P", verbLikes: "", adjLikes: ""),
-    
-    JsonNoun(spanish: "bebé", english: "baby",    french: "bebe", spanishGender : "M", frenchGender : "M", englishPlural: "babies", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "niño", english: "child",    french: "enfant", spanishGender : "M", frenchGender : "M", englishPlural: "infants", nounType : "P", verbLikes: "", adjLikes: ""),
     JsonNoun(spanish: "hijo", english: "son",    french: "fils", spanishGender : "M", frenchGender : "M", englishPlural: "sons", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "niño", english: "boy",    french: "garçon", spanishGender : "M", frenchGender : "M", englishPlural: "boys", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "niña", english: "girl",    french: "fille", spanishGender : "F", frenchGender : "F", englishPlural: "girls", nounType : "P", verbLikes: "", adjLikes: ""),
     JsonNoun(spanish: "hombre", english: "man",    french: "homme", spanishGender : "M", frenchGender : "M", englishPlural: "men", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "mujer", english: "woman",    french: "femme", spanishGender : "F", frenchGender : "F", englishPlural: "women", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "amigo", english: "friend",    french: "ami", spanishGender : "M", frenchGender : "M", englishPlural: "friends", nounType : "P", verbLikes: "", adjLikes: ""),
-    
     JsonNoun(spanish: "jefe", english: "boss",    french: "chef", spanishGender : "M", frenchGender : "M",  englishPlural: "bosses", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "vecina", english: "neighbor",    french: "voisine", spanishGender : "F", frenchGender : "M", englishPlural: "neighbors", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "vestido", english: "dress",    french: "robe", spanishGender : "M", frenchGender : "M", englishPlural: "dresses", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "camisa", english: "shirt",    french: "chemise", spanishGender : "F", frenchGender : "M", englishPlural: "shirts", nounType : "T", verbLikes: "", adjLikes: ""),
-    
     JsonNoun(spanish: "libro", english: "book ",    french: "livre", spanishGender : "M", frenchGender : "M", englishPlural: "books", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "bicicleta", english: "bike",    french: "bicyclette", spanishGender : "F", frenchGender : "F", englishPlural: "bikes", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "tren", english: "train",    french: "train", spanishGender : "M", frenchGender : "M", englishPlural: "trains", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "autobús", english: "bus",    french: "bus", spanishGender : "M", frenchGender : "M", englishPlural: "buses", nounType : "T", verbLikes: "", adjLikes: ""),
-    
-    JsonNoun(spanish: "dinero", english: "money ",    french: "argent", spanishGender : "M", frenchGender : "M", englishPlural: "ears", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "bicicleta", english: "bike",    french: "bicyclette", spanishGender : "F", frenchGender : "F", englishPlural: "ears", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "mesa", english: "table",    french: "table", spanishGender : "F", frenchGender : "F", englishPlural: "tables", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "auto", english: "car",    french: "voiture", spanishGender : "M", frenchGender : "M", englishPlural: "cars", nounType : "T", verbLikes: "", adjLikes: ""),
-    
-    JsonNoun(spanish: "zapato", english: "shoe",    french: "chaussure", spanishGender : "M", frenchGender : "M", englishPlural: "shoes", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "sombrero", english: "hat",    french: "chapeau", spanishGender : "M", frenchGender : "M", englishPlural: "hats", nounType : "T", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "pelo", english: "hair",    french: "cheveux", spanishGender : "M", frenchGender : "M", englishPlural: "hair", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "mano", english: "hand",    french: "main", spanishGender : "M", frenchGender : "M", englishPlural: "hands", nounType : "T", verbLikes: "", adjLikes: ""),
     JsonNoun(spanish: "médico", english: "doctor",    french: "médecin", spanishGender : "M", frenchGender : "M", englishPlural: "doctors", nounType : "P", verbLikes: "", adjLikes: ""),
-    JsonNoun(spanish: "enfermedad", english: "illness",    french: "maladie", spanishGender : "F", frenchGender : "M", englishPlural: "illnesses", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "mesa", english: "table",    french: "table", spanishGender : "F", frenchGender : "F", englishPlural: "tables", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "mujer", english: "woman",    french: "femme", spanishGender : "F", frenchGender : "F", englishPlural: "women", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pregunta", english: "question",    french: "question", spanishGender : "F", frenchGender : "F", englishPlural: "questions", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "niño", english: "boy",    french: "garçon", spanishGender : "M", frenchGender : "M", englishPlural: "boys", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "niño", english: "child",    french: "enfant", spanishGender : "M", frenchGender : "M", englishPlural: "infants", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "niña", english: "girl",    french: "fille", spanishGender : "F", frenchGender : "F", englishPlural: "girls", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "oreja", english: "ear",    french: "oreille", spanishGender : "F", frenchGender : "F", englishPlural: "ears", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pelo", english: "hair",    french: "cheveux", spanishGender : "M", frenchGender : "M", englishPlural: "hair", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pie", english: "foot",    french: "pied", spanishGender : "M", frenchGender : "M", englishPlural: "feet", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "regalo", english: "present",    french: "cadeau", spanishGender : "M", frenchGender : "F", englishPlural: "visages", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "sombrero", english: "hat",    french: "chapeau", spanishGender : "M", frenchGender : "M", englishPlural: "hats", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "tio", english: "uncle",    french: "uncle", spanishGender : "M", frenchGender : "M", englishPlural: "uncles", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "tren", english: "train",    french: "train", spanishGender : "M", frenchGender : "M", englishPlural: "trains", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "vecina", english: "neighbor",    french: "voisine", spanishGender : "F", frenchGender : "M", englishPlural: "neighbors", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "verdad", english: "truth",    french: "vérité", spanishGender : "F", frenchGender : "F", englishPlural: "truths", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "vestido", english: "dress",    french: "robe", spanishGender : "M", frenchGender : "F", englishPlural: "dresses", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "zapato", english: "shoe",    french: "chaussure", spanishGender : "M", frenchGender : "F", englishPlural: "shoes", nounType : "T", verbLikes: "", adjLikes: ""),
+    
+    
+    
+    
     ]
 
 //create json from

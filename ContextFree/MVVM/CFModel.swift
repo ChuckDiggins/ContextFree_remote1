@@ -12,6 +12,9 @@ import Foundation
 struct CFModel{
     
     var grammarLibrary = CFGrammarLibrary()
+    var frenchGrammarLibrary = GnosticGrammarLibrary(language: .French)
+    var spanishGrammarLibrary = GnosticGrammarLibrary(language: .Spanish)
+    var englishGrammarLibrary = GnosticGrammarLibrary(language: .English)
     
     //var m_currentLanguage = LanguageType.French
     var m_currentLanguage : LanguageType
@@ -40,8 +43,11 @@ struct CFModel{
     var jsonVerbManager = JsonVerbManager()
     var jsonNounManager = JsonNounManager()
     var jsonAdjectiveManager = JsonAdjectiveManager()
+    var jsonAdverbManager = JsonAdverbManager()
+    var jsonConjunctionManager = JsonConjunctionManager()
     var jsonDeterminerManager = JsonDeterminerManager()
     var jsonPrepositionManager = JsonPrepositionManager()
+    var jsonPronounManager = JsonPronounManager()
     
     var m_currentVerbIndex = 0
     var m_currentTenseIndex = 0
@@ -72,6 +78,10 @@ struct CFModel{
         
     }
 
+    func getWordStringParser()->WordStringParser{
+        return m_wsp
+    }
+    
     mutating func getVerbModel(language: LanguageType)->VerbModelConjugation{
         switch language{
         case .Spanish: return m_spanishVerbModelConjugation
@@ -107,7 +117,10 @@ struct CFModel{
             jsonVerbManager.encodeInternalVerbs(total: 2000)
             jsonAdjectiveManager.encodeInternalWords(total: 2000)
             jsonPrepositionManager.encodeInternalWords(total: 2000)
+            jsonAdverbManager.encodeInternalWords(total: 2000)
+            jsonConjunctionManager.encodeInternalWords(total: 2000)
             jsonDeterminerManager.encodeInternalWords(total: 2000)
+            jsonPronounManager.encodeInternalWords(total: 2000)
         }
         jsonVerbManager.decodeVerbs()
         createDictionaryFromJsonWords(wordType: .verb)
@@ -119,6 +132,12 @@ struct CFModel{
         createDictionaryFromJsonWords(wordType: .preposition)
         jsonDeterminerManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .determiner)
+        jsonDeterminerManager.decodeWords()
+        createDictionaryFromJsonWords(wordType: .adverb)
+        jsonDeterminerManager.decodeWords()
+        createDictionaryFromJsonWords(wordType: .conjunction)
+        jsonPronounManager.decodeWords()
+        createDictionaryFromJsonWords(wordType: .pronoun)
     }
     
     func getRandomSentenceObject()->RandomSentence{
@@ -129,13 +148,7 @@ struct CFModel{
         m_randomSentence = RandomSentence(wsp: m_wsp, rft: .subjectPronounVerb)
         return m_randomSentence.createAgnosticSubjectPronounVerbClause()
     }
-    
-    
-    mutating func getRandomSubjPronounSentence()->dIndependentClause{
-        m_randomSentence = RandomSentence(wsp: m_wsp, rft: .subjectPronounVerb)
-        return m_randomSentence.createRandomSentenceNew()
-    }
-    
+
     mutating func getRandomAgnosticSentence()->dIndependentAgnosticClause{
         //var randomSentence = RandomSentence(wsp: m_wsp, rft: .twoArticles)
         //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simplePrepositionPhrase)
@@ -149,56 +162,57 @@ struct CFModel{
         else {
             //m_randomSentence.setRandomPhraseType(rft: .simpleClause)
             //m_randomSentence.setRandomPhraseType(rft: .simpleNounPhrase)
-            return m_randomSentence.createRandomAgnosticPhrase(phraseType: .simpleClause)
+            //return m_randomSentence.createRandomAgnosticPhrase(phraseType: .simpleVerbAdverbPhrase)
+            return m_randomSentence.createRandomAgnosticPhrase(phraseType: .subjectPronounVerb)
         }
     }
-
-
-    mutating func getRandomSentence()->dIndependentClause{
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .twoArticles)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simplePrepositionPhrase)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleVerbPhrase)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .complexNounPhrase)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleNounPhrase)
-        if m_currentLanguage == .English {
-            m_randomSentence.setRandomPhraseType(rft: .simpleEnglishClause)
-            return m_randomSentence.createRandomSentenceNew()
-        }
-        else {
-            m_randomSentence.setRandomPhraseType(rft: .simpleClause)
-            //m_randomSentence.setRandomPhraseType(rft: .simpleClause)
-            return m_randomSentence.createRandomSentenceNew()
-        }
-    }
-
-   
     
+    mutating func getRandomAgnosticSentence(rft: RandomPhraseType)->dIndependentAgnosticClause{
+        return m_randomSentence.createRandomAgnosticPhrase(phraseType: rft)
+    }
+
     mutating func createDictionaryFromJsonWords(wordType: WordType){
+        
         switch wordType{
-        case .verb:
-            for i in 0 ..< jsonVerbManager.getVerbCount() {
-                let jsonWord = jsonVerbManager.getVerbAt(index: i)
-                createAndAppendVerbFromJsonVerb(jv: jsonWord)
+        case .adjective:
+            for i in 0 ..< jsonAdjectiveManager.getWordCount() {
+                let jsonWord = jsonAdjectiveManager.getWordAt(index: i)
+                createAndAppendAdjectiveFromJsonAdjective(jn: jsonWord)
+            }
+        case .adverb:
+            for i in 0 ..< jsonAdverbManager.getWordCount() {
+                let jsonWord = jsonAdverbManager.getWordAt(index: i)
+                createAndAppendAdverbFromJsonAdverb(jn: jsonWord)
+            }
+        case .conjunction:
+            for i in 0 ..< jsonConjunctionManager.getWordCount() {
+                let jsonWord = jsonConjunctionManager.getWordAt(index: i)
+                createAndAppendConjunctionFromJsonConjunction(jn: jsonWord)
+            }
+        case .determiner:
+            for i in 0 ..< jsonDeterminerManager.getWordCount() {
+                let jsonWord = jsonDeterminerManager.getWordAt(index: i)
+                createAndAppendDeterminerFromJsonDeterminer(jn: jsonWord)
             }
         case .noun:
             for i in 0 ..< jsonNounManager.getWordCount() {
                 let jsonWord = jsonNounManager.getWordAt(index: i)
                 createAndAppendNounFromJsonNoun(jn: jsonWord)
             }
-        case .adjective:
-            for i in 0 ..< jsonAdjectiveManager.getWordCount() {
-                let jsonWord = jsonAdjectiveManager.getWordAt(index: i)
-                createAndAppendAdjectiveFromJsonAdjective(jn: jsonWord)
-            }
         case .preposition:
             for i in 0 ..< jsonPrepositionManager.getWordCount() {
                 let jsonWord = jsonPrepositionManager.getWordAt(index: i)
                 createAndAppendPrepositionFromJsonPreposition(jn: jsonWord)
             }
-        case .determiner:
-            for i in 0 ..< jsonDeterminerManager.getWordCount() {
-                let jsonWord = jsonDeterminerManager.getWordAt(index: i)
-                createAndAppendDeterminerFromJsonDeterminer(jn: jsonWord)
+        case .pronoun:
+            for i in 0 ..< jsonPronounManager.getWordCount() {
+                let jsonWord = jsonPronounManager.getWordAt(index: i)
+                createAndAppendPronounFromJsonPronoun(jn: jsonWord)
+            }
+        case .verb:
+            for i in 0 ..< jsonVerbManager.getVerbCount() {
+                let jsonWord = jsonVerbManager.getVerbAt(index: i)
+                createAndAppendVerbFromJsonVerb(jv: jsonWord)
             }
         default:
             break
@@ -206,84 +220,66 @@ struct CFModel{
     }
 
     mutating func createAndAppendNounFromJsonNoun(jn: JsonNoun){
-        var nounListCount = 0
-        
-        switch m_currentLanguage {
-        case .Spanish:
-            let noun = SpanishNoun(jsonNoun: jn)
-            nounListCount = m_wsp.addNounToDictionary(noun: noun)
-        case .French:
-            let noun = FrenchNoun(jsonNoun: jn)
-            nounListCount = m_wsp.addNounToDictionary(noun: noun)
-        case .English:
-            let noun = EnglishNoun(jsonNoun: jn)
-            nounListCount = m_wsp.addNounToDictionary(noun: noun)
-        case .Agnostic:
-            let noun = Noun(jsonNoun: jn, language: .Agnostic)
-            nounListCount = m_wsp.addNounToDictionary(noun: noun)
-        default:
-            break
-        }
+        let noun = Noun(jsonNoun: jn, language: .Agnostic)
+        m_wsp.addNounToDictionary(noun: noun)
     }
     
     mutating func createAndAppendAdjectiveFromJsonAdjective(jn: JsonAdjective){
-        var adjListCount = 0
-        
-        switch m_currentLanguage {
-        case .Spanish:
-            let adj = SpanishAdjective(jsonAdjective: jn)
-            adjListCount = m_wsp.addAdjectiveToDictionary(adj: adj)
-        case .French:
-            let adj = FrenchAdjective(jsonAdjective: jn)
-            adjListCount = m_wsp.addAdjectiveToDictionary(adj: adj)
-        case .English:
-            let adj = EnglishAdjective(jsonAdjective: jn, language: .English)
-            adjListCount = m_wsp.addAdjectiveToDictionary(adj: adj)
-        case .Agnostic:
             let adj = Adjective(jsonAdjective: jn, language: .Agnostic)
-            adjListCount = m_wsp.addAdjectiveToDictionary(adj: adj)
-        default:
-            break
-        }
+            m_wsp.addAdjectiveToDictionary(adj: adj)
+    }
+    
+    mutating func createAndAppendAdverbFromJsonAdverb(jn: JsonAdverb){
+            let adv = Adverb(json: jn, language: .Agnostic)
+            m_wsp.addAdverbToDictionary(wd: adv)
     }
     
     mutating func createAndAppendPrepositionFromJsonPreposition(jn: JsonPreposition){
-        var listCount = 0
-        
         switch m_currentLanguage {
         case .Spanish:
             let p = SpanishPreposition(json: jn)
-            listCount = m_wsp.addPrepositionToDictionary(wd: p)
+            m_wsp.addPrepositionToDictionary(wd: p)
         case .French:
             let p = FrenchPreposition(json: jn)
-            listCount = m_wsp.addPrepositionToDictionary(wd: p)
+            m_wsp.addPrepositionToDictionary(wd: p)
         case .English:
             let p = EnglishPreposition(json: jn, language: .English)
-            listCount = m_wsp.addPrepositionToDictionary(wd: p)
+            m_wsp.addPrepositionToDictionary(wd: p)
         case .Agnostic:
             let p = Preposition(json: jn, language: .Agnostic)
-            listCount = m_wsp.addPrepositionToDictionary(wd: p)
+            m_wsp.addPrepositionToDictionary(wd: p)
         default:
             break
         }
     }
    
+    mutating func createAndAppendPronounFromJsonPronoun(jn: JsonPronoun){
+        let p = Pronoun(json: jn, language: .Agnostic)
+        m_wsp.addPronounToDictionary(wd: p)
+
+    }
+    
+    mutating func createAndAppendConjunctionFromJsonConjunction(jn: JsonConjunction){
+        let wd = Conjunction(json: jn, language: .Agnostic)
+        m_wsp.addConjuctionToDictionary(wd: wd)
+
+    }
+    
     mutating func createAndAppendDeterminerFromJsonDeterminer(jn: JsonDeterminer){
-        var listCount = 0
         
         switch m_currentLanguage {
         case .Spanish:
             let p = SpanishDeterminer(json: jn)
-            listCount = m_wsp.addDeterminerToDictionary(wd: p)
+            m_wsp.addDeterminerToDictionary(wd: p)
         case .French:
             let p = FrenchDeterminer(json: jn)
-            listCount = m_wsp.addDeterminerToDictionary(wd: p)
+            m_wsp.addDeterminerToDictionary(wd: p)
         case .English:
             let p = EnglishDeterminer(json: jn, language: .English)
-            listCount = m_wsp.addDeterminerToDictionary(wd: p)
+            m_wsp.addDeterminerToDictionary(wd: p)
         case .Agnostic:
             let p = Determiner(json: jn, language: .Agnostic)
-            listCount = m_wsp.addDeterminerToDictionary(wd: p)
+            m_wsp.addDeterminerToDictionary(wd: p)
         default:
             
             break
@@ -294,15 +290,13 @@ struct CFModel{
         appendJsonNoun(jsonNoun: noun.createJsonNoun())
     }
 
-    mutating func appendJsonNoun(jsonNoun: JsonNoun)->Int{
+    mutating func appendJsonNoun(jsonNoun: JsonNoun){
         jsonNounManager.appendWord(verb: jsonNoun)
         createAndAppendNounFromJsonNoun(jn: jsonNoun)
-        //jsonNounManager.printWords()
-        return jsonNounManager.getWordCount()
     }
     
-    mutating func createJsonVerb(verb: Verb){
-        appendJsonVerb(jsonVerb: verb.createJsonVerb())
+    mutating func createJsonVerb(verb: Verb)->Int{
+        return appendJsonVerb(jsonVerb: verb.createJsonVerb())
     }
 
     mutating func appendJsonVerb(jsonVerb: JsonVerb)->Int{
@@ -323,7 +317,7 @@ struct CFModel{
         var verbListCount = 0
         
         //creates a BVerb from the jsonVerb.word
-        
+        /*
         var bVerbString = ""
         switch m_currentLanguage {
         case .Spanish:
@@ -334,6 +328,7 @@ struct CFModel{
             bVerbString = jv.english
         default: break
         }
+        */
         
         let spanishVerbStuff = analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: jv.spanish)
         let frenchVerbStuff = analyzeAndCreateBVerb_SPIFE(language: .French, verbPhrase: jv.french)
@@ -343,18 +338,18 @@ struct CFModel{
             case .Spanish:
                 let verb = SpanishVerb(jsonVerb: jv)
                 verb.setBVerb(bVerb: spanishVerbStuff.verb)
-                verbListCount = m_wsp.addVerbToDictionary(verb: verb)
+                m_wsp.addVerbToDictionary(verb: verb)
             case .French:
                 let verb = FrenchVerb(jsonVerb: jv)
                 verb.setBVerb(bVerb: frenchVerbStuff.verb)
-                verbListCount = m_wsp.addVerbToDictionary(verb: verb)
+                m_wsp.addVerbToDictionary(verb: verb)
             case .English:
                 let verb = EnglishVerb(jsonVerb: jv)
                 verb.setBVerb(bVerb: englishVerbStuff.verb)
-                verbListCount = m_wsp.addVerbToDictionary(verb: verb)
+                m_wsp.addVerbToDictionary(verb: verb)
             case .Agnostic:
                 let verb = Verb(jsonVerb: jv, language: .Agnostic)
-                verbListCount = m_wsp.addVerbToDictionary(verb: verb)
+               m_wsp.addVerbToDictionary(verb: verb)
             default:
                 break
             }
@@ -363,37 +358,40 @@ struct CFModel{
     
     
    
-    mutating func append(spanishVerb: RomanceVerb, frenchVerb: RomanceVerb)->Int{
-        var verbListCount = 0
+    mutating func append(spanishVerb: RomanceVerb, frenchVerb: RomanceVerb){
         switch m_currentLanguage {
         case .Spanish:
-            if m_wsp.isNewVerb(verb: spanishVerb) { verbListCount = m_wsp.addVerbToDictionary(verb: spanishVerb)}
+            if m_wsp.isNewVerb(verb: spanishVerb) { m_wsp.addVerbToDictionary(verb: spanishVerb)}
         case .French:
-            if m_wsp.isNewVerb(verb: frenchVerb) { verbListCount = m_wsp.addVerbToDictionary(verb: frenchVerb)}
+            if m_wsp.isNewVerb(verb: frenchVerb) {m_wsp.addVerbToDictionary(verb: frenchVerb)}
         default:
             break
         }
-        return verbListCount
     }
 
     mutating func  analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
         var verb = BVerb()
-        var util = VerbUtilities()
-        let verbStuff = util.analyzeWordPhrase(testString: verbPhrase)
-        var reconstructedVerbPhrase = util.reconstructVerbPhrase(verbWord: verbStuff.verbWord, residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
+        let util = VerbUtilities()
         
         switch language {
         case .Spanish:
+            let verbStuff = util.analyzeWordPhrase(testString: verbPhrase)
+            //var reconstructedVerbPhrase = util.reconstructVerbPhrase(verbWord: verbStuff.verbWord, residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
+            if verbStuff.verbEnding == .none {return (false, BVerb())}
             verb = createSpanishBVerb(verbWord:verbStuff.verbWord, verbEnding: verbStuff.verbEnding,
                                       residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
             return (true, verb)
         case .French:
+            let verbStuff = util.analyzeWordPhrase(testString: verbPhrase)
+            //var reconstructedVerbPhrase = util.reconstructVerbPhrase(verbWord: verbStuff.verbWord, residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
+            if verbStuff.verbEnding == .none {return (false, BVerb())}
             verb = createFrenchBVerb(verbWord:verbStuff.verbWord, verbEnding: verbStuff.verbEnding,
                                      residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
             return (true, verb)
         case .English:
+            let verbStuff = util.analyzeEnglishWordPhrase(testString: verbPhrase)
             var verb = BVerb()
-            verb = createEnglishBVerb(verbWord:verbPhrase)
+            verb = createEnglishBVerb(verbWord:verbStuff.verbWord)
             return (true, verb)
         default:
             return (false, BVerb())
@@ -416,6 +414,23 @@ struct CFModel{
     func getRandomTense()->Tense{
         return tenseManager.getRandomTense()
     }
+    
+    mutating func getNextTense()->Tense {
+        m_currentTenseIndex += 1
+        if ( m_currentTenseIndex >= m_tenseList.count ){
+            m_currentTenseIndex = 0
+        }
+        return m_tenseList[m_currentTenseIndex]
+    }
+    
+    mutating func getPreviousTense()->Tense {
+        m_currentTenseIndex -= 1
+        if ( m_currentTenseIndex <= 0 ){
+            m_currentTenseIndex = m_tenseList.count-1
+        }
+        return m_tenseList[m_currentTenseIndex]
+    }
+    
     
     func getModifierList(wordType: WordType)->Array<Word>{
         switch m_currentLanguage {
@@ -498,7 +513,7 @@ struct CFModel{
         
         let stringList = VerbUtilities().getListOfWordsIncludingPunctuation(characterArray: clauseString)
         for wordString in stringList {
-            let word = Word(word: wordString, def: "", wordType : .unknown)
+            let word = Word(word: wordString, wordType : .unknown)
             wordList.append(word)
         }
         
@@ -649,7 +664,7 @@ struct CFModel{
     mutating func createEnglishBVerb(verbWord: String) -> BEnglishVerb {
         //reconstruct the clean-up verb phrase here
         
-        var constructedVerbPhrase = verbWord
+        let constructedVerbPhrase = verbWord
         
         let brv = BEnglishVerb(verbPhrase : constructedVerbPhrase, verbWord: verbWord)
         

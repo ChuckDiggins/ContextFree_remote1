@@ -1,4 +1,13 @@
 //
+//  RandomWordsForPersonalPronounGames.swift
+//  ContextFree
+//
+//  Created by Charles Diggins on 7/2/21.
+//
+
+import Foundation
+
+//
 //  RandomWords.swift
 //  ContextFree
 //
@@ -7,13 +16,13 @@
 
 import Foundation
 
-struct RandomWordLists{
+struct RandomWordListsForPersonalPronounGames{
     var m_wsp : WordStringParser?
-    var m_language = LanguageType.Spanish
     var m_subjects = Array<Word>()
     var m_verbs = Array<Word>()
     var m_nouns = Array<Word>()
-    var m_objects = Array<Word>()
+    var m_directObjectNouns = Array<Word>()
+    var m_indirectObjectNouns = Array<Word>()
     
     var m_adverbs = Array<Word>()
     var m_conjunctions = Array<Word>()
@@ -24,18 +33,40 @@ struct RandomWordLists{
     
     var sentenceData = Array<SentenceData>()
     
+    //these should work for all languages
+    let bestVerbs = ["comprar",
+                     "contar",
+                     "dar",
+                     "decir",
+                     "escribir",
+                     "mandar",
+                     "mostrar",
+                     "pedir",
+                     "quitar",
+                     "robar",
+                     "servir",
+                     "traer"]
+    let bestPrepositions = ["a", "para" ]
+    let bestDirectObjects = ["libro", "cuenta", "casa", "verdad", "carta", "foto", "pregunta", "comida", "regalo", "sombrero"]
+    let bestIndirectObjects = ["me", "te", "niño", "niña", "fat", "les"]  //personal stuff
+    
+    //use proper nouns - "Bob", "Lisa", etc.
+    
+    
     init(wsp: WordStringParser){
         m_wsp = wsp
-        m_language = wsp.getLanguage()
-        createListOfAgnosticSubjects()
-        createListOfAgnosticVerbs()
-        createListOfAgnosticObjects()
+        createListOfPersonalPronouns() //personal nouns
+        createListOfBestVerbs()  //comprar, mostrar, etc.
+        createListOfBestDirectObjects()
+        createListOfBestIndirectObjects()
+        createListOfBestSubjects()
+        //createListOfBestPrepositionalObjects()  //you, him, her, etc.
         createListOfAgnosticDeterminers()
         createListOfAgnosticAdjectives()
         createListOfAgnosticAdverbs()
         createListOfAgnosticConjunctions()
-        createListOfAgnosticPrepositions()
-        createListOfAgnosticPronouns()
+        createListOfBestPrepositions()
+        createListOfPersonalPronouns()
     }
     
     mutating func createListOfAgnosticAdjectives(){
@@ -78,7 +109,35 @@ struct RandomWordLists{
         }
     }
     
-    mutating func createListOfAgnosticSubjects(){
+    mutating func createListOfBestDirectObjects(){
+        m_directObjectNouns.removeAll()
+        for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
+            //get language-converted noun from dictionary
+            let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.noun, index: i)
+            for bv in bestDirectObjects {
+                if w.spanish == bv {
+                    m_directObjectNouns.append(w)
+                    break
+                }
+            }
+        }
+    }
+    
+    //let's use only people at this point
+    
+    mutating func createListOfBestIndirectObjects(){
+        m_indirectObjectNouns.removeAll()
+        for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
+            //get language-converted noun from dictionary
+            let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.noun, index: i)
+            let noun = w as! Noun
+            if (noun.nounType == .person){
+                m_indirectObjectNouns.append(w)
+            }
+        }
+    }
+    
+    mutating func createListOfBestSubjects(){
         m_subjects.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
             //get language-converted noun from dictionary
@@ -89,80 +148,48 @@ struct RandomWordLists{
             }
         }
     }
+
     
-    mutating func createListOfAgnosticObjects(){
-        m_objects.removeAll()
-        for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
-            //get language-converted noun from dictionary
-            let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.noun, index: i)
-            let noun = w as! Noun
-            if (noun.nounType == .plant || noun.nounType == .thing || noun.nounType == .place){
-                m_objects.append(noun)
-            }
-        }
-    }
-    
-    mutating func createListOfAgnosticPronouns(){
+    mutating func createListOfPersonalPronouns(){
         m_pronouns.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .pronoun) {
             m_pronouns.append(m_wsp!.getAgnosticWordFromDictionary(wordType:.pronoun,  index: i))
         }
     }
-
-
     
-    mutating func createListOfAgnosticVerbs(){
+    //
+    mutating func createListOfBestVerbs(){
+        //only accept a "best verb"
         for i in 0 ..< m_wsp!.getWordCount(wordType: .verb) {
-            m_verbs.append(m_wsp!.getAgnosticWordFromDictionary(wordType:.verb, index: i))
+            let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.verb, index: i)
+            for bv in bestVerbs {
+                if w.spanish == bv {
+                    m_verbs.append(w)
+                    break
+                }
+            }
         }
     }
     
-    mutating func createListOfAgnosticPrepositions(){
+    mutating func createListOfBestPrepositions(){
         m_prepositions.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .preposition) {
-            //get language-converted noun from dictionary
-            m_prepositions.append(m_wsp!.getAgnosticWordFromDictionary(wordType:.preposition,  index: i))
+            let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.preposition, index: i)
+            for bv in bestPrepositions {
+                if w.spanish == bv {
+                    m_prepositions.append(w)
+                    break
+                }
+            }
         }
     }
 
-
-   
-
-    func getAgnosticRandomWordAsSingle(wordType : WordType, isSubject:Bool)->dSingle{
+    func getAgnosticRandomWordAsSingle(wordType : WordType, functionType: PPFunctionType)->dSingle{
         var word = Word()
         var i = 0
         var single = dSingle()
         
         switch wordType{
-        
-        case .ambiguous:
-            let wsd = WordStateData()
-            wsd.language = m_wsp!.getLanguage()
-            i = Int.random(in: 0 ..< m_determiners.count)
-            word = m_determiners[i]
-            wsd.word = word
-            wsd.articleType = .definite
-            var number = Int.random(in: 1 ..< 3)
-            if ( number == 1 ) { wsd.gender = .masculine}
-            else {wsd.gender = .feminine}
-            wsd.gender = .masculine
-            number = Int.random(in: 1 ..< 3)
-            if ( number == 1 ) { wsd.number = .singular}
-            else {wsd.number = .plural}
-            wsd.wordType = .article
-            //create a new instance of this article
-            if wsd.language == .Spanish {
-                let newArt = SpanishArticle()
-                single = dArticleSingle(word: newArt, data: wsd)
-            }
-            else if wsd.language == .French {
-                let newArt = FrenchArticle()
-                single = dArticleSingle(word: newArt, data: wsd)
-            }
-            else if wsd.language == .English {
-                let newArt = EnglishArticle(word: word.word, def: "", type: .definite)
-                single = dArticleSingle(word: newArt, data: wsd)
-            }
         case .determiner:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
@@ -225,14 +252,22 @@ struct RandomWordLists{
         case .noun:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
-            if isSubject {
+            switch functionType{
+            case .subject:
                 i = Int.random(in: 0 ..< m_subjects.count)
                 word = m_subjects[i]
-            }else{
-                i = Int.random(in: 0 ..< m_objects.count)
-                word = m_objects[i]
+            case .directObject:
+                i = Int.random(in: 0 ..< m_directObjectNouns.count)
+                word = m_directObjectNouns[i]
+            case .indirectObject, .none:
+                i = Int.random(in: 0 ..< m_subjects.count)
+                word = m_subjects[i]
+            case .prepositionalObject:
+                i = Int.random(in: 0 ..< m_directObjectNouns.count)
+                word = m_directObjectNouns[i]
+            default:
+                word = Word()  //this should crash
             }
-
             let number = Int.random(in: 1 ..< 3)
             
             if ( number == 1 ) {
@@ -248,29 +283,41 @@ struct RandomWordLists{
             let noun = word as! Noun
             wsd.gender = noun.spanishGender
             wsd.nounType = noun.nounType
-            
-            
             wsd.wordType = .noun
             single = dNounSingle(word: word, data: wsd)
             let ns = single as! dNounSingle
-            ns.setIsSubject(flag: isSubject)
+            if functionType == .subject {ns.setIsSubject(flag: true)}
         case .pronoun:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
-            if isSubject {
+            if functionType == .subject {
                 for i in 0 ..< m_pronouns.count{
                     word = m_pronouns[i]
                     wsd.word = word
-                    let pronoun = word as! Pronoun
-                    wsd.pronounType = pronoun.type
-                    if pronoun.type == .SUBJECT {
-                        let personIndex = Int.random(in: 0 ..< 6)
-                        wsd.person = Person.all[personIndex]
-                        let genderIndex = Int.random(in: 0 ..< 2)
-                        wsd.gender = Gender.all[genderIndex]
-                        wsd.wordType = .pronoun
-                        single = dPersonalPronounSingle(word: word, data: wsd)
-                    }
+                    wsd.wordType = .pronoun
+                    wsd.pronounType = .SUBJECT
+                    let personIndex = Int.random(in: 0 ..< 6)
+                    wsd.person = Person.all[personIndex]
+                    let genderIndex = Int.random(in: 0 ..< 2)
+                    wsd.gender = Gender.all[genderIndex]
+                    wsd.wordType = .pronoun
+                    single = dPersonalPronounSingle(word: word, data: wsd)
+                    return single
+                }
+            }
+            if functionType == .indirectObject {
+                for i in 0 ..< m_pronouns.count{
+                    word = m_pronouns[i]
+                    wsd.word = word
+                    wsd.wordType = .pronoun
+                    wsd.pronounType = .INDIRECT_OBJECT
+                    let personIndex = Int.random(in: 0 ..< 6)
+                    wsd.person = Person.all[personIndex]
+                    let genderIndex = Int.random(in: 0 ..< 2)
+                    wsd.gender = Gender.all[genderIndex]
+                    wsd.wordType = .pronoun
+                    single = dPersonalPronounSingle(word: word, data: wsd)
+                    return single
                 }
             }
         case .verb:

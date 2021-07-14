@@ -9,16 +9,16 @@ import Foundation
 
 class Word : Hashable, Equatable {
     let word : String
-    let def : String
+    //let def : String
     let wordType : WordType
     
     var english = ""
     var spanish = ""
     var french = ""
     
-    init(word: String, def: String, wordType: WordType){
+    init(word: String, wordType: WordType){
         self.word = word
-        self.def = def
+        //self.def = def
         self.wordType = wordType
         self.english = ""
         self.spanish = ""
@@ -27,7 +27,7 @@ class Word : Hashable, Equatable {
     
     init(){
         self.word = ""
-        self.def = ""
+        //self.def = ""
         self.wordType = .unknown
     }
     

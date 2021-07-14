@@ -197,7 +197,7 @@ class dIndependentClause : dClause {
     func informHeadVerb(){
         if hasHeadVerb() && hasHeadNoun() {
             let hvp = headVerb as! dVerbPhrase
-            if  headNoun.getClusterType() == .N || headNoun.getClusterType() == .SubjP {hvp.setPerson(value: headNoun.getPerson())}
+            if  headNoun.getClusterType() == .N || headNoun.getClusterType() == .PersPro {hvp.setPerson(value: headNoun.getPerson())}
             else if headNoun.getClusterType() == .NP {
                 let hnp = headNoun as! dNounPhrase
                 let npPerson = hnp.getPerson()
@@ -427,7 +427,7 @@ class dIndependentClause : dClause {
             case .number:
                 single = dAdjectiveSingle(word: word, data: data.data)
             case .pronoun:
-                single = dSubjectPronounSingle(word: word, data: data.data)
+                single = dPersonalPronounSingle(word: word, data: data.data)
             case .preposition:
                 single = dPrepositionSingle(word: word, data: data.data)
             case .punctuation:
@@ -458,7 +458,7 @@ class dIndependentClause : dClause {
         for cluster in sentence.getClusterList(){
             switch cluster.getClusterType() {
             case .Adj, .AdjCls, .Adv, .AMB, .Art, .C, .comma,
-                 .Det, .Num, .PersPro, .P, .V, .SubjP, .AuxV, .UNK :
+                 .Det, .Num, .PersPro, .P, .V, .AuxV, .UNK :
                 continue
             case .NP:
                 let c = cluster as! dNounPhrase
@@ -479,7 +479,7 @@ class dIndependentClause : dClause {
         for cluster in sentence.getClusterList(){
             switch cluster.getClusterType() {
             case .Adj, .AdjCls, .Adv, .AMB, .Art, .C, .comma,
-                 .Det, .Num, .PersPro, .P, .V, .SubjP, .AuxV, .UNK :
+                 .Det, .Num, .PersPro, .P, .V, .AuxV, .UNK :
                 wordStateList.append(cluster.getSentenceData())
             case .NP:
                 let c = cluster as! dNounPhrase
@@ -515,7 +515,7 @@ class dIndependentClause : dClause {
         for cluster in sentence.getClusterList(){
             switch cluster.getClusterType() {
             case .Adj, .AdjCls, .Adv, .AMB, .Art, .C, .comma,
-                 .Det, .Num, .PersPro, .P, .V, .SubjP, .AuxV, .UNK :
+                 .Det, .Num, .PersPro, .P, .V, .AuxV, .UNK :
                 let single = cluster as! dSingle
                 singleList.append(single)
             case .NP:
@@ -601,10 +601,6 @@ class dIndependentClause : dClause {
             case .PP:
                 let c = cluster as! dPrepositionPhrase
                 str = c.getString()
-            case .SubjP:
-                let c = cluster as! dSubjectPronounSingle
-                str = c.getString()
-                cluster.setProcessWordInWordStateData(str: c.getString())
             case .V:
                 let c = cluster as! dVerbSingle
                 str = c.getString()

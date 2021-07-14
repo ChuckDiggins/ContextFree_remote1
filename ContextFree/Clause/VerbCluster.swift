@@ -22,7 +22,7 @@ class dVerbPhrase : dPhrase {
     var m_isPerfect = false
     var m_computedTense = Tense.present
     var m_computedPerson = Person.S1
-    var m_subjectCluster = dCluster(word: Word(), clusterType: .SubjP)
+    var m_subjectCluster = dCluster(word: Word(), clusterType: .PersPro)
  
     var m_verbType = VerbType.normal
     func setVerbType(type: VerbType ){m_verbType = type}
@@ -58,6 +58,9 @@ class dVerbPhrase : dPhrase {
             
         }
     }
+    
+
+    
     /*
     func setComputedTense(tense: Tense){m_computedTense = tense}
     func getComputedTense()->Tense{return m_computedTense}

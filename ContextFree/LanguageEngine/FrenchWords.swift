@@ -24,24 +24,24 @@ struct FrenchWords{
     
     //  ç  è
     
+    /*
     mutating func createSomeDeterminers(){
-        createDeterminerAndAppend(word: "ce", def: "this", type: .definite, femWord: "cette", mascPlural: "ces", femPlural: "ces")
-        createDeterminerAndAppend(word: "cet", def: "that", type: .definite, femWord: "cet", mascPlural: "ces", femPlural: "ces")
+        createDeterminerAndAppend(word: "ce", type: .definite, femWord: "cette", mascPlural: "ces", femPlural: "ces")
+        createDeterminerAndAppend(word: "cet", type: .definite, femWord: "cet", mascPlural: "ces", femPlural: "ces")
     }
     
     mutating func createSomePossessiveAdjectives(){
-        createPossessiveAdjectiveAndAppend(word: "mon", def: "my", type: .possessive)
+        createPossessiveAdjectiveAndAppend(word: "mon",type: .possessive)
     }
     
     mutating func createSomeInterrogativeAdjectives(){
-        createInterrogativeAdjectiveAndAppend(word: "quel", def: "what", type: .interrogative)
+        createInterrogativeAdjectiveAndAppend(word: "quel", type: .interrogative)
     }
     
     mutating func createSomeDemonstrativeAdjectives(){
-        createDemonstrativeAdjectiveAndAppend(word: "ce", def: "what", type: .demonstrative)
+        createDemonstrativeAdjectiveAndAppend(word: "ce", type: .demonstrative)
     }
     
-    /*
     mutating func createSomeAdjectives(){
         createAdjectiveAndAppend(word: "ce", def: "this", type: .demonstrative, position: .preceding)
         createAdjectiveAndAppend(word: "mon", def: "my", type: .possessive, position: .preceding)
@@ -56,16 +56,16 @@ struct FrenchWords{
         createAdjectiveAndAppend(word: "ennuyé", def: "annoyed", type: .any, position: .following)
         createAdjectiveAndAppend(word: "fâché", def: "angry", type: .any, position: .following)
     }
-    */
     
     mutating func createSomeAmbiguousWords(){
-        createAmbiguousAndAppend(word: "", def: "", type: .general)
-        createAmbiguousAndAppend(word: "", def: "", type: .pronoun)
+        createAmbiguousAndAppend(word: "", type: .general)
+        createAmbiguousAndAppend(word: "",  type: .pronoun)
     }
     
+
     mutating func createSomeAdverbs(){
     }
-    
+
     mutating func createSomeArticles(){
         createArticleAndAppend(word: "le", def: "the", type: .definite)
         createArticleAndAppend(word: "un", def: "a", type: .indefinite)
@@ -105,7 +105,6 @@ struct FrenchWords{
         createPronounAndAppend(word: "me", def: "me", type : .DIRECT_OBJECT)
     }
     
-    /*
     mutating func createSomeNouns(){
         createNounAndAppend(word: "homme", def: "man", type: .person, gender: .masculine)
         createNounAndAppend(word: "femme", def: "woman", type: .person, gender: .feminine)
@@ -132,10 +131,10 @@ struct FrenchWords{
         createNounAndAppend(word: "carte de débit", def: "money", type: .thing, gender: .masculine)
         createNounAndAppend(word: "carte de crédit", def: "money", type: .thing, gender: .masculine)
     }
-    */
+
     
     mutating func createSomeVerbsA(){
-        /*
+
         var verb : RomanceVerb
         verb = FrenchVerb(bVerb: <#BFrenchVerb#>, word: "être", def: "be", type: .normal)
         verb.setSimplePresentForms(s1:"suis", s2:"es", s3:"est", p1:"sommes", p2:"êtes", p3:"sont")
@@ -164,64 +163,62 @@ struct FrenchWords{
         verb = FrenchVerb(word: "mettre", def: "put", type: .normal)
         verb.setSimplePresentForms(s1:"mets", s2:"mets", s3:"met", p1:"mettons", p2:"mettez", p3:"mettent")
         verbList.append(verb)
- */
     }
     
     //  ç  è
     
-    
    
     
-    mutating func createAdjectiveAndAppend (word : String, def: String, type : AdjectiveType, position: AdjectivePositionType){
-        let pos = FrenchAdjective(word: word, def: def, type: type)
+    mutating func createAdjectiveAndAppend (word : String, type : AdjectiveType, position: AdjectivePositionType){
+        let pos = FrenchAdjective(word: word, type: type)
         pos.setPreferredPosition(position: position)
         adjectiveList.append(pos)
     }
     
-    mutating func createAdverbAndAppend (word : String, def: String, type : AdverbType){
-        let pos = FrenchAdverb(word: word, def: def, type: type)
+    mutating func createAdverbAndAppend (word : String, type : AdverbType){
+        let pos = FrenchAdverb(word: word,type: type)
         adverbList.append(pos)
     }
     
-    mutating func createAmbiguousAndAppend (word : String, def: String, type : AmbiguousType){
-        let pos = Ambiguous(word: word, def: def, type: type)
+    mutating func createAmbiguousAndAppend (word : String, type : AmbiguousType){
+        let pos = Ambiguous(word: word, type: type)
         ambiguousList.append(pos)
     }
     
-    mutating func createArticleAndAppend (word : String, def: String, type : ArticleType){
+    mutating func createArticleAndAppend (word : String, type : ArticleType){
         let pos = FrenchArticle()
         articleList.append(pos)
     }
     
   
-    mutating func createConjunctionAndAppend (word : String, def: String, type : ConjunctionType){
-        let pos = FrenchConjunction(word: word, def: def, type: type)
+    mutating func createConjunctionAndAppend (word : String, type : ConjunctionType){
+        let pos = FrenchConjunction(word: word, type: type)
         conjunctionList.append(pos)
     }
     
     
-   mutating func createDeterminerAndAppend (word : String, def: String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String){
-        let pos = RomanceDeterminer(word: word, def: def, type: type, femWord: femWord, mascPlural : mascPlural, femPlural : femPlural)
+   mutating func createDeterminerAndAppend (word : String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String){
+        let pos = RomanceDeterminer(word: word, type: type, femWord: femWord, mascPlural : mascPlural, femPlural : femPlural)
         determinerList.append(pos)
     }
     
-    mutating func createPossessiveAdjectiveAndAppend(word: String, def: String, type: AdjectiveType){
-        let pos = FrenchPossessiveAdjective(word: word, def: def, type: type)
+    mutating func createPossessiveAdjectiveAndAppend(word: String, type: AdjectiveType){
+        let pos = FrenchPossessiveAdjective(word: word, type: type)
         possessiveAdjectiveList.append(pos)
     }
     
-    mutating func createDemonstrativeAdjectiveAndAppend(word: String, def: String, type: AdjectiveType){
-        let pos = FrenchDemonstrativeAdjective(word: word, def: def, type: type)
+    mutating func createDemonstrativeAdjectiveAndAppend(word: String, type: AdjectiveType){
+        let pos = FrenchDemonstrativeAdjective(word: word, type: type)
         demonstrativeAdjectiveList.append(pos)
     }
     
-    mutating func createInterrogativeAdjectiveAndAppend(word: String, def: String, type: AdjectiveType){
-        let pos = FrenchInterrogativeAdjective(word: word, def: def, type: type)
+    mutating func createInterrogativeAdjectiveAndAppend(word: String, type: AdjectiveType){
+        let pos = FrenchInterrogativeAdjective(word: word, type: type)
         interrogativeAdjectiveList.append(pos)
     }
     
-    mutating func createPronounAndAppend (word : String, def: String, type : PronounType){
-        let pos = FrenchPronoun(word: word, def: def, type: type)
+    mutating func createPronounAndAppend (word : String,  type : PronounType){
+        let pos = FrenchPronoun(word: word, type: type)
         pronounList.append(pos)
     }
     
@@ -231,8 +228,8 @@ struct FrenchWords{
         nounList.append(pos)
     }
     */
-    mutating func createPrepositionAndAppend (word : String, def: String, type : PrepositionType){
-        let pos = RomancePreposition(word: word, def: def, type: type)
+    mutating func createPrepositionAndAppend (word : String, type : PrepositionType){
+        let pos = RomancePreposition(word: word, type: type)
         prepositionList.append(pos)
     }
     
@@ -242,5 +239,5 @@ struct FrenchWords{
         verbList.append(pos)
     }
 */
-    
+    */
 }

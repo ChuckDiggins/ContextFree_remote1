@@ -61,7 +61,7 @@ struct SpanishWords {
         createArticleAndAppend(word: "el", def: "the", type: .definite)
         createArticleAndAppend(word: "un", def: "a", type: .indefinite)
     }
-    */
+
     
     mutating func createSomeSpanishPronouns(){
         createPronounAndAppend(word: "yo", def: "I", type: .SUBJECT)
@@ -69,14 +69,16 @@ struct SpanishWords {
         createPronounAndAppend(word: "me", def: "me", type: .REFLEXIVE)
         createPronounAndAppend(word: "me", def: "me", type: .DIRECT_OBJECT)
     }
-    
+    */
 
-    
+    /*
     mutating func createSomeAdverbs(){
         createAdverbAndAppend(word: "mas", def: "more", type: .comparing)
         createAdverbAndAppend(word: "menos", def: "less", type: .comparing)
     }
+    */
     
+    /*
     mutating func createSomeConjunctions(){
         createConjunctionAndAppend(word: "y", def: "and", type: .coordinating)
         createConjunctionAndAppend(word: "e", def: "and", type: .coordinating)
@@ -104,7 +106,7 @@ struct SpanishWords {
         createConjunctionAndAppend(word: "para que", def: "as long as", type: .condition)
         createConjunctionAndAppend(word: "a fin de que", def: "as long as", type: .condition)
     }
-    
+    */
     /*
     mutating func createSomePrepositions(){
         createPrepositionAndAppend(word: "a", def: "to", type: .assignment)
@@ -285,18 +287,18 @@ struct SpanishWords {
     
       
     mutating func createAdjectiveAndAppend (word : String, def: String, type : AdjectiveType, position: AdjectivePositionType){
-        let pos = SpanishAdjective(word: word, def: def, type: type)
+        let pos = SpanishAdjective(word: word, type: type)
         pos.setPreferredPosition(position: position)
         adjectiveList.append(pos)
     }
     
     mutating func createAdverbAndAppend (word : String, def: String, type : AdverbType){
-        let pos = SpanishAdverb(word: word, def: def, type: type)
+        let pos = SpanishAdverb(word: word, type: type)
         adverbList.append(pos)
     }
     
     mutating func createAmbiguousAndAppend (word : String, def: String, type : AmbiguousType){
-        let pos = Ambiguous(word: word, def: def, type: type)
+        let pos = Ambiguous(word: word, type: type)
         ambiguousList.append(pos)
     }
     
@@ -308,29 +310,29 @@ struct SpanishWords {
     */
     
   
-    mutating func createConjunctionAndAppend (word : String, def: String, type : ConjunctionType){
-        let pos = SpanishConjunction(word: word, def: def, type: type)
+    mutating func createConjunctionAndAppend (word : String, type : ConjunctionType){
+        let pos = SpanishConjunction(word: word, type: type)
         conjunctionList.append(pos)
     }
     
     
-   mutating func createDeterminerAndAppend (word : String, def: String, type : DeterminerType, femWord:String, mascPlural:String, femPlural:String){
-        let pos = RomanceDeterminer(word: word, def: def, type: type, femWord: femWord, mascPlural : mascPlural, femPlural : femPlural)
+   mutating func createDeterminerAndAppend (word : String,  type : DeterminerType, femWord:String, mascPlural:String, femPlural:String){
+        let pos = RomanceDeterminer(word: word, type: type, femWord: femWord, mascPlural : mascPlural, femPlural : femPlural)
         determinerList.append(pos)
     }
     
-    mutating func createPronounAndAppend (word : String, def: String, type : PronounType){
-        let pos = SpanishPronoun(word: word, def: def, type: type)
+    mutating func createPronounAndAppend (word : String, type : PronounType){
+        let pos = SpanishPronoun(word: word, type: type)
         pronounList.append(pos)
     }
     
-    mutating func createNounAndAppend (word : String, def: String, type : NounType, gender: Gender){
-        let pos = RomanceNoun(word: word, def: def, type: type, gender: gender )
+    mutating func createNounAndAppend (word : String, type : NounType, gender: Gender){
+        let pos = RomanceNoun(word: word, type: type, gender: gender )
         nounList.append(pos)
     }
     
-    mutating func createPrepositionAndAppend (word : String, def: String, type : PrepositionType){
-        let pos = RomancePreposition(word: word, def: def, type: type)
+    mutating func createPrepositionAndAppend (word : String,  type : PrepositionType){
+        let pos = RomancePreposition(word: word, type: type)
         prepositionList.append(pos)
     }
     /*

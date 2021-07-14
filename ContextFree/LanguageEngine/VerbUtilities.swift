@@ -120,12 +120,18 @@ struct VerbUtilities {
     }
     
     func getLastNCharactersInString(inputString: String, copyCount: Int) -> String {
+        var newString = ""
+        
+        //if we only want the last letter and there is only one letter, then return it
+        if copyCount == 1 && inputString.count == 1 {
+            return inputString
+        }
+        
         if ( copyCount >= inputString.count ){
             return ""
         }
         
         let inputStringReversed = String(inputString.reversed())
-        var newString = ""
         for i in 0..<copyCount{
             newString.append(inputStringReversed[inputStringReversed.index(inputStringReversed.startIndex, offsetBy: i)])
         }
@@ -365,7 +371,7 @@ struct VerbUtilities {
         if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
             || input == "ü" || input == "ñ"
-            || input == "ç" || input == "è"  || input == "ê" {
+            || input == "ç" || input == "è"  || input == "ê" || input == "î" {
            return true
         }
      return false
@@ -375,7 +381,7 @@ struct VerbUtilities {
         if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
             || input == "ü" || input == "ñ"
-            || input == "ç" || input == "è"  || input == "ê"
+            || input == "ç" || input == "è"  || input == "ê" || input == "î"
         { return true }
         if isPunctuation(input: input)
         { return true }
@@ -414,6 +420,33 @@ struct VerbUtilities {
         return (verb : verbWord, bIsReflexive: isReflexive)
     }
     
+    func  analyzeEnglishWordPhrase(testString: String) -> (verbWord:String, residualPhrase:String)
+    {
+        let wordList = getListOfWords(characterArray: testString)
+   
+        //if analyzeWordPhrase returns an empty verbWord, the testString does not start with a legitimate Spanish verb
+        if wordList.isEmpty {
+            return  (verbWord:"", residualPhrase:"")
+        }
+        
+        var verbWord = ""
+        var  residualPhrase = ""
+
+        //assume that the first word is a legitimate verb
+        
+        verbWord = wordList[0]
+
+        //if more than one word in the wordList, then there must be a residual phrase attached
+        //build the residual phrase from the remaining words in the list
+        
+        if wordList.count > 1 {
+            for i in 1..<wordList.count {
+                residualPhrase += wordList[i] + " "
+            }
+        }
+        return (verbWord:verbWord, residualPhrase: residualPhrase)
+    }//func analyzeEnglishWordPhrase
+
     func  analyzeWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
         let wordList = getListOfWords(characterArray: testString)

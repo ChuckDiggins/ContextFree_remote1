@@ -17,28 +17,28 @@ class Noun : Word {
     
     override init(){
         self.nounType = NounType.any
-        super.init(word: "", def: "", wordType: .noun)
+        super.init(word: "", wordType: .noun)
     }
     
-    init(word: String, def: String, type : NounType){
+    init(word: String, type : NounType){
         self.nounType = type
-        super.init(word: word, def: def, wordType: .noun)
+        super.init(word: word,  wordType: .noun)
     }
     
     init(jsonNoun: JsonNoun, language: LanguageType){
         self.nounType = NounType.any
 
         switch(language){
-        case .Spanish:  super.init(word: jsonNoun.spanish, def: jsonNoun.english, wordType: .noun)
-        case .French:  super.init(word: jsonNoun.french, def: jsonNoun.english, wordType: .noun)
+        case .Spanish:  super.init(word: jsonNoun.spanish, wordType: .noun)
+        case .French:  super.init(word: jsonNoun.french,  wordType: .noun)
         case .English:
-            super.init(word: jsonNoun.english, def: jsonNoun.english, wordType: .noun)
+            super.init(word: jsonNoun.english, wordType: .noun)
             plural = jsonNoun.englishPlural
             englishPlural = jsonNoun.englishPlural
-        case .Agnostic:  super.init(word: jsonNoun.spanish, def: jsonNoun.english, wordType: .noun)
+        case .Agnostic:  super.init(word: jsonNoun.spanish, wordType: .noun)
             englishPlural = jsonNoun.englishPlural
         default:
-            super.init(word: jsonNoun.spanish, def: jsonNoun.english, wordType: .noun)
+            super.init(word: jsonNoun.spanish,  wordType: .noun)
         }
         english = jsonNoun.english
         french = jsonNoun.french
@@ -108,9 +108,9 @@ class RomanceNoun : Noun {
         super.init(jsonNoun: jsonNoun, language: language)
     }
     
-    init(word: String, def: String, type: NounType, gender: Gender){
+    init(word: String, type: NounType, gender: Gender){
         self.gender = gender
-        super.init(word: word, def: def, type : type)
+        super.init(word: word, type : type)
         constructPlural()
     }
     
@@ -154,8 +154,8 @@ class FrenchNoun : RomanceNoun {
         gender = frenchGender
     }
     
-    override init(word: String, def: String, type: NounType, gender: Gender ){
-        super.init(word:word, def: def, type:type, gender: gender)
+    override init(word: String, type: NounType, gender: Gender ){
+        super.init(word:word, type:type, gender: gender)
         constructPlural()
     }
     
@@ -178,8 +178,8 @@ class FrenchNoun : RomanceNoun {
 
 class SpanishNoun : RomanceNoun {
     
-    override init(word: String, def: String, type: NounType, gender: Gender ){
-        super.init(word:word, def: def, type:type, gender: gender)
+    override init(word: String, type: NounType, gender: Gender ){
+        super.init(word:word, type:type, gender: gender)
         constructPlural()
     }
     
@@ -192,12 +192,14 @@ class SpanishNoun : RomanceNoun {
     override func constructPlural(){
         let util = VerbUtilities()
         var root = word
-        root.removeLast()
+        //root.removeLast()
         
         let suffix = util.getLastNCharactersInString(inputString: word, copyCount: 1)
         
-        if ( suffix == "l" || suffix == "n" || suffix == "r" ){ plural = root + "es" }
-        if ( suffix == "s" ){ plural = root}
+        if ( suffix == "l" || suffix == "n" || suffix == "r" ){
+            plural = word + "es"
+        }
+        else if ( suffix == "s" ){ plural = root}
         else{ plural = word + "s" }
     }
     
@@ -209,19 +211,20 @@ class EnglishNoun : Noun {
     var endsInY = false
     var endsInE = false
         
-    init(word: String, def: String, type: NounType, englishPlural: String ){
-        super.init(word:word, def: def, type:type)
+    init(word: String, type: NounType, englishPlural: String ){
+        super.init(word:word, type:type)
         plural = englishPlural
     }
     
-    override init(word: String, def: String, type: NounType ){
-        super.init(word:word, def: def, type:type)
+    override init(word: String, type: NounType ){
+        super.init(word:word, type:type)
         constructPlural()
     }
     
     init(jsonNoun: JsonNoun){
         super.init(jsonNoun: jsonNoun, language: .English)
-        constructPlural()
+        if jsonNoun.englishPlural.count > 0 {plural = englishPlural}
+        else { constructPlural()}
     }
     
     func isNoun(word: String)->(Bool, NounType, Number){
@@ -232,11 +235,10 @@ class EnglishNoun : Noun {
     
     func constructPlural(){
         if englishPlural.count > 0 {return}
-        let util = VerbUtilities()
         var root = word
         root.removeLast()
         
-        var stem = prepareStem()
+        let stem = prepareStem()
         if endsInY {plural = stem + "ies"}
         else if endsInE {
             plural = stem + "es"

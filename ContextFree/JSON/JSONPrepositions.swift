@@ -96,7 +96,7 @@ class JsonPrepositionManager {
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
-            if v.spanish == prep.spanish && v.french == prep.french {
+            if v.spanish == prep.spanish && v.french == prep.french && v.english == prep.english {
                 myWordList.remove(at: i)
                 myWordList.insert(prep, at:i)
                 appendThis = false
