@@ -36,6 +36,8 @@ struct CFModel{
     private var bReconstructVerbModels = false
     private var bUseJsonStarterFiles = true   //this will reconstruct json words from user-supplied files, any other words will be lost
     private var m_randomSentence : RandomSentence!
+    private var m_randomWordLists : RandomWordLists!
+    
     var m_morphForm = [String]()
     var m_morphComment = [String]()
     var m_verbForm = [String]()
@@ -48,6 +50,11 @@ struct CFModel{
     var jsonDeterminerManager = JsonDeterminerManager()
     var jsonPrepositionManager = JsonPrepositionManager()
     var jsonPronounManager = JsonPronounManager()
+    var jsonPhraseManager = JsonPhraseManager()
+    var jsonClauseManager = JsonClauseManager()
+    
+    var namedPhraseList = [NamedPhrase]()
+    var namedClauseList = [NamedClause]()
     
     var m_currentVerbIndex = 0
     var m_currentTenseIndex = 0
@@ -70,12 +77,19 @@ struct CFModel{
         buildSomeStuff()
         m_tenseList = tenseManager.getActiveTenseList()
         loadJsonWords()
+        
+        m_randomWordLists = RandomWordLists(wsp: m_wsp)
         m_randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleClause)
-
+        
+        loadJsonPhrasesAndClauses()
         for tense in m_tenseList {
             print("active tense: \(tense.rawValue)")
         }
         
+    }
+
+    func getRandomWordLists()->RandomWordLists{
+        return m_randomWordLists
     }
 
     func getWordStringParser()->WordStringParser{
@@ -107,7 +121,52 @@ struct CFModel{
             m_englishVerbModelConjugation.createVerbModels()
         }
     }
+    mutating func loadJsonPhrasesAndClauses(){
+        jsonPhraseManager.encodeInternalPhrases(total: 2000)
+        
+        createPhrasesFromJsonPhrases()
+        //jsonClauseManager.encodeInternalClauses(total: 2000)
+    }
     
+    mutating func createPhrasesFromJsonPhrases(){
+        var phraseType = ContextFreeSymbol.AMB
+        var np = NamedPhrase()
+        var clusterWordType = ContextFreeSymbol.AMB
+        
+        
+        for jp in jsonPhraseManager.myList {
+            switch(jp.phraseType){
+            case "NP": phraseType = .NP
+            case "VP": phraseType = .VP
+            case "PP": phraseType = .PP
+            default: break
+            }
+            if (phraseType != .AMB){
+                np = NamedPhrase(randomWord: m_randomWordLists!, phraseName: jp.phraseName, phraseType: phraseType)
+                for cluster in jp.clusterList {
+                    let str =  cluster.wordType
+                    clusterWordType = clusterWordType.getWordType(str : str)
+                    if clusterWordType == .NP || clusterWordType == .VP || clusterWordType == . PP {
+                        for namedPhrase in namedPhraseList {
+                            if namedPhrase.getPhraseName() == cluster.clusterName{
+                                np.appendNamedPhrase(phrase:namedPhrase)
+                            }
+                        }
+                    }
+                    else {
+                        np.appendCluster(cfs: clusterWordType, isSubject: false)
+                    }
+                    
+                }
+                namedPhraseList.append(np)
+            }
+        }
+        for np in namedPhraseList {
+            print("\(np.getPhraseName()): \(np.getPhrase().getStringAtLanguage(language: m_currentLanguage))")
+        }
+
+    }
+        
     mutating func loadJsonWords(){
         if bUseJsonStarterFiles {
             //jsonNounManager.encodeWords()  //this should wipe out existing jsonVerbs
@@ -578,7 +637,7 @@ struct CFModel{
         for word in wordList {
             var wordData = SentenceData()
             wordData.word = word
-            wordData.data.wordType = .unknown
+            wordData.data.wordType = .UNK
             sentenceData.append(wordData)
         }
         return sentenceData
@@ -591,15 +650,15 @@ struct CFModel{
         var sd : SentenceData
         for wordData in sdList {
             sd = wordData
-            if sd.data.wordType == .unknown { sd = m_wsp.getNoun(wordString: wordData.word.word)}
-            if sd.data.wordType == .unknown { sd = m_wsp.getArticle(wordString: wordData.word.word) }
-            if sd.data.wordType == .unknown { sd = m_wsp.getPronoun(wordString: wordData.word.word) }
-            if sd.data.wordType == .unknown { sd = m_wsp.getPunctuation(wordString: wordData.word.word) }
-            if sd.data.wordType == .unknown { sd = m_wsp.getAdjective(wordString: wordData.word.word)}
-            if sd.data.wordType == .unknown { sd = m_wsp.getDeterminer(wordString: wordData.word.word)}
-            if sd.data.wordType == .unknown { sd = m_wsp.getConjunction(wordString: wordData.word.word)  }
-            if sd.data.wordType == .unknown { sd = m_wsp.getPreposition(wordString: wordData.word.word)  }
-            if sd.data.wordType == .unknown { sd = m_wsp.getVerb(wordString: wordData.word.word) }
+            if sd.data.wordType == .UNK { sd = m_wsp.getNoun(wordString: wordData.word.word)}
+            if sd.data.wordType == .UNK { sd = m_wsp.getArticle(wordString: wordData.word.word) }
+            if sd.data.wordType == .UNK { sd = m_wsp.getPronoun(wordString: wordData.word.word) }
+            if sd.data.wordType == .UNK { sd = m_wsp.getPunctuation(wordString: wordData.word.word) }
+            if sd.data.wordType == .UNK { sd = m_wsp.getAdjective(wordString: wordData.word.word)}
+            if sd.data.wordType == .UNK { sd = m_wsp.getDeterminer(wordString: wordData.word.word)}
+            if sd.data.wordType == .UNK { sd = m_wsp.getConjunction(wordString: wordData.word.word)  }
+            if sd.data.wordType == .UNK { sd = m_wsp.getPreposition(wordString: wordData.word.word)  }
+            if sd.data.wordType == .UNK { sd = m_wsp.getVerb(wordString: wordData.word.word) }
             //append word here, even if it is unknown
             sentenceDataList.append(sd)
             printSentenceDataStruct(msg: "During convertWordStringsToSentenceDataStructs", sd: sd)

@@ -184,13 +184,13 @@ struct RandomWordListsForPersonalPronounGames{
         }
     }
 
-    func getAgnosticRandomWordAsSingle(wordType : WordType, functionType: PPFunctionType)->dSingle{
+    func getAgnosticRandomWordAsSingle(wordType : ContextFreeSymbol, functionType: PPFunctionType)->dSingle{
         var word = Word()
         var i = 0
         var single = dSingle()
         
         switch wordType{
-        case .determiner:
+        case .Det:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_determiners.count)
@@ -207,9 +207,9 @@ struct RandomWordListsForPersonalPronounGames{
             if ( number == 1 ) { wsd.number = .singular}
             else {wsd.number = .plural}
             
-            wsd.wordType = .determiner
+            wsd.wordType = .Det
             single = dDeterminerSingle(word: word, data: wsd)
-        case .adjective:
+        case .Adj:
             i = Int.random(in: 0 ..< m_adjectives.count)
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
@@ -217,9 +217,9 @@ struct RandomWordListsForPersonalPronounGames{
             let adj = word as! Adjective
             wsd.word = word
             wsd.adjectiveType = adj.type
-            wsd.wordType = .adjective
+            wsd.wordType = .Adj
             single = dAdjectiveSingle(word: word, data: wsd)
-        case .adverb:
+        case .Adv:
             i = Int.random(in: 0 ..< m_adverbs.count)
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
@@ -227,9 +227,9 @@ struct RandomWordListsForPersonalPronounGames{
             let adv = word as! Adverb
             wsd.word = word
             wsd.adverbType = adv.type
-            wsd.wordType = .adverb
+            wsd.wordType = .Adv
             single = dAdverbSingle(word: word, data: wsd)
-        case .conjunction:
+        case .C:
             i = Int.random(in: 0 ..< m_conjunctions.count)
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
@@ -237,9 +237,9 @@ struct RandomWordListsForPersonalPronounGames{
             let conj = word as! Conjunction
             wsd.word = word
             wsd.conjunctionType = conj.type
-            wsd.wordType = .conjunction
+            wsd.wordType = .C
             single = dConjunctionSingle(word: word, data: wsd)
-        case .preposition:
+        case .P:
             i = Int.random(in: 0 ..< m_prepositions.count)
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
@@ -247,9 +247,9 @@ struct RandomWordListsForPersonalPronounGames{
             wsd.word = word
             let prep = word as! Preposition
             wsd.prepositionType = prep.type
-            wsd.wordType = .preposition
+            wsd.wordType = .P
             single = dPrepositionSingle(word: word, data: wsd)
-        case .noun:
+        case .N:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             switch functionType{
@@ -283,24 +283,23 @@ struct RandomWordListsForPersonalPronounGames{
             let noun = word as! Noun
             wsd.gender = noun.spanishGender
             wsd.nounType = noun.nounType
-            wsd.wordType = .noun
+            wsd.wordType = .N
             single = dNounSingle(word: word, data: wsd)
             let ns = single as! dNounSingle
             if functionType == .subject {ns.setIsSubject(flag: true)}
-        case .pronoun:
+        case .Pronoun:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             if functionType == .subject {
                 for i in 0 ..< m_pronouns.count{
                     word = m_pronouns[i]
                     wsd.word = word
-                    wsd.wordType = .pronoun
+                    wsd.wordType = .Pronoun
                     wsd.pronounType = .SUBJECT
                     let personIndex = Int.random(in: 0 ..< 6)
                     wsd.person = Person.all[personIndex]
                     let genderIndex = Int.random(in: 0 ..< 2)
                     wsd.gender = Gender.all[genderIndex]
-                    wsd.wordType = .pronoun
                     single = dPersonalPronounSingle(word: word, data: wsd)
                     return single
                 }
@@ -309,18 +308,17 @@ struct RandomWordListsForPersonalPronounGames{
                 for i in 0 ..< m_pronouns.count{
                     word = m_pronouns[i]
                     wsd.word = word
-                    wsd.wordType = .pronoun
+                    wsd.wordType = .Pronoun
                     wsd.pronounType = .INDIRECT_OBJECT
                     let personIndex = Int.random(in: 0 ..< 6)
                     wsd.person = Person.all[personIndex]
                     let genderIndex = Int.random(in: 0 ..< 2)
                     wsd.gender = Gender.all[genderIndex]
-                    wsd.wordType = .pronoun
                     single = dPersonalPronounSingle(word: word, data: wsd)
                     return single
                 }
             }
-        case .verb:
+        case .V:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             i = Int.random(in: 0 ..< m_verbs.count)
@@ -328,7 +326,7 @@ struct RandomWordListsForPersonalPronounGames{
             wsd.word = word
             let verb = word as! Verb
             wsd.verbType = verb.typeList[0]
-            wsd.wordType = .verb
+            wsd.wordType = .V
             single = dVerbSingle(word: word, data: wsd)
         default:
             break

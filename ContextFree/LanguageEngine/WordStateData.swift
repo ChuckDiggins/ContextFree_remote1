@@ -27,7 +27,7 @@ class WordStateData : Hashable, Equatable {
     var gender = Gender.masculine
     
     //identity
-    var wordType = WordType.unknown
+    var wordType = ContextFreeSymbol.AMB
     var ambiguousType = AmbiguousType.general
     var adverbType = AdverbType.manner
     var articleType = ArticleType.definite
@@ -36,6 +36,7 @@ class WordStateData : Hashable, Equatable {
     var adjectiveType = AdjectiveType.any
     var adjectivePosition = AdjectivePositionType.following
     var prepositionType = PrepositionType.general
+    var personalPronounType = PronounType.PERSONAL  //ambiguous until set 
     var pronounType = PronounType.none
     var punctuationType = PunctuationType.none
     
@@ -54,7 +55,7 @@ class WordStateData : Hashable, Equatable {
         return lhs.word.word == rhs.word.word
     }
     
-    func getWordType()->WordType{
+    func getWordType()->ContextFreeSymbol{
         return wordType
     }
     

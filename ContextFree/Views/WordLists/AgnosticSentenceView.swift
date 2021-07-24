@@ -156,20 +156,20 @@ struct AgnosticSentenceView: View {
         var wsd = single.getSentenceData()
         
         switch wsd.wordType {
-        case .verb:
+        case .V:
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle) 
-        case .adjective, .determiner, .adverb, .conjunction:
+        case .Adj, .Det, .Adv, .C:
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
-        case .noun:
+        case .N:
             let nounSingle = single as! dNounSingle
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:nounSingle.isSubject())
             nounSingle.copyGuts(newSingle: newSingle)
             if nounSingle.isSubject() {
                 m_clause.setPerson(value: nounSingle.getPerson())
             }
-        case .preposition:
+        case .P:
             let newSingle = m_randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
             single.copyGuts(newSingle: newSingle)
         default: break
@@ -322,7 +322,7 @@ struct AgnosticSentenceView: View {
         surgicalMessage = "Click on another word to examine"
         surgicalWord =         "\(wsd.wordType.rawValue): \(wsd.word.word)"
         switch wsd.wordType {
-        case .noun:
+        case .N:
             surgicalTitle = "Noun"
             surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
             surgicalEnglish = "English: \("")"
@@ -332,7 +332,7 @@ struct AgnosticSentenceView: View {
             surgicalLine4 = ""
             surgicalLine5 = ""
             surgicalLine6 = ""
-        case .adjective:
+        case .Adj:
             surgicalTitle = "Adjective"
             surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
             surgicalEnglish = "English: \("")"
@@ -342,7 +342,7 @@ struct AgnosticSentenceView: View {
             surgicalLine4 = ""
             surgicalLine5 = ""
             surgicalLine6 = ""
-        case .determiner:
+        case .Det:
             surgicalTitle = "Determiner"
             surgicalProcessedWord = "Current form: \(wsd.getProcessedWord())"
             surgicalEnglish = "English: \("")"
@@ -352,7 +352,7 @@ struct AgnosticSentenceView: View {
             surgicalLine4 = ""
             surgicalLine5 = ""
             surgicalLine6 = ""
-        case .verb:
+        case .V:
             surgicalTitle = "Verb"
             surgicalProcessedWord = "Conjugated: \(wsd.getProcessedWord())"
             
@@ -365,7 +365,7 @@ struct AgnosticSentenceView: View {
             
             surgicalLine5 = ""
             surgicalLine6 = ""
-        case .preposition:
+        case .P:
             surgicalTitle = "Preposition"
             surgicalEnglish = "English: \("")"
             surgicalLine1 = "Preposition type: \(wsd.prepositionType.rawValue)"

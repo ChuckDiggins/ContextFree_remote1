@@ -14,6 +14,7 @@ struct CFMorphStep {
     var comment1 : String = ""
     var comment2 : String = ""
     var comment3 : String = ""
+    var comment4 : String = ""
     var part1 : String = ""
     var part2 : String = ""
     var part3: String = ""
@@ -22,8 +23,8 @@ struct CFMorphStep {
         return (part1, part2, part3)
     }
     
-    func getComments()->(String, String, String){
-        return (comment1, comment2, comment3)
+    func getComments()->(String, String, String, String){
+        return (comment1, comment2, comment3, comment4)
     }
 }
 

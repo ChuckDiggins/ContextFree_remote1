@@ -37,7 +37,7 @@ class dNounSingle : dSingle
     }
     
     
-    func    getWordString()->String{
+    override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         
@@ -120,7 +120,7 @@ class dNounPhrase : dPhrase {
                 let det = cluster as! dDeterminerSingle
                 let ds = det.getWordStringAtLanguage(language: language)
                 sd.setProcessedWord(language: language, str: ds)
-                print("ds: \(ds) - sd.processedWord: \(sd.getProcessedWord(language: language))")
+                //print("ds: \(ds) - sd.processedWord: \(sd.getProcessedWord(language: language))")
             case .Adj:
                 let sd = cluster.getSentenceData()
                 sd.gender = npSentenceData.gender
@@ -128,7 +128,7 @@ class dNounPhrase : dPhrase {
                 let adj = cluster as! dAdjectiveSingle
                 let adjStr = adj.getWordStringAtLanguage(language: language)
                 sd.setProcessedWord(language: language, str: adjStr)
-                print("ds: \(adjStr) - sd.processedWord: \(sd.getProcessedWord(language: language))")
+                //print("ds: \(adjStr) - sd.processedWord: \(sd.getProcessedWord(language: language))")
             case .NP:
                 let np = cluster as! dNounPhrase
                 np.reconcileForLanguage(language: language)
@@ -175,33 +175,6 @@ class dNounPhrase : dPhrase {
         }
     }
     
-    func dumpClusterInfo(str: String){
-        print(str)
-        
-        //let npSentenceData = getSentenceData()
-        for cluster in getClusterList(){
-            let sym = cluster.getClusterType()
-            if ( sym == .Det  ){
-                let sd = cluster.getSentenceData()
-                if sym == .Det {
-                    let det = cluster as! dDeterminerSingle
-                    let ds = det.getWordString()
-                    print("dumpClusterInfo:  determiner: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
-                }
-                if sym == .Adj {
-                    let det = cluster as! dAdjectiveSingle
-                    let ds = det.getWordString()
-                    print("dumpClusterInfo:  adjective: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
-                }
-                
-                if sym == .N {
-                    let n = cluster as! dNounSingle
-                    let ds = n.getWordString()
-                    print("adjective: \(ds) - sd.processedWord: \(sd.getProcessedWord())")
-                }
-            }
-        }
-    }
     
     override func getPerson()->Person{
         for cluster in getClusterList() {
@@ -210,7 +183,7 @@ class dNounPhrase : dPhrase {
                 let c = cluster as! dPersonalPronounSingle
                 let person = c.getPerson()
                 getSentenceData().person = person
-                if c.getPronounType() == .SUBJECT {m_isSubject = true}
+                if cluster.getPronounType() == .SUBJECT {m_isSubject = true}
                 return person      
             }
             else if clusterType == .N {
@@ -236,7 +209,7 @@ class dNounPhrase : dPhrase {
             if clusterType == .PersPro {
                 let c = cluster as! dPersonalPronounSingle
                 c.setPerson(value: value)
-                if c.getPronounType() == .SUBJECT {m_isSubject = true}
+                if cluster.getPronounType() == .SUBJECT {m_isSubject = true}
             }
         }
     }

@@ -51,7 +51,7 @@ struct Disambiguation {
             let single = singleList[i]
             let wsd = single.getSentenceData()
             switch wsd.wordType {
-            case .article:
+            case .Art:
                 if wsd.gender == .masculine && wsd.number == .singular && wsd.articleType == .definite  {
                     let nextSingle = singleList[i+1]
                     print("next single = \(nextSingle.getClusterWord().word) -- starts with a vowel \(nextSingle.startsWithVowelSound() )")
@@ -61,7 +61,7 @@ struct Disambiguation {
                         single.setProcessWordInWordStateData(str: "le")
                     }
                 }
-            case .subjectPronoun:
+            case .PersPro:
                 break
             default: break
             }
@@ -99,10 +99,10 @@ struct Disambiguation {
                     let wordType = nextSD.data.wordType
                     let tense = nextSD.data.tense
                     
-                    if  wordType == .verb && tense == .presentParticiple {
+                    if  wordType == .V && tense == .presentParticiple {
                         nextWordData = nextSD
                     }
-                    else if wordType == .verb && tense == .pastParticiple {
+                    else if wordType == .V && tense == .pastParticiple {
                         nextWordData = nextSD
                     }
                     //else scan for it

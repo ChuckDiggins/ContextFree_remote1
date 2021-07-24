@@ -24,6 +24,10 @@ class CFModelView: ObservableObject {
         return (cfModel?.getVerbModel(language: language))!
     }
     
+    func getRandomWordList()->RandomWordLists{
+        return (cfModel?.getRandomWordLists())!
+    }
+    
     func getWordStringParser()->WordStringParser{
         return (cfModel?.getWordStringParser())!
     }

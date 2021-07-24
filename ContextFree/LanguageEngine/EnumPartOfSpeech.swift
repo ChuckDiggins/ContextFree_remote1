@@ -7,8 +7,16 @@
 
 import Foundation
 
-enum  LanguageType{
+enum  LanguageType : String {
     case English, Spanish, French, Italian, Portuguese, Agnostic
+}
+
+enum PhraseType{
+    case NounPhrase
+    case VerbPhrase
+    case PrepositionPhrase
+    case AdjectivePhrase
+    case AdverbPhrase
 }
 
 enum  VerbEnding : String
@@ -364,6 +372,12 @@ enum WordType : String {
     case directObjectPronoun
     case indirectObjectPronoun
     case prepositionalPronoun
+    
+    case nounPhrase
+    case verbPhrase
+    case prepositionPhrase
+    case adverbPhrase
+    
     case unknown
 }
 

@@ -22,46 +22,47 @@ struct MorphOperationStruct{
     var morphOperation = MorphOperation.grab
     var from = CFTypes.none
     var to = CFTypes.none
-    var moveTo = MoveTo.none
+    var location = Location.none
 }
 
 struct MorphOperationJson : Codable{
     let morphOperationString : String
     let cfFromTypeString : String
     let cfToTypeString : String
-    var moveToString : String
+    var locationString : String
     
     init(morphOperation: String, cfFromTypeString: String, cfToTypeString: String){
         self.morphOperationString = morphOperation
         self.cfFromTypeString = cfFromTypeString
         self.cfToTypeString = cfToTypeString
-        self.moveToString = ""
+        self.locationString = ""
     }
     
-    init(morphOperation: String, cfToTypeString: String, moveToString: String){
+    init(morphOperation: String, cfFromTypeString: String, locationString: String){
         self.morphOperationString = morphOperation
-        self.cfFromTypeString = ""
-        self.cfToTypeString = cfToTypeString
-        self.moveToString = moveToString
+        self.cfFromTypeString = cfFromTypeString
+        self.cfToTypeString = ""
+        self.locationString = locationString
     }
 }
 
 enum CFTypes {
     case none
+    case literal     //any string, exclamation
+    case punctuation
     case directObjectPhrase
     case indirectObjectPhrase
     case subjectPhrase
-
     case directObjectPronoun
     case indirectObjectPronoun
     case subjectPronoun
     case demonstrativePronoun //this one, that one
-    case DisjP   //disjunctive: after preposition, after C'est (FR)
-    case AdvP   //y, en
-    case PossP   //my, mine
+    case disjunctivePronoun   //disjunctive: after preposition, after C'est (FR)
+    case adverbialPronoun   //y, en
+    case possessivePronoun   //my, mine
 }
 
-enum MoveTo {
+enum Location {
     case none
     case precedingVerb
     case insideVerb     //phrasal verbs in English
@@ -70,6 +71,8 @@ enum MoveTo {
     case afterDOPronoun
     case precedingClause
     case afterClause
+    case afterSingle
+    case beforeSingle
 }
 
 
@@ -112,30 +115,41 @@ struct CFMorphModel : Identifiable {
             case "directObjectPhrase" : mps.from = .directObjectPhrase
             case "subjectPhrase" : mps.from = .subjectPhrase
             case "indirectObjectPhrase" : mps.from = .indirectObjectPhrase
+            case "directObjectPronoun" : mps.from = .directObjectPronoun  //for removing
+            case "subjectPronoun" : mps.from = .subjectPronoun
+            case "indirectObjectPronoun" :  mps.from = .indirectObjectPronoun
+            case "demonstrativePronoun" : mps.from = .demonstrativePronoun //this one, that one
+            case "disjunctivePronoun" : mps.from = .disjunctivePronoun    //disjunctive: after preposition, after C'est (FR)
+            case "adverbialPronoun" : mps.from = .adverbialPronoun   //y, en
+            case "possessivePronoun" : mps.from = .possessivePronoun   //my, mine
+            case "literal" : mps.from = .literal
             case "none" : mps.from = .none
             default: mps.from = .none
             }
             
             switch mpj.cfToTypeString{
+            case "directObjectPhrase" : mps.to = .directObjectPhrase
+            case "subjectPhrase" : mps.to = .subjectPhrase
+            case "indirectObjectPhrase" : mps.to = .indirectObjectPhrase
             case "directObjectPronoun" : mps.to = .directObjectPronoun
             case "subjectPronoun" : mps.to = .subjectPronoun
             case "indirectObjectPronoun" :  mps.to = .directObjectPronoun
             case "demonstrativePronoun" : mps.to = .demonstrativePronoun //this one, that one
-            case "disjunctivePronoun" : mps.to = .DisjP   //disjunctive: after preposition, after C'est (FR)
-            case "adverbialPronoun" : mps.to = .AdvP   //y, en
-            case "possessivePronoun" : mps.to = .PossP   //my, mine
+            case "disjunctivePronoun" : mps.to = .disjunctivePronoun   //disjunctive: after preposition, after C'est (FR)
+            case "adverbialPronoun" : mps.to = .adverbialPronoun   //y, en
+            case "possessivePronoun" : mps.to = .possessivePronoun   //my, mine
             default: mps.to = .none
             }
             
-            switch mpj.moveToString{
-            case "precedingVerb" : mps.moveTo = .precedingVerb
-            case "insideVerb" : mps.moveTo = .insideVerb
-            case "appendToVerb" : mps.moveTo = .appendToVerb
-            case "precedingDOPronoun" : mps.moveTo = .precedingDOPronoun
-            case "afterDOPronoun" : mps.moveTo = .afterDOPronoun
-            case "precedingClause" : mps.moveTo = .precedingClause
-            case "afterClause" : mps.moveTo = .afterClause
-            default: mps.moveTo = .none
+            switch mpj.locationString{
+            case "precedingVerb" : mps.location = .precedingVerb
+            case "insideVerb" : mps.location = .insideVerb
+            case "appendToVerb" : mps.location = .appendToVerb
+            case "precedingDOPronoun" : mps.location = .precedingDOPronoun
+            case "afterDOPronoun" : mps.location = .afterDOPronoun
+            case "precedingClause" : mps.location = .precedingClause
+            case "afterClause" : mps.location = .afterClause
+            default: mps.location = .none
             }
             mpsList.append(mps)
         }

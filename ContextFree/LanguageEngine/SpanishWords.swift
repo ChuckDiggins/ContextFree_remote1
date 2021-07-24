@@ -51,11 +51,12 @@ struct SpanishWords {
     }
     */
     
+    /*
     mutating func createSomeAmbiguousWords(){
         createAmbiguousAndAppend(word: "", def: "", type: .general)
         createAmbiguousAndAppend(word: "", def: "", type: .pronoun)
     }
-    
+    */
     /*
     mutating func createSomeSpanishArticles(){
         createArticleAndAppend(word: "el", def: "the", type: .definite)
@@ -284,7 +285,7 @@ struct SpanishWords {
     }
     */
   
-    
+    /*
       
     mutating func createAdjectiveAndAppend (word : String, def: String, type : AdjectiveType, position: AdjectivePositionType){
         let pos = SpanishAdjective(word: word, type: type)
@@ -342,6 +343,6 @@ struct SpanishWords {
     }
     */
    
-
+*/
     
 }

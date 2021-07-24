@@ -35,6 +35,14 @@ struct ContentView: View {
                 .background(Color.purple)
                 .cornerRadius(10)
                 
+                NavigationLink(destination: ContextFreeLessonView()){
+                    Text("Context free lessons")
+                }.frame(width: 200, height: 50)
+                .padding(.leading, 10)
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                
                 NavigationLink(destination: AgnosticSentenceView()){
                     Text("Phrases in 3 Languages")
                 }.frame(width: 200, height: 50)

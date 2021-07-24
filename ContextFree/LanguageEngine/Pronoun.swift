@@ -385,7 +385,7 @@ class SpanishPronoun : Pronoun {
                 case .S3: return "él"
                 case .P1: return "nosotros"
                 case .P2: return "vosotros"
-                case .P3: return "ustedes"
+                case .P3: return "ellos"
                 }
             case .feminine:
                 switch person{
@@ -394,7 +394,7 @@ class SpanishPronoun : Pronoun {
                 case .S3: return "ella"
                 case .P1: return "nosotras"
                 case .P2: return "vosotras"
-                case .P3: return "ustedes"
+                case .P3: return "ellas"
                 }
             }
         }

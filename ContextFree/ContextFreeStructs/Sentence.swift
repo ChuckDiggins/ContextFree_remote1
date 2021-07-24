@@ -280,27 +280,27 @@ struct Sentence  {
         for data in dataList {
             let word = data.word
             switch data.data.wordType {
-            case .adjective:
+            case .Adj:
                 single = dAdjectiveSingle(word: word, data: data.data)
-            case .adverb:
+            case .Adv:
                 single = dAdverbSingle(word:word, data: data.data)
-            case .ambiguous:
+            case .AMB:
                 single = dAmbiguousSingle(word: word, data: data.data)
-            case .article:
+            case .Art:
                 single = dArticleSingle(word: word, data: data.data)
-            case .conjunction:
+            case .C:
                 single = dConjunctionSingle(word: word, data: data.data)
-            case .determiner:
+            case .Det:
                 single = dDeterminerSingle(word: word, data: data.data)
-            case .noun:
+            case .N:
                 single = dNounSingle(word: word, data: data.data)
-            case .number:
+            case .Num:
                 single = dAdjectiveSingle(word: word, data: data.data)
-            case .pronoun:
+            case .PersPro:
                 single = dPersonalPronounSingle(word: word, data: data.data)
-            case .preposition:
+            case .P:
                 single = dPrepositionSingle(word: word, data: data.data)
-            case .verb:
+            case .V:
                 single = dVerbSingle(word: word, data: data.data)
             default:
                 single = dUnknownSingle(word: word, data: data.data)

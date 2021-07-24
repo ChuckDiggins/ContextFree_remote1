@@ -53,6 +53,7 @@ enum ContextFreeSymbolType : String, CaseIterable {
     
 }
 */
+
 enum ContextFreeFunction : String, CaseIterable {
     case Subject = "Subject"
     case DirectObject = "DirectObject"
@@ -61,10 +62,12 @@ enum ContextFreeFunction : String, CaseIterable {
     case Undefined = "Undefined"
 }
 
+
 enum ContextFreeSymbol : String, CaseIterable {
     case arrow = "->"
     case AMB
     case UNK = "UNK"
+    case punct = "Punct"
     case comma = ","
     case period = "."
     case colon = ":"
@@ -77,6 +80,7 @@ enum ContextFreeSymbol : String, CaseIterable {
     case N = "N"
     case ProperName = "PropN"
     case PersPro = "PersPro"
+    case Pronoun = "Pronoun"
 
     case ReflP = "ReflP"
     case ImpP = "ImpP"
@@ -112,6 +116,7 @@ enum ContextFreeSymbol : String, CaseIterable {
     case Vger = "VgerP"
     case AdvP = "AdvP"
 
+    case Cls = "Clause"
     case InDCls = "InDepCls"
     case DCls = "DepCls"
     case RCls = "RelCls"
@@ -140,6 +145,24 @@ enum ContextFreeSymbol : String, CaseIterable {
         switch self{
         case .DCls, .RCls, .AdjCls, .AdvCls, .NCls, .S: return true
         default: return false
+        }
+    }
+    
+    func getWordType(str: String)->ContextFreeSymbol{
+        switch str{
+        case "NP":  return .NP
+        case "VP": return  .VP
+        case "PP": return .PP
+        case "Art": return .Art
+        case "Adj": return .Adj
+        case "Adv": return .Adv
+        case "C": return .C
+        case "N": return .N
+        case "V": return .V
+        case "P": return .P
+        case "PersPro": return .PersPro
+        case "?": return .questionMark
+        default: return .AMB
         }
     }
     

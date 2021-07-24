@@ -85,19 +85,58 @@ class dCluster {
         m_sentenceData.tense = value
     }
     
+    func getPronounType()->PronounType{return m_sentenceData.pronounType}
+    func isPersonalPronounType()->Bool{
+        if m_sentenceData.pronounType == .DIRECT_OBJECT ||
+            m_sentenceData.pronounType == .INDIRECT_OBJECT ||
+            m_sentenceData.pronounType == .SUBJECT ||
+            m_sentenceData.pronounType == .PREPOSITIONAL ||
+            m_sentenceData.pronounType == .REFLEXIVE {return true}
+        return false
+    }
+    
     func getTense()->Tense{return m_sentenceData.tense}
 
     func setNumber(value : Number){m_sentenceData.number = value}
     func getNumber()->Number{return m_sentenceData.number}
 
-    func setWordType(value : WordType){m_sentenceData.wordType = value}
-    func getWordType()->WordType{return m_sentenceData.wordType}
+    func setWordType(value : ContextFreeSymbol){m_sentenceData.wordType = value}
+    func getWordType()->ContextFreeSymbol{return m_sentenceData.wordType}
 
     func getPhraseString(inCluster: dCluster)->String{
         return ""
     }
 }
 
+/*
+class dClusterGroup : dCluster {
+    var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
+    var m_clusterList = Array<dCluster>()
+    
+    func getClusterCount()->Int{return m_clusterList.count}
+    
+    func getClusterList()->[dCluster]{ return m_clusterList}
+    
+    func appendCluster(cluster: dCluster){
+        if cluster.getWordType() == .noun {
+            m_sentenceData.gender = cluster.getGender()
+            m_sentenceData.number = cluster.getNumber()
+        }
+        m_clusterList.append(cluster)
+        if m_clusterList.count == 1 {m_sentenceData.language = cluster.getSentenceData().language}
+    }
+    
+    func getClusterAtFunction(fn: ContextFreeFunction)->dCluster{
+        for cluster in getClusterList(){
+            if cluster.getClusterFunction() == fn {return cluster}
+        }
+        return dCluster()
+    }
+    
+    
+    
+}
+*/
 
 
 

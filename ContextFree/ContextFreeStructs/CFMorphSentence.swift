@@ -13,252 +13,188 @@ struct CFMorphSentence {
     var directObjectPronoun = ""
     var indirectObjectPronoun = ""
     
-    
-    
-    mutating func convertSpanishPhrasesToPersonalPronouns(inputMorphStruct:CFMorphStruct, ppFunctionList: [PPFunctionType])->CFMorphStruct {
-        let currentLanguage = LanguageType.Spanish
-        var equivalentPronounString = ""
-        var equivalentPronounDescription = ""
-        var equivalentPronoun = Pronoun()
-        var workingMorphStruct = inputMorphStruct
-        var masterSingleList = m_clause.getSingleList()
-        var verbIndex = 0
-        
-        var phraseSingleList = [dSingle]()
-        var phraseIndexList = [Int]()
-        
-        for ppFunction in ppFunctionList{
-            switch ppFunction{
-            case .none:
-                return workingMorphStruct
-            case .subject:
-                equivalentPronounString = m_clause.getSubjectPronounString(language: currentLanguage)
-                equivalentPronounDescription = "subject pronoun"
-                phraseSingleList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
-            case .directObject:
-                equivalentPronounString = m_clause.getDirectObjectPronounString(language: currentLanguage)
-                equivalentPronounDescription = "direct object pronoun"
-                phraseSingleList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .DirectObject)
-            case .indirectObject:
-                equivalentPronounString = m_clause.getIndirectObjectPronounString(language: currentLanguage)
-                equivalentPronounDescription = "indirect object pronoun"
-                phraseSingleList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .IndirectObject)
-            case .prepositionalObject:
-                equivalentPronounDescription = "prepositional object pronoun"
-                return workingMorphStruct
+    mutating func dumpWorkingSingleList(language: LanguageType, showPronounTypes:Bool){
+        var workingSingleList = m_clause.getWorkingSingleList()
+        print("dumpWorkingSingleList ")
+        for index in 0 ..< workingSingleList.count {
+            let single = workingSingleList[index]
+            if showPronounTypes {
+                let ptype = single.getPronounType().rawValue
+                print("\(index).\(getWordString(language: language, single: single)), \(ptype)")
             }
-            
-            //create a parallel array of booleans to indicate selected or not
-            
-            var selectedList = [Bool]()
-            for _ in 0 ..< masterSingleList.count {
-                selectedList.append(false)
+            else{
+                print("\(index).\(getWordString(language: language, single: single))")
             }
-            
-            //find the location of the first verb single
-            
-            for ssIndex in 0 ..< masterSingleList.count {
-                let single = masterSingleList[ssIndex]
-                if ( single.getClusterType() == .V ){
-                    verbIndex = ssIndex
-                    break
-                }
-            }
-            
-            //fill the phraseIndexList indices ...
-            phraseIndexList.removeAll()
-            for phraseIndex in 0 ..< phraseSingleList.count {
-                let phraseSingle = phraseSingleList[phraseIndex]
-                for ssIndex in 0 ..< masterSingleList.count {
-                    let single = masterSingleList[ssIndex]
-                    //literally checking their addresses to confirm that they point to the same object
-                    if phraseSingle == single {
-                        phraseIndexList.append(ssIndex)
-                        selectedList[ssIndex] = true
-                        break
-                    }
-                }
-            }
-            
-            for ssIndex in 0 ..< masterSingleList.count {
-                print("masterSingleList \(masterSingleList[ssIndex]): selectedList \(selectedList[ssIndex])")
-            }
-            
-            //------------------------------------------------------------------------------
-            //step 1 - highlight the current functional phrase
-            
-            var morphStep = CFMorphStep()
-            
-            //fill part1 - prefunctional part ... if any
-            var breakIndex = 0
-            for ssIndex in breakIndex ..< masterSingleList.count {
-                if selectedList[ssIndex] {
-                    breakIndex = ssIndex
-                    break
-                }
-                morphStep.part1 += masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-            }
-            
-            //fill part2 -- functional part - should start off with selected word
-            
-            var doPhrase = ""
-            for ssIndex in breakIndex ..< masterSingleList.count {
-                if selectedList[ssIndex] {
-                    morphStep.part2 += masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-                    doPhrase = masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage)
-                } else {
-                    breakIndex = ssIndex
-                    break
-                }
-            }
-            //fill part3 -- postfunctional part ... if any
-            for ssIndex in breakIndex ..< masterSingleList.count {
-                morphStep.part3 += masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-            }
-            morphStep.comment1 = "Grab the "
-            morphStep.comment2 = "\(equivalentPronounDescription) "
-            morphStep.comment3 = "phrase in sentence"
-            workingMorphStruct.append(morphStep: morphStep)
-            
-            print("\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
-            //------------------------------------------------------------------------------
-            //step 2 - replace the current phrase with the equivalent pronoun
-            
-            //fill part1 - prefunctional part ... if any
-            
-            morphStep = CFMorphStep()
-            breakIndex = 0
-            for ssIndex in breakIndex ..< masterSingleList.count {
-                if selectedList[ssIndex] {
-                    breakIndex = ssIndex
-                    break
-                }
-                morphStep.part1 += masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-            }
-            
-            //fill part2 -- functional part - should start off with selected word
-            
-            for ssIndex in breakIndex ..< masterSingleList.count {
-                if selectedList[ssIndex] {
-                    morphStep.part2 += equivalentPronounString + " "
-                    //remove these singles from the single list
-                    for removeIndex in 0 ..< phraseSingleList.count {
-                        masterSingleList.remove(at: ssIndex)
-                    }
-                    breakIndex = ssIndex
-                    break
-                } else {
-                    breakIndex = ssIndex
-                    break
-                }
-            }
-            
-            //fill part3 -- postfunctional part ... if any
-            for ssIndex in breakIndex ..< masterSingleList.count {
-                morphStep.part3 += masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-            }
-            morphStep.comment1 = "Replace the \(equivalentPronounDescription) "
-            morphStep.comment2 = "\(doPhrase) -> \(equivalentPronoun)"
-            morphStep.comment3 = ""
-            workingMorphStruct.append(morphStep: morphStep)
-            
-            print("\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
-            
-            if ppFunction == .subject { continue }
-            
-            //
-            //step 3 - move the direct object pronoun in front of the verb
-            //
-            
-            //fill part1 - subject ... preVerb
-            
-            morphStep = CFMorphStep()
-            breakIndex = 0
-            for ssIndex in breakIndex ..< verbIndex {
-                morphStep.part1 += masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-            }
-            
-            morphStep.part2 += equivalentPronounString + " "
-            breakIndex = verbIndex //this only accounts for a single word verb ... we need to find the core verb phrase
-            // está comprando
-            // quiero mandar
-            
-            //fill part3 -- postfunctional part ... if any
-            for ssIndex in breakIndex ..< masterSingleList.count {
-                morphStep.part3 += masterSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-            }
-            morphStep.comment1 = "Move the \(equivalentPronounDescription) -> "
-            morphStep.comment2 = "\(equivalentPronoun)"
-            morphStep.comment3 = " <- before the verb"
-            workingMorphStruct.append(morphStep: morphStep)
-            
-            print("equivalentPronounDescription:")
-            print("\(morphStep.comment1) + .. \(morphStep.comment2) + ..\(morphStep.comment3) ")
-            print("\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
         }
-        return workingMorphStruct
     }
     
     mutating func applyMorphModel(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
         let currentLanguage = language
         var workingMorphStruct = inputMorphStruct
         var equivalentPronoun = Pronoun()
-        var equivalentPronounString = ""
+        var equivalentPronounSingle = dPersonalPronounSingle()
         var equivalentPronounDescription = ""
         var workingSingleList = m_clause.getWorkingSingleList()
-        var verbIndex = 0
+        var verbIndex = -1
+        var doIndex = -1
+        var inDoIndex = -1
+        var subjIndex = -1
         var selectedList = [Bool]()
-        
+        var gender = Gender.masculine
+        var number = Number.singular
+        var person = Person.S1
         var phraseSingleList = [dSingle]()
         var phraseIndexList = [Int]()
-    
+        var removeIndex = 0
+        var targetPronounType = PronounType.PERSONAL  //ambiguous
+
         //retrieve the appropriate pronoun phrase
         for cfOperation in cfMorphModel.mpsList{
-            switch cfOperation.from {
-            case .subjectPhrase:
-                equivalentPronounString = m_clause.getSubjectPronounString(language: currentLanguage)
-                equivalentPronounDescription = "subject pronoun"
-                phraseSingleList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
-                if phraseSingleList.count == 0 {
-                    print("could not retieve a subject phrase")
-                    return workingMorphStruct
+            print("\ncfOperation: \(cfOperation.morphOperation.rawValue)")
+            if cfOperation.morphOperation == .remove {
+                switch cfOperation.from {
+                case .subjectPronoun:
+                    equivalentPronounDescription = "remove subject pronoun"
+                    targetPronounType = .SUBJECT
+                case .directObjectPronoun:
+                    equivalentPronounDescription = "remove direct object pronoun"
+                    targetPronounType = .DIRECT_OBJECT
+                case .indirectObjectPronoun:
+                    equivalentPronounDescription = "remove indirect object pronoun"
+                    targetPronounType = .INDIRECT_OBJECT
+                default: break
                 }
-            case .directObjectPhrase:
-                equivalentPronounString = m_clause.getDirectObjectPronounString(language: currentLanguage)
-                equivalentPronounDescription = "direct object pronoun"
-                phraseSingleList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .DirectObject)
-                if phraseSingleList.count == 0 {
-                    print("could not retieve a direct object phrase")
-                    return workingMorphStruct
+                
+                print("In remove: ")
+                dumpWorkingSingleList(language: language, showPronounTypes: true)
+                
+                workingSingleList = m_clause.getWorkingSingleList()
+                
+                //find the personal pronoun
+                for index in 0 ..< workingSingleList.count {
+                    var single = workingSingleList[index]
+                    let pronounType = single.getPronounType()
+                    if pronounType == targetPronounType {
+                        removeIndex = index
+                        break
+                    }
                 }
-            case .indirectObjectPhrase:
-                equivalentPronounString = m_clause.getIndirectObjectPronounString(language: currentLanguage)
-                equivalentPronounDescription = "indirect object pronoun"
-                phraseSingleList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .IndirectObject)
-                if phraseSingleList.count == 0 {
-                    print("could not retieve an indirect object phrase")
-                    return workingMorphStruct
-                }
-            default:
-                break
+                print("In remove 2: ")
+                dumpWorkingSingleList(language: language, showPronounTypes: true)
+                
+                workingMorphStruct = remove(language: currentLanguage, inputMorphStruct: workingMorphStruct, removeIndex: removeIndex, equivalentPronounDescription: equivalentPronounDescription)
             }
+            else {
+                switch cfOperation.from {
+                case .subjectPhrase:
+                    equivalentPronoun = m_clause.getPronoun(language: currentLanguage, type: .SUBJECT)
+                    equivalentPronounDescription = "subject pronoun"
+                    let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
+                    phraseSingleList = result.0
+                    gender = result.1
+                    number = result.2
+                    person = result.3
+                    if phraseSingleList.count == 0 {
+                        print("could not retieve a subject phrase")
+                        return workingMorphStruct
+                    }
+                case .directObjectPhrase:
+                    equivalentPronoun = m_clause.getPronoun(language: currentLanguage, type: .DIRECT_OBJECT)
+                    equivalentPronounDescription = "direct object pronoun"
+                    let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .DirectObject)
+                    phraseSingleList = result.0
+                    gender = result.1
+                    number = result.2
+                    person = result.3
+                    if phraseSingleList.count == 0 {
+                        print("could not retieve a direct object phrase")
+                        return workingMorphStruct
+                    }
+                case .indirectObjectPhrase:
+                    equivalentPronoun = m_clause.getPronoun(language: currentLanguage, type: .INDIRECT_OBJECT)
+                    equivalentPronounDescription = "indirect object pronoun"
+                    let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .IndirectObject)
+                    phraseSingleList = result.0
+                    gender = result.1
+                    number = result.2
+                    person = result.3
+                    if phraseSingleList.count == 0 {
+                        print("Could not retrieve an indirect object phrase")
+                        return workingMorphStruct
+                    }
+                case .indirectObjectPronoun:
+                    var single = dPersonalPronounSingle()
+                   
+                    for index in 0 ..< workingSingleList.count {
+                        if single.getPronounType() == .INDIRECT_OBJECT {
+                            equivalentPronounSingle = single
+                        }
+                    }
+                    equivalentPronounDescription = "indirect object pronoun"
+                    phraseSingleList.append(single)
+                default:
+                    break
+                }
+            }
+
+            //create a new pronoun single to work with
             
-            //create a parallel array of booleans to indicate selected or not
+            let wsd = WordStateData()
+            wsd.language = language
+            wsd.word = Word()
+            wsd.pronounType = equivalentPronoun.type
+            wsd.person = person
+            wsd.gender = gender
+            wsd.number = number
+            wsd.wordType = .Pronoun
+            equivalentPronounSingle = dPersonalPronounSingle(word: equivalentPronoun, data: wsd)
+            let equivalentPronounString = getWordString(language:language, single: equivalentPronounSingle)
+            
+             //create a parallel array of booleans to indicate selected or not
            
             selectedList.removeAll()
             for _ in 0 ..< workingSingleList.count {
                 selectedList.append(false)
             }
             
-            //find the location of the first verb single
             
+            //find the location of a few important words
+            
+            var moveFromIndex = -1
+            var moveToIndex = -1
+            dumpWorkingSingleList(language: language, showPronounTypes: true)
+            var workingSingleList = m_clause.getWorkingSingleList()
             for ssIndex in 0 ..< workingSingleList.count {
                 let single = workingSingleList[ssIndex]
-                if ( single.getClusterType() == .V ){
+                if  single.getClusterType() == .V {
                     verbIndex = ssIndex
-                    break
+                }
+                else if  single.getPronounType() == .SUBJECT {
+                    subjIndex = ssIndex
+                }
+                else if  single.getPronounType() == .DIRECT_OBJECT {
+                    doIndex = ssIndex
+                }
+                else if  single.getPronounType() == .INDIRECT_OBJECT {
+                    inDoIndex = ssIndex
                 }
             }
+            
+            switch cfOperation.from {
+            case .indirectObjectPronoun: moveFromIndex = inDoIndex
+            case .directObjectPronoun: moveFromIndex = doIndex
+            case .subjectPronoun: moveFromIndex = subjIndex
+            default: break
+            }
+            
+            switch cfOperation.location {
+            case .precedingVerb:  moveToIndex = verbIndex
+            case .precedingDOPronoun:
+                if doIndex >= 0 {moveToIndex = doIndex}
+                else {moveToIndex = verbIndex}
+            default: break
+            }
+
             
             //fill the phraseIndexList ...
             //also, set the selectedList to true for this phrase type
@@ -282,11 +218,11 @@ struct CFMorphSentence {
                
             switch cfOperation.morphOperation {
             case .grab:
-                workingMorphStruct = grab(language: currentLanguage, inputMorphStruct: workingMorphStruct, selectedList: selectedList, equivalentPronounDescription: equivalentPronounDescription)
+                workingMorphStruct = grab(language: currentLanguage, inputMorphStruct: workingMorphStruct, selectedList: selectedList,  phraseSingleList : phraseSingleList, equivalentPronounSingle : equivalentPronounSingle, equivalentPronounDescription: equivalentPronounDescription)
             case .replace:
-                workingMorphStruct = replace(language: currentLanguage, inputMorphStruct: workingMorphStruct, selectedList: selectedList, phraseSingleList : phraseSingleList, equivalentPronounString:equivalentPronounString, equivalentPronounDescription: equivalentPronounDescription)
+                workingMorphStruct = replace(language: currentLanguage, inputMorphStruct: workingMorphStruct, selectedList: selectedList, phraseSingleList : phraseSingleList, equivalentPronounSingle : equivalentPronounSingle, equivalentPronounDescription: equivalentPronounDescription)
             case .insertBefore:
-                workingMorphStruct = insertBefore(language: currentLanguage, inputMorphStruct: workingMorphStruct, insertIndex: verbIndex, equivalentPronounString:equivalentPronounString, equivalentPronounDescription: equivalentPronounDescription)
+                workingMorphStruct = insertBefore(language: currentLanguage, inputMorphStruct: workingMorphStruct, insertIndex: moveToIndex, equivalentPronounSingle : equivalentPronounSingle, equivalentPronounDescription: equivalentPronounDescription)
             case .remove:
                 break
             case .contract:
@@ -296,21 +232,33 @@ struct CFMorphSentence {
             case .append:
                 break
             case .move:
+                workingMorphStruct = moveSingle(language: currentLanguage, inputMorphStruct: workingMorphStruct, removeIndex: moveFromIndex, moveToIndex: moveToIndex,  equivalentPronounDescription: equivalentPronounDescription)
                 break
             }
             
         }//operation loop
-        
-        
+
         return workingMorphStruct
     }
     
-    mutating func grab (language: LanguageType, inputMorphStruct:CFMorphStruct, selectedList:[Bool], equivalentPronounDescription: String)->CFMorphStruct{
+    mutating func getWordString(language: LanguageType, single: dSingle)->String{
+        if single.isPersonalPronounType(){
+            let ppSingle = single as! dPersonalPronounSingle
+            return ppSingle.getWordStringAtLanguage(language: language)
+        }
+        return single.getProcessWordInWordStateData(language: language) + " "
+    }
+    
+    mutating func grab (language: LanguageType, inputMorphStruct:CFMorphStruct, selectedList:[Bool], phraseSingleList : [dSingle], equivalentPronounSingle : dPersonalPronounSingle, equivalentPronounDescription: String)->CFMorphStruct{
         
-        let currentLanguage = language
         let workingMorphStruct = inputMorphStruct
         var morphStep = CFMorphStep()
         var workingSingleList = m_clause.getWorkingSingleList()
+        var grabString = ""
+        var doPhrase = ""
+        for i in 0 ..< phraseSingleList.count {
+            doPhrase += getWordString(language: language, single: phraseSingleList[i]) + " "
+        }
         
         //fill part1 - prefunctional part ... if any
         var breakIndex = 0
@@ -319,16 +267,17 @@ struct CFMorphSentence {
                 breakIndex = ssIndex
                 break
             }
-            morphStep.part1 += workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
+            let single = workingSingleList[ssIndex]
+            morphStep.part1 += getWordString(language: language, single: single) + " "
         }
         
         //fill part2 -- functional part - should start off with selected word
         
-        
         for ssIndex in breakIndex ..< workingSingleList.count {
             if selectedList[ssIndex] {
-                morphStep.part2 += workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
-                
+                let wordString = getWordString(language: language, single: workingSingleList[ssIndex])
+                morphStep.part2 = doPhrase + " "
+                //grabString = doPhrase  + " "
             } else {
                 breakIndex = ssIndex
                 break
@@ -336,52 +285,56 @@ struct CFMorphSentence {
         }
         //fill part3 -- postfunctional part ... if any
         for ssIndex in breakIndex ..< workingSingleList.count {
-            morphStep.part3 += workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
+            morphStep.part3 += getWordString(language: language, single: workingSingleList[ssIndex])
         }
-        morphStep.comment1 = "Grab the "
-        morphStep.comment2 = "\(equivalentPronounDescription) "
-        morphStep.comment3 = "phrase in sentence"
+        morphStep.comment1 = "Grab the \(equivalentPronounDescription) ("
+        morphStep.comment2 = "\(doPhrase)"
+        morphStep.comment3 = ") in the sentence"
         workingMorphStruct.append(morphStep: morphStep)
         
-        print("\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
-        print("\(morphStep.comment1) + .. \(morphStep.comment2) + ..\(morphStep.comment3) ")
+        print("\nGrab: \(equivalentPronounDescription)")
+        print("MorphSteps: \(morphStep.part1), \(morphStep.part2), \(morphStep.part3) ")
+        print("Comment: \(morphStep.comment1) \(morphStep.comment2) \(morphStep.comment3) ")
         
         m_clause.setWorkingSingleList(singleList: workingSingleList)
         return workingMorphStruct
     }
     
     mutating func replace(language: LanguageType, inputMorphStruct:CFMorphStruct, selectedList:[Bool],
-                          phraseSingleList : [dSingle], equivalentPronounString:String, equivalentPronounDescription: String)->CFMorphStruct{
-        //step 2 - replace the current phrase with the equivalent pronoun
+                          phraseSingleList : [dSingle], equivalentPronounSingle : dPersonalPronounSingle, equivalentPronounDescription: String)->CFMorphStruct{
+        
+        //Replace the current phrase with the equivalent pronoun
         
         let currentLanguage = language
         let workingMorphStruct = inputMorphStruct
         var morphStep = CFMorphStep()
         var workingSingleList = m_clause.getWorkingSingleList()
-        
+        print("\nBefore replace")
+        dumpWorkingSingleList(language: language, showPronounTypes:true)
         var doPhrase = ""
         var breakIndex = 0
         for ssIndex in breakIndex ..< workingSingleList.count {
             if selectedList[ssIndex] {
                 breakIndex = ssIndex
-                
                 break
             }
-            morphStep.part1 += workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
+            morphStep.part1 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
         }
         
         //fill part2 -- functional part - should start off with selected word
         
+        let equivalentPronounString = equivalentPronounSingle.getWordStringAtLanguage(language:language)
+        
         for ssIndex in breakIndex ..< workingSingleList.count {
             if selectedList[ssIndex] {
-                doPhrase = workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage)
                 morphStep.part2 += equivalentPronounString + " "
                 //remove these singles from the single list
                 for _ in 0 ..< phraseSingleList.count {
+                    doPhrase += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
                     workingSingleList.remove(at: ssIndex)
                 }
-                
-                breakIndex = ssIndex
+                workingSingleList.insert(equivalentPronounSingle, at: ssIndex)
+                breakIndex = ssIndex + 1
                 break
             } else {
                 breakIndex = ssIndex
@@ -391,20 +344,113 @@ struct CFMorphSentence {
         
         //fill part3 -- postfunctional part ... if any
         for ssIndex in breakIndex ..< workingSingleList.count {
-            morphStep.part3 += workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
+            morphStep.part3 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
         }
-        morphStep.comment1 = "Replace the \(equivalentPronounDescription) "
-        morphStep.comment2 = "\(doPhrase) -> \(equivalentPronounString)"
-        morphStep.comment3 = ""
+        morphStep.comment1 = "Replace \(equivalentPronounDescription) "
+        morphStep.comment2 = "(\(doPhrase)) "
+        morphStep.comment3 = "with pronoun "
+        morphStep.comment4 = "(\(equivalentPronounString))"
         workingMorphStruct.append(morphStep: morphStep)
         m_clause.setWorkingSingleList(singleList: workingSingleList)
+        //
+        print("\nAfter replace")
+        dumpWorkingSingleList(language: language, showPronounTypes:true)
         
-        print("\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
-        print("\(morphStep.comment1) + .. \(morphStep.comment2) + ..\(morphStep.comment3) ")
+        print("\nReplace: \(equivalentPronounDescription) -\(doPhrase)- with \(equivalentPronounString)")
+        print("MorphSteps: \(morphStep.part1) +  \(morphStep.part2) + \(morphStep.part3) ")
+        print("Comment\(morphStep.comment1) \(morphStep.comment2)\(morphStep.comment3)\(morphStep.comment4) ")
         return workingMorphStruct
     }
     
-    mutating func insertBefore (language: LanguageType, inputMorphStruct:CFMorphStruct, insertIndex:Int, equivalentPronounString:String, equivalentPronounDescription: String)->CFMorphStruct{
+    mutating func moveSingle (language: LanguageType, inputMorphStruct:CFMorphStruct, removeIndex:Int, moveToIndex:Int, equivalentPronounDescription: String)->CFMorphStruct
+    {
+        let currentLanguage = language
+        let workingMorphStruct = inputMorphStruct
+        
+        var workingSingleList = m_clause.getWorkingSingleList()
+        var targetSingle = dSingle()
+        
+        //-------------------------------------------------------------------------------------------------------
+        //first remove the target single
+        
+        var morphStep = CFMorphStep()
+        for ssIndex in 0 ..< removeIndex {
+            morphStep.part1 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
+        }
+        targetSingle = workingSingleList[removeIndex]
+        let pronounStr = getWordString(language: language, single: targetSingle) + " "
+        
+        //morphStep.part2 += pronoun.getString() + " "
+        workingSingleList.remove(at: removeIndex)
+
+        //fill part3 -- postfunctional part ... if any
+        for ssIndex in removeIndex ..< workingSingleList.count {
+            morphStep.part3 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
+        }
+        morphStep.comment1 = "Remove the \(equivalentPronounDescription) "
+        morphStep.comment2 = "(\(pronounStr))"
+        workingMorphStruct.append(morphStep: morphStep)
+        
+        //-------------------------------------------------------------------------------------------------------
+        // next move the single to where it belongs
+        
+        morphStep = CFMorphStep()
+        for ssIndex in 0 ..< moveToIndex {
+            morphStep.part1 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
+        }
+        morphStep.part2 = getWordString(language: language, single: targetSingle) + " "
+        //fill part3 -- postfunctional part ... if any
+        for ssIndex in moveToIndex ..< workingSingleList.count {
+            morphStep.part3 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
+        }
+        // insert the single last so the morphSteps don't have to take into account the changing indices
+        workingSingleList.insert(targetSingle, at: moveToIndex)
+        morphStep.comment1 = "Insert the \(equivalentPronounDescription) "
+        morphStep.comment2 = "(\(pronounStr))"
+        workingMorphStruct.append(morphStep: morphStep)
+        m_clause.setWorkingSingleList(singleList: workingSingleList)
+        
+        
+        print("\nRemove: \(equivalentPronounDescription)  at index \(removeIndex)")
+        print("MorphSteps:\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
+        print("Comment: \(morphStep.comment1) (\(morphStep.comment2 ) \(morphStep.comment3) ")
+
+        return workingMorphStruct
+    }
+    mutating func remove (language: LanguageType, inputMorphStruct:CFMorphStruct, removeIndex:Int, equivalentPronounDescription: String)->CFMorphStruct{
+        
+        let currentLanguage = language
+        let workingMorphStruct = inputMorphStruct
+        var morphStep = CFMorphStep()
+        var workingSingleList = m_clause.getWorkingSingleList()
+        
+        for ssIndex in 0 ..< removeIndex {
+            morphStep.part1 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
+        }
+        
+        let pronounStr = getWordString(language: language, single: workingSingleList[removeIndex]) + " "
+        
+        //morphStep.part2 += pronoun.getString() + " "
+        workingSingleList.remove(at: removeIndex)
+
+        //fill part3 -- postfunctional part ... if any
+        for ssIndex in removeIndex ..< workingSingleList.count {
+            morphStep.part3 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
+        }
+        morphStep.comment1 = "Remove the \(equivalentPronounDescription) "
+        morphStep.comment2 = "(\(pronounStr))"
+        workingMorphStruct.append(morphStep: morphStep)
+        m_clause.setWorkingSingleList(singleList: workingSingleList)
+        
+        print("\nRemove: \(equivalentPronounDescription)  at index \(removeIndex)")
+        print("MorphSteps:\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
+        print("Comment: \(morphStep.comment1) (\(morphStep.comment2 ) \(morphStep.comment3) ")
+
+        return workingMorphStruct
+    }
+    mutating func insertBefore (language: LanguageType, inputMorphStruct:CFMorphStruct, insertIndex:Int, equivalentPronounSingle : dPersonalPronounSingle,  equivalentPronounDescription: String)->CFMorphStruct{
+       
+        let equivalentPronounString = getWordString(language: language, single: equivalentPronounSingle) + " "
         
         let currentLanguage = language
         let workingMorphStruct = inputMorphStruct
@@ -413,28 +459,31 @@ struct CFMorphSentence {
         
         var breakIndex = 0
         for ssIndex in breakIndex ..< insertIndex {
-            morphStep.part1 += workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
+            morphStep.part1 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
         }
         
         morphStep.part2 += equivalentPronounString + " "
         breakIndex = insertIndex //this only accounts for a single word verb ... we need to find the core verb phrase
+        workingSingleList.insert(equivalentPronounSingle, at: insertIndex)
+        
+        breakIndex = insertIndex + 1
         
         // está comprando
         // quiero mandar
         
         //fill part3 -- postfunctional part ... if any
         for ssIndex in breakIndex ..< workingSingleList.count {
-            morphStep.part3 += workingSingleList[ssIndex].getProcessWordInWordStateData(language: currentLanguage) + " "
+            morphStep.part3 += getWordString(language: language, single: workingSingleList[ssIndex]) + " "
         }
         morphStep.comment1 = "Move the \(equivalentPronounDescription) -> "
         morphStep.comment2 = "\(equivalentPronounString)"
-        morphStep.comment3 = " <- before the verb"
+        morphStep.comment3 = " to new location"
         workingMorphStruct.append(morphStep: morphStep)
         m_clause.setWorkingSingleList(singleList: workingSingleList)
         
-        print("equivalentPronounDescription:")
-        print("\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
-        print("\(morphStep.comment1) + .. \(morphStep.comment2) + ..\(morphStep.comment3) ")
+        print("\nInsertBefore: \(equivalentPronounDescription) \(equivalentPronounString) before index \(insertIndex)")
+        print("MorphSteps:\(morphStep.part1) + .. \(morphStep.part2) + ..\(morphStep.part3) ")
+        print("Comment: \(morphStep.comment1) (\(morphStep.comment2 ) \(morphStep.comment3) ")
 
         return workingMorphStruct
     }

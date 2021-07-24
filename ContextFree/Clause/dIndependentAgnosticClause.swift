@@ -109,13 +109,17 @@ class dIndependentAgnosticClause : dClause {
         return workingMorphStruct
     }
     
-    func getCompositeSentenceString(language: LanguageType, targetFunction: ContextFreeFunction)->[dSingle] {
+    func getCompositeSentenceString(language: LanguageType, targetFunction: ContextFreeFunction)->([dSingle], Gender, Number, Person) {
         var singleListBefore = Array<dSingle>()  //pre target
         var targetSingleList = Array<dSingle>()
         var singleListAfter = Array<dSingle>()  //after target
 
         // first find the start index of the target function
         
+        var gender = Gender.masculine
+        var number = Number.singular
+        var person = Person.S3
+
         var workingSingleList = [dSingle]()
         for cluster in sentence.getClusterList(){
             switch cluster.getClusterType() {
@@ -123,6 +127,9 @@ class dIndependentAgnosticClause : dClause {
                 let nounPhrase = cluster as! dNounPhrase
                 if nounPhrase.getClusterFunction() == targetFunction {
                     targetSingleList = nounPhrase.getSingleList(inputSingleList: targetSingleList)
+                    gender = nounPhrase.getGender()
+                    number = nounPhrase.getNumber()
+                    person = nounPhrase.getPerson()
                 }
             case .VP:
                 let verbPhrase = cluster as! dVerbPhrase
@@ -131,6 +138,9 @@ class dIndependentAgnosticClause : dClause {
                         let prepPhrase = vc as! dPrepositionPhrase
                         if prepPhrase.getClusterFunction() == targetFunction {
                             targetSingleList = prepPhrase.getSingleList(inputSingleList: targetSingleList)
+                            gender = prepPhrase.getGender()
+                            number = prepPhrase.getNumber()
+                            person = prepPhrase.getPerson()
                             break
                         }
                     }
@@ -138,6 +148,9 @@ class dIndependentAgnosticClause : dClause {
                         let nounPhrase = vc as! dNounPhrase
                         if nounPhrase.getClusterFunction() == targetFunction {
                             targetSingleList = nounPhrase.getSingleList(inputSingleList: targetSingleList)
+                            gender = nounPhrase.getGender()
+                            number = nounPhrase.getNumber()
+                            person = nounPhrase.getPerson()
                             break
                         }
                     }
@@ -145,8 +158,7 @@ class dIndependentAgnosticClause : dClause {
             default: continue
             }
         }
-        
-        return targetSingleList
+        return (targetSingleList, gender, number, person)
     }
     
     
@@ -188,21 +200,90 @@ class dIndependentAgnosticClause : dClause {
         return createNewSentenceString(language: language)
     }
     
+    func getPronoun(language: LanguageType, type : PronounType)->Pronoun{
+        switch type{
+        case .SUBJECT: return getSubjectPronoun(language: language)
+        case .DIRECT_OBJECT: return getDirectObjectPronoun(language: language)
+        case .INDIRECT_OBJECT: return getIndirectObjectPronoun(language: language)
+        default: return Pronoun()
+        }
+    }
     
-    func getSubjectPronounString(language: LanguageType)->String{
-        if ( headNoun.getClusterType() != .UNK){
+    func getPronounString(language: LanguageType, type : PronounType)->String{
+        let pronoun = getPronoun(language: language, type: type)
+        switch language {
+        case .Spanish:
+            let sp = pronoun as! SpanishPronoun
+            return sp.getForm(gender: getGender(), person: getPerson())
+        case .French:
+            let fr = pronoun as! FrenchPronoun
+            return fr.getForm(gender: getGender(), person: getPerson())
+        case .English:
+            let en = pronoun as! EnglishPronoun
+            return en.getForm(gender: getGender(), person: getPerson())
+        default:
+            return ""
+        }
+    }
+    
+    func getSubjectPronoun(language: LanguageType)->Pronoun
+    {
+        if ( headNoun.getClusterType() == .UNK){
+            setHeadNounAndHeadVerb()
+        }
+        if headNoun.getClusterType() != .UNK{
             let hnp = headNoun as! dNounPhrase
-            return hnp.getEquivalentSubjectPronounString(language: language)
+            return hnp.getEquivalentPronoun(language: language, type : .SUBJECT)
+        }
+        return Pronoun()
+    }
+    
+    func getDirectObjectPronoun(language: LanguageType)->Pronoun{
+        let hvp = headVerb as! dVerbPhrase
+        if hvp.hasClusterFunction(fn: .DirectObject){
+            let c = hvp.getClusterAtFunction(fn: .DirectObject)
+            let dp = c as! dPhrase
+            return dp.getEquivalentPronoun(language: language, type : .DIRECT_OBJECT)
+        }
+        return Pronoun()
+    }
+    
+    func getIndirectObjectPronoun(language: LanguageType)->Pronoun{
+        let hvp = headVerb as! dVerbPhrase
+        if hvp.hasClusterFunction(fn: .DirectObject){
+            let c = hvp.getClusterAtFunction(fn: .IndirectObject)
+            let dp = c as! dPhrase
+            return dp.getEquivalentPronoun(language: language, type : .INDIRECT_OBJECT)
+        }
+        return Pronoun()
+    }
+    
+
+    func getSubjectPronounStringA(language: LanguageType)->String{
+        let pronoun = getSubjectPronoun(language: language)
+        switch language {
+        case .Spanish:
+            let sp = pronoun as! SpanishPronoun
+            return sp.getForm(gender: getGender(), person: getPerson())
+        case .French:
+            let fr = pronoun as! FrenchPronoun
+            return fr.getForm(gender: getGender(), person: getPerson())
+        case .English:
+            let en = pronoun as! EnglishPronoun
+            return en.getForm(gender: getGender(), person: getPerson())
+        default:
+            break
         }
         return ""
     }
-
+    
+    
     func getDirectObjectPronounString(language: LanguageType)->String{
         let hvp = headVerb as! dVerbPhrase
         if hvp.hasClusterFunction(fn: .DirectObject){
             let c = hvp.getClusterAtFunction(fn: .DirectObject)
             let dp = c as! dPhrase
-            return dp.getEquivalentDirectObjectPronounString(language: language)
+            return dp.getEquivalentPronounString(language: language, type : .DIRECT_OBJECT)
         }
         return ""
     }
@@ -212,14 +293,16 @@ class dIndependentAgnosticClause : dClause {
         if hvp.hasClusterFunction(fn: .IndirectObject){
             let c = hvp.getClusterAtFunction(fn: .IndirectObject)
             let dp = c as! dPhrase
-            return dp.getEquivalentIndirectObjectPronounString(language: language)
+            return dp.getEquivalentPronounString(language: language, type : .INDIRECT_OBJECT)
         }
         return ""
     }
     
+    /*
     func getPronounString(language: LanguageType, phrase: dPhrase, fn: ContextFreeFunction)->String{
         return phrase.getEquivalentPronounString(language: language, fn: fn)
     }
+ */
     
     func createNewSentenceString(language: LanguageType)->String{
         var sentenceString = getReconstructedSentenceString(language: language)

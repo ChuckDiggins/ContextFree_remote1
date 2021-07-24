@@ -144,6 +144,7 @@ struct PersonalPronounGames: View {
                     Text(morphStruct.getMorphStep(index: morphIndex).comment1).foregroundColor(.black)
                     Text(morphStruct.getMorphStep(index: morphIndex).comment2).foregroundColor(.red).font(.system(size: 20)).bold()
                     Text(morphStruct.getMorphStep(index: morphIndex).comment3).foregroundColor(.black)
+                    Text(morphStruct.getMorphStep(index: morphIndex).comment4).foregroundColor(.red).font(.system(size: 20)).bold()
                 }
             }
         }.padding(10)
@@ -165,8 +166,8 @@ struct PersonalPronounGames: View {
         }.onAppear{
             cfModelView.createNewModel(language: .Agnostic)
             m_randomPronounPhrase = RandomPersonalPronounPhrase(wsp: cfModelView.getWordStringParser(), rft: .subjectPronounVerb)
-            highlightCurrentFunction()
             createRandomClause()
+            highlightCurrentFunction()
         }
         
         
@@ -208,13 +209,13 @@ struct PersonalPronounGames: View {
         var wsd = single.getSentenceData()
         
         switch wsd.wordType {
-        case .verb:
+        case .V:
             let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
             single.copyGuts(newSingle: newSingle)
-        case .adjective, .determiner, .adverb, .conjunction:
+        case .Adj, .Det, .Adv, .C:
             let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
             single.copyGuts(newSingle: newSingle)
-        case .noun:
+        case .N:
             let nounSingle = single as! dNounSingle
             var newFunctionType = PPFunctionType.none
             if nounSingle.isSubject() { newFunctionType = .subject }
@@ -223,7 +224,7 @@ struct PersonalPronounGames: View {
             if nounSingle.isSubject() {
                 m_clause.setPerson(value: nounSingle.getPerson())
             }
-        case .pronoun:
+        case .Pronoun:
             let ppSingle = single as! dPersonalPronounSingle
             var newFunctionType = PPFunctionType.none
             if ppSingle.isSubject() { newFunctionType = .subject }
@@ -232,7 +233,7 @@ struct PersonalPronounGames: View {
             if ppSingle.isSubject() {
                 m_clause.setPerson(value: ppSingle.getPerson())
             }
-        case .preposition:
+        case .P:
             let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
             single.copyGuts(newSingle: newSingle)
         default: break
@@ -282,6 +283,7 @@ struct PersonalPronounGames: View {
         var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
         morphStruct.clear()
 
+
         //create the subject morph model first
         if checkboxSubject {
             var subjectCFMM = CFMorphModel(id: 0, modelName: "Convert Spanish Phrases to PPs")
@@ -291,20 +293,22 @@ struct PersonalPronounGames: View {
             morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: subjectCFMM)
         }
         
+
         if checkboxDirectObject {
             var doCFMM = CFMorphModel(id: 1, modelName: "Convert Spanish DO phrases to DO PPs")
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "directObjectPhrase", cfToTypeString: ""))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "directObjectPhrase", cfToTypeString: "directObjectPronoun"))
-            doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "insert", cfToTypeString: "directObjectPronoun", moveToString: "precedingVerb"))
+            doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "directObjectPronoun", locationString: "precedingVerb"))
             doCFMM.parseMorphModel()
             morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: doCFMM)
         }
+
         
         if checkboxIndirectObject {
             var doCFMM = CFMorphModel(id: 1, modelName: "Convert Spanish inDO phrases to inDO PPs")
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "indirectObjectPhrase", cfToTypeString: ""))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "indirectObjectPhrase", cfToTypeString: "indirectObjectPronoun"))
-            doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "insert", cfToTypeString: "indirectObjectPhrase", moveToString: "precedingDOPronoun"))
+            doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "indirectObjectPronoun", locationString: "precedingDOPronoun"))
             doCFMM.parseMorphModel()
             morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: doCFMM)
         }
@@ -356,20 +360,24 @@ struct PersonalPronounGames: View {
         
     }
     
-    
+
     func processPronouns(){
         var subjectPronoun = ""
         var directObjectPronoun = ""
         var indirectObjectPronoun = ""
-        subjectPronoun = m_clause.getSubjectPronounString(language: currentLanguage)
-        directObjectPronoun = m_clause.getDirectObjectPronounString(language: currentLanguage)
-        indirectObjectPronoun = m_clause.getIndirectObjectPronounString(language: currentLanguage)
+        subjectPronoun = m_clause.getPronounString(language: currentLanguage, type: .SUBJECT)
+        directObjectPronoun = m_clause.getPronounString(language: currentLanguage, type: .DIRECT_OBJECT)
+        indirectObjectPronoun = m_clause.getPronounString(language: currentLanguage, type: .INDIRECT_OBJECT)
         
         print("Subject pronoun: \(subjectPronoun) \nDirect object pronoun: \(directObjectPronoun) \nIndirect object pronoun: \(indirectObjectPronoun)")
         
-        let doList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .DirectObject)
-        let subjList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
-        let inDoList = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .IndirectObject)
+        var result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .DirectObject)
+        let doList = result.0
+        result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
+        let subjList = result.0
+        result  = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .IndirectObject)
+        let inDoList = result.0
+        
         print ("Subj count: \(subjList.count), doCount: \(doList.count), inDoCount: \(inDoList.count)")
         
         let singleList = m_clause.getSingleList()
@@ -415,6 +423,7 @@ struct PersonalPronounGames: View {
             }
         }
     }
+
     
     func highlightCurrentFunction(){
         currentFunction += 1
@@ -424,9 +433,9 @@ struct PersonalPronounGames: View {
         currentFunctionString = Function[currentFunction].rawValue
         switch currentFunction {
         case 0:  currentEquivalentPronoun = "none current"
-        case 1:  currentEquivalentPronoun = m_clause.getSubjectPronounString(language: currentLanguage)
-        case 2:  currentEquivalentPronoun = m_clause.getDirectObjectPronounString(language: currentLanguage)
-        case 3:  currentEquivalentPronoun = m_clause.getIndirectObjectPronounString(language: currentLanguage)
+        case 1:  currentEquivalentPronoun = m_clause.getPronounString(language: currentLanguage, type: .SUBJECT)
+        case 2:  currentEquivalentPronoun = m_clause.getPronounString(language: currentLanguage, type: .DIRECT_OBJECT)
+        case 3:  currentEquivalentPronoun = m_clause.getPronounString(language: currentLanguage, type: .INDIRECT_OBJECT)
         default: break
         }
      

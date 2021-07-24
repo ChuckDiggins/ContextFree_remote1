@@ -303,7 +303,7 @@ struct WordStringParser {
    
 
     
-    func convertWordToSentenceData(word: Word, wordType: WordType)->SentenceData{
+    func convertWordToSentenceData(word: Word, wordType: ContextFreeSymbol)->SentenceData{
         var sentenceData = SentenceData()
         sentenceData.word = word
         sentenceData.data.wordType = wordType
@@ -459,7 +459,7 @@ struct WordStringParser {
         let punct = word.isPunctuation(word: wordString)
         if punct != .none {
             sd.word = word
-            sd.data.wordType = .punctuation
+            sd.data.wordType = .punct
             sd.data.punctuationType = punct
         }
         return sd
@@ -473,7 +473,7 @@ struct WordStringParser {
             for word in spanishWords.determinerList {
                 //let determiner = word as! SpanishDeterminer
                 sd.word = word
-                sd.data.wordType = .determiner
+                sd.data.wordType = .Det
                 sd.data.determinerType = .definite
                 sd.data.gender = .either
                 sd.data.number = .singular
@@ -483,7 +483,7 @@ struct WordStringParser {
             for word in frenchWords.determinerList {
                 //let determiner = word as! FrenchDeterminer
                 sd.word = word
-                sd.data.wordType = .determiner
+                sd.data.wordType = .Det
                 sd.data.determinerType = .definite
                 sd.data.gender = .either
                 sd.data.number = .singular
@@ -493,7 +493,7 @@ struct WordStringParser {
             for word in englishWords.determinerList {
                 //let determiner = word as! EnglishDeterminer
                 sd.word = word
-                sd.data.wordType = .determiner
+                sd.data.wordType = .Det
                 sd.data.determinerType = .definite
                 sd.data.gender = .either
                 sd.data.number = .singular
@@ -517,7 +517,7 @@ struct WordStringParser {
                 let result = adjective.isAdjective(word: wordString)
                 if ( result.0 ) {
                     sd.word = word
-                    sd.data.wordType = .adjective
+                    sd.data.wordType = .Adj
                     sd.data.gender = result.1
                     sd.data.number = result.2
                     return sd
@@ -529,7 +529,7 @@ struct WordStringParser {
                 let result = adjective.isAdjective(word: wordString)
                 if ( result.0 ) {
                     sd.word = word
-                    sd.data.wordType = .adjective
+                    sd.data.wordType = .Adj
                     sd.data.gender = result.1
                     sd.data.number = result.2
                     return sd
@@ -541,7 +541,7 @@ struct WordStringParser {
                 let result = adjective.isAdjective(word: wordString)
                 if ( result.0 ) {
                     sd.word = word
-                    sd.data.wordType = .adjective
+                    sd.data.wordType = .Adj
                     sd.data.number = result.1
                     return sd
                 }
@@ -563,7 +563,7 @@ struct WordStringParser {
                 let result = noun.isNoun(word: wordString)
                 if result.0 {
                     sd.word = word
-                    sd.data.wordType = .noun
+                    sd.data.wordType = .N
                     sd.data.nounType = result.1
                     sd.data.number = result.2
                     sd.data.gender = result.3
@@ -577,7 +577,7 @@ struct WordStringParser {
                 let result = noun.isNoun(word: wordString)
                 if result.0 {
                     sd.word = word
-                    sd.data.wordType = .noun
+                    sd.data.wordType = .N
                     sd.data.nounType = result.1
                     sd.data.number = result.2
                     sd.data.gender = result.3
@@ -591,7 +591,7 @@ struct WordStringParser {
                 let result = noun.isNoun(word: wordString)
                 if result.0 {
                     sd.word = word
-                    sd.data.wordType = .noun
+                    sd.data.wordType = .N
                     sd.data.nounType = result.1
                     sd.data.number = result.2
                     return sd
@@ -614,7 +614,7 @@ struct WordStringParser {
                     let result = conj.isConjunction(word: wordString)
                     if result {
                         sd.word = word
-                        sd.data.wordType = .conjunction
+                        sd.data.wordType = .C
                         return sd
                     }
                 }
@@ -626,7 +626,7 @@ struct WordStringParser {
                     let result = conj.isConjunction(word: wordString)
                     if result {
                         sd.word = word
-                        sd.data.wordType = .conjunction
+                        sd.data.wordType = .C
                         return sd
                     }
                 }
@@ -638,7 +638,7 @@ struct WordStringParser {
                     let result = prep.isConjunction(word: wordString)
                     if result {
                         sd.word = word
-                        sd.data.wordType = .conjunction
+                        sd.data.wordType = .C
                         return sd
                     }
                 }
@@ -661,7 +661,7 @@ struct WordStringParser {
                     let result = prep.isPreposition(word: wordString)
                     if result {
                         sd.word = word
-                        sd.data.wordType = .preposition
+                        sd.data.wordType = .P
                         return sd
                     }
                 }
@@ -673,7 +673,7 @@ struct WordStringParser {
                     let result = prep.isPreposition(word: wordString)
                     if result {
                         sd.word = word
-                        sd.data.wordType = .preposition
+                        sd.data.wordType = .P
                         return sd
                     }
                 }
@@ -685,7 +685,7 @@ struct WordStringParser {
                     let result = prep.isPreposition(word: wordString)
                     if result {
                         sd.word = word
-                        sd.data.wordType = .preposition
+                        sd.data.wordType = .P
                         return sd
                     }
                 }
@@ -766,7 +766,7 @@ struct WordStringParser {
             for word in spanishWords.verbList {
                 if wordString == word.word {
                     sd.word = word
-                    sd.data.wordType = .verb
+                    sd.data.wordType = .V
                     sd.data.tense = .infinitive
                     return sd
                 }
@@ -794,7 +794,7 @@ struct WordStringParser {
             for word in frenchWords.verbList {
                 if wordString == word.word {
                     sd.word = word
-                    sd.data.wordType = .verb
+                    sd.data.wordType = .V
                     sd.data.tense = .infinitive
                     return sd
                 }
@@ -805,7 +805,7 @@ struct WordStringParser {
                     
                     if ( result.0 ){
                         sd.word = word
-                        sd.data.wordType = .verb
+                        sd.data.wordType = .V
                         sd.data.tense = result.1
                         sd.data.person = result.2
                         return sd
@@ -818,7 +818,7 @@ struct WordStringParser {
                 let result = verb.isConjugateForm(word: wordString)
                 if ( result.0 ){
                     sd.word = word
-                    sd.data.wordType = .verb
+                    sd.data.wordType = .V
                     sd.data.tense = result.1
                     sd.data.person = result.2
                     return sd
@@ -840,7 +840,7 @@ struct WordStringParser {
             else { result = pronoun.isIndirectObjectPronoun(word: wordString)}
             if result.0 != .none {
                 sd.word = Pronoun(word: wordString, type: type)
-                sd.data.wordType = .pronoun
+                sd.data.wordType = .P
                 sd.data.pronounType = result.0
                 sd.data.gender = result.1
                 sd.data.person = result.2
@@ -867,14 +867,14 @@ struct WordStringParser {
                     let amb = Ambiguous(word: wordString, type: .pronoun)
                     amb.setPronounList(list: pronounList)
                     sd.word = amb
-                    sd.data.wordType = .ambiguous
+                    sd.data.wordType = .AMB
                     sd.data.ambiguousType = .pronoun
                     return sd
                 }
                 var result = pronoun.isSubjectPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .SUBJECT)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .PersPro
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -883,7 +883,7 @@ struct WordStringParser {
                 result = pronoun.isReflexivePronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .REFLEXIVE)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -892,7 +892,7 @@ struct WordStringParser {
                 result = pronoun.isIndirectObjectPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .INDIRECT_OBJECT)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -901,7 +901,7 @@ struct WordStringParser {
                 result = pronoun.isDirectObjectPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .DIRECT_OBJECT)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -910,7 +910,7 @@ struct WordStringParser {
                 result = pronoun.isPrepositionalPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString,type: .PREPOSITIONAL)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -925,14 +925,14 @@ struct WordStringParser {
                     let amb = Ambiguous(word: wordString, type: .pronoun)
                     amb.setPronounList(list: pronounList)
                     sd.word = amb
-                    sd.data.wordType = .ambiguous
+                    sd.data.wordType = .AMB
                     sd.data.ambiguousType = .pronoun
                     return sd
                 }
                 var result = pronoun.isSubjectPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .SUBJECT)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -941,7 +941,7 @@ struct WordStringParser {
                 result = pronoun.isReflexivePronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .REFLEXIVE)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -950,7 +950,7 @@ struct WordStringParser {
                 result = pronoun.isIndirectObjectPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .INDIRECT_OBJECT)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -959,7 +959,7 @@ struct WordStringParser {
                 result = pronoun.isDirectObjectPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .DIRECT_OBJECT)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -968,7 +968,7 @@ struct WordStringParser {
                 result = pronoun.isPrepositionalPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = Pronoun(word: wordString, type: .PREPOSITIONAL)
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -982,7 +982,7 @@ struct WordStringParser {
                 let result = pronoun.isSubjectPronoun(word: wordString)
                 if result.0 != .none {
                     sd.word = word
-                    sd.data.wordType = .pronoun
+                    sd.data.wordType = .Pronoun
                     sd.data.pronounType = result.0
                     sd.data.gender = result.1
                     sd.data.person = result.2
@@ -1004,7 +1004,7 @@ struct WordStringParser {
                 let result = determiner.isDeterminer(word: wordString)
                 if result.0 {
                     sd.word = word
-                    sd.data.wordType = .determiner
+                    sd.data.wordType = .Det
                     sd.data.determinerType = result.1
                     sd.data.gender = result.2
                     sd.data.number = result.3
@@ -1017,7 +1017,7 @@ struct WordStringParser {
                 let result = determiner.isDeterminer(word: wordString)
                 if result.0 {
                     sd.word = word
-                    sd.data.wordType = .determiner
+                    sd.data.wordType = .Det
                     sd.data.determinerType = result.1
                     sd.data.number = result.2
                     return sd

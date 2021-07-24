@@ -158,7 +158,7 @@ class dVerbSingle : dSingle
         }
     }
     
-    func    getWordString()->String{
+    override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         switch sd.language {

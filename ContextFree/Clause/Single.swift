@@ -66,6 +66,10 @@ class dSingle  : dCluster
         return cs.getString()
     }
     
+    func    getWordString()->String{
+        return getString()
+    }
+    
     func getString()->String
     {
         return m_clusterWord.word
@@ -155,7 +159,7 @@ class dAdjectiveSingle :dSingle
         setSentenceData(data: sd)
     }
     
-    func    getWordString()->String{
+    override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         switch sd.language {
@@ -281,7 +285,7 @@ class dArticleSingle :  dSingle{
         super.init(word: word, clusterType: type, data: data)
     }
     
-    func    getWordString()->String{
+    override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         switch sd.language {
@@ -350,7 +354,7 @@ class dDeterminerSingle :  dSingle{
         setSentenceData(data: sd)
     }
     
-    func getWordString()->String{
+    override func getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         switch sd.language{
@@ -469,7 +473,7 @@ class dPersonalPronounSingle : dSingle
     }
     
     func setPronounType(pronounType: PronounType){getSentenceData().pronounType = pronounType}
-    func getPronounType()->PronounType{return getSentenceData().pronounType}
+    override func getPronounType()->PronounType{return getSentenceData().pronounType}
         
     func getWordStringAtLanguage(language: LanguageType)->String{
         let word = getClusterWord()

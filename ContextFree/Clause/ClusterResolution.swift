@@ -46,10 +46,10 @@ struct ClusterResolution {
                     let wordType = nextSD.data.wordType
                     var tense = nextSD.data.tense
                     
-                    if  wordType == .verb && tense == .presentParticiple {
+                    if  wordType == .V && tense == .presentParticiple {
                         nextWordData = nextSD
                     }
-                    else if wordType == .verb && tense == .pastParticiple {
+                    else if wordType == .V && tense == .pastParticiple {
                         nextWordData = nextSD
                     }
                     //else scan for it
@@ -134,15 +134,15 @@ struct ClusterResolution {
     
     func resolveAmbiguousSingles(sentenceData: Array<SentenceData>)->Array<SentenceData>{
         var sentenceCopy = sentenceData
-        var prevWordType = WordType.unknown
+        var prevWordType = ContextFreeSymbol.UNK
         
         for i in 0..<sentenceCopy.count {
             var wd = sentenceCopy[i]
             //if this word is ambiguous ...
             
-            if ( wd.data.wordType == .ambiguous ){
+            if ( wd.data.wordType == .AMB ){
                 let amb = wd.word as! Ambiguous
-                if amb.isPossiblePrepositionalPronoun() && prevWordType == .preposition {
+                if amb.isPossiblePrepositionalPronoun() && prevWordType == .P {
                     wd = convertAmbiguousToNewType(sd: wd, newType: .prepositionalPronoun)
                     sentenceCopy.remove(at: i)
                     sentenceCopy.insert(wd, at: i)
@@ -180,7 +180,7 @@ struct ClusterResolution {
             
             if ( pronounResult.0 != .none ){
                 wd.word = p
-                wd.data.wordType = .pronoun
+                wd.data.wordType = .Pronoun
                 wd.data.pronounType = pronounResult.0
                 wd.data.gender = pronounResult.1
                 wd.data.person = pronounResult.2
@@ -200,7 +200,7 @@ struct ClusterResolution {
             
             if ( pronounResult.0 != .none ){
                 wd.word = p
-                wd.data.wordType = .pronoun
+                wd.data.wordType = .Pronoun
                 wd.data.pronounType = pronounResult.0
                 wd.data.gender = pronounResult.1
                 wd.data.person = pronounResult.2

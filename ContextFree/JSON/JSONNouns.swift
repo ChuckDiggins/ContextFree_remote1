@@ -34,8 +34,6 @@ class JsonNoun: Codable, CustomStringConvertible {
         
     }
     
-    //if intransitive, then no object likes
-    
     init(spanish: String, english: String, french: String, spanishGender: String, frenchGender: String, englishPlural: String, verbLikes: String){
         self.spanish = spanish
         self.english = english

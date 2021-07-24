@@ -119,26 +119,26 @@ struct RandomSentence {
     
     mutating func createTwoArticles()->dPhrase{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP1.processInfo()
         return NP1
     }
     
     mutating func createArticleNoun()->dPhrase{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
         NP1.processInfo()
         return NP1
     }
     
     mutating func createSimpleNounPhrase()->dPhrase{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP1.processInfo()
         return NP1
     }
@@ -146,13 +146,13 @@ struct RandomSentence {
     mutating func createSimplePrepositionPhrase()->dPhrase{
         let NP1 = dNounPhrase()
 
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .article, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Art, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP1.processInfo()
         
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .preposition, isSubject:false))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, isSubject:false))
         PP1.appendCluster(cluster: NP1)
         return PP1
     }
@@ -160,16 +160,16 @@ struct RandomSentence {
     mutating func createComplexNounPhrase()->dPhrase{
         
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
-        let single1 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false)
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
+        let single1 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false)
         NP1.appendCluster(cluster: single1)
         
         
         let NP2 = dNounPhrase()
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false))
-        let single2 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false)
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false))
+        let single2 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false)
         NP2.appendCluster(cluster: single2)
         
         let adj1 = single1 as! dAdjectiveSingle
@@ -180,7 +180,7 @@ struct RandomSentence {
         NP2.processInfo()
         
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .preposition, isSubject:false))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, isSubject:false))
         PP1.appendCluster(cluster: NP2)
         
         let NP3 = dNounPhrase()
@@ -192,36 +192,36 @@ struct RandomSentence {
     
     mutating func createSimpleVerbPhrase()->dPhrase{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP1.processInfo()
         let VP = dVerbPhrase()
-        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false))
         VP.appendCluster(cluster: NP1)
         return VP
     }
     
     mutating func createSimpleVerbAdverbPhrase()->dPhrase{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP1.processInfo()
         let VP = dVerbPhrase()
-        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false))
-        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adverb, isSubject:false))
-        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .conjunction, isSubject:false))
-        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adverb, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adv, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .C, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adv, isSubject:false))
         VP.appendCluster(cluster: NP1)
         return VP
     }
     
     mutating func createSubjectPronounVerbClause()->dIndependentClause{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .pronoun, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .PersPro, isSubject:false))
         let VP = dVerbPhrase()
-        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false))
         
         let clause = dIndependentClause(language: m_wsp.getLanguage())
         clause.appendCluster(cluster: NP1)
@@ -235,33 +235,33 @@ struct RandomSentence {
     
     mutating func createSimpleEnglishClause()->dIndependentClause{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
         NP1.setPerson(value: .S3)
         NP1.processInfo()
         NP1.dumpClusterInfo(str: "createSimpleEnglishClause: NP1")
         
         let NP2 = dNounPhrase()
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false))
         NP2.setPerson(value: .S3)
         NP2.processInfo()
         NP2.dumpClusterInfo(str: "createSimpleEnglishClause: NP2")
         
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .preposition, isSubject:false))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, isSubject:false))
         PP1.appendCluster(cluster: NP2)
         
         let NP3 = dNounPhrase()
-        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false))
+        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false))
         NP3.setPerson(value: .S3)
         NP3.processInfo()
         NP3.dumpClusterInfo(str: "createSimpleEnglishClause: NP3")
         let VP = dVerbPhrase()
-        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false)
+        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false)
         VP.appendCluster(cluster: vs )
         VP.appendCluster(cluster: NP3)
         VP.appendCluster(cluster: PP1)
@@ -281,34 +281,34 @@ struct RandomSentence {
     
     mutating func createSimpleClause()->dIndependentClause{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        let nounSingle1 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true)
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        let nounSingle1 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true)
         NP1.appendCluster(cluster: nounSingle1)
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP1.setPerson(value: nounSingle1.getPerson())
         NP1.processInfo()
         
         let NP2 = dNounPhrase()
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        let nounSingle2 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false)
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        let nounSingle2 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false)
         NP2.appendCluster(cluster: nounSingle2)
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP2.setPerson(value: nounSingle2.getPerson())
         NP2.processInfo()
         
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .preposition, isSubject:false))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, isSubject:false))
         PP1.appendCluster(cluster: NP2)
         
         let NP3 = dNounPhrase()
-        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        let nounSingle3 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false)
+        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        let nounSingle3 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false)
         NP3.appendCluster(cluster: nounSingle3)
         NP3.setPerson(value: nounSingle3.getPerson())
         NP3.processInfo()
         
         let VP = dVerbPhrase()
-        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false)
+        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false)
         VP.appendCluster(cluster: vs )
         VP.appendCluster(cluster: NP3)
         VP.appendCluster(cluster: PP1)
@@ -327,35 +327,35 @@ struct RandomSentence {
     mutating func createSimpleAgnosticClause()->dIndependentAgnosticClause{
         var clausePerson = Person.S3
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        let nounSingle1 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true)
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        let nounSingle1 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true)
         NP1.appendCluster(cluster: nounSingle1)
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         clausePerson = nounSingle1.getPerson()
         NP1.setPerson(value: nounSingle1.getPerson())
         NP1.processInfo()
         
         let NP2 = dNounPhrase()
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        let nounSingle2 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false)
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        let nounSingle2 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false)
         NP2.appendCluster(cluster: nounSingle2)
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
         NP2.setPerson(value: nounSingle2.getPerson())
         NP2.processInfo()
         
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .preposition, isSubject:false))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, isSubject:false))
         PP1.appendCluster(cluster: NP2)
         
         let NP3 = dNounPhrase()
-        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        let nounSingle3 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false)
+        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        let nounSingle3 = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false)
         NP3.appendCluster(cluster: nounSingle3)
         NP3.setPerson(value: nounSingle3.getPerson())
         NP3.processInfo()
         
         let VP = dVerbPhrase()
-        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false)
+        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false)
         VP.appendCluster(cluster: vs )
         VP.appendCluster(cluster: NP3)
         VP.appendCluster(cluster: PP1)
@@ -374,33 +374,33 @@ struct RandomSentence {
     
     mutating func createSimpleAgnosticEnglishClause()->dIndependentAgnosticClause{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:true))
         NP1.setPerson(value: .S3)
         NP1.processInfo()
         NP1.dumpClusterInfo(str: "createSimpleEnglishClause: NP1")
         
         let NP2 = dNounPhrase()
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .adjective, isSubject:false))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, isSubject:false))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false))
         NP2.setPerson(value: .S3)
         NP2.processInfo()
         NP2.dumpClusterInfo(str: "createSimpleEnglishClause: NP2")
         
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .preposition, isSubject:false))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, isSubject:false))
         PP1.appendCluster(cluster: NP2)
         
         let NP3 = dNounPhrase()
-        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .determiner, isSubject:false))
-        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .noun, isSubject:false))
+        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, isSubject:false))
+        NP3.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, isSubject:false))
         NP3.setPerson(value: .S3)
         NP3.processInfo()
         NP3.dumpClusterInfo(str: "createSimpleEnglishClause: NP3")
         let VP = dVerbPhrase()
-        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false)
+        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false)
         VP.appendCluster(cluster: vs )
         VP.appendCluster(cluster: NP3)
         VP.appendCluster(cluster: PP1)
@@ -418,9 +418,9 @@ struct RandomSentence {
 
     mutating func createAgnosticSubjectPronounVerbClause()->dIndependentAgnosticClause{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .pronoun, isSubject:true))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .PersPro, isSubject:true))
         let VP = dVerbPhrase()
-        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .verb, isSubject:false))
+        VP.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, isSubject:false))
         
         let clause = dIndependentAgnosticClause()
         clause.appendCluster(cluster: NP1)
