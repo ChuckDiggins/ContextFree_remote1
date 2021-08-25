@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct NamedClause {
+struct NamedClause : Identifiable{
+    var id = UUID()
     private var clauseName : String
     private var m_clause = dIndependentAgnosticClause()
     
@@ -36,7 +37,8 @@ struct NamedClause {
     }
 }
 
-struct NamedPhrase {
+struct NamedPhrase : Identifiable{
+    var id = UUID()
     private var phraseName : String
     private var phraseType = ContextFreeSymbol.UNK
     private var m_phrase = dPhrase()

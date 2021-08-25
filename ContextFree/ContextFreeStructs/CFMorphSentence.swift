@@ -14,7 +14,7 @@ struct CFMorphSentence {
     var indirectObjectPronoun = ""
     
     mutating func dumpWorkingSingleList(language: LanguageType, showPronounTypes:Bool){
-        var workingSingleList = m_clause.getWorkingSingleList()
+        let workingSingleList = m_clause.getWorkingSingleList()
         print("dumpWorkingSingleList ")
         for index in 0 ..< workingSingleList.count {
             let single = workingSingleList[index]
@@ -27,6 +27,54 @@ struct CFMorphSentence {
             }
         }
     }
+    
+    mutating func applyMorphModelToSimplePhrases(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
+        let currentLanguage = language
+        var workingMorphStruct = inputMorphStruct
+        
+        var lookForNounPhrase = false
+        
+        for cfOperation in cfMorphModel.mpsList {
+            switch cfOperation.from {
+            case .followingAdjective: lookForNounPhrase = true
+            default: break
+            }
+            
+            switch cfOperation.to {
+            case .precedingAdjective: lookForNounPhrase = true
+            default: break
+            }
+        }
+        
+        //ask for next noun phrase
+        var gender = Gender.masculine
+        var number = Number.singular
+        var person = Person.S1
+        var phraseSingleList = [dSingle]()
+        
+        if lookForNounPhrase {
+            let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
+            phraseSingleList = result.0
+            gender = result.1
+            number = result.2
+            person = result.3
+            if phraseSingleList.count == 0 {
+                print("could not retieve a subject phrase")
+                return workingMorphStruct
+            }
+            //applyMorphModelToSimplePhrase(phraseSingleList: phraseSingleList, )
+        }
+        return workingMorphStruct
+    }
+    
+    /*
+    mutating func applyMorphModelToSimplePhrase(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
+        let currentLanguage = language
+        var workingMorphStruct = inputMorphStruct
+        
+        return workingMorphStruct
+    }
+    */
     
     mutating func applyMorphModel(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
         let currentLanguage = language
@@ -239,7 +287,9 @@ struct CFMorphSentence {
         }//operation loop
 
         return workingMorphStruct
-    }
+    }//applyMorphModel
+    
+    
     
     mutating func getWordString(language: LanguageType, single: dSingle)->String{
         if single.isPersonalPronounType(){

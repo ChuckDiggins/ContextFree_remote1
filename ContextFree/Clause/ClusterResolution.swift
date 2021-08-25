@@ -21,6 +21,7 @@ struct ClusterResolution {
         
         for i in 0..<sentenceData.count-1{
             let thisWd = sentenceData[i]
+            print("\(thisWd)")
         }
         return sentenceCopy
     }

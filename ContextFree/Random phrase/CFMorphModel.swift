@@ -60,6 +60,8 @@ enum CFTypes {
     case disjunctivePronoun   //disjunctive: after preposition, after C'est (FR)
     case adverbialPronoun   //y, en
     case possessivePronoun   //my, mine
+    case followingAdjective  //for use in moving a following romance adjective to preceding english adjective
+    case precedingAdjective  //for use in moving a following romance adjective to preceding english adjective
 }
 
 enum Location {
@@ -122,6 +124,7 @@ struct CFMorphModel : Identifiable {
             case "disjunctivePronoun" : mps.from = .disjunctivePronoun    //disjunctive: after preposition, after C'est (FR)
             case "adverbialPronoun" : mps.from = .adverbialPronoun   //y, en
             case "possessivePronoun" : mps.from = .possessivePronoun   //my, mine
+            case "followingAdjective" : mps.from = .followingAdjective //
             case "literal" : mps.from = .literal
             case "none" : mps.from = .none
             default: mps.from = .none
@@ -138,6 +141,7 @@ struct CFMorphModel : Identifiable {
             case "disjunctivePronoun" : mps.to = .disjunctivePronoun   //disjunctive: after preposition, after C'est (FR)
             case "adverbialPronoun" : mps.to = .adverbialPronoun   //y, en
             case "possessivePronoun" : mps.to = .possessivePronoun   //my, mine
+            case "precedingAdjective" : mps.from = .precedingAdjective //
             default: mps.to = .none
             }
             

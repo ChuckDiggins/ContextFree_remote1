@@ -22,10 +22,23 @@ struct DetailedPhraseView: View {
                                         ]
 
     var properties = [Bool] ()
+    @State private var singleList = [dSingle]()
+    @State private var currentSingleIndex = 0
     
     var body: some View {
         HStack {
-            Text(namedPhrase.getPhrase().getStringAtLanguage(language: language))
+            VStack(alignment: .leading, spacing: 40) {
+                    Text(namedPhrase.getPhrase().getStringAtLanguage(language: language))
+                        .font(.title)
+                    Divider() // Creates a thin line (Push-out view)
+                    Image(systemName: "arrow.left")
+                }
+                .padding()
+                .foregroundColor(Color.white)
+                .background(RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(.blue))
+                .padding()
+            
             Spacer()
             /*HStack{
             ForEach(namedPhrase.restrictions, id: \.self){
@@ -46,6 +59,49 @@ struct DetailedPhraseView: View {
 
         }
     }
+    
+    /*
+    func changeWord(){
+        let single = singleList[currentSingleIndex]
+        var wsd = single.getSentenceData()
+        
+        switch wsd.wordType {
+        case .V:
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
+            single.copyGuts(newSingle: newSingle)
+        case .Adj, .Det, .Adv, .C:
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
+            single.copyGuts(newSingle: newSingle)
+        case .N:
+            let nounSingle = single as! dNounSingle
+            var newFunctionType = PPFunctionType.none
+            if nounSingle.isSubject() { newFunctionType = .subject }
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType : newFunctionType)
+            nounSingle.copyGuts(newSingle: newSingle)
+            if nounSingle.isSubject() {
+                m_clause.setPerson(value: nounSingle.getPerson())
+            }
+        case .Pronoun:
+            let ppSingle = single as! dPersonalPronounSingle
+            var newFunctionType = PPFunctionType.none
+            if ppSingle.isSubject() { newFunctionType = .subject }
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType : newFunctionType)
+            ppSingle.copyGuts(newSingle: newSingle)
+            if ppSingle.isSubject() {
+                m_clause.setPerson(value: ppSingle.getPerson())
+            }
+        case .P:
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
+            single.copyGuts(newSingle: newSingle)
+        default: break
+        }
+        wsd = single.getSentenceData()
+        m_clause.processInfo()
+        currentPerson = m_clause.getPerson()
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+        updateCurrentSentenceViewStuff()
+    }
+     */
 }
 
 

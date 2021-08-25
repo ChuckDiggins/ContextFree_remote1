@@ -424,29 +424,26 @@ struct AddVerbToDictionary: View {
         englishPhrase = thisVerb.getWordAtLanguage(language: .English)
         frenchPhrase = thisVerb.getWordAtLanguage(language: .French)
         
-        analyzeFrenchVerb()
-        analyzeSpanishVerb()
-        analyzeEnglishVerb()
-
-        
-        for i in 0..<transitivityList.count{ transitivityList[i].isSelected = false }
-        transitivityList[thisVerb.transitivity.rawValue].isSelected = true
-        for i in 0..<passivityList.count{ passivityList[i].isSelected = false }
-        passivityList[thisVerb.passivity.rawValue].isSelected = true
-        
-        for i in 0..<subjectivity.count {subjectivity[i].isSelected = false}
-        for f in thisVerb.getFavoriteSubjects() { subjectivity[f.rawValue].isSelected = true }
-        
-        for i in 0..<objectivity.count {objectivity[i].isSelected = false}
-        for f in thisVerb.getFavoriteObjects() {objectivity[f.rawValue].isSelected = true}
-        
-        for i in 0..<verbType.count {verbType[i].isSelected = false}
-        //var vt = thisVerb.getVerbTypes()
-       
-        for f in thisVerb.getVerbTypes() {
-            //exclude a phrase separable and impersonal
-            if ( f.rawValue < 6 ){
-                verbType[f.rawValue].isSelected = true
+        if analyzeFrenchVerb() && analyzeSpanishVerb() && analyzeEnglishVerb() {
+            for i in 0..<transitivityList.count{ transitivityList[i].isSelected = false }
+            transitivityList[thisVerb.transitivity.rawValue].isSelected = true
+            for i in 0..<passivityList.count{ passivityList[i].isSelected = false }
+            passivityList[thisVerb.passivity.rawValue].isSelected = true
+            
+            for i in 0..<subjectivity.count {subjectivity[i].isSelected = false}
+            for f in thisVerb.getFavoriteSubjects() { subjectivity[f.rawValue].isSelected = true }
+            
+            for i in 0..<objectivity.count {objectivity[i].isSelected = false}
+            for f in thisVerb.getFavoriteObjects() {objectivity[f.rawValue].isSelected = true}
+            
+            for i in 0..<verbType.count {verbType[i].isSelected = false}
+            //var vt = thisVerb.getVerbTypes()
+            
+            for f in thisVerb.getVerbTypes() {
+                //exclude a phrase separable and impersonal
+                if ( f.rawValue < 6 ){
+                    verbType[f.rawValue].isSelected = true
+                }
             }
         }
     }

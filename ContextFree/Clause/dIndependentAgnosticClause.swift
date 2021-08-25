@@ -62,65 +62,18 @@ class dIndependentAgnosticClause : dClause {
         sentence = newSentence
     }
     
-    func convertSubjectPronoun(language: LanguageType, inputMorphStruct: CFMorphStruct)->CFMorphStruct{
-        var workingMorphStruct = inputMorphStruct
-        var morph = CFMorphStep()
-        
-        //find the subject phrase
-        if ( headNoun.getClusterType() != .UNK){
-            let hnp = headNoun as! dNounPhrase
-            //hnp.getStringAtLanguage(language: language)()
-        }
-        
-        //get the subject phrase as pronoun, if necessary
-        
-        //replace phrase with pronoun
-        
-        return workingMorphStruct
-    }
-    
-    func convertDirectObjectPronoun(inputMorphStruct: CFMorphStruct)->CFMorphStruct{
-        var workingMorphStruct = inputMorphStruct
-        var morph = CFMorphStep()
-        
-        //find the direct-object phrase
-        
-        //get the direct-object phrase as pronoun, if necessary
-        
-        //replace phrase with pronoun
-        
-        //move before verb
-        
-        return workingMorphStruct
-    }
-    
-    func convertIndirectObjectPronoun(inputMorphStruct: CFMorphStruct)->CFMorphStruct{
-        var workingMorphStruct = inputMorphStruct
-        var morph = CFMorphStep()
-        
-        //find the indirect-object phrase
-        
-        //get the indirect-object phrase as pronoun, if necessary
-        
-        //replace phrase with pronoun
-        
-        //move before verb
-        
-        return workingMorphStruct
-    }
-    
     func getCompositeSentenceString(language: LanguageType, targetFunction: ContextFreeFunction)->([dSingle], Gender, Number, Person) {
-        var singleListBefore = Array<dSingle>()  //pre target
-        var targetSingleList = Array<dSingle>()
-        var singleListAfter = Array<dSingle>()  //after target
+        //var workingSingleList = [dSingle]()
+        //var singleListBefore = Array<dSingle>()  //pre target
+        //var singleListAfter = Array<dSingle>()  //after target
 
         // first find the start index of the target function
         
         var gender = Gender.masculine
         var number = Number.singular
         var person = Person.S3
-
-        var workingSingleList = [dSingle]()
+        var targetSingleList = Array<dSingle>()
+        
         for cluster in sentence.getClusterList(){
             switch cluster.getClusterType() {
             case .NP:
@@ -372,7 +325,7 @@ class dIndependentAgnosticClause : dClause {
     func getSingleList()->[dSingle]{
         var singleList = [dSingle]()
         var clusterIndex = 0
-        let count = sentence.getClusterList().count
+        //let count = sentence.getClusterList().count
         
         for cluster in sentence.getClusterList(){
             switch cluster.getClusterType() {

@@ -65,12 +65,16 @@ struct PersonalPronounGames: View {
     @State private var morphStruct = CFMorphStruct()
     @State private var morphIndex = 0
     
+    //this is for changing all the noun phrase order from Romance to English
+    @State private var m_englishPhraseCFMM = CFMorphModel(id: 0, modelName: "")
+    
     var body: some View {
+        //LanguageChooserView(currentLanguage: currentLanguage)
+ 
         HStack{
             Button(action: {
                 currentLanguage = .Spanish
-                sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
-                updateCurrentSentenceViewStuff()
+                setNewLanguage()
             }){
                 Text("Spanish")
             }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
@@ -78,8 +82,7 @@ struct PersonalPronounGames: View {
             
             Button(action: {
                 currentLanguage = .French
-                sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
-                updateCurrentSentenceViewStuff()
+                setNewLanguage()
             }){
                 Text("French")
             }.font(currentLanguage == .French ? .title : .system(size: 20) )
@@ -87,8 +90,7 @@ struct PersonalPronounGames: View {
             
             Button(action: {
                 currentLanguage = .English
-                sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
-                updateCurrentSentenceViewStuff()
+                setNewLanguage()
             }){
                 Text("English")
             }.font(currentLanguage == .English ? .title : .system(size: 20) )
@@ -168,6 +170,7 @@ struct PersonalPronounGames: View {
             m_randomPronounPhrase = RandomPersonalPronounPhrase(wsp: cfModelView.getWordStringParser(), rft: .subjectPronounVerb)
             createRandomClause()
             highlightCurrentFunction()
+            createEnglishNounPhraseOrderMorph()  //create for when it's needed
         }
         
         
@@ -202,7 +205,11 @@ struct PersonalPronounGames: View {
         
     }
     
-    
+    func setNewLanguage(){
+        if currentLanguage == .English { convertToEnglishWordOrder() }
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+        updateCurrentSentenceViewStuff()
+    }
    
     func changeWord(){
         let single = singleList[currentSingleIndex]
@@ -275,18 +282,31 @@ struct PersonalPronounGames: View {
             break
         }
         
-        
+        morphIndex = 0
         updateCurrentSentenceViewStuff()
+    }
+    
+    func createEnglishNounPhraseOrderMorph(){
+        m_englishPhraseCFMM = CFMorphModel(id: 0, modelName: "Convert Spanish Noun Phrases to English Order")
+        m_englishPhraseCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "followingAdjective", cfToTypeString: "precedingAdjective"))
+        m_englishPhraseCFMM.parseMorphModel()
+        
+    }
+    
+    func convertToEnglishWordOrder(){
+        var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
+        morphStruct.clear()
+        morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: m_englishPhraseCFMM)
     }
     
     func testCFMorphModel(){
         var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
         morphStruct.clear()
 
-
+        
         //create the subject morph model first
         if checkboxSubject {
-            var subjectCFMM = CFMorphModel(id: 0, modelName: "Convert Spanish Phrases to PPs")
+            var subjectCFMM = CFMorphModel(id: 0, modelName: "Convert simple Spanish subject phrases to subject pronouns")
             subjectCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "subjectPhrase", cfToTypeString: ""))
             subjectCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "subjectPhrase", cfToTypeString: "subjectPronoun"))
             subjectCFMM.parseMorphModel()
@@ -295,7 +315,7 @@ struct PersonalPronounGames: View {
         
 
         if checkboxDirectObject {
-            var doCFMM = CFMorphModel(id: 1, modelName: "Convert Spanish DO phrases to DO PPs")
+            var doCFMM = CFMorphModel(id: 1, modelName: "Convert simple Spanish DO phrases to DO pronouns")
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "directObjectPhrase", cfToTypeString: ""))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "directObjectPhrase", cfToTypeString: "directObjectPronoun"))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "directObjectPronoun", locationString: "precedingVerb"))
@@ -305,13 +325,14 @@ struct PersonalPronounGames: View {
 
         
         if checkboxIndirectObject {
-            var doCFMM = CFMorphModel(id: 1, modelName: "Convert Spanish inDO phrases to inDO PPs")
+            var doCFMM = CFMorphModel(id: 1, modelName: "Convert simple Spanish inDO phrases to inDO pronouns")
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "indirectObjectPhrase", cfToTypeString: ""))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "indirectObjectPhrase", cfToTypeString: "indirectObjectPronoun"))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "indirectObjectPronoun", locationString: "precedingDOPronoun"))
             doCFMM.parseMorphModel()
             morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: doCFMM)
         }
+        
     }
     
     func updateCurrentSentenceViewStuff(){

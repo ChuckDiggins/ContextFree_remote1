@@ -247,7 +247,7 @@ class dPhrase : dCluster {
                     wordList.append(sd)
                 }
                 else if ( type == .PersPro){
-                    let c = cluster as! dPersonalPronounSingle
+                    //let c = cluster as! dPersonalPronounSingle
                     wordList.append(cluster.getSentenceData())
                 }
                 else if ( type == .Det){

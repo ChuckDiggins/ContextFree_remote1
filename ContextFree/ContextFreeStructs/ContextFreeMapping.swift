@@ -24,6 +24,8 @@ struct MappingPair {
 struct ContextFreeMapping {
     let cfs = ContextFreeSymbol.AMB
     
+    
+    
     func fromRomanceVPToEnglishVP(fromVP: dVerbPhrase)->dVerbPhrase{
         let toVP = dVerbPhrase()
         

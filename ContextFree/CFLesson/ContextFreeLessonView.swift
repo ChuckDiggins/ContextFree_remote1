@@ -133,29 +133,17 @@ struct ContextFreeLessonView: View {
                         }
                     }
                 }
-                /*
-                 NavigationLink(destination: FilteredPhraseListView()){
-                 Text("Filtered verb list")
-                 }.frame(width: 200, height: 50)
-                 .padding(.leading, 10)
-                 .background(Color.yellow)
-                 .cornerRadius(10)
-                 */
               
                 List{
                     ForEach(0..<namedPhraseCount){ index in
-                        Text("\(namedPhraseList[index].getPhraseName())")
-                        //FilteredRowView(verb : verb)
-                        
-                        NavigationLink(destination: DetailedPhraseView(namedPhrase: namedPhraseList[index], language: currentLanguage)){
-                            //Text("Detailed phrase view")
+                        HStack{
+                            Text("\(namedPhraseList[index].getPhraseName())")
+                            NavigationLink(destination: DetailedPhraseView(namedPhrase: namedPhraseList[index], language: currentLanguage)){
+                            }
                         }
                     }.buttonStyle(PlainButtonStyle())
                     
                 }
-
-                
-                //Text("\(viperViewModel.getWorkingVerbList().count) verbs here")
                 
             }//VStack
             .navigationTitle("Context Free Lessons")
@@ -210,13 +198,16 @@ struct ContextFreeLessonView: View {
         namedPhraseList.append(NP3)
         namedPhraseList.append(PP)
         namedPhraseList.append(VP)
-        namedPhraseList.append(NP1Copy)
+        
         
         namedClause.appendNamedPhrase(namedPhrase: NP1)
         namedClause.appendNamedPhrase(namedPhrase: VP)
         namedClause.process()
+        print("In ContextFreeLessonView: Language is \(currentLanguage.rawValue)")
         let clauseString = namedClause.getClause().getReconstructedSentenceString(language: currentLanguage)
         print("\(namedClause.getName()): \(clauseString)")
+        
+        //namedPhraseList.append(namedClause)
         
         for np in namedPhraseList {
             print("\(np.getPhraseName()): \(np.getPhrase().getStringAtLanguage(language: currentLanguage))")

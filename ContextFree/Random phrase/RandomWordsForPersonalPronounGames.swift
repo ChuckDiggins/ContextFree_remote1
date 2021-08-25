@@ -265,8 +265,6 @@ struct RandomWordListsForPersonalPronounGames{
             case .prepositionalObject:
                 i = Int.random(in: 0 ..< m_directObjectNouns.count)
                 word = m_directObjectNouns[i]
-            default:
-                word = Word()  //this should crash
             }
             let number = Int.random(in: 1 ..< 3)
             
