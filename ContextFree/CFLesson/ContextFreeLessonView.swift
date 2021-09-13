@@ -212,6 +212,8 @@ struct ContextFreeLessonView: View {
         for np in namedPhraseList {
             print("\(np.getPhraseName()): \(np.getPhrase().getStringAtLanguage(language: currentLanguage))")
         }
+        print("\(NP1Copy.getPhraseName()): \(NP1Copy.getPhrase().getStringAtLanguage(language: currentLanguage))")
+        
         namedPhraseCount = namedPhraseList.count
         
     }

@@ -28,9 +28,11 @@ struct CFMorphSentence {
         }
     }
     
+    //WorkInProgress
+    
     mutating func applyMorphModelToSimplePhrases(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
         let currentLanguage = language
-        var workingMorphStruct = inputMorphStruct
+        let workingMorphStruct = inputMorphStruct
         
         var lookForNounPhrase = false
         
@@ -47,17 +49,14 @@ struct CFMorphSentence {
         }
         
         //ask for next noun phrase
-        var gender = Gender.masculine
-        var number = Number.singular
-        var person = Person.S1
         var phraseSingleList = [dSingle]()
         
         if lookForNounPhrase {
             let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
             phraseSingleList = result.0
-            gender = result.1
-            number = result.2
-            person = result.3
+            //let gender = result.1
+            //let number = result.2
+            //let person = result.3
             if phraseSingleList.count == 0 {
                 print("could not retieve a subject phrase")
                 return workingMorphStruct
@@ -120,7 +119,7 @@ struct CFMorphSentence {
                 
                 //find the personal pronoun
                 for index in 0 ..< workingSingleList.count {
-                    var single = workingSingleList[index]
+                    let single = workingSingleList[index]
                     let pronounType = single.getPronounType()
                     if pronounType == targetPronounType {
                         removeIndex = index
@@ -171,9 +170,9 @@ struct CFMorphSentence {
                         return workingMorphStruct
                     }
                 case .indirectObjectPronoun:
-                    var single = dPersonalPronounSingle()
+                    let single = dPersonalPronounSingle()
                    
-                    for index in 0 ..< workingSingleList.count {
+                    for _ in 0 ..< workingSingleList.count {
                         if single.getPronounType() == .INDIRECT_OBJECT {
                             equivalentPronounSingle = single
                         }
@@ -195,8 +194,8 @@ struct CFMorphSentence {
             wsd.gender = gender
             wsd.number = number
             wsd.wordType = .Pronoun
-            equivalentPronounSingle = dPersonalPronounSingle(word: equivalentPronoun, data: wsd)
-            let equivalentPronounString = getWordString(language:language, single: equivalentPronounSingle)
+            //equivalentPronounSingle = dPersonalPronounSingle(word: equivalentPronoun, data: wsd)
+            //let equivalentPronounString = getWordString(language:language, single: equivalentPronounSingle)
             
              //create a parallel array of booleans to indicate selected or not
            
@@ -211,7 +210,7 @@ struct CFMorphSentence {
             var moveFromIndex = -1
             var moveToIndex = -1
             dumpWorkingSingleList(language: language, showPronounTypes: true)
-            var workingSingleList = m_clause.getWorkingSingleList()
+            let workingSingleList = m_clause.getWorkingSingleList()
             for ssIndex in 0 ..< workingSingleList.count {
                 let single = workingSingleList[ssIndex]
                 if  single.getClusterType() == .V {
@@ -303,8 +302,7 @@ struct CFMorphSentence {
         
         let workingMorphStruct = inputMorphStruct
         var morphStep = CFMorphStep()
-        var workingSingleList = m_clause.getWorkingSingleList()
-        var grabString = ""
+        let workingSingleList = m_clause.getWorkingSingleList()
         var doPhrase = ""
         for i in 0 ..< phraseSingleList.count {
             doPhrase += getWordString(language: language, single: phraseSingleList[i]) + " "
@@ -325,7 +323,7 @@ struct CFMorphSentence {
         
         for ssIndex in breakIndex ..< workingSingleList.count {
             if selectedList[ssIndex] {
-                let wordString = getWordString(language: language, single: workingSingleList[ssIndex])
+                //let wordString = getWordString(language: language, single: workingSingleList[ssIndex])
                 morphStep.part2 = doPhrase + " "
                 //grabString = doPhrase  + " "
             } else {
@@ -354,8 +352,7 @@ struct CFMorphSentence {
                           phraseSingleList : [dSingle], equivalentPronounSingle : dPersonalPronounSingle, equivalentPronounDescription: String)->CFMorphStruct{
         
         //Replace the current phrase with the equivalent pronoun
-        
-        let currentLanguage = language
+
         let workingMorphStruct = inputMorphStruct
         var morphStep = CFMorphStep()
         var workingSingleList = m_clause.getWorkingSingleList()
@@ -414,7 +411,6 @@ struct CFMorphSentence {
     
     mutating func moveSingle (language: LanguageType, inputMorphStruct:CFMorphStruct, removeIndex:Int, moveToIndex:Int, equivalentPronounDescription: String)->CFMorphStruct
     {
-        let currentLanguage = language
         let workingMorphStruct = inputMorphStruct
         
         var workingSingleList = m_clause.getWorkingSingleList()
@@ -469,7 +465,6 @@ struct CFMorphSentence {
     }
     mutating func remove (language: LanguageType, inputMorphStruct:CFMorphStruct, removeIndex:Int, equivalentPronounDescription: String)->CFMorphStruct{
         
-        let currentLanguage = language
         let workingMorphStruct = inputMorphStruct
         var morphStep = CFMorphStep()
         var workingSingleList = m_clause.getWorkingSingleList()
@@ -502,7 +497,6 @@ struct CFMorphSentence {
        
         let equivalentPronounString = getWordString(language: language, single: equivalentPronounSingle) + " "
         
-        let currentLanguage = language
         let workingMorphStruct = inputMorphStruct
         var morphStep = CFMorphStep()
         var workingSingleList = m_clause.getWorkingSingleList()

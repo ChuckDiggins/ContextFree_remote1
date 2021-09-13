@@ -373,21 +373,6 @@ struct CFModel{
     }
     
     mutating func createAndAppendVerbFromJsonVerb(jv: JsonVerb){
-        var verbListCount = 0
-        
-        //creates a BVerb from the jsonVerb.word
-        /*
-        var bVerbString = ""
-        switch m_currentLanguage {
-        case .Spanish:
-            bVerbString = jv.spanish
-        case .French:
-            bVerbString = jv.french
-        case .English:
-            bVerbString = jv.english
-        default: break
-        }
-        */
         
         let spanishVerbStuff = analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: jv.spanish)
         let frenchVerbStuff = analyzeAndCreateBVerb_SPIFE(language: .French, verbPhrase: jv.french)

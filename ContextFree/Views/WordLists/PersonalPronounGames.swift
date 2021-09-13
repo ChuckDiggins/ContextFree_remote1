@@ -254,8 +254,6 @@ struct PersonalPronounGames: View {
     
     
     func createRandomClause(){
-        
-        var str = ""
         let tense = currentTense
         while tense == currentTense {
             currentTense = cfModelView.getRandomTense()
@@ -268,6 +266,7 @@ struct PersonalPronounGames: View {
                                                                            prepositional: checkboxPrepositional)
         
         currentPerson = m_clause.getPerson()
+        var str = ""
         switch currentLanguage {
         case .French:
             str  = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: currentTense, person: currentPerson)
@@ -281,7 +280,12 @@ struct PersonalPronounGames: View {
         default:
             break
         }
-        
+        if ( str.count > 0 ){
+        print("createRandomClause: random clause = \(str)")
+        }
+        else {
+            print("createRandomClause: random clause was not created.")
+        }
         morphIndex = 0
         updateCurrentSentenceViewStuff()
     }

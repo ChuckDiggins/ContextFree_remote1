@@ -40,9 +40,12 @@ class CFModelView: ObservableObject {
         return (cfModel?.getRandomAgnosticSentence(rft: rft))!
     }
 
- 
     func getRandomSentenceObject()->RandomSentence{
         return (cfModel?.getRandomSentenceObject())!
+    }
+    
+    func analyzeAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String)->Bool {
+        return cfModel!.analyzeAgnosticWord(wordType: WordType, spanishWord : spanishWord, frenchWord : frenchWord, englishWord: englishWord)
     }
     
     func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){

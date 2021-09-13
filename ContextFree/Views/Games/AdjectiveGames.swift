@@ -102,7 +102,7 @@ struct AdjectiveGames: View {
     
     func generateRandomPhrase(){
         if ( currentLanguage == .French || currentLanguage == .Spanish ){
-            let adjType = AdjectiveType.any
+            //let adjType = AdjectiveType.any
             //m_clause = cfModelView.getRandomPhraseForAdjectives(type: adjType.getPrimaryType(index: adjectiveTypeIndex))
             sentenceString = m_clause.createNewSentenceString()
             print(sentenceString)

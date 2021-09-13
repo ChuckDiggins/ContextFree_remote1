@@ -13,6 +13,23 @@ struct ContentView: View {
         NavigationView {
             
             List {
+                
+                NavigationLink(destination: Add3Words(wordType: .noun)){
+                    Text("Add words in 3 Languages")
+                }.frame(width: 200, height: 50)
+                .foregroundColor(.black)
+                .padding(.leading, 10)
+                .background(Color(UIColor(named: "Color4")!))
+                .cornerRadius(25)
+                
+                NavigationLink(destination: AddVerbToDictionary()){
+                    Text("Add Verbs in 3 Languages")
+                }.frame(width: 200, height: 50)
+                .foregroundColor(.black)
+                .padding(.leading, 10)
+                .background(Color(UIColor(named: "Color5")!))
+                .cornerRadius(25)
+                
                 NavigationLink(destination: MultiVerbConjugation()){
                     Text("Multi Verbs")
                 }.frame(width: 200, height: 50)

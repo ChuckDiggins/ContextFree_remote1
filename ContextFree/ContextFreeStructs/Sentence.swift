@@ -372,9 +372,6 @@ struct Sentence  {
             case .PP:
                 let c = cluster as! dPrepositionPhrase
                 str = c.getString()
-            case .PersPro:
-                let c = cluster as! dPersonalPronounSingle
-                str = c.getString()
             case .V:
                 let c = cluster as! dVerbSingle
                 str = c.getString()

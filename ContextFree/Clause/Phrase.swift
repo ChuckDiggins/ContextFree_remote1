@@ -307,6 +307,8 @@ class dPhrase : dCluster {
                 setNumber(value: c.getNumber())
             case .PersPro:
                 let c = cluster as! dPersonalPronounSingle
+                c.setGender(value: gender)
+                c.setNumber(value: number)
             case .N:
                 setPerson(value: cluster.getPerson())
                 setGender(value: cluster.getGender())

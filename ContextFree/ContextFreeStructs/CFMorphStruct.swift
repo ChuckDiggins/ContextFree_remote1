@@ -31,7 +31,7 @@ struct CFMorphStep {
 //all the morphsteps should relate to a single person
 class CFMorphStruct {
     init(){
-        var ms = CFMorphStep()
+        let ms = CFMorphStep()
         append(morphStep: ms)
     }
     var currentIndex = 0

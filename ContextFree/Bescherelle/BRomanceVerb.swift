@@ -267,6 +267,7 @@ class BRomanceVerb: BVerb {
         initializeMorphStructs()
         if isReflexive() { addReflexiveMorphing() }
         
+        /*
         let printThis = false
         
         if printThis {
@@ -275,6 +276,7 @@ class BRomanceVerb: BVerb {
             }
         }
         
+ */
         //do some other stuff while we are at it
         m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: verbEnding)
         m_pastParticiple = createPastParticiple(verb : self)

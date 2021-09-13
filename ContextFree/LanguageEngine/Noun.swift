@@ -191,7 +191,7 @@ class SpanishNoun : RomanceNoun {
     
     override func constructPlural(){
         let util = VerbUtilities()
-        var root = word
+        let root = word
         //root.removeLast()
         
         let suffix = util.getLastNCharactersInString(inputString: word, copyCount: 1)

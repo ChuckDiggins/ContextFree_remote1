@@ -23,7 +23,7 @@ class dIndependentAgnosticClause : dClause {
     var workingSingleList = [dSingle]()
     
     override func appendCluster(cluster: dCluster){
-        let ct = cluster.getClusterType()
+        //let ct = cluster.getClusterType()
         sentence.appendCluster(cluster: cluster)
     }
     
