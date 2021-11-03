@@ -53,7 +53,7 @@ class dNounSingle : dSingle
         }
     }
     
-    func    getWordStringAtLanguage(language: LanguageType)->String{
+    override func    getWordStringAtLanguage(language: LanguageType)->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         let cn = word as! Noun

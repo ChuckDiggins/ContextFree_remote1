@@ -75,6 +75,8 @@ class dIndependentAgnosticClause : dClause {
         var targetSingleList = Array<dSingle>()
         
         for cluster in sentence.getClusterList(){
+            print ("getCompositeSentenceString: Top level \(cluster)")
+            
             switch cluster.getClusterType() {
             case .NP:
                 let nounPhrase = cluster as! dNounPhrase
@@ -87,6 +89,7 @@ class dIndependentAgnosticClause : dClause {
             case .VP:
                 let verbPhrase = cluster as! dVerbPhrase
                 for vc in verbPhrase.getClusterList() {
+                    print ("... sub level \(vc)")
                     if vc.getClusterType() == .PP {
                         let prepPhrase = vc as! dPrepositionPhrase
                         if prepPhrase.getClusterFunction() == targetFunction {
@@ -332,7 +335,7 @@ class dIndependentAgnosticClause : dClause {
             case .Adj, .AdjCls, .Adv, .AMB, .Art, .C, .comma,
                  .Det, .Num, .PersPro, .P, .V, .AuxV, .UNK :
                 let single = cluster as! dSingle
-                //print("clusterIndex \(clusterIndex): \(single.getProcessWordInWordStateData(language: .Spanish))")
+                print("clusterIndex \(clusterIndex): \(single.getProcessWordInWordStateData(language: .Spanish))")
                 singleList.append(single)
             case .NP:
                 let c = cluster as! dNounPhrase

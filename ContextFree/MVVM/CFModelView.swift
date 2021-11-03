@@ -13,6 +13,10 @@ class CFModelView: ObservableObject {
     init(){
     }
     
+    func setCurrentLanguage(language: LanguageType){
+        cfModel!.m_currentLanguage = language
+    }
+    
     func getParser()->WordStringParser{
         return cfModel!.getParser()
     }
@@ -44,14 +48,22 @@ class CFModelView: ObservableObject {
         return (cfModel?.getRandomSentenceObject())!
     }
     
-    func analyzeAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String)->Bool {
-        return cfModel!.analyzeAgnosticWord(wordType: WordType, spanishWord : spanishWord, frenchWord : frenchWord, englishWord: englishWord)
+    /*
+    func appendAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String){
+        return cfModel!.appendAgnosticWord(wordType: wordType, spanishWord : spanishWord, frenchWord : frenchWord, englishWord: englishWord)
     }
+    
+
+    func analyzeAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String)->Bool {
+        return cfModel!.analyzeAgnosticWord(wordType: wordType, spanishWord : spanishWord, frenchWord : frenchWord, englishWord: englishWord)
+    }
+
+    */
     
     func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
         return cfModel!.analyzeAndCreateBVerb_SPIFE(language: language, verbPhrase: verbPhrase)
     }
-    
+
     func  getWordCount(wordType: WordType)->Int{
         return cfModel!.getWordCount(wordType: wordType)
     }
@@ -61,7 +73,7 @@ class CFModelView: ObservableObject {
     }
     
     func appendJsonVerb(jsonVerb: JsonVerb)->Int{
-        return cfModel!.appendJsonVerb(jsonVerb: jsonVerb)
+        return 5
     }
  
     func append(spanishVerb : RomanceVerb, frenchVerb: RomanceVerb ){
@@ -91,7 +103,7 @@ class CFModelView: ObservableObject {
         return cfModel!.getModifierList(wordType: wordType)
     }
     
-    func getNounList()->Array<NounComponent>{
+    func getNounList()->Array<Word>{
         return cfModel!.getNounList()
     }
     

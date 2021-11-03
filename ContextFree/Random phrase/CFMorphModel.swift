@@ -16,13 +16,14 @@ enum MorphOperation : String {
     case contract   //a + el = al, will + not = won't
     case convert   //from direct object phrase to direct object pronoun
     case append   //estoy comprando + lo = estoy comprándolo
+    case none
 }
 
 struct MorphOperationStruct{
     var morphOperation = MorphOperation.grab
-    var from = CFTypes.none
-    var to = CFTypes.none
-    var location = Location.none
+    var from = CFType.none
+    var to = CFType.none
+    var location = CFLocation.none
 }
 
 struct MorphOperationJson : Codable{
@@ -46,7 +47,7 @@ struct MorphOperationJson : Codable{
     }
 }
 
-enum CFTypes {
+enum CFType {
     case none
     case literal     //any string, exclamation
     case punctuation
@@ -64,7 +65,7 @@ enum CFTypes {
     case precedingAdjective  //for use in moving a following romance adjective to preceding english adjective
 }
 
-enum Location {
+enum CFLocation {
     case none
     case precedingVerb
     case insideVerb     //phrasal verbs in English
@@ -96,75 +97,77 @@ struct CFMorphModel : Identifiable {
         mpjList.append(mp)
     }
     
-    mutating func parseMorphModel(){
+    mutating func unpackJSONOperationString(operation: String)->MorphOperation{
+        var morphOperation : MorphOperation
+        switch operation {
+        case "remove" : morphOperation = .remove
+        case "insert" : morphOperation  = .insertBefore
+        case "replace" : morphOperation  = .replace
+        case "move" : morphOperation  = .move
+        case "grab" : morphOperation  = .grab
+        case "contract" : morphOperation  = .contract
+        case "convert" : morphOperation = .convert
+        case "append" : morphOperation = .append
+        default: morphOperation = .none
+        }
+        return morphOperation
+    }
+    
+    mutating func unpackJSONFromToString(fromToString: String)->CFType{
+        var cfType : CFType
+        switch fromToString{
+        case "directObjectPhrase" : cfType = .directObjectPhrase
+        case "subjectPhrase" : cfType = .subjectPhrase
+        case "indirectObjectPhrase" : cfType = .indirectObjectPhrase
+        case "directObjectPronoun" : cfType = .directObjectPronoun  //for removing
+        case "subjectPronoun" : cfType = .subjectPronoun
+        case "indirectObjectPronoun" :  cfType = .indirectObjectPronoun
+        case "demonstrativePronoun" : cfType = .demonstrativePronoun //this one, that one
+        case "disjunctivePronoun" : cfType = .disjunctivePronoun    //disjunctive: after preposition, after C'est (FR)
+        case "adverbialPronoun" : cfType = .adverbialPronoun   //y, en
+        case "possessivePronoun" : cfType = .possessivePronoun   //my, mine
+        case "followingAdjective" : cfType = .followingAdjective //
+        case "literal" : cfType = .literal
+        case "none" : cfType = .none
+        default: cfType = .none
+        }
+        return cfType
+    }
+    
+    mutating func unpackJSONLocation(locationString: String)->CFLocation{
+        var cfLocation : CFLocation
+        switch locationString{
+        case "precedingVerb" : cfLocation = .precedingVerb
+        case "insideVerb" : cfLocation = .insideVerb
+        case "appendToVerb" : cfLocation = .appendToVerb
+        case "precedingDOPronoun" : cfLocation = .precedingDOPronoun
+        case "afterDOPronoun" : cfLocation = .afterDOPronoun
+        case "precedingClause" : cfLocation = .precedingClause
+        case "afterClause" : cfLocation = .afterClause
+        default: cfLocation = .none
+        }
+        return cfLocation
    
+        /*
+         case inFrontOfVerb
+         case insideVerb     //phrasal verbs in English
+         case inFrontOfPronoun
+         case inFrontOfClause
+         case atBackOfClause
+         */
+    }
+    
+    //mutating func parseMorphModel(){
+    mutating func unpackJSONOperations(){
         for mpj in mpjList {
             var mps = MorphOperationStruct()
-            switch mpj.morphOperationString{
-            case "remove" : mps.morphOperation = .remove
-            case "insert" : mps.morphOperation  = .insertBefore
-            case "replace" : mps.morphOperation  = .replace
-            case "move" : mps.morphOperation  = .move
-            case "grab" : mps.morphOperation  = .grab
-            case "contract" : mps.morphOperation  = .contract
-            case "convert" : mps.morphOperation = .convert
-            case "append" : mps.morphOperation = .append
-            default: break
-            }
-            
-            
-            switch mpj.cfFromTypeString{
-            case "directObjectPhrase" : mps.from = .directObjectPhrase
-            case "subjectPhrase" : mps.from = .subjectPhrase
-            case "indirectObjectPhrase" : mps.from = .indirectObjectPhrase
-            case "directObjectPronoun" : mps.from = .directObjectPronoun  //for removing
-            case "subjectPronoun" : mps.from = .subjectPronoun
-            case "indirectObjectPronoun" :  mps.from = .indirectObjectPronoun
-            case "demonstrativePronoun" : mps.from = .demonstrativePronoun //this one, that one
-            case "disjunctivePronoun" : mps.from = .disjunctivePronoun    //disjunctive: after preposition, after C'est (FR)
-            case "adverbialPronoun" : mps.from = .adverbialPronoun   //y, en
-            case "possessivePronoun" : mps.from = .possessivePronoun   //my, mine
-            case "followingAdjective" : mps.from = .followingAdjective //
-            case "literal" : mps.from = .literal
-            case "none" : mps.from = .none
-            default: mps.from = .none
-            }
-            
-            switch mpj.cfToTypeString{
-            case "directObjectPhrase" : mps.to = .directObjectPhrase
-            case "subjectPhrase" : mps.to = .subjectPhrase
-            case "indirectObjectPhrase" : mps.to = .indirectObjectPhrase
-            case "directObjectPronoun" : mps.to = .directObjectPronoun
-            case "subjectPronoun" : mps.to = .subjectPronoun
-            case "indirectObjectPronoun" :  mps.to = .directObjectPronoun
-            case "demonstrativePronoun" : mps.to = .demonstrativePronoun //this one, that one
-            case "disjunctivePronoun" : mps.to = .disjunctivePronoun   //disjunctive: after preposition, after C'est (FR)
-            case "adverbialPronoun" : mps.to = .adverbialPronoun   //y, en
-            case "possessivePronoun" : mps.to = .possessivePronoun   //my, mine
-            case "precedingAdjective" : mps.from = .precedingAdjective //
-            default: mps.to = .none
-            }
-            
-            switch mpj.locationString{
-            case "precedingVerb" : mps.location = .precedingVerb
-            case "insideVerb" : mps.location = .insideVerb
-            case "appendToVerb" : mps.location = .appendToVerb
-            case "precedingDOPronoun" : mps.location = .precedingDOPronoun
-            case "afterDOPronoun" : mps.location = .afterDOPronoun
-            case "precedingClause" : mps.location = .precedingClause
-            case "afterClause" : mps.location = .afterClause
-            default: mps.location = .none
-            }
+            mps.morphOperation = unpackJSONOperationString(operation: mpj.morphOperationString)
+            mps.from = unpackJSONFromToString(fromToString: mpj.cfFromTypeString)
+            mps.to = unpackJSONFromToString(fromToString: mpj.cfToTypeString)
+            mps.location = unpackJSONLocation(locationString: mpj.locationString)
             mpsList.append(mps)
         }
     }
 }
 
 
-/*
- case inFrontOfVerb
- case insideVerb     //phrasal verbs in English
- case inFrontOfPronoun
- case inFrontOfClause
- case atBackOfClause
- */

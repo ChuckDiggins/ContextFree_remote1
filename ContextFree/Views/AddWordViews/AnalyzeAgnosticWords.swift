@@ -9,35 +9,33 @@ import Foundation
 
 struct AnalyzeAgnosticWords {
     var cfModelView : CFModelView
-    var spanishPhrase: String
-    var frenchPhrase: String
-    var englishPhrase: String
     
-    
-    func appendAgnositicWordToDictionary(){
-        cfModelView.appendAgnosticWord(wordType: WordType, spanishWord : spanishPhrase, frenchWord : frenchPhrase, englishWord: englishPhrase)
+/*
+    func appendAgnositicWordToDictionary(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String){
+        cfModelView.appendAgnosticWord(wordType: wordType, spanishWord : spanishWord, frenchWord : frenchWord, englishWord: englishWord)
     }
     
-    func analyzeWords(wordType: WordType)->Bool {
+    func analyzeWords(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String)->Bool {
         
-        let wordOk = cfModelView.analyzeAgnosticWord(wordType: wordType, spanishWord: spanishPhrase, frenchWord: frenchPhrase, englishWord: englishPhrase)
+        let wordOk = cfModelView.analyzeAgnosticWord(wordType: wordType, spanishWord: spanishWord, frenchWord: frenchWord, englishWord: englishWord)
 
-        if wordOk { appendAgnositicWordToDictionary(wordType: wordType, spanishWord: spanishPhrase, frenchWord: frenchPhrase, englishWord: englishPhrase) }
+        if wordOk { appendAgnositicWordToDictionary(wordType: wordType, spanishWord: spanishWord, frenchWord: frenchWord, englishWord: englishWord) }
         
         return wordOk
     }
+  */
     
-    func analyzeVerbs()->(Bool, Bool, Bool) {
+    func analyzeVerbs(wordType: WordType, spVerbString: String, frVerbString: String, engVerbString: String)->(Bool, Bool, Bool) {
         
-        var spanishVerb = SpanishVerb()
-        var frenchVerb =  FrenchVerb()
-        var englishVerb =  EnglishVerb()
+        var spanishVerbString = spVerbString
+        var frenchVerbString =  frVerbString
+        var englishVerbString =  engVerbString
         
         let spanishOk = analyzeSpanishVerb()
         let frenchOk = analyzeFrenchVerb()
         let englishOk = analyzeEnglishVerb()
         
-        appendAgnositicWordToDictionary()
+        //appendAgnositicWordToDictionary(wordType: wordType, spanishWord: spanishVerbString, frenchWord: frenchVerbString, englishWord: englishVerbString)
         
         return (spanishOk, frenchOk, englishOk)
         
@@ -45,11 +43,11 @@ struct AnalyzeAgnosticWords {
         
         func analyzeSpanishVerb()->Bool{
             
-            let result = cfModelView.analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: spanishPhrase)
+            let result = cfModelView.analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: spanishVerbString)
             if result.0 {
                 let verb = result.1  //BVerb
                 let bSpanishVerb = verb as! BSpanishVerb
-                spanishVerb = SpanishVerb(word: bSpanishVerb.m_verbWord, def: "", type: VerbType.normal)
+                var spanishVerb = SpanishVerb(word: bSpanishVerb.m_verbWord, def: "", type: VerbType.normal)
                 spanishVerb.setBVerb(bVerb: bSpanishVerb)
                 return true
             }
@@ -57,11 +55,11 @@ struct AnalyzeAgnosticWords {
         }
         
         func analyzeFrenchVerb()->Bool{
-            let result = cfModelView.analyzeAndCreateBVerb_SPIFE(language: .French, verbPhrase: frenchPhrase)
+            let result = cfModelView.analyzeAndCreateBVerb_SPIFE(language: .French, verbPhrase: frenchVerbString)
             if result.0 {
                 let verb = result.1  //BVerb
                 let bFrenchVerb = verb as! BFrenchVerb
-                frenchVerb = FrenchVerb(word: bFrenchVerb.m_verbWord, def: "", type: VerbType.normal)
+                var frenchVerb = FrenchVerb(word: bFrenchVerb.m_verbWord, def: "", type: VerbType.normal)
                 frenchVerb.setBVerb(bVerb: bFrenchVerb)
                 return true
             }
@@ -69,11 +67,11 @@ struct AnalyzeAgnosticWords {
         }
         
         func analyzeEnglishVerb()->Bool{
-            let result = cfModelView.analyzeAndCreateBVerb_SPIFE(language: .English, verbPhrase: englishPhrase)
+            let result = cfModelView.analyzeAndCreateBVerb_SPIFE(language: .English, verbPhrase: englishVerbString)
             if result.0 {
                 let verb = result.1  //BVerb
                 let bEnglishVerb = verb as! BEnglishVerb
-                englishVerb = EnglishVerb(word: bEnglishVerb.m_verbWord, def: "", type: VerbType.normal)
+                var englishVerb = EnglishVerb(word: bEnglishVerb.m_verbWord, def: "", type: VerbType.normal)
                 englishVerb.setBVerb(bVerb: bEnglishVerb)
                 return true
             }
@@ -82,12 +80,7 @@ struct AnalyzeAgnosticWords {
         
         
     }
-    
-    
-    
-    
-    
-    
+
     
 }
 

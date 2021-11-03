@@ -10,14 +10,14 @@ import Foundation
 //handles create templates that will guide
 //  in creating sentences of various complexity of random words
 
-
-enum PPFunctionType : String {
-    case none = "No function"
-    case subject = "Subject"
-    case directObject = "Direct object phrase"
-    case indirectObject = "Indirect object phrase"
-    case prepositionalObject = "Prepositional object phrase"
-}
+//
+//enum PPFunctionType : String {
+//    case none = "No function"
+//    case subject = "Subject"
+//    case directObject = "Direct object phrase"
+//    case indirectObject = "Indirect object phrase"
+//    case prepositionalObject = "Prepositional object phrase"
+//}
 
 struct RandomPersonalPronounPhrase {
     
@@ -44,12 +44,12 @@ struct RandomPersonalPronounPhrase {
         
         //if subject requested, then a article/noun subject NP is created
         if subject {
-            NP1 = createArticleNoun( functionType: .subject) as! dNounPhrase
+            NP1 = createArticleNoun( functionType: .Subject) as! dNounPhrase
             NP1.setClusterFunction(fn: .Subject)
         }
         //otherwise, the subject pronoun is created as a noun phrase
         else {
-            let subj = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Pronoun, functionType: .subject)
+            let subj = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Pronoun, functionType: .Subject)
             NP1.appendCluster(cluster: subj)
             NP1.setClusterFunction(fn: .Subject)
         }
@@ -60,7 +60,7 @@ struct RandomPersonalPronounPhrase {
         let VP1 = createVerbOnly()
         
         if directObject {
-            let dirObj = createSimpleNounPhrase(functionType: .directObject)
+            let dirObj = createSimpleNounPhrase(functionType: .DirectObject)
             dirObj.setClusterFunction(fn: .DirectObject)
             VP1.appendCluster(cluster: dirObj)
         }
@@ -85,26 +85,26 @@ struct RandomPersonalPronounPhrase {
         return agnosticClause
     }
     
-    mutating func createArticleNoun(functionType: PPFunctionType)->dPhrase{
+    mutating func createArticleNoun(functionType: ContextFreeFunction)->dPhrase{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, functionType: .none))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, functionType: functionType))
         NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: functionType))
         NP1.processInfo()
         return NP1
     }
     
-    mutating func createSimpleNounPhrase(functionType: PPFunctionType)->dPhrase{
+    mutating func createSimpleNounPhrase(functionType: ContextFreeFunction)->dPhrase{
         let NP1 = dNounPhrase()
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, functionType: .none))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Det, functionType: functionType))
         NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: functionType))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: .none))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: functionType))
         NP1.processInfo()
         return NP1
     }
     
     mutating func createVerbOnly()->dPhrase{
         let verbPhrase = dVerbPhrase()
-        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, functionType: .none)
+        let vs = m_randomWord.getAgnosticRandomWordAsSingle(wordType: .V, functionType: .HeadVerb)
         verbPhrase.appendCluster(cluster: vs)
         return verbPhrase
     }
@@ -113,22 +113,22 @@ struct RandomPersonalPronounPhrase {
         let NP1 = dNounPhrase()
         let NP2 = dNounPhrase()
         
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Art, functionType: .none))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: .indirectObject))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: .none))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Art, functionType: .IndirectObject))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: .IndirectObject))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: .IndirectObject))
         NP1.processInfo()
 
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, functionType: .none))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, functionType: .IndirectObject))
         PP1.appendCluster(cluster: NP1)
         PP1.processInfo()
         
         //create a PP2 and attach it to PP1
         let PP2 = dPrepositionPhrase()
-        PP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, functionType: .none))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Art, functionType: .none))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: .none))
-        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: .none))
+        PP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, functionType: .IndirectObject))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Art, functionType: .IndirectObject))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: .IndirectObject))
+        NP2.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: .IndirectObject))
         NP2.processInfo()
         PP2.appendCluster(cluster: NP2)
         PP2.processInfo()
@@ -141,13 +141,13 @@ struct RandomPersonalPronounPhrase {
     mutating func createSimplePrepositionPhrase()->dPhrase{
         let NP1 = dNounPhrase()
         
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Art, functionType: .none))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: .prepositionalObject))
-        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: .none))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Art, functionType: .Prepositional))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .N, functionType: .Prepositional))
+        NP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .Adj, functionType: .Prepositional))
         NP1.processInfo()
         
         let PP1 = dPrepositionPhrase()
-        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, functionType: .none))
+        PP1.appendCluster(cluster: m_randomWord.getAgnosticRandomWordAsSingle(wordType: .P, functionType: .None))
         PP1.appendCluster(cluster: NP1)
         PP1.processInfo()
         return PP1

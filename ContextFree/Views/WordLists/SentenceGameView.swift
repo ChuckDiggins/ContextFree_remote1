@@ -54,8 +54,9 @@ struct SentenceGameView: View {
                 m_randomSentence = cfModelView.getRandomSentenceObject()
             }){
                 Text("Spanish")
-            }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
-            .foregroundColor(currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+            }.font(currentLanguage == .Spanish ? .title : .system(size: 10) )
+            .foregroundColor(currentLanguage == .Spanish ? Color.black : Color.blue)
+            
             Button(action: {
                 currentLanguage = .French
                 cfModelView.createNewModel(language: currentLanguage)
@@ -64,8 +65,9 @@ struct SentenceGameView: View {
                 m_randomSentence = cfModelView.getRandomSentenceObject()
             }){
                 Text("French")
-            }.font(currentLanguage == .Spanish ? .system(size: 20) : .title)
-            .foregroundColor(currentLanguage == .Spanish ? Color(UIColor(named: "SurgeryBackground")!) : Color.red)
+            }.font(currentLanguage == .French ? .title : .system(size: 10) )
+            .foregroundColor(currentLanguage == .French ? Color.black : Color.blue)
+            
             Button(action: {
                 currentLanguage = .English
                 cfModelView.createNewModel(language: currentLanguage)
@@ -74,8 +76,8 @@ struct SentenceGameView: View {
                 m_randomSentence = cfModelView.getRandomSentenceObject()
             }){
                 Text("English")
-            }.font(currentLanguage == .English ? .system(size: 20) : .title)
-            .foregroundColor(currentLanguage == .Spanish ? Color(UIColor(named: "SurgeryBackground")!) : Color.red)
+            }.font(currentLanguage == .English ? .title : .system(size: 10) )
+                .foregroundColor(currentLanguage == .English ? Color.black : Color.blue)
         }.onAppear{
             currentLanguage = cfModelView.getCurrentLanguage()
         }.padding()

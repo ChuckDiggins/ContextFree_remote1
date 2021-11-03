@@ -32,6 +32,8 @@ class dSingle  : dCluster
         return VerbUtilities().startsWithVowelSound(characterArray: getClusterWord().word)
     }
     
+    var m_partOfPronounPhrase = PronounType.none
+    
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     
     var m_originalString = ""
@@ -66,6 +68,15 @@ class dSingle  : dCluster
         return cs.getString()
     }
     
+    func getWordStringAtLanguage(language: LanguageType)->String{
+        switch(language){
+        case .English: return m_clusterWord.english
+        case .Spanish: return m_clusterWord.spanish
+        case .French: return m_clusterWord.french
+        default:
+            return "no word string available"
+        }
+    }
     func    getWordString()->String{
         return getString()
     }
@@ -80,7 +91,7 @@ class dSingle  : dCluster
         return m_clusterWord.getWordTypeString()
     }
     
-
+    
     func setInputInfo(info : WordStateData){m_inputInfo = info}
     func setOutputInfo(info : WordStateData){m_outputInfo = info}
     
@@ -183,7 +194,7 @@ class dAdjectiveSingle :dSingle
         }
         
     }
-    func getWordStringAtLanguage(language: LanguageType)->String{
+    override func getWordStringAtLanguage(language: LanguageType)->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         let an = word as! Adjective
@@ -225,7 +236,7 @@ class dAdverbSingle : dSingle
     var   m_adverbType = AdverbType.manner
     func aetAdverbType (advType: AdverbType){m_adverbType = advType}
     
-    func getWordStringAtLanguage(language: LanguageType)->String{
+    override func getWordStringAtLanguage(language: LanguageType)->String{
         let word = getClusterWord()
         switch language{
         case .Spanish:
@@ -320,7 +331,7 @@ class dConjunctionSingle :  dSingle{
     
     func getConjunctionType ()->ConjunctionType{return getSentenceData().conjunctionType }
     
-    func getWordStringAtLanguage(language: LanguageType)->String{
+    override func getWordStringAtLanguage(language: LanguageType)->String{
         let word = getClusterWord()
         switch language{
         case .Spanish:
@@ -368,7 +379,7 @@ class dDeterminerSingle :  dSingle{
         }
     }
     
-    func getWordStringAtLanguage(language: LanguageType)->String{
+    override func getWordStringAtLanguage(language: LanguageType)->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         switch language{
@@ -433,7 +444,7 @@ class dPrepositionSingle : dSingle
         super.init(word: word, clusterType: type, data: data)
     }
     
-    func getWordStringAtLanguage(language: LanguageType)->String{
+    override func getWordStringAtLanguage(language: LanguageType)->String{
         let word = getClusterWord()
         switch language{
         case .Spanish:
@@ -475,7 +486,7 @@ class dPersonalPronounSingle : dSingle
     func setPronounType(pronounType: PronounType){getSentenceData().pronounType = pronounType}
     override func getPronounType()->PronounType{return getSentenceData().pronounType}
         
-    func getWordStringAtLanguage(language: LanguageType)->String{
+    override func getWordStringAtLanguage(language: LanguageType)->String{
         let word = getClusterWord()
         let sd = getSentenceData()
         switch language{

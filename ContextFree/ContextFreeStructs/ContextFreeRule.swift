@@ -7,59 +7,14 @@
 
 import Foundation
 
-/*
-enum ContextFreeSymbolType : String, CaseIterable {
-    case connector = "->"
-    
-    case ambiguous = "AMB"
-    case unknown = "UNK"
-    case comma = ","
-    case period = "."
-    case colon = ":"
-    case semiColon = ";"
-    case singleQuote = "'"
-    case doubleQuote = "\""
-    case questionMark = "?"
-    case exclamationMark = "!"
-    
-    case noun = "N"
-    case properNoun = "PropN"
-    case personalPronoun = "PersPro"
-    case objectPronounn = "ObjP"
-    case indirectObjectPronoun = "IndObjP"
-    case reflexivePronoun = "ReflP"
-    case impersonalPronoun = "ImpP"
-    case relativePronoun = "RelP"
-    case interrogativePronoun = "IntP"
-    case demonstrativePronoun = "DemP"
-    
-    case article = "ART"
-    case determiner = "DET"
-    case adjective = "ADJ"
-    case number = "NUM"
-    case adverb = "ADV"
-    case preposition = "PREP"
-    case prepositionToA = "PREP2A"
-    case conjunction = "CONJ"
-    
-    case verb = "V"
-    case modalAuxVerb = "AuxV"
-    case auxVerbPerfect = "PerfV"
-    case auxVerProgressive = "ProgV"
-    case verbPastParticiple = "PPV"
-    case verbGerund = "GV"
-    case verbStem = "SV"
-    
-    
-}
-*/
 
 enum ContextFreeFunction : String, CaseIterable {
     case Subject = "Subject"
-    case DirectObject = "DirectObject"
-    case IndirectObject = "IndirectObject"
+    case DirectObject = "Direct Object"
+    case IndirectObject = "Indirect Object"
     case Prepositional = "Prepositional"
-    case Undefined = "Undefined"
+    case HeadVerb = "Head Verb"
+    case None = "Undefined"
 }
 
 

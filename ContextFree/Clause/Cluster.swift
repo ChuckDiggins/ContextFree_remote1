@@ -9,7 +9,7 @@ import Foundation
 
 class dCluster {
     var m_clusterType : ContextFreeSymbol
-    var m_clusterFunction = ContextFreeFunction.Undefined
+    var m_clusterFunction = ContextFreeFunction.None
     
     init(){
         m_clusterWord = Word()

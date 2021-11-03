@@ -21,6 +21,7 @@ struct CheckboxToggleStyle: ToggleStyle {
 }
 
 let Info = (singleList:[dSingle], indexList:[Int], breakIndex: Int).self
+var m_currentLanguage : LanguageType = .French
 
 struct PersonalPronounGames: View {
     @EnvironmentObject var cfModelView : CFModelView
@@ -38,7 +39,7 @@ struct PersonalPronounGames: View {
     @State private var indirectObjectIndexList = [Int]()
     
     @State private var breakIndex = 0
-    @State private var currentLanguage = LanguageType.Spanish
+    //@State private var currentLanguage = LanguageType.Spanish
     
     @State private var currentSingleIndex = 0
     @State private var selectedProcessedIndex = 0
@@ -59,7 +60,7 @@ struct PersonalPronounGames: View {
     @State private var currentFunctionString = ""
     
     @State var m_randomPronounPhrase : RandomPersonalPronounPhrase!
-    let Function : [PPFunctionType] = [.none, .subject, .directObject, .indirectObject]
+    let Function : [ContextFreeFunction] = [.None, .Subject, .DirectObject, .IndirectObject]
     @State private var currentFunction = 0
     @State private var currentEquivalentPronoun = ""
     @State private var morphStruct = CFMorphStruct()
@@ -68,54 +69,79 @@ struct PersonalPronounGames: View {
     //this is for changing all the noun phrase order from Romance to English
     @State private var m_englishPhraseCFMM = CFMorphModel(id: 0, modelName: "")
     
+    let colors:[Color]
+    let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing:0), count: 12)
+    
     var body: some View {
+        
         //LanguageChooserView(currentLanguage: currentLanguage)
  
         HStack{
             Button(action: {
-                currentLanguage = .Spanish
+                m_currentLanguage = .Spanish
                 setNewLanguage()
             }){
                 Text("Spanish")
-            }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
-            .foregroundColor(currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
-            
+                    .bold()
+                    .frame(width: 150, height: 20)
+                    .font(m_currentLanguage == .Spanish ? .system(size: 30)  : .system(size: 10) )
+                    .foregroundColor(m_currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+
             Button(action: {
-                currentLanguage = .French
+                m_currentLanguage = .French
                 setNewLanguage()
             }){
                 Text("French")
-            }.font(currentLanguage == .French ? .title : .system(size: 20) )
-            .foregroundColor(currentLanguage == .French ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
-            
+                    .bold()
+                    .frame(width: 150, height: 20)
+                    .font(m_currentLanguage == .French ? .system(size: 30) : .system(size: 10) )
+                    .foregroundColor(m_currentLanguage == .French ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+
             Button(action: {
-                currentLanguage = .English
+                m_currentLanguage = .English
                 setNewLanguage()
             }){
                 Text("English")
-            }.font(currentLanguage == .English ? .title : .system(size: 20) )
-            .foregroundColor(currentLanguage == .English ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                    .bold()
+                    .frame(width: 150, height: 20)
+                    .font(m_currentLanguage == .English ? .system(size: 30)  : .system(size: 10) )
+                    .foregroundColor(m_currentLanguage == .English ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
         }.padding()
+
+        //LanguageButtonGroup()
         
         //show the random sentence
-        HStack {
+        
+        //LazyVGrid (columns: columns, spacing: 0){
+        HStack{
             ForEach(singleIndexList, id: \.self){index in
+                //colors[index % colors.count].overlay (
                 Button(action: {
                     currentSingleIndex = index
                     changeWord()
                 }){
                     HStack{
-                        Text(singleList[index].getProcessWordInWordStateData(language: currentLanguage))
+                        Text(singleList[index].getProcessWordInWordStateData(language: m_currentLanguage))
                             .font(.subheadline)
                             .foregroundColor(index == currentSingleIndex ? .red : .black)
                     }
                 }
+                //)
             }
         }.padding(10)
         .border(Color.green)
         .background(Color.white)
         
-        /*
+        
         Button(action: {
             highlightCurrentFunction()
             updateCurrentSentenceViewStuff()
@@ -128,7 +154,7 @@ struct PersonalPronounGames: View {
                 Text(currentEquivalentPronoun)
             }
         }.font(.subheadline)
-        */
+        
         
         //morph the sentence here
         Button(action: {
@@ -138,15 +164,15 @@ struct PersonalPronounGames: View {
             VStack{
                 HStack{
                     Text(morphStruct.getMorphStep(index: morphIndex).part1).foregroundColor(.black)
-                    Text(morphStruct.getMorphStep(index: morphIndex).part2).foregroundColor(.red).font(.system(size: 20)).bold()
+                    Text(morphStruct.getMorphStep(index: morphIndex).part2).foregroundColor(.red).font(.system(size: 30)).bold()
                     Text(morphStruct.getMorphStep(index: morphIndex).part3).foregroundColor(.black)
                 }
                 .padding()
                 HStack{
                     Text(morphStruct.getMorphStep(index: morphIndex).comment1).foregroundColor(.black)
-                    Text(morphStruct.getMorphStep(index: morphIndex).comment2).foregroundColor(.red).font(.system(size: 20)).bold()
+                    Text(morphStruct.getMorphStep(index: morphIndex).comment2).foregroundColor(.red).font(.system(size: 30)).bold()
                     Text(morphStruct.getMorphStep(index: morphIndex).comment3).foregroundColor(.black)
-                    Text(morphStruct.getMorphStep(index: morphIndex).comment4).foregroundColor(.red).font(.system(size: 20)).bold()
+                    Text(morphStruct.getMorphStep(index: morphIndex).comment4).foregroundColor(.red).font(.system(size: 30)).bold()
                 }
             }
         }.padding(10)
@@ -205,11 +231,56 @@ struct PersonalPronounGames: View {
         
     }
     
+    struct LanguageButtonGroup : View {
+        var body: some View {
+            HStack{
+                LanguageButton(buttonLanguage: .Spanish)
+                LanguageButton(buttonLanguage: .French)
+                LanguageButton(buttonLanguage: .English)
+            }
+        }
+    }
+    
+    struct LanguageButton : View {
+        let buttonLanguage : LanguageType
+        
+        init(buttonLanguage: LanguageType){
+            self.buttonLanguage = buttonLanguage
+        }
+        
+        var body: some View {
+            GeometryReader { geometry in
+                Button(action: {
+                    m_currentLanguage = buttonLanguage
+                    //setNewLanguage()
+                    print(m_currentLanguage.rawValue)
+                }){
+                    Text(buttonLanguage.rawValue)
+                        .bold()
+                        .frame(width: 120, height: 40)
+                        .font(m_currentLanguage == buttonLanguage ? .title : .title )
+                        .foregroundColor(m_currentLanguage == buttonLanguage ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+            }
+        }
+        
+    }
+    
     func setNewLanguage(){
-        if currentLanguage == .English { convertToEnglishWordOrder() }
-        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+        if m_currentLanguage == .English { convertToEnglishWordOrder() }
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: m_currentLanguage, tense: currentTense, person: currentPerson)
         updateCurrentSentenceViewStuff()
     }
+   
+    func setNewLanguage(language: LanguageType){
+        m_currentLanguage = language
+        if m_currentLanguage == .English { convertToEnglishWordOrder() }
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: m_currentLanguage, tense: currentTense, person: currentPerson)
+        updateCurrentSentenceViewStuff()
+    }
+    
    
     func changeWord(){
         let single = singleList[currentSingleIndex]
@@ -217,15 +288,15 @@ struct PersonalPronounGames: View {
         
         switch wsd.wordType {
         case .V:
-            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .None)
             single.copyGuts(newSingle: newSingle)
         case .Adj, .Det, .Adv, .C:
-            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .None)
             single.copyGuts(newSingle: newSingle)
         case .N:
             let nounSingle = single as! dNounSingle
-            var newFunctionType = PPFunctionType.none
-            if nounSingle.isSubject() { newFunctionType = .subject }
+            var newFunctionType = ContextFreeFunction.None
+            if nounSingle.isSubject() { newFunctionType = .Subject }
             let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType : newFunctionType)
             nounSingle.copyGuts(newSingle: newSingle)
             if nounSingle.isSubject() {
@@ -233,22 +304,22 @@ struct PersonalPronounGames: View {
             }
         case .Pronoun:
             let ppSingle = single as! dPersonalPronounSingle
-            var newFunctionType = PPFunctionType.none
-            if ppSingle.isSubject() { newFunctionType = .subject }
+            var newFunctionType = ContextFreeFunction.None
+            if ppSingle.isSubject() { newFunctionType = .Subject }
             let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType : newFunctionType)
             ppSingle.copyGuts(newSingle: newSingle)
             if ppSingle.isSubject() {
                 m_clause.setPerson(value: ppSingle.getPerson())
             }
         case .P:
-            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .none)
+            let newSingle = m_randomPronounPhrase.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, functionType: .None)
             single.copyGuts(newSingle: newSingle)
         default: break
         }
         wsd = single.getSentenceData()
         m_clause.processInfo()
         currentPerson = m_clause.getPerson()
-        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: m_currentLanguage, tense: currentTense, person: currentPerson)
         updateCurrentSentenceViewStuff()
     }
     
@@ -267,7 +338,7 @@ struct PersonalPronounGames: View {
         
         currentPerson = m_clause.getPerson()
         var str = ""
-        switch currentLanguage {
+        switch m_currentLanguage {
         case .French:
             str  = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: currentTense, person: currentPerson)
         case .Spanish:
@@ -293,28 +364,27 @@ struct PersonalPronounGames: View {
     func createEnglishNounPhraseOrderMorph(){
         m_englishPhraseCFMM = CFMorphModel(id: 0, modelName: "Convert Spanish Noun Phrases to English Order")
         m_englishPhraseCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "followingAdjective", cfToTypeString: "precedingAdjective"))
-        m_englishPhraseCFMM.parseMorphModel()
+        m_englishPhraseCFMM.unpackJSONOperations()
         
     }
     
     func convertToEnglishWordOrder(){
         var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
         morphStruct.clear()
-        morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: m_englishPhraseCFMM)
+        //morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: m_englishPhraseCFMM)
     }
     
     func testCFMorphModel(){
         var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
         morphStruct.clear()
-
-        
+    
         //create the subject morph model first
         if checkboxSubject {
             var subjectCFMM = CFMorphModel(id: 0, modelName: "Convert simple Spanish subject phrases to subject pronouns")
             subjectCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "subjectPhrase", cfToTypeString: ""))
             subjectCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "subjectPhrase", cfToTypeString: "subjectPronoun"))
-            subjectCFMM.parseMorphModel()
-            morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: subjectCFMM)
+            subjectCFMM.unpackJSONOperations()
+            //morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: subjectCFMM)
         }
         
 
@@ -323,8 +393,8 @@ struct PersonalPronounGames: View {
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "directObjectPhrase", cfToTypeString: ""))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "directObjectPhrase", cfToTypeString: "directObjectPronoun"))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "directObjectPronoun", locationString: "precedingVerb"))
-            doCFMM.parseMorphModel()
-            morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: doCFMM)
+            doCFMM.unpackJSONOperations()
+            //morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: doCFMM)
         }
 
         
@@ -333,8 +403,8 @@ struct PersonalPronounGames: View {
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "grab", cfFromTypeString: "indirectObjectPhrase", cfToTypeString: ""))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "replace", cfFromTypeString: "indirectObjectPhrase", cfToTypeString: "indirectObjectPronoun"))
             doCFMM.appendOperation(mp: MorphOperationJson(morphOperation: "move", cfFromTypeString: "indirectObjectPronoun", locationString: "precedingDOPronoun"))
-            doCFMM.parseMorphModel()
-            morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: doCFMM)
+            doCFMM.unpackJSONOperations()
+            //morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: doCFMM)
         }
         
     }
@@ -342,9 +412,22 @@ struct PersonalPronounGames: View {
     func updateCurrentSentenceViewStuff(){
         
         singleList = m_clause.getSingleList()
-        m_clause.setWorkingSingleList(singleList: singleList)
-        testCFMorphModel()
+        var index = 0
+        for s in singleList {
+            let singleString = s.getWordStringAtLanguage(language: m_currentLanguage)
+            print ("Index \(index), word: \(singleString) ... cfFunction \(s.m_clusterFunction)")
+            index += 1
+        }
         
+        m_clause.setWorkingSingleList(singleList: singleList)
+        
+        //Tests logic for parsing the current clause
+        
+        // - MARK: CF Morph Model Test
+        
+        processPronouns()
+        //testCFMorphModel()
+
         /*
         processPronouns()
         
@@ -390,17 +473,19 @@ struct PersonalPronounGames: View {
         var subjectPronoun = ""
         var directObjectPronoun = ""
         var indirectObjectPronoun = ""
-        subjectPronoun = m_clause.getPronounString(language: currentLanguage, type: .SUBJECT)
-        directObjectPronoun = m_clause.getPronounString(language: currentLanguage, type: .DIRECT_OBJECT)
-        indirectObjectPronoun = m_clause.getPronounString(language: currentLanguage, type: .INDIRECT_OBJECT)
+        subjectPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .SUBJECT)
+        directObjectPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .DIRECT_OBJECT)
+        indirectObjectPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .INDIRECT_OBJECT)
         
         print("Subject pronoun: \(subjectPronoun) \nDirect object pronoun: \(directObjectPronoun) \nIndirect object pronoun: \(indirectObjectPronoun)")
         
-        var result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .DirectObject)
-        let doList = result.0
-        result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
+        
+        var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .Subject)
         let subjList = result.0
-        result  = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .IndirectObject)
+        print("Subject list = \(subjList)")
+        result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .DirectObject)
+        let doList = result.0
+        result  = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .IndirectObject)
         let inDoList = result.0
         
         print ("Subj count: \(subjList.count), doCount: \(doList.count), inDoCount: \(inDoList.count)")
@@ -409,8 +494,7 @@ struct PersonalPronounGames: View {
         
         //fill the subjList indices ...subjectIndexList
         subjectIndexList.removeAll()
-        for subjIndex in 0 ..< subjList.count {
-            let subj = subjList[subjIndex]
+        for subj in subjList {
             for ssIndex in 0 ..< singleList.count {
                 let single = singleList[ssIndex]
                 if subj == single {
@@ -420,10 +504,10 @@ struct PersonalPronounGames: View {
             }
         }
         
+        
         //fill the directObjectList indices ...directObjectIndexList
         directObjectIndexList.removeAll()
-        for doIndex in 0 ..< doList.count {
-            let d = doList[doIndex]
+        for d in doList {
             for ssIndex in 0 ..< singleList.count {
                 let single = singleList[ssIndex]
                 if d == single {
@@ -435,21 +519,19 @@ struct PersonalPronounGames: View {
         
         //fill the directObjectList indices ...directObjectIndexList
         indirectObjectIndexList.removeAll()
-        var singleListStart = 0
-        for indoIndex in 0 ..< inDoList.count {
-            let d = inDoList[indoIndex]
-            for ssIndex in singleListStart ..< singleList.count {
+        //var singleListStart = 0
+        for d in inDoList{
+            for ssIndex in 0 ..< singleList.count {
                 let single = singleList[ssIndex]
                 if d == single {
                     indirectObjectIndexList.append(ssIndex)
-                    singleListStart = ssIndex+1
+                    //singleListStart = ssIndex+1
                     break
                 }
             }
         }
     }
 
-    
     func highlightCurrentFunction(){
         currentFunction += 1
         if currentFunction > Function.count - 1 {
@@ -458,9 +540,9 @@ struct PersonalPronounGames: View {
         currentFunctionString = Function[currentFunction].rawValue
         switch currentFunction {
         case 0:  currentEquivalentPronoun = "none current"
-        case 1:  currentEquivalentPronoun = m_clause.getPronounString(language: currentLanguage, type: .SUBJECT)
-        case 2:  currentEquivalentPronoun = m_clause.getPronounString(language: currentLanguage, type: .DIRECT_OBJECT)
-        case 3:  currentEquivalentPronoun = m_clause.getPronounString(language: currentLanguage, type: .INDIRECT_OBJECT)
+        case 1:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .SUBJECT)
+        case 2:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .DIRECT_OBJECT)
+        case 3:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .INDIRECT_OBJECT)
         default: break
         }
      
@@ -516,6 +598,6 @@ struct PersonalPronounGames: View {
 
 struct PronounGames_Previews: PreviewProvider {
     static var previews: some View {
-        PersonalPronounGames()
+        PersonalPronounGames(colors: [Color.red, Color.blue])
     }
 }

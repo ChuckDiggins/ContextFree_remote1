@@ -38,14 +38,14 @@ struct ContentView: View {
                 .background(Color(UIColor(named: "Color1")!))
                 .cornerRadius(25)
                 
-                NavigationLink(destination: SentenceParserView()){
-                    Text("Sentence Parser")
-                }.frame(width: 200, height: 50)
-                .padding(.leading, 10)
-                .background(Color.orange)
-                .cornerRadius(10)
+//                NavigationLink(destination: SentenceParserView()){
+//                    Text("Sentence Parser")
+//                }.frame(width: 200, height: 50)
+//                .padding(.leading, 10)
+//                .background(Color.orange)
+//                .cornerRadius(10)
                 
-                NavigationLink(destination: PersonalPronounGames()){
+                NavigationLink(destination: PersonalPronounGames(colors: [Color.red, Color.blue, Color.green, Color.yellow])){
                     Text("Personal Pronouns Play")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)

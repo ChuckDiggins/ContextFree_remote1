@@ -10,38 +10,6 @@ import Foundation
 //handles create templates that will guide
 //  in creating sentences of various complexity of random words
 
-/*
-struct ContextFreeConstructionGrammar {
-    var m_wsp : WordStringParser?
-    var name = ""
-    var description = ""
-    var m_randomWord : RandomWordLists?
-    
-    init(wsp: WordStringParser){
-        m_wsp = wsp
-        m_randomWord = RandomWordLists(wsp: m_wsp!)
-    }
- 
-    var cfRuleList = Array<ContextFreeRule>()
-    
-    mutating func addRule(cfr: ContextFreeRule){
-        cfRuleList.append(cfr)
-    }
-    
-    func getRuleCount()->Int{
-        return cfRuleList.count
-    }
-    
-    func getRuleName(index: Int)->String{
-        return cfRuleList[index].getRuleName()
-    }
-    
-    func getRuleAt(index: Int)->ContextFreeRule{
-        return cfRuleList[index]
-    }
-    
-}
-*/
 
 enum RandomPhraseType{
     case twoArticles

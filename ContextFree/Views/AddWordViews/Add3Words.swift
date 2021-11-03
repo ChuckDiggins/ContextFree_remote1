@@ -158,15 +158,16 @@ struct Add3Words: View {
         case .noun:
             print("WordType = \(wordType.rawValue)")
             //compute plural forms
-            determineNounPlurals()
+            //determineNounPlurals()
         case .verb:
             print("WordType = \(wordType.rawValue)")
-            computeVerbPatterns()
+            //computeVerbPatterns()
         default:
             break
         }
     }
     
+    /*
     func determineNounPlurals(){
         var analyzeAgnosticWords = AnalyzeAgnosticWords(cfModelView: cfModelView, spanishPhrase: spanishPhrase, frenchPhrase: frenchPhrase, englishPhrase: englishPhrase)
         
@@ -188,7 +189,8 @@ struct Add3Words: View {
         }
         //showCurrentWordInfo()
     }
-
+*/
+    
 }
 
 

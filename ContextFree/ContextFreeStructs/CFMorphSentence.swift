@@ -13,6 +13,15 @@ struct CFMorphSentence {
     var directObjectPronoun = ""
     var indirectObjectPronoun = ""
     
+    mutating func applyMorphModel(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
+        let currentLanguage = language
+        let workingMorphStruct = inputMorphStruct
+        
+        let workingSingleList = m_clause.getWorkingSingleList()
+        
+        return workingMorphStruct
+    }
+    
     mutating func dumpWorkingSingleList(language: LanguageType, showPronounTypes:Bool){
         let workingSingleList = m_clause.getWorkingSingleList()
         print("dumpWorkingSingleList ")
@@ -27,6 +36,7 @@ struct CFMorphSentence {
             }
         }
     }
+    
     
     //WorkInProgress
     
@@ -75,6 +85,60 @@ struct CFMorphSentence {
     }
     */
     
+    mutating func retrieveAppropriatPronounPhrase(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
+        var workingMorphStruct = inputMorphStruct
+    
+        for cfOperation in cfMorphModel.mpsList{
+            print("\ncfOperation: \(cfOperation.morphOperation.rawValue)")
+        }
+        
+        return workingMorphStruct
+    }
+    
+    /*
+    mutating func createCfRemove(language: LanguageType, inputMorphStruct:CFMorphStruct, mos: MorphOperationStruct )->CFMorphStruct{
+        let currentLanguage = language
+        var workingMorphStruct = inputMorphStruct
+        var equivalentPronounDescription = ""
+        var targetPronounType = PronounType.PERSONAL  //ambiguous
+        
+        
+        switch mos.from {
+        case .subjectPronoun:
+            equivalentPronounDescription = "remove subject pronoun"
+            targetPronounType = .SUBJECT
+        case .directObjectPronoun:
+            equivalentPronounDescription = "remove direct object pronoun"
+            targetPronounType = .DIRECT_OBJECT
+        case .indirectObjectPronoun:
+            equivalentPronounDescription = "remove indirect object pronoun"
+            targetPronounType = .INDIRECT_OBJECT
+        default: break
+        }
+        
+        let workingSingleList = m_clause.getWorkingSingleList()
+        var removeIndex = -1
+        
+        //find the personal pronoun
+        for index in 0 ..< workingSingleList.count {
+            let single = workingSingleList[index]
+            let pronounType = single.getPronounType()
+            if pronounType == targetPronounType {
+                removeIndex = index
+                break
+            }
+        }
+        
+        if removeIndex > 0 {
+            workingMorphStruct = remove(language: currentLanguage, inputMorphStruct: workingMorphStruct, removeIndex: removeIndex, equivalentPronounDescription: equivalentPronounDescription)
+        } else {
+            print("executeCfRemove: Could not find \(...equivalentPronounDescription)")
+        }
+        return workingMorphStruct
+    }
+*/
+    
+        /*
     mutating func applyMorphModel(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
         let currentLanguage = language
         var workingMorphStruct = inputMorphStruct
@@ -87,101 +151,30 @@ struct CFMorphSentence {
         var inDoIndex = -1
         var subjIndex = -1
         var selectedList = [Bool]()
-        var gender = Gender.masculine
-        var number = Number.singular
-        var person = Person.S1
         var phraseSingleList = [dSingle]()
         var phraseIndexList = [Int]()
-        var removeIndex = 0
-        var targetPronounType = PronounType.PERSONAL  //ambiguous
 
+        var result: (singleList: [dSingle], gender: Gender, number: Number, person: Person)
         //retrieve the appropriate pronoun phrase
         for cfOperation in cfMorphModel.mpsList{
             print("\ncfOperation: \(cfOperation.morphOperation.rawValue)")
-            if cfOperation.morphOperation == .remove {
-                switch cfOperation.from {
-                case .subjectPronoun:
-                    equivalentPronounDescription = "remove subject pronoun"
-                    targetPronounType = .SUBJECT
-                case .directObjectPronoun:
-                    equivalentPronounDescription = "remove direct object pronoun"
-                    targetPronounType = .DIRECT_OBJECT
-                case .indirectObjectPronoun:
-                    equivalentPronounDescription = "remove indirect object pronoun"
-                    targetPronounType = .INDIRECT_OBJECT
-                default: break
-                }
-                
-                print("In remove: ")
-                dumpWorkingSingleList(language: language, showPronounTypes: true)
-                
-                workingSingleList = m_clause.getWorkingSingleList()
-                
-                //find the personal pronoun
-                for index in 0 ..< workingSingleList.count {
-                    let single = workingSingleList[index]
-                    let pronounType = single.getPronounType()
-                    if pronounType == targetPronounType {
-                        removeIndex = index
-                        break
-                    }
-                }
-                print("In remove 2: ")
-                dumpWorkingSingleList(language: language, showPronounTypes: true)
-                
-                workingMorphStruct = remove(language: currentLanguage, inputMorphStruct: workingMorphStruct, removeIndex: removeIndex, equivalentPronounDescription: equivalentPronounDescription)
-            }
-            else {
+            switch cfOperation.morphOperation {
+            case .remove: workingMorphStruct = createCfRemove(language: currentLanguage, inputMorphStruct: inputMorphStruct, mos: cfOperation)
+            case .grab:
                 switch cfOperation.from {
                 case .subjectPhrase:
-                    equivalentPronoun = m_clause.getPronoun(language: currentLanguage, type: .SUBJECT)
-                    equivalentPronounDescription = "subject pronoun"
-                    let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .Subject)
-                    phraseSingleList = result.0
-                    gender = result.1
-                    number = result.2
-                    person = result.3
-                    if phraseSingleList.count == 0 {
-                        print("could not retieve a subject phrase")
-                        return workingMorphStruct
-                    }
+                    result = getEquivalentPronoun(clause: m_clause, type: .SUBJECT, language: currentLanguage)
+                    equivalentPronounDescription = "subject pronoun"//
                 case .directObjectPhrase:
-                    equivalentPronoun = m_clause.getPronoun(language: currentLanguage, type: .DIRECT_OBJECT)
+                    result = getEquivalentPronoun(clause: m_clause, type: .DIRECT_OBJECT, language: currentLanguage)
                     equivalentPronounDescription = "direct object pronoun"
-                    let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .DirectObject)
-                    phraseSingleList = result.0
-                    gender = result.1
-                    number = result.2
-                    person = result.3
-                    if phraseSingleList.count == 0 {
-                        print("could not retieve a direct object phrase")
-                        return workingMorphStruct
-                    }
                 case .indirectObjectPhrase:
-                    equivalentPronoun = m_clause.getPronoun(language: currentLanguage, type: .INDIRECT_OBJECT)
+                    result = getEquivalentPronoun(clause: m_clause, type: .INDIRECT_OBJECT, language: currentLanguage)
                     equivalentPronounDescription = "indirect object pronoun"
-                    let result = m_clause.getCompositeSentenceString(language: currentLanguage, targetFunction: .IndirectObject)
-                    phraseSingleList = result.0
-                    gender = result.1
-                    number = result.2
-                    person = result.3
-                    if phraseSingleList.count == 0 {
-                        print("Could not retrieve an indirect object phrase")
-                        return workingMorphStruct
-                    }
-                case .indirectObjectPronoun:
-                    let single = dPersonalPronounSingle()
-                   
-                    for _ in 0 ..< workingSingleList.count {
-                        if single.getPronounType() == .INDIRECT_OBJECT {
-                            equivalentPronounSingle = single
-                        }
-                    }
-                    equivalentPronounDescription = "indirect object pronoun"
-                    phraseSingleList.append(single)
                 default:
                     break
                 }
+            default:  break
             }
 
             //create a new pronoun single to work with
@@ -190,9 +183,9 @@ struct CFMorphSentence {
             wsd.language = language
             wsd.word = Word()
             wsd.pronounType = equivalentPronoun.type
-            wsd.person = person
-            wsd.gender = gender
-            wsd.number = number
+            wsd.gender = result.gender
+            wsd.number = result.number
+            wsd.person = result.person
             wsd.wordType = .Pronoun
             //equivalentPronounSingle = dPersonalPronounSingle(word: equivalentPronoun, data: wsd)
             //let equivalentPronounString = getWordString(language:language, single: equivalentPronounSingle)
@@ -200,11 +193,10 @@ struct CFMorphSentence {
              //create a parallel array of booleans to indicate selected or not
            
             selectedList.removeAll()
-            for _ in 0 ..< workingSingleList.count {
+            for _ in workingSingleList {
                 selectedList.append(false)
             }
-            
-            
+                
             //find the location of a few important words
             
             var moveFromIndex = -1
@@ -281,13 +273,26 @@ struct CFMorphSentence {
             case .move:
                 workingMorphStruct = moveSingle(language: currentLanguage, inputMorphStruct: workingMorphStruct, removeIndex: moveFromIndex, moveToIndex: moveToIndex,  equivalentPronounDescription: equivalentPronounDescription)
                 break
+            default:
+                break
             }
             
         }//operation loop
 
         return workingMorphStruct
     }//applyMorphModel
-    
+    */
+        
+    mutating func getEquivalentPronoun(clause: dIndependentAgnosticClause, type: PronounType, language: LanguageType)->([dSingle], Gender, Number, Person){
+        let equivalentPronoun = clause.getPronoun(language: language, type: .SUBJECT)
+        let equivalentPronounDescription = "subject pronoun"
+        let result = clause.getCompositeSentenceString(language: language, targetFunction: .Subject)
+        let phraseSingleList = result.0
+        let gender = result.1
+        let number = result.2
+        let person = result.3
+        return (phraseSingleList, gender, number, person)
+    }
     
     
     mutating func getWordString(language: LanguageType, single: dSingle)->String{

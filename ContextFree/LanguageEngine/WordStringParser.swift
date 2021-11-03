@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WordStringParser {
+class WordStringParser {
     
     private var spanishWords = SpanishWords()
     private var frenchWords = FrenchWords()
@@ -46,38 +46,6 @@ struct WordStringParser {
         return englishWords
     }
     
-    /*
-    mutating func createDictionaries(){
-
-        switch (m_language ){
-        case .Spanish:
-            //spanishWords.createSomeAmbiguousWords()
-            //spanishWords.createSomeAdjectives()
-            //spanishWords.createSomeSpanishArticles()
-            //spanishWords.createSomeAdverbs()
-            //spanishWords.createSomeConjunctions()
-            //spanishWords.createSomeNouns()
-            //spanishWords.createSomeSpanishPunctuations()
-            //spanishWords.createSomePrepositions()
-            //spanishWords.createSomeSpanishPronouns()
-        case .French:
-           // frenchWords.createSomeAmbiguousWords()
-            //frenchWords.createSomePossessiveAdjectives()
-            //frenchWords.createSomeInterrogativeAdjectives()
-            //frenchWords.createSomeDemonstrativeAdjectives()
-            //frenchWords.createSomeArticles()
-            //frenchWords.createSomeAdjectives()
-            //frenchWords.createSomeAdverbs()
-            //frenchWords.createSomeConjunctions()
-            //frenchWords.createSomeNouns()
-            //frenchWords.createSomePrepositions()
-            //frenchWords.createSomePronouns()
-        default:
-            break
-        }
-    }
- */
-    
     
     func isNewVerb(verb: Verb)->Bool{
         for word in generalWords.verbList {
@@ -94,6 +62,17 @@ struct WordStringParser {
     
     func getVerbCount()->Int{
         return generalWords.verbList.count
+    }
+    
+    func getWordCounts(){
+        print("Adjective count = \(getWordCount(wordType: .adjective))")
+        print("Adverb count = \(getWordCount(wordType: .adverb))")
+        print("Determiner count = \(getWordCount(wordType: .determiner))")
+        print("Conjunction count = \(getWordCount(wordType: .conjunction))")
+        print("Noun count = \(getWordCount(wordType: .noun))")
+        print("Preposition count = \(getWordCount(wordType: .preposition))")
+        print("Pronoun count = \(getWordCount(wordType: .pronoun))")
+        print("Verb count = \(getWordCount(wordType: .verb))")
     }
     
     func getWordCount(wordType: WordType)->Int{
@@ -159,7 +138,7 @@ struct WordStringParser {
     }
     */
     
-    mutating func getAgnosticWordFromDictionary(wordType:WordType, index:Int)->Word{
+    func getAgnosticWordFromDictionary(wordType:WordType, index:Int)->Word{
         switch wordType {
         case .determiner: return generalWords.determinerList[index]
         case .adjective: return generalWords.adjectiveList[index]
@@ -175,7 +154,7 @@ struct WordStringParser {
     }
     
     //create the correct verb on the fly
-    mutating func getVerbFromDictionary(language: LanguageType, index: Int)->Verb{
+    func getVerbFromDictionary(language: LanguageType, index: Int)->Verb{
         var verb = Verb()
         switch language {
         case .Spanish:
@@ -203,7 +182,7 @@ struct WordStringParser {
     }
     
     //create the correct verb just in time
-    mutating func getNounFromDictionary(language: LanguageType, index: Int)->Noun{
+    func getNounFromDictionary(language: LanguageType, index: Int)->Noun{
         var noun  = Noun()
         switch language {
         case .Spanish:
@@ -219,7 +198,7 @@ struct WordStringParser {
     }
     
     //create the correct verb just in time
-    mutating func getAdjectiveFromDictionary(language: LanguageType, index: Int)->Adjective{
+    func getAdjectiveFromDictionary(language: LanguageType, index: Int)->Adjective{
         var adj  = Adjective()
         switch language {
         case .Spanish:
@@ -235,7 +214,7 @@ struct WordStringParser {
     }
     
     //create the correct verb just in time
-    mutating func getPrepositionFromDictionary(language: LanguageType, index: Int)->Preposition{
+    func getPrepositionFromDictionary(language: LanguageType, index: Int)->Preposition{
         var prep  = Preposition()
         switch language {
         case .Spanish:
@@ -251,7 +230,7 @@ struct WordStringParser {
     }
     
     //create the correct verb just in time
-    mutating func getDeterminerFromDictionary(language: LanguageType, index: Int)->Determiner{
+    func getDeterminerFromDictionary(language: LanguageType, index: Int)->Determiner{
         var det  = Determiner()
         switch language {
         case .Spanish:
@@ -267,35 +246,35 @@ struct WordStringParser {
     }
     
 
-    mutating func addAdjectiveToDictionary(adj: Adjective){
+    func addAdjectiveToDictionary(adj: Adjective){
         generalWords.adjectiveList.append(adj)
     }
     
-    mutating func addAdverbToDictionary(wd: Adverb){
+    func addAdverbToDictionary(wd: Adverb){
         generalWords.adverbList.append(wd)
     }
     
-    mutating func addConjuctionToDictionary(wd: Conjunction){
+    func addConjuctionToDictionary(wd: Conjunction){
         generalWords.conjunctionList.append(wd)
     }
     
-    mutating func addDeterminerToDictionary(wd: Determiner){
+    func addDeterminerToDictionary(wd: Determiner){
         generalWords.determinerList.append(wd)
     }
     
-    mutating func addNounToDictionary(noun: Noun){
+    func addNounToDictionary(noun: Noun){
         generalWords.nounList.append(noun)
     }
     
-    mutating func addPrepositionToDictionary(wd: Preposition){
+    func addPrepositionToDictionary(wd: Preposition){
         generalWords.prepositionList.append(wd)
     }
     
-    mutating func addPronounToDictionary(wd: Pronoun){
+    func addPronounToDictionary(wd: Pronoun){
         generalWords.pronounList.append(wd)
     }
     
-    mutating func addVerbToDictionary(verb: Verb){
+    func addVerbToDictionary(verb: Verb){
         generalWords.verbList.append(verb)
     }
     
@@ -332,7 +311,7 @@ struct WordStringParser {
         }
     }
     
-    mutating func handleObjectPronouns(wordString: String)->Array<String>{
+    func handleObjectPronouns(wordString: String)->Array<String>{
         var wordList = Array<String>()
         var wsr = WordStringResolution()
         switch m_language {
@@ -356,7 +335,7 @@ struct WordStringParser {
 
 
 
-    mutating func handleContractions(wordList: [Word])->[Word]{
+    func handleContractions(wordList: [Word])->[Word]{
 
         var wordListCopy = wordList
         switch m_language {
@@ -387,7 +366,7 @@ struct WordStringParser {
     
     //find one or more instances of the multi-word prepString in the wordList.  Replace them with a single multi-word string
     
-    mutating func handleCompoundExpressionInWordList( wordList: [Word], inputWordList: [String])->(Bool, [Word]){
+    func handleCompoundExpressionInWordList( wordList: [Word], inputWordList: [String])->(Bool, [Word]){
         var startIndex = 0
         var wordIndex = 1
         var i = 0
@@ -420,7 +399,7 @@ struct WordStringParser {
     }
     
 
-    mutating func handleCompoundExpressionInStringList( wordList: [String], inputWordList: [String])->(Bool, [String]){
+    func handleCompoundExpressionInStringList( wordList: [String], inputWordList: [String])->(Bool, [String]){
         var startIndex = 0
         var wordIndex = 1
         var i = 0
@@ -553,7 +532,7 @@ struct WordStringParser {
         return sd
     }
     
-    mutating func getNoun(wordString:String)->SentenceData{
+    func getNoun(wordString:String)->SentenceData{
         
         var sd = SentenceData()
         switch m_language {
@@ -603,7 +582,7 @@ struct WordStringParser {
         return sd
     }
     
-    mutating func getConjunction(wordString:String)->SentenceData{
+    func getConjunction(wordString:String)->SentenceData{
         
         var sd = SentenceData()
         switch m_language {
@@ -650,7 +629,7 @@ struct WordStringParser {
     }
     
     
-    mutating func getPreposition(wordString:String)->SentenceData{
+    func getPreposition(wordString:String)->SentenceData{
         
         var sd = SentenceData()
         switch m_language {

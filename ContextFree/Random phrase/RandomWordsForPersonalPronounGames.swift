@@ -184,7 +184,7 @@ struct RandomWordListsForPersonalPronounGames{
         }
     }
 
-    func getAgnosticRandomWordAsSingle(wordType : ContextFreeSymbol, functionType: PPFunctionType)->dSingle{
+    func getAgnosticRandomWordAsSingle(wordType : ContextFreeSymbol, functionType: ContextFreeFunction)->dSingle{
         var word = Word()
         var i = 0
         var single = dSingle()
@@ -253,18 +253,20 @@ struct RandomWordListsForPersonalPronounGames{
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
             switch functionType{
-            case .subject:
+            case .Subject:
                 i = Int.random(in: 0 ..< m_subjects.count)
                 word = m_subjects[i]
-            case .directObject:
+            case .DirectObject:
                 i = Int.random(in: 0 ..< m_directObjectNouns.count)
                 word = m_directObjectNouns[i]
-            case .indirectObject, .none:
+            case .IndirectObject, .None:
                 i = Int.random(in: 0 ..< m_subjects.count)
                 word = m_subjects[i]
-            case .prepositionalObject:
+            case .Prepositional:
                 i = Int.random(in: 0 ..< m_directObjectNouns.count)
                 word = m_directObjectNouns[i]
+            default:
+                break
             }
             let number = Int.random(in: 1 ..< 3)
             
@@ -284,11 +286,11 @@ struct RandomWordListsForPersonalPronounGames{
             wsd.wordType = .N
             single = dNounSingle(word: word, data: wsd)
             let ns = single as! dNounSingle
-            if functionType == .subject {ns.setIsSubject(flag: true)}
+            if functionType == .Subject {ns.setIsSubject(flag: true)}
         case .Pronoun:
             let wsd = WordStateData()
             wsd.language = m_wsp!.getLanguage()
-            if functionType == .subject {
+            if functionType == .Subject {
                 for i in 0 ..< m_pronouns.count{
                     word = m_pronouns[i]
                     wsd.word = word
@@ -299,10 +301,9 @@ struct RandomWordListsForPersonalPronounGames{
                     let genderIndex = Int.random(in: 0 ..< 2)
                     wsd.gender = Gender.all[genderIndex]
                     single = dPersonalPronounSingle(word: word, data: wsd)
-                    return single
                 }
             }
-            if functionType == .indirectObject {
+            else if functionType == .IndirectObject {
                 for i in 0 ..< m_pronouns.count{
                     word = m_pronouns[i]
                     wsd.word = word
@@ -313,7 +314,6 @@ struct RandomWordListsForPersonalPronounGames{
                     let genderIndex = Int.random(in: 0 ..< 2)
                     wsd.gender = Gender.all[genderIndex]
                     single = dPersonalPronounSingle(word: word, data: wsd)
-                    return single
                 }
             }
         case .V:
@@ -330,6 +330,7 @@ struct RandomWordListsForPersonalPronounGames{
             break
         }
         
+        single.setClusterFunction(fn: functionType)
         return single
     }
     

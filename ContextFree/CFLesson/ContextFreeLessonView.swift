@@ -62,9 +62,8 @@ struct ContextFreeLessonView: View {
     
     
     var body: some View {
-        NavigationView {
-            
-            VStack{
+        //NavigationView {
+           // VStack{
                 HStack{
                     Button(action: {
                         currentLanguage = .Spanish
@@ -72,7 +71,7 @@ struct ContextFreeLessonView: View {
                     }){
                         Text("Spanish")
                     }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
-                    .foregroundColor(currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                        .foregroundColor(currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
                     
                     Button(action: {
                         currentLanguage = .French
@@ -80,7 +79,7 @@ struct ContextFreeLessonView: View {
                     }){
                         Text("French")
                     }.font(currentLanguage == .French ? .title : .system(size: 20) )
-                    .foregroundColor(currentLanguage == .French ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                        .foregroundColor(currentLanguage == .French ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
                     
                     Button(action: {
                         currentLanguage = .English
@@ -88,17 +87,15 @@ struct ContextFreeLessonView: View {
                     }){
                         Text("English")
                     }.font(currentLanguage == .English ? .title : .system(size: 20) )
-                    .foregroundColor(currentLanguage == .English ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+                        .foregroundColor(currentLanguage == .English ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
                 }.onAppear{
                     cfModelView.createNewModel(language: .Agnostic)
                     m_randomWordLists = cfModelView.getRandomWordList()
                 }
                 .padding()
-                
-                
-            }
-
-            VStack{
+                //                }
+                //
+                //                VStack{
                 Button(action: {
                     createNamedPhrases()
                 }){
@@ -133,7 +130,7 @@ struct ContextFreeLessonView: View {
                         }
                     }
                 }
-              
+                
                 List{
                     ForEach(0..<namedPhraseCount){ index in
                         HStack{
@@ -144,17 +141,17 @@ struct ContextFreeLessonView: View {
                     }.buttonStyle(PlainButtonStyle())
                     
                 }
-                
-            }//VStack
-            .navigationTitle("Context Free Lessons")
-            .font(.title)
-        }.onAppear{
-            cfModelView.createNewModel(language: .Agnostic)
-            m_randomWordLists = cfModelView.getRandomWordList()
-            phraseCategories = getPhraseCategories()
-            phraseFilters = getPhraseFilters()
-            createNamedPhrases()
-        }
+                .onAppear{
+                    cfModelView.createNewModel(language: .Agnostic)
+                    m_randomWordLists = cfModelView.getRandomWordList()
+                    phraseCategories = getPhraseCategories()
+                    phraseFilters = getPhraseFilters()
+                    createNamedPhrases()
+                }
+                //.navigationTitle("Context Free Lessons")
+                .font(.title)
+            //Spacer()
+            
     }
     
     func createLesson(){
