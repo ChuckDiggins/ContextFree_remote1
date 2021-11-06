@@ -456,8 +456,12 @@ enum VerbType : Int, Codable{
     case phrasalSeparable
     case impersonal //weather stuff:  orvallar(drizzle), llover(rain)
     case defective //
-    
-   
+}
+
+enum Separable : Int, Codable{
+    case notSeparable   //laugh about it
+    case separable      //call me up
+    case both          //put this up, put up this
 }
 
 func getVerbType(index:Int)->VerbType{

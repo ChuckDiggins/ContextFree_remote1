@@ -132,6 +132,7 @@ func createEnglishVerbModels()->[EnglishVerbModel]{
     verbModelList.append( EnglishVerbModel(id: id, infinitive: "swim", preterite: "swam", pastPart: "swum", gerund : "swimming")); id += 1
     verbModelList.append( EnglishVerbModel(id: id, infinitive: "take", preterite: "took", pastPart: "taken", gerund : "taking")); id += 1
     verbModelList.append( EnglishVerbModel(id: id, infinitive: "teach", preterite: "taught", pastPart: "taught", gerund : "teaching")); id += 1
+    verbModelList.append( EnglishVerbModel(id: id, infinitive: "tell", preterite: "told", pastPart: "told", gerund : "telling")); id += 1
     verbModelList.append( EnglishVerbModel(id: id, infinitive: "think", preterite: "thought", pastPart: "thought", gerund : "thinking")); id += 1
     verbModelList.append( EnglishVerbModel(id: id, infinitive: "throw", preterite: "threw", pastPart: "thrown", gerund : "throwing")); id += 1
     verbModelList.append( EnglishVerbModel(id: id, infinitive: "wake", preterite: "woke", pastPart: "waked", gerund : "waking")); id += 1

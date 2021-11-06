@@ -171,7 +171,7 @@ class WordStringParser {
             verb.setBVerb(bVerb: bv)
         case .English:
             verb = generalWords.verbList[index] as! EnglishVerb
-            let brv = BEnglishVerb(verbPhrase : verb.english, verbWord: verb.english)
+            let brv = BEnglishVerb(verbPhrase : verb.english, separable: .separable)
             let verbModel = englishVerbModel.getVerbModel(verbWord: verb.english)
             brv.setModel(verbModel : verbModel)
             verb.setBVerb(bVerb: brv)

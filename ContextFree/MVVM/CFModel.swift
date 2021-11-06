@@ -16,17 +16,14 @@ struct CFModel{
     var spanishGrammarLibrary = GnosticGrammarLibrary(language: .Spanish)
     var englishGrammarLibrary = GnosticGrammarLibrary(language: .English)
     
-    //var m_currentLanguage = LanguageType.French
+  
     var m_currentLanguage : LanguageType
     
     var tenseManager = TenseManager()
     
     private var m_disambiguation = Disambiguation()
     private var m_tenseList = Array<Tense>()
-    private var m_verbStringList: [String] = []
-    private var m_masterVerbList: [BVerb] = []
-    
-    private var currentVerbString : String = ""
+
     private var currentTenseString : String = ""
     private var currentVerbPhrase : String = ""
     private var preposition : String = ""
@@ -34,31 +31,19 @@ struct CFModel{
     private var m_currentPerson : Person = .S1
 
     private var bReconstructVerbModels = false
-    private var bUseJsonStarterFiles = true   //this will reconstruct json words from user-supplied files, any other words will be lost
+    //private var bUseJsonStarterFiles = true   //this will reconstruct json words from user-supplied files, any other words will be lost
     private var m_randomSentence : RandomSentence!
     private var m_randomWordLists : RandomWordLists!
-    
-    var m_morphForm = [String]()
-    var m_morphComment = [String]()
-    var m_verbForm = [String]()
+
     var m_wsp : WordStringParser!
-    var jsonVerbManager = JsonVerbManager()
-    var jsonNounManager = JsonNounManager()
-    var jsonAdjectiveManager = JsonAdjectiveManager()
-    var jsonAdverbManager = JsonAdverbManager()
-    var jsonConjunctionManager = JsonConjunctionManager()
-    var jsonDeterminerManager = JsonDeterminerManager()
-    var jsonPrepositionManager = JsonPrepositionManager()
-    var jsonPronounManager = JsonPronounManager()
+    
     var jsonPhraseManager = JsonPhraseManager()
     var jsonClauseManager = JsonClauseManager()
-    
+
     var namedPhraseList = [NamedPhrase]()
     var namedClauseList = [NamedClause]()
     
-    var m_currentVerbIndex = 0
     var m_currentTenseIndex = 0
-    var m_currentVerb =  BRomanceVerb()
     var m_jsonDictionaryManager = JSONDictionaryManager()
     var m_verbModelManager = VerbModelManager()
     
@@ -228,13 +213,6 @@ struct CFModel{
         return m_verbModelManager.analyzeAndCreateBVerb_SPIFE(language: language, verbPhrase: verbPhrase)
     }
     
-
-    mutating func bVerbDoesExist(verbString: String)->Bool{
-        for bVerb in m_masterVerbList {
-            if verbString == bVerb.m_verbPhrase {return true}
-        }
-        return false
-    }
 
     func getParser()->WordStringParser{
         return m_wsp
@@ -438,14 +416,6 @@ struct CFModel{
     //
     //-------------------------------------------------------------------------------------------
     
-    func getWorkingVerbList()->[BVerb]{
-        return m_masterVerbList
-    }
-
-    mutating func addVerbToWorkingList(verb : BVerb){
-        m_masterVerbList.append(verb)
-    }
-    
     func isValidVerbEnding(language: LanguageType, verbEnding: VerbEnding )->Bool {
         switch language {
         case .Spanish: if verbEnding == .RE {return false}
@@ -534,24 +504,8 @@ struct CFModel{
         }
         return Array<Word>()
     }
-
-    mutating func loadCurrentVerbStringListFromCurrentDictionary(){
-        var dictionary = [String]()
-        switch (m_currentLanguage){
-        case .Spanish:
-            dictionary = SpanishVerbList().getVerbList(svl: spanishVerbList.orthoPresent)
-        case .French:
-            dictionary = FrenchVerbList().getVerbList(svl: frenchVerbList.irregular )
-        default:  break
-        }
-        
-        m_verbStringList.removeAll()
-        
-        for str in dictionary {
-            m_verbStringList.append(str)
-        }
-    }
     
+    /*
     mutating func conjugateCurrentVerb(){
         currentTense = m_tenseList[m_currentTenseIndex]
         currentTenseString = currentTense.rawValue
@@ -569,14 +523,8 @@ struct CFModel{
             print("Tense: \(currentTense), Person: \(person) - verbForm = \(m_verbForm[p])")
         }
     }
+*/
     
-    mutating func addVerbToMasterList(verb: BRomanceVerb){
-        m_masterVerbList.append(verb)
-        m_currentVerb = verb
-        m_currentVerbIndex = m_masterVerbList.count-1
-    }
-    
-
 }
 
 

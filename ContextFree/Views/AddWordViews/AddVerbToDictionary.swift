@@ -455,7 +455,7 @@ struct AddVerbToDictionary: View {
             let verb = result.1  //BVerb
             let bSpanishVerb = verb as! BSpanishVerb
             spanishPatternString = bSpanishVerb.getBescherelleInfo()
-            spanishVerb = SpanishVerb(word: bSpanishVerb.m_verbWord, def: "", type: VerbType.normal)
+            spanishVerb = SpanishVerb(word: bSpanishVerb.m_verbWord, type: VerbType.normal)
             spanishVerb.setBVerb(bVerb: bSpanishVerb)
             return true
         }
@@ -472,7 +472,7 @@ struct AddVerbToDictionary: View {
             let verb = result.1  //BVerb
             let bFrenchVerb = verb as! BFrenchVerb
             frenchPatternString = bFrenchVerb.getBescherelleInfo()
-            frenchVerb = FrenchVerb(word: bFrenchVerb.m_verbWord, def: "", type: VerbType.normal)
+            frenchVerb = FrenchVerb(word: bFrenchVerb.m_verbWord, type: VerbType.normal)
             frenchVerb.setBVerb(bVerb: bFrenchVerb)
             return true
         }
@@ -489,7 +489,7 @@ struct AddVerbToDictionary: View {
             let verb = result.1  //BVerb
             let bEnglishVerb = verb as! BEnglishVerb
             englishPatternString = bEnglishVerb.getBescherelleInfo()
-            englishVerb = EnglishVerb(word: bEnglishVerb.m_verbWord, def: "", type: VerbType.normal)
+            englishVerb = EnglishVerb(word: bEnglishVerb.m_verbWord, type: VerbType.normal)
             englishVerb.setBVerb(bVerb: bEnglishVerb)
             return true
         }

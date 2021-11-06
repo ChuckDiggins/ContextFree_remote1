@@ -17,11 +17,6 @@ class Verb : Word {
     var passivity =  VerbPassivity.active
     var favoriteSubjects = [NounType]()
     var favoriteObjects = [NounType]()
-    //var verbSemantics =  [VerbType]()
-    //var typeListAsInt = [Int]()
-    //var favoriteSubjectsAsInt = [Int]()
-    //var favoriteObjectsAsInt = [Int]()
-    //var verbSemanticsAsInt = [Int]()
     var tense = Tense.present
     var person = Person.S1
     var tensePersonSet = false
@@ -38,19 +33,19 @@ class Verb : Word {
         self.english = english
     }
     
-    init(word: String, def: String, type : VerbType){
+    init(word: String, type : VerbType){
         typeList.append(type)
         super.init(word: word, wordType: .verb)
     }
     
-    init(word: String, def: String, type : VerbType, tense: Tense, person: Person){
+    init(word: String, type : VerbType, tense: Tense, person: Person){
         typeList.append(type)
         self.person = person
         self.tense = tense
         super.init(word: word, wordType: .verb)
     }
     
-    init(word: String, def: String, wsd: WordStateData){
+    init(word: String, wsd: WordStateData){
         typeList.append(wsd.verbType)
         self.person = wsd.person
         self.tense = wsd.tense
@@ -255,13 +250,13 @@ class RomanceVerb : Verb {
         super.init(jsonVerb: jsonVerb, language: language)
     }
     
-    override init(word: String, def: String, type: VerbType, tense: Tense, person: Person){
-        super.init(word: word, def: def, type : type)
+    override init(word: String, type: VerbType, tense: Tense, person: Person){
+        super.init(word: word, type : type)
         setTensePerson(tense: tense, person: person)
     }
     
-    override init(word: String, def: String, type: VerbType){
-        super.init(word: word, def: def, type : type)
+    override init(word: String, type: VerbType){
+        super.init(word: word, type : type)
     }
     
     func getConjugateForm()->String{
@@ -283,15 +278,15 @@ class RomanceVerb : Verb {
 
 class FrenchVerb : RomanceVerb {   
     init(){
-        super.init(word: "", def: "", type : .normal)
+        super.init(word: "", type : .normal)
     }
     
     init(jsonVerb: JsonVerb){
         super.init(jsonVerb: jsonVerb, language: .French)
     }
     
-    override init(word: String, def: String, type: VerbType){
-        super.init(word: word, def: def, type : type)
+    override init(word: String, type: VerbType){
+        super.init(word: word, type : type)
     }
     
     override func getConjugateForm(tense: Tense, person : Person)->String{
@@ -314,15 +309,15 @@ class FrenchVerb : RomanceVerb {
 class SpanishVerb : RomanceVerb {
     
     init(){
-        super.init(word: "", def: "", type : .normal)
+        super.init(word: "", type : .normal)
     }
     
     init(jsonVerb: JsonVerb){
         super.init(jsonVerb: jsonVerb, language: .Spanish)
     }
     
-    override init(word: String, def: String, type: VerbType){
-        super.init(word: word, def: def, type : type)
+    override init(word: String, type: VerbType){
+        super.init(word: word, type : type)
     }
     
     override func getConjugateForm(tense: Tense, person : Person)->String{
@@ -346,15 +341,15 @@ class EnglishVerb : Verb {
     var singularForm = ""
     
     override init(){
-        super.init(word: "", def: "", type : .normal)
+        super.init(word: "", type : .normal)
     }
     
     init(jsonVerb: JsonVerb){
         super.init(jsonVerb: jsonVerb, language: .English)
     }
     
-    override init(word: String, def: String, type: VerbType){
-        super.init(word: word, def: def, type : type)
+    override init(word: String, type: VerbType){
+        super.init(word: word, type : type)
         singularForm = word + "s"
     }
     

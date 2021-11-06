@@ -356,7 +356,7 @@ class dPhrase : dCluster {
                     switch language{
                     case .Spanish:
                         let v = c.getClusterWord()
-                        let fv = SpanishVerb(word:  v.spanish, def: "", type: sd.verbType)
+                        let fv = SpanishVerb(word:  v.spanish, type: sd.verbType)
                         let bv = BSpanishVerb(verbPhrase: v.spanish)
                         let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
                         bv.setPatterns(verbModel : verbModel)
@@ -365,7 +365,7 @@ class dPhrase : dCluster {
                         str += conjStr + " "
                     case .French:
                         let v = c.getClusterWord()
-                        let fv = FrenchVerb(word:  v.french, def: "", type: sd.verbType)
+                        let fv = FrenchVerb(word:  v.french, type: sd.verbType)
                         let bv = BFrenchVerb(verbPhrase: v.french)
                         let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
                         bv.setPatterns(verbModel : verbModel)
@@ -374,8 +374,8 @@ class dPhrase : dCluster {
                         str += conjStr + " "
                     case .English:
                         let v = c.getClusterWord()
-                        let ev = EnglishVerb(word:  v.french, def: "", type: sd.verbType)
-                        let bv = BEnglishVerb(verbPhrase: v.english, verbWord: v.english)
+                        let ev = EnglishVerb(word:  v.english, type: sd.verbType)
+                        let bv = BEnglishVerb(verbPhrase: v.english, separable: .separable)
                         let verbModel = m_englishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
                         bv.setModel(verbModel : verbModel)
                         ev.setBVerb(bVerb: bv)

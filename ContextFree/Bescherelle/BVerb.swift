@@ -50,31 +50,56 @@ class BVerb : Word, Identifiable {
     var languageType : LanguageType
     var m_isPassive = false
     var m_isIrregular = false
-    
+    var m_residualPhrase = ""
+    var m_isReflexive = false           //not used for English
+    var m_verbEnding = VerbEnding.AR    //not used for English
     var m_pastParticiple = ""
     var m_gerund = ""
     private var m_isConjugated = false
     
+    let verbStuff : (verbWord: String, verbEnding: VerbEnding, residualPhrase: String, isReflexive: Bool)
+    
     override init(){
         self.m_verbPhrase = ""
         self.m_verbWord = ""
-        self.languageType = LanguageType.Spanish
+        self.languageType = LanguageType.Agnostic
+        verbStuff = ("", .ER, "", false)
+        super.init(word: "", wordType: .verb)
+    }
+    
+    init(verbPhrase: String, languageType: LanguageType){
+        self.m_verbPhrase = verbPhrase
+        self.languageType = languageType
+        
+        switch (languageType){
+        case .Spanish:
+            verbStuff = VerbUtilities().analyzeSpanishWordPhrase(testString: verbPhrase)
+        case .French:
+            verbStuff = VerbUtilities().analyzeFrenchWordPhrase(testString: verbPhrase)
+        case .English:
+            verbStuff = VerbUtilities().analyzeEnglishWordPhrase(testString: verbPhrase)
+        default:
+            verbStuff = ("", .ER, "", false)
+        }
+        
+        let util = VerbUtilities()
+        m_verbWord = verbStuff.verbWord
+        m_residualPhrase = verbStuff.residualPhrase
+        m_isReflexive = verbStuff.isReflexive
+        m_verbEnding = verbStuff.verbEnding
         super.init(word: m_verbWord, wordType: .verb)
     }
     
-    init(verbPhrase: String, verbWord: String, languageType: LanguageType){
-        self.m_verbPhrase = verbPhrase
-        self.m_verbWord = verbWord
-        self.languageType = languageType
-        super.init(word: m_verbWord, wordType: .verb)
+    func isPhrasalVerb()->Bool{
+        m_residualPhrase.count > 1
     }
-
+    
     func getInfinitiveAndParticiples()->(String, String, String){
         return (word, m_pastParticiple, m_gerund)
     }
     
     func getPresentParticiple()->String{
-        return m_gerund
+        m_gerund
     }
     
     func getPastParticiple()->String{

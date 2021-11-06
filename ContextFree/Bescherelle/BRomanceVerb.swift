@@ -8,15 +8,11 @@
 import Foundation
 
 class BRomanceVerb: BVerb {
-    var verbEnding : VerbEnding
     var m_verbStem = ""
-    var m_isReflexive : Bool
     var m_stemChanging = false
     var m_stemFrom = ""
     var m_stemTo = ""
     
-    
-    var m_preposition = ""
     var bVerbModel = RomanceVerbModel(id: -1, modelVerb: "")
     var m_orthoPresent = false
     var m_orthoPresentFrom = ""
@@ -42,28 +38,11 @@ class BRomanceVerb: BVerb {
     var replaceEndingList = [ReplaceEndingForm]()
     
     init(verbPhrase: String, language: LanguageType){
-        let verbStuff = VerbUtilities().analyzeWordPhrase(testString: verbPhrase)
-        self.verbEnding = verbStuff.verbEnding
-        self.m_isReflexive = verbStuff.isReflexive
-        self.m_preposition = ""
-        var constructedVerbPhrase = verbStuff.verbWord
-        if ( verbStuff.isReflexive){constructedVerbPhrase += "se"}
-        if verbStuff.residualPhrase.count>0 { constructedVerbPhrase += " " + verbStuff.residualPhrase  }
-        super.init(verbPhrase: constructedVerbPhrase, verbWord: verbStuff.verbWord, languageType: language)
-    }
-        
-    init(verbPhrase: String, verbWord: String, verbEnding: VerbEnding, languageType: LanguageType, isReflexive: Bool, preposition : String){
-        self.verbEnding = verbEnding
-        self.m_isReflexive = isReflexive
-        self.m_preposition = preposition
-        super.init(verbPhrase: verbPhrase, verbWord: verbWord, languageType: languageType)
+        super.init(verbPhrase: verbPhrase, languageType: language)
     }
     
     override init(){
-        self.verbEnding = .none
-        self.m_isReflexive = false
-        self.m_preposition = ""
-        super.init(verbPhrase: "", verbWord: "", languageType: LanguageType.Spanish)
+        super.init(verbPhrase: "", languageType: .Agnostic)
     }
 
     func isOrthoPresent(tense: Tense, person: Person)->Bool{
@@ -137,11 +116,11 @@ class BRomanceVerb: BVerb {
     }
     
     func isVerbPhrase()->Bool{
-        return m_preposition.count>0
+        return m_residualPhrase.count>0
     }
  
     func hasPreposition()->Bool{
-        return m_preposition.count>0
+        return m_residualPhrase.count>0
     }
     
     func getVerbStem(verbWord: String, verbEnding : VerbEnding )->String {
@@ -165,20 +144,20 @@ class BRomanceVerb: BVerb {
     }
     
     func isAR()->Bool{
-        return verbEnding == VerbEnding.AR
+        return m_verbEnding == VerbEnding.AR
     }
     
     func isER()->Bool{
-        return verbEnding == VerbEnding.ER
+        return m_verbEnding == VerbEnding.ER
     }
     
     
     func isIR()->Bool{
-        return verbEnding == VerbEnding.IR
+        return m_verbEnding == VerbEnding.IR
     }
     
     func isRE()->Bool{
-        return verbEnding == VerbEnding.RE
+        return m_verbEnding == VerbEnding.RE
     }
     
      
@@ -239,7 +218,7 @@ class BRomanceVerb: BVerb {
     
     func createPastParticiple(verb: BRomanceVerb)->String {
         let word = verb.m_verbStem
-        switch verb.verbEnding {
+        switch verb.m_verbEnding {
         case .AR: return word + "ado"
         case .ER, .IR, .accentIR: return word + "ido"
         default: return word + "nada"
@@ -248,7 +227,7 @@ class BRomanceVerb: BVerb {
     
     func createGerund(verb: BRomanceVerb)->String {
         let word = verb.m_verbStem
-        switch verb.verbEnding {
+        switch verb.m_verbEnding {
         case .AR: return word + "ando"
         case .ER, .IR, .accentIR: return word + "iendo"
         default: return word + "nada"
@@ -278,7 +257,7 @@ class BRomanceVerb: BVerb {
         
  */
         //do some other stuff while we are at it
-        m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: verbEnding)
+        m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: m_verbEnding)
         m_pastParticiple = createPastParticiple(verb : self)
         m_gerund = createGerund(verb : self)
         

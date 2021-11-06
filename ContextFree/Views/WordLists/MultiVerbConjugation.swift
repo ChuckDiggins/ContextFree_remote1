@@ -6,19 +6,7 @@
 //
 
 import SwiftUI
-
-
-
-//
-//  VerbFormView.swift
-//  VIperSpanish 2
-//
-//  Created by Charles Diggins on 12/2/20.
-//
-
 import Combine
-import SwiftUI
-
 
 struct MultiVerbConjugation: View {
     @EnvironmentObject var cfModelView : CFModelView
@@ -281,7 +269,7 @@ struct MultiVerbConjugation: View {
             if result.0 {
                 let verb = result.1  //BVerb
                 let bSpanishVerb = verb as! BSpanishVerb
-                spanishVerb = SpanishVerb(word: bSpanishVerb.m_verbWord, def: "", type: VerbType.normal)
+                spanishVerb = SpanishVerb(word: bSpanishVerb.m_verbWord, type: VerbType.normal)
                 spanishVerb.setBVerb(bVerb: bSpanishVerb)
                 return true
             }
@@ -295,7 +283,7 @@ struct MultiVerbConjugation: View {
             if result.0 {
                 let verb = result.1  //BVerb
                 let bFrenchVerb = verb as! BFrenchVerb
-                frenchVerb = FrenchVerb(word: bFrenchVerb.m_verbWord, def: "", type: VerbType.normal)
+                frenchVerb = FrenchVerb(word: bFrenchVerb.m_verbWord, type: VerbType.normal)
                 frenchVerb.setBVerb(bVerb: bFrenchVerb)
                 return true
             }
@@ -308,7 +296,7 @@ struct MultiVerbConjugation: View {
             if result.0 {
                 let verb = result.1  //BVerb
                 let bEnglishVerb = verb as! BEnglishVerb
-                englishVerb = EnglishVerb(word: bEnglishVerb.m_verbWord, def: "", type: VerbType.normal)
+                englishVerb = EnglishVerb(word: bEnglishVerb.m_verbWord, type: VerbType.normal)
                 englishVerb.setBVerb(bVerb: bEnglishVerb)
                 return true
             }

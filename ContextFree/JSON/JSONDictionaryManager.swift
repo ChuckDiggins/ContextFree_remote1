@@ -178,7 +178,7 @@ struct JSONDictionaryManager {
         
         //determine if this is a legitimate verb in all three languages
         
-        let spanishVerbStuff = verbModelManager.analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: jv.spanish)
+       let spanishVerbStuff = verbModelManager.analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: jv.spanish)
        let frenchVerbStuff = verbModelManager.analyzeAndCreateBVerb_SPIFE(language: .French, verbPhrase: jv.french)
        let englishVerbStuff = verbModelManager.analyzeAndCreateBVerb_SPIFE(language: .English, verbPhrase: jv.english)
        if ( spanishVerbStuff.isValid && frenchVerbStuff.isValid && englishVerbStuff.isValid){

@@ -90,18 +90,7 @@ class dVerbSingle : dSingle
     var    m_toBe = false
     var    m_isPerfect = false
     var    m_bestPreposition = ""
-    /*
-    var    m_auxiliary = dSingle(word: Word(), clusterType: .AuxV, data: WordStateData())
-    var    m_modalAuxiliary = dSingle(word: Word(), clusterType: .ModalAuxV, data: WordStateData())
-    var    m_perfectAuxiliary = dSingle(word: Word(), clusterType: .PerfV, data: WordStateData())
-    var    m_progressiveAuxiliary = dSingle(word: Word(), clusterType: .ProgV, data: WordStateData())
-    var    m_passiveAuxiliary = dSingle(word: Word(), clusterType: .PassiveAuxV, data: WordStateData())
-     func    setAuxiliary(single : dVerbSingle){m_auxiliary = single}
-     func    setModalAuxiliary(single : dVerbSingle){m_modalAuxiliary = single}
-     func    setPerfectAuxiliary(single : dVerbSingle){m_perfectAuxiliary = single}
-     func    setPassiveAuxiliary(single : dVerbSingle){m_passiveAuxiliary = single}
-     func    setProgressiveAuxiliary(single : dVerbSingle){m_progressiveAuxiliary = single}
- */
+
     var    m_verbType = VerbType.normal
     var    m_isConjugated = false
     var    m_auxiliaryType = AuxiliaryType.IS

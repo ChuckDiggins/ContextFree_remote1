@@ -31,7 +31,7 @@ struct VerbUtilities {
         return false
     }
     
-    mutating func reconstructVerbPhrase(verbWord: String, residualPhrase: String, isReflexive: Bool)->String{
+    func reconstructVerbPhrase(verbWord: String, residualPhrase: String, isReflexive: Bool)->String{
         var verbPhrase = verbWord
         if  isReflexive {verbPhrase += "se"}
         if residualPhrase.count > 0 { verbPhrase += " " + residualPhrase}
@@ -420,13 +420,13 @@ struct VerbUtilities {
         return (verb : verbWord, bIsReflexive: isReflexive)
     }
     
-    func  analyzeEnglishWordPhrase(testString: String) -> (verbWord:String, residualPhrase:String)
+    func  analyzeEnglishWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
         let wordList = getListOfWords(characterArray: testString)
    
         //if analyzeWordPhrase returns an empty verbWord, the testString does not start with a legitimate Spanish verb
         if wordList.isEmpty {
-            return  (verbWord:"", residualPhrase:"")
+            return  (verbWord: "", verbEnding:.none, residualPhrase: "", isReflexive: false)
         }
         
         var verbWord = ""
@@ -444,10 +444,10 @@ struct VerbUtilities {
                 residualPhrase += wordList[i] + " "
             }
         }
-        return (verbWord:verbWord, residualPhrase: residualPhrase)
+    return (verbWord:verbWord, verbEnding:.none, residualPhrase: residualPhrase, isReflexive: false)
     }//func analyzeEnglishWordPhrase
 
-    func  analyzeWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
+    func  analyzeSpanishWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
         let wordList = getListOfWords(characterArray: testString)
    
@@ -485,8 +485,48 @@ struct VerbUtilities {
                 residualPhrase += wordList[i] + " "
             }
         }
+        return (verbWord:verbWord, verbEnding: verbEnding, residualPhrase: residualPhrase, isReflexive: isReflexive)
+    }
         
+    func  analyzeFrenchWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
+    {
+        let wordList = getListOfWords(characterArray: testString)
+   
+        //if analyzeWordPhrase returns an empty verbWord, the testString does not start with a legitimate Spanish verb
+        if wordList.isEmpty {
+            return  (verbWord:"", verbEnding:.none, residualPhrase:"", isReflexive:false)
+        }
         
+        var verbWord = ""
+        var  residualPhrase = ""
+        var isReflexive = false
+
+        verbWord = wordList[0]
+        
+        if ( verbWord.count > 2 ){
+            //if word is a verb with a reflexive ending, then return the word without the "se" ending
+            let result = testForReflexiveEnding(testWord: verbWord)
+            verbWord = result.0
+            isReflexive = result.1
+        }
+        
+        //check to see if the verbWord has a legitimate verb (ar, er, ir, ír or oir (french)) ending
+        
+        let verbEnding = determineVerbEnding(verbWord: verbWord)
+        
+        if ( verbEnding == VerbEnding.none){
+            return  (verbWord:"", verbEnding:.none, residualPhrase:"", isReflexive:false)
+        }
+
+        //if more than one word in the wordList, then there must be a residual phrase attached
+        //build the residual phrase from the remaining words in the list
+        
+        if wordList.count > 1 {
+            for i in 1..<wordList.count {
+                residualPhrase += wordList[i] + " "
+            }
+        }
+
         return (verbWord:verbWord, verbEnding: verbEnding, residualPhrase: residualPhrase, isReflexive: isReflexive)
     }//func analyzeWordPhrase
 

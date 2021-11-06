@@ -17,14 +17,17 @@ class BEnglishVerb : BVerb {
     var m_preteriteStem = ""
     var m_presentS3Stem = ""
     var endsInE = false
+    var endsInLL = false
     var endsInConsonant = true
     var endsInDKNRT = false
-    var endsInY = false
+    var endsInConsonantY = false
     var endsInN = false
     var m_baseString = ""
+    var m_separable = Separable.both
     
-    init(verbPhrase: String, verbWord: String){
-        super.init(verbPhrase: verbPhrase, verbWord: verbWord, languageType: .English)
+    init(verbPhrase: String, separable: Separable){
+        m_separable = separable
+        super.init(verbPhrase: verbPhrase, languageType: .English)
         createRegularDefaultForms()  //these will be overridden later if there is a model for this verb
     }
     
@@ -56,9 +59,12 @@ class BEnglishVerb : BVerb {
                 endsInE = true
             }
         }
+        else if m_suffix2 == "ll" {
+            endsInLL = true
+        }
         else if m_suffix1 == "y" {
             endsInConsonant = false
-            endsInY = true
+            endsInConsonantY = true
             //only remove the y if preceded by a consonant - "hurry" -> "hurries", but not "pray" -> "prays"
             var nextToLast = util.getLastNCharactersInString(inputString: m_verbWord, copyCount: 2)
             nextToLast.removeLast()
@@ -66,6 +72,9 @@ class BEnglishVerb : BVerb {
             if !util.isVowel(letter: nextToLast){
                 m_presentS3Stem.removeLast()
                 m_preteriteStem.removeLast()
+            }
+            else {
+                endsInConsonantY = false
             }
         }
         //at this point, the last letter must be a consonant
@@ -107,7 +116,7 @@ class BEnglishVerb : BVerb {
         m_presentS3Form = m_presentS3Stem + "s"
         
         m_gerund = m_verbWord + "ing"
-        if endsInY {
+        if endsInConsonantY {
             m_presentS3Form = m_presentS3Stem + "ies"
             m_preteriteForm = m_preteriteStem + "ied"
         }
@@ -122,7 +131,7 @@ class BEnglishVerb : BVerb {
             m_presentS3Form = m_presentS3Stem + "es"
             m_preteriteForm = m_preteriteStem + "ed"
         }
-        if endsInDKNRT {
+        if endsInDKNRT || endsInLL {
             m_gerund = m_preteriteStem + "ing"
             m_presentS3Form = m_presentS3Stem + "s"
             m_preteriteForm = m_preteriteStem + "ed"
@@ -158,7 +167,7 @@ class BEnglishVerb : BVerb {
             m_gerund = verbModel.gerund
             m_verbWord = verbModel.infinitive
             prepareStemNew()
-            if endsInY {m_presentS3Form = m_presentS3Stem + "ies"}
+            if endsInConsonantY {m_presentS3Form = m_presentS3Stem + "ies"}
             else if endsInE {
                 m_presentS3Form = m_presentS3Stem + "es"
                 if m_verbWord == "have" {m_presentS3Form="has"}

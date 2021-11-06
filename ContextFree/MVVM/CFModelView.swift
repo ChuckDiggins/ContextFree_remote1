@@ -13,9 +13,11 @@ class CFModelView: ObservableObject {
     init(){
     }
     
+    /*
     func setCurrentLanguage(language: LanguageType){
         cfModel!.m_currentLanguage = language
     }
+    */
     
     func getParser()->WordStringParser{
         return cfModel!.getParser()
@@ -80,12 +82,10 @@ class CFModelView: ObservableObject {
        cfModel!.append(spanishVerb: spanishVerb, frenchVerb : frenchVerb)
     }
 
-
-    
     func getCurrentLanguage()->LanguageType{
         return cfModel!.m_currentLanguage
     }
-    
+
     /*
     func getRandomSentence()->dIndependentClause{
         return cfModel!.getRandomSentence()
@@ -139,10 +139,6 @@ class CFModelView: ObservableObject {
     
     func createIndependentClause(clauseString: String)->dIndependentClause{
         return cfModel!.createIndependentClause(clauseString: clauseString)
-    }
-    
-    func getWorkingVerbList()->[BVerb]{
-        return cfModel!.getWorkingVerbList()
     }
     
 }

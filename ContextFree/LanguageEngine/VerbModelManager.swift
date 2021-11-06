@@ -14,23 +14,13 @@ struct VerbModelManager{
         
         switch language {
         case .Spanish:
-            let verbStuff = util.analyzeWordPhrase(testString: verbPhrase)
-            //var reconstructedVerbPhrase = util.reconstructVerbPhrase(verbWord: verbStuff.verbWord, residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
-            if verbStuff.verbEnding == .none {return (false, BVerb())}
-            verb = createSpanishBVerb(verbWord:verbStuff.verbWord, verbEnding: verbStuff.verbEnding,
-                                      residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
+            verb = createSpanishBVerb(verbPhrase: verbPhrase)
             return (true, verb)
         case .French:
-            let verbStuff = util.analyzeWordPhrase(testString: verbPhrase)
-            //var reconstructedVerbPhrase = util.reconstructVerbPhrase(verbWord: verbStuff.verbWord, residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
-            if verbStuff.verbEnding == .none {return (false, BVerb())}
-            verb = createFrenchBVerb(verbWord:verbStuff.verbWord, verbEnding: verbStuff.verbEnding,
-                                     residualPhrase: verbStuff.residualPhrase, isReflexive: verbStuff.isReflexive)
+            verb = createFrenchBVerb(verbPhrase: verbPhrase)
             return (true, verb)
         case .English:
-            let verbStuff = util.analyzeEnglishWordPhrase(testString: verbPhrase)
-            var verb = BVerb()
-            verb = createEnglishBVerb(verbWord:verbStuff.verbWord)
+            verb = createEnglishBVerb(verbPhrase: verbPhrase, separable: .separable)
             return (true, verb)
         default:
             return (false, BVerb())
@@ -38,91 +28,28 @@ struct VerbModelManager{
         
     }
     
-    mutating func createNewBVerb(verbWord: String, verbEnding: VerbEnding, residualPhrase: String, isReflexive: Bool) -> BRomanceVerb {
-        
-        //reconstruct the clean-up verb phrase here
-        
-        var constructedVerbPhrase = verbWord
-        if ( isReflexive){constructedVerbPhrase += "se"}
-        if residualPhrase.count>0 {
-            constructedVerbPhrase += " " + residualPhrase
-        }
-        
-        switch m_currentLanguage {
-        case .Spanish:
-            let brv = BSpanishVerb(verbPhrase : constructedVerbPhrase,
-                                   verbWord: verbWord,
-                                   verbEnding: verbEnding,
-                                   languageType: m_currentLanguage,
-                                   preposition: residualPhrase, isReflexive: isReflexive)
-            
-            let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: verbWord)
-            brv.setPatterns(verbModel : verbModel)
-            return brv
-        case .French:
-            let brv = BFrenchVerb(verbPhrase : constructedVerbPhrase,
-                                   verbWord: verbWord,
-                                   verbEnding: verbEnding,
-                                   languageType: m_currentLanguage,
-                                   preposition: residualPhrase, isReflexive: isReflexive)
-            let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: verbWord)
-            brv.setPatterns(verbModel : verbModel)
-            return brv
-        default:
-            return BRomanceVerb()
-        }
-        
-    }
     
-    mutating func createEnglishBVerb(verbWord: String) -> BEnglishVerb {
-        //reconstruct the clean-up verb phrase here
+    mutating func createEnglishBVerb(verbPhrase: String, separable: Separable ) -> BEnglishVerb {
+        let brv = BEnglishVerb(verbPhrase : verbPhrase, separable: separable)
         
-        let constructedVerbPhrase = verbWord
-        
-        let brv = BEnglishVerb(verbPhrase : constructedVerbPhrase, verbWord: verbWord)
-        
-        let verbModel = m_englishVerbModelConjugation.getVerbModel(verbWord: verbWord)
+        let verbModel = m_englishVerbModelConjugation.getVerbModel(verbWord: brv.m_verbWord)
         brv.setModel(verbModel : verbModel)
 
         return brv
     }
 
-    mutating func createSpanishBVerb(verbWord: String, verbEnding: VerbEnding, residualPhrase: String, isReflexive: Bool) -> BSpanishVerb {
-        //reconstruct the clean-up verb phrase here
+    mutating func createSpanishBVerb(verbPhrase: String) -> BSpanishVerb {
+        let brv = BSpanishVerb(verbPhrase : verbPhrase)
         
-        var constructedVerbPhrase = verbWord
-        if ( isReflexive){constructedVerbPhrase += "se"}
-        if residualPhrase.count>0 {
-            constructedVerbPhrase += " " + residualPhrase
-        }
-        
-        let brv = BSpanishVerb(verbPhrase : constructedVerbPhrase,
-                               verbWord: verbWord,
-                               verbEnding: verbEnding,
-                               languageType: m_currentLanguage,
-                               preposition: residualPhrase, isReflexive: isReflexive)
-        
-        let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: verbWord)
+        let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: brv.m_verbWord)
         brv.setPatterns(verbModel : verbModel)
         return brv
     }
     
-    mutating func createFrenchBVerb(verbWord: String, verbEnding: VerbEnding, residualPhrase: String, isReflexive: Bool) -> BFrenchVerb {
-        //reconstruct the clean-up verb phrase here
+    mutating func createFrenchBVerb(verbPhrase: String) -> BFrenchVerb {
+        let brv = BFrenchVerb(verbPhrase : verbPhrase)
         
-        var constructedVerbPhrase = verbWord
-        if ( isReflexive){constructedVerbPhrase += "se"}
-        if residualPhrase.count>0 {
-            constructedVerbPhrase += " " + residualPhrase
-        }
-        
-        let brv = BFrenchVerb(verbPhrase : constructedVerbPhrase,
-                               verbWord: verbWord,
-                               verbEnding: verbEnding,
-                               languageType: m_currentLanguage,
-                               preposition: residualPhrase, isReflexive: isReflexive)
-        
-        let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: verbWord)
+        let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: brv.m_verbWord)
         brv.setPatterns(verbModel : verbModel)
         return brv
     }

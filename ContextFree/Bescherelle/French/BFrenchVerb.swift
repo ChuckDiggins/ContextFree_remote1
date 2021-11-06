@@ -53,14 +53,8 @@ class BFrenchVerb : BRomanceVerb {
         super.init(verbPhrase: verbPhrase, language: .French)
     }
     
-    init(verbPhrase: String, verbWord: String, verbEnding : VerbEnding, languageType : LanguageType, preposition: String, isReflexive: Bool){
-        
-        super.init(verbPhrase: verbPhrase, verbWord: verbWord, verbEnding : verbEnding, languageType: languageType, isReflexive : isReflexive, preposition : preposition)
-    }
-    
-    override init(){
-        
-        super.init(verbPhrase: "", verbWord: "", verbEnding : .none, languageType: .Spanish, isReflexive : false, preposition : "")
+     override init(){
+         super.init(verbPhrase: "", language: .French)
     }
     
     override func setPatterns (verbModel : RomanceVerbModel) {
@@ -72,7 +66,7 @@ class BFrenchVerb : BRomanceVerb {
         
 
         //do some other stuff while we are at it
-        m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: verbEnding)
+        m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: m_verbEnding)
         
         m_verbModelParseList = bVerbModel.parseVerbModel()
         readModelParseStuff()
