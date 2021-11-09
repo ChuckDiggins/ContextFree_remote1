@@ -216,22 +216,12 @@ class BRomanceVerb: BVerb {
         return (fromWord, toWord)
     }
     
-    func createPastParticiple(verb: BRomanceVerb)->String {
-        let word = verb.m_verbStem
-        switch verb.m_verbEnding {
-        case .AR: return word + "ado"
-        case .ER, .IR, .accentIR: return word + "ido"
-        default: return word + "nada"
-        }
+    func createPastParticiple()->String {
+        return ""
     }
     
-    func createGerund(verb: BRomanceVerb)->String {
-        let word = verb.m_verbStem
-        switch verb.m_verbEnding {
-        case .AR: return word + "ando"
-        case .ER, .IR, .accentIR: return word + "iendo"
-        default: return word + "nada"
-        }
+    func createGerund()->String {
+        return ""
     }
     
     func getConjugateForm(tense : Tense, person : Person)->String {
@@ -258,8 +248,8 @@ class BRomanceVerb: BVerb {
  */
         //do some other stuff while we are at it
         m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: m_verbEnding)
-        m_pastParticiple = createPastParticiple(verb : self)
-        m_gerund = createGerund(verb : self)
+        m_pastParticiple = createPastParticiple()
+        m_gerund = createGerund()
         
         //extract verb model stuff
         /*
@@ -273,6 +263,8 @@ class BRomanceVerb: BVerb {
         */
         
     }//SetPatterns
+    
+    // - MARK: Reflexive Morphing
 
     func addReflexiveMorphing(){
         //create and initialize the morph structs
@@ -290,12 +282,23 @@ class BRomanceVerb: BVerb {
             m_initialMorphObject[person.rawValue].append(morphStep : morphStep)
             m_morphStruct[person.rawValue].append(morphStep : morphStep)
             
+            let startsWithVowelSound = VerbUtilities().startsWithVowelSound(characterArray: m_verbWord)
+            
+            var addSpace = false
+            switch languageType {
+            case .Spanish:
+                addSpace = true
+            case .French:
+                if person == .P1 || person == .P2 { addSpace = true }
+                if !startsWithVowelSound { addSpace = true }
+            default: break
+            }
             morphStep = MorphStep()
             morphStep.index = 0
             morphStep.morphType = .nada
-            //morphStep.verbForm = m_verbWord
             morphStep.part1 = ""
-            morphStep.part2 = vrp.getReflexive(person: person) + " "
+            morphStep.part2 = vrp.getReflexive(language: languageType, person: person, startsWithVowelSound: startsWithVowelSound)   //only relevant for French
+            if addSpace { morphStep.part2 += " " }
             morphStep.part3 = m_verbWord
             morphStep.verbForm = morphStep.part1 + morphStep.part2 + morphStep.part3
             morphStep.comment = "convert to person and move to front of the verb"

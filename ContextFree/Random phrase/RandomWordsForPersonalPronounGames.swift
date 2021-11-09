@@ -34,7 +34,14 @@ struct RandomWordListsForPersonalPronounGames{
     var sentenceData = Array<SentenceData>()
     
     //these should work for all languages
-    let bestVerbs = ["comprar",
+    let bestVerbs = ["dormirse",
+                     "cuidar de",
+                     "registrarse en",
+                     "volver a llamar",
+                     "afeitarse",
+                     "comprar",
+                     "preocuparse por"]
+    let nextBestVerbs = [
                      "contar",
                      "dar",
                      "decir",
@@ -46,7 +53,7 @@ struct RandomWordListsForPersonalPronounGames{
                      "robar",
                      "servir",
                      "traer"]
-    let bestPrepositions = ["a", "para" ]
+    let bestPrepositions = ["a", "para", "por", "desde" , "de", "con", "contra de"]
     let bestDirectObjects = ["libro", "cuenta", "casa", "verdad", "carta", "foto", "pregunta", "comida", "regalo", "sombrero"]
     let bestIndirectObjects = ["me", "te", "niño", "niña", "fat", "les"]  //personal stuff
     

@@ -237,6 +237,10 @@ class Verb : Word {
     func getPerson()->Person{
         return person
     }
+    
+    func getResidualPhrase()->String {
+        getBVerb().getResidualPhrase()
+    }
 
 }
 
@@ -260,10 +264,10 @@ class RomanceVerb : Verb {
     }
     
     func getConjugateForm()->String{
-        return getConjugateForm(tense: tense, person: person)
+        return getConjugateForm(tense: tense, person: person, showResidualPhrase: false)
     }
     
-    func getConjugateForm(tense: Tense, person : Person)->String{ return verbForm[person.getIndex()] }
+    func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{ return verbForm[person.getIndex()] }
     
     func isConjugateForm(word: String)->(Bool, Tense, Person){
         for p in 0..<6 {
@@ -272,7 +276,7 @@ class RomanceVerb : Verb {
         }
         return (false, .present, .S1)
     }
-    
+
 }
 
 
@@ -289,7 +293,7 @@ class FrenchVerb : RomanceVerb {
         super.init(word: word, type : type)
     }
     
-    override func getConjugateForm(tense: Tense, person : Person)->String{
+    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
         if ( bVerb.m_verbWord.count == 0){
             let bv = BFrenchVerb(verbPhrase: french)
             let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
@@ -301,8 +305,16 @@ class FrenchVerb : RomanceVerb {
         case .pastParticiple: return bFrVerb.getPastParticiple()
         case .presentParticiple: return bFrVerb.getPresentParticiple()
         case .infinitive: return bFrVerb.m_verbWord
-        default:  return bFrVerb.getConjugateForm(tense: tense, person: person)
+        default:
+            var conjugateString = bFrVerb.getConjugateForm(tense: tense, person: person)
+            if showResidualPhrase && bFrVerb.getResidualPhrase().count > 0 { conjugateString += " " + bFrVerb.getResidualPhrase() }
+            return conjugateString
         }
+    }
+    
+    func isReflexive()->Bool{
+        let bFrVerb = bVerb as! BFrenchVerb
+        return bFrVerb.m_isReflexive
     }
 }
 
@@ -320,7 +332,7 @@ class SpanishVerb : RomanceVerb {
         super.init(word: word, type : type)
     }
     
-    override func getConjugateForm(tense: Tense, person : Person)->String{
+    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String {
         if ( bVerb.m_verbWord.count == 0){
             let bv = BSpanishVerb(verbPhrase: spanish)
             let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
@@ -328,13 +340,25 @@ class SpanishVerb : RomanceVerb {
             setBVerb(bVerb: bv)
         }
         let bSpVerb = bVerb as! BSpanishVerb
+        
+        
         switch tense {
         case .pastParticiple: return bSpVerb.getPastParticiple()
         case .presentParticiple: return bSpVerb.getPresentParticiple()
         case .infinitive: return bSpVerb.m_verbWord
-        default:  return bSpVerb.getConjugateForm(tense: tense, person: person)
+        default:
+            var conjugateString = bSpVerb.getConjugateForm(tense: tense, person: person)
+            if showResidualPhrase && bSpVerb.getResidualPhrase().count > 0 {
+                conjugateString += " " + bSpVerb.getResidualPhrase() }
+            return conjugateString
         }
     }
+    
+    func isReflexive()->Bool{
+        let bSpVerb = bVerb as! BSpanishVerb
+        return bSpVerb.m_isReflexive
+    }
+    
 }
 
 class EnglishVerb : Verb {
@@ -359,14 +383,22 @@ class EnglishVerb : Verb {
         return (false, .present, .S1)
     }
     
-    func getConjugateForm(tense: Tense, person : Person)->String{
+    func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
         let bEnglishVerb = bVerb as! BEnglishVerb
         switch tense {
         case .pastParticiple: return bEnglishVerb.getPastParticiple()
         case .presentParticiple: return bEnglishVerb.getPresentParticiple()
         case .infinitive: return bEnglishVerb.m_verbWord
-        default:  return bEnglishVerb.getConjugateForm(tense: tense, person: person)
+        default:
+            var conjugateString = bEnglishVerb.getConjugateForm(tense: tense, person: person)
+            if showResidualPhrase && bEnglishVerb.getResidualPhrase().count > 0 {
+                conjugateString += " " + bEnglishVerb.getResidualPhrase() }
+            return conjugateString
         }
+    }
+    
+    func isReflexive()->Bool{
+        false
     }
     
 }

@@ -56,7 +56,15 @@ class Pronoun : Word {
         return pt
     }
     
-    func getReflexive(person: Person)->String{
+    func getReflexive(language: LanguageType, person: Person, startsWithVowelSound: Bool)->String{
+        switch language {
+        case .Spanish: return SpanishPronoun().getReflexive(person: person)
+        case .French:
+            if startsWithVowelSound { return FrenchPronoun().getReflexiveContraction(person: person)}
+            else {return FrenchPronoun().getReflexive(person: person)}
+        case .English: return EnglishPronoun().getReflexive(person: person)
+        default: break
+        }
         return ""
     }
     
@@ -108,7 +116,7 @@ class EnglishPronoun : Pronoun {
         }
     }
 
-    override func getReflexive(person: Person)->String{
+    func getReflexive(person: Person)->String{
         switch person{
         case .S1: return "myself"
         case .S2: return "yourself"
@@ -223,7 +231,7 @@ class FrenchPronoun : Pronoun {
         }
     }
     
-    override func getReflexive(person: Person)->String{
+    func getReflexive(person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"
@@ -231,6 +239,17 @@ class FrenchPronoun : Pronoun {
         case .P1: return "nous"
         case .P2: return "vous"
         case .P3: return "se"
+        }
+    }
+    
+    func getReflexiveContraction(person: Person)->String{
+        switch person{
+        case .S1: return "m'"
+        case .S2: return "t'"
+        case .S3: return "s'"
+        case .P1: return "nous"
+        case .P2: return "vous"
+        case .P3: return "s'"
         }
     }
     
@@ -401,7 +420,7 @@ class SpanishPronoun : Pronoun {
         
     }
     
-    override func getReflexive(person: Person)->String{
+    func getReflexive(person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"

@@ -62,7 +62,8 @@ class dIndependentAgnosticClause : dClause {
         sentence = newSentence
     }
     
-    func getCompositeSentenceString(language: LanguageType, targetFunction: ContextFreeFunction)->([dSingle], Gender, Number, Person) {
+    func getCompositeSentenceString(language: LanguageType, targetFunction: ContextFreeFunction)
+                     ->(targetSingleList: [dSingle], gender: Gender, number: Number, person: Person, targetString: String) {
         //var workingSingleList = [dSingle]()
         //var singleListBefore = Array<dSingle>()  //pre target
         //var singleListAfter = Array<dSingle>()  //after target
@@ -73,6 +74,7 @@ class dIndependentAgnosticClause : dClause {
         var number = Number.singular
         var person = Person.S3
         var targetSingleList = Array<dSingle>()
+        var targetString = ""
         
         for cluster in sentence.getClusterList(){
             print ("getCompositeSentenceString: Top level \(cluster)")
@@ -114,7 +116,11 @@ class dIndependentAgnosticClause : dClause {
             default: continue
             }
         }
-        return (targetSingleList, gender, number, person)
+        for single in targetSingleList{
+            targetString += single.getWordStringAtLanguage(language: language) + " "
+        }
+                         
+        return (targetSingleList, gender, number, person, targetString)
     }
     
     

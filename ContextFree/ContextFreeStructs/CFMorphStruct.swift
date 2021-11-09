@@ -43,7 +43,7 @@ class CFMorphStruct {
     }
     
     func getMorphStep(index : Int)-> CFMorphStep {
-            if index == 0 || index < morphArray.count { return morphArray[index]}
+            if index == 0 && index < morphArray.count { return morphArray[index]}
             return CFMorphStep()
     }
 }

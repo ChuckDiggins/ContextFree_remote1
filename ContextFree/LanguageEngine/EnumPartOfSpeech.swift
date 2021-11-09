@@ -53,7 +53,7 @@ enum  VerbEnding : String
     var description:  String {return rawValue}
 }
 
-
+/*
 enum  ReflexivePronoun: String
 {
     case me
@@ -80,6 +80,7 @@ enum  ReflexivePronoun: String
         }
     }
 }
+*/
 
 enum  Person:  Int, CaseIterable
 {

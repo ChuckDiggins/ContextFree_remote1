@@ -63,15 +63,33 @@ class BFrenchVerb : BRomanceVerb {
         //bRomanceVerb specific
         initializeMorphStructs()
         if isReflexive() { addReflexiveMorphing() }
-        
 
         //do some other stuff while we are at it
         m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: m_verbEnding)
-        
+        m_pastParticiple = createPastParticiple()
+        m_gerund = createGerund()
         m_verbModelParseList = bVerbModel.parseVerbModel()
         readModelParseStuff()
         
     }//SetPatterns
+    
+    override func createPastParticiple()->String {
+        let word = m_verbStem
+        switch m_verbEnding {
+        case .AR: return word + "ado"
+        case .ER, .IR, .accentIR: return word + "ido"
+        default: return word + "nada"
+        }
+    }
+    
+    override func createGerund()->String {
+        let word = m_verbStem
+        switch m_verbEnding {
+        case .AR: return word + "ando"
+        case .ER, .IR, .accentIR: return word + "iendo"
+        default: return word + "nada"
+        }
+    }
     
     override func getConjugateForm(tense : Tense, person : Person)->String {
         let ms = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)

@@ -153,10 +153,10 @@ class dVerbSingle : dSingle
         switch sd.language {
         case .Spanish, .French:
             let verb = word as! RomanceVerb
-            return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+            return verb.getConjugateForm(tense: sd.tense, person: sd.person, showResidualPhrase: true)
         case .English:
             let verb = word as! EnglishVerb
-            return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+            return verb.getConjugateForm(tense: sd.tense, person: sd.person, showResidualPhrase: true)
         default:
             return ""
         }
@@ -189,7 +189,7 @@ class dSpanishVerbSingle : dVerbSingle
         let sd = getSentenceData()
         let word = getClusterWord()
         let verb = word as! SpanishVerb
-        return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+        return verb.getConjugateForm(tense: sd.tense, person: sd.person, showResidualPhrase: true)
     }
     
 
@@ -212,7 +212,7 @@ class dFrenchVerbSingle : dVerbSingle
         let sd = getSentenceData()
         let word = getClusterWord()
         let verb = word as! FrenchVerb
-        return verb.getConjugateForm(tense: sd.tense, person: sd.person)
+        return verb.getConjugateForm(tense: sd.tense, person: sd.person, showResidualPhrase: true)
     }
     
 

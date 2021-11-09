@@ -45,8 +45,8 @@ struct PersonalPronounGames: View {
     @State private var selectedProcessedIndex = 0
     @State private var sentenceString = ""
     
-    @State private var m_clause = dIndependentAgnosticClause()
-    @State private var m_englishClause = dIndependentAgnosticClause()
+    @State private var m_clause : dIndependentAgnosticClause!
+    @State private var m_englishClause : dIndependentAgnosticClause!
     
     @State private var checkboxSpanish: Bool = false
     @State private var checkboxFrench: Bool = true
@@ -60,9 +60,10 @@ struct PersonalPronounGames: View {
     @State private var currentFunctionString = ""
     
     @State var m_randomPronounPhrase : RandomPersonalPronounPhrase!
-    let Function : [ContextFreeFunction] = [.None, .Subject, .DirectObject, .IndirectObject]
+    let Function : [ContextFreeFunction] = [.Subject, .DirectObject, .IndirectObject]
     @State private var currentFunction = 0
     @State private var currentEquivalentPronoun = ""
+    @State private var currentString = ""
     @State private var morphStruct = CFMorphStruct()
     @State private var morphIndex = 0
     
@@ -84,7 +85,7 @@ struct PersonalPronounGames: View {
                 Text("Spanish")
                     .bold()
                     .frame(width: 150, height: 20)
-                    .font(m_currentLanguage == .Spanish ? .system(size: 30)  : .system(size: 10) )
+                    .font(m_currentLanguage == .Spanish ? .system(size: 20)  : .system(size: 10) )
                     .foregroundColor(m_currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
                     .background(Color.blue)
                     .cornerRadius(10)
@@ -97,7 +98,7 @@ struct PersonalPronounGames: View {
                 Text("French")
                     .bold()
                     .frame(width: 150, height: 20)
-                    .font(m_currentLanguage == .French ? .system(size: 30) : .system(size: 10) )
+                    .font(m_currentLanguage == .French ? .system(size: 20) : .system(size: 10) )
                     .foregroundColor(m_currentLanguage == .French ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
                     .background(Color.blue)
                     .cornerRadius(10)
@@ -110,12 +111,13 @@ struct PersonalPronounGames: View {
                 Text("English")
                     .bold()
                     .frame(width: 150, height: 20)
-                    .font(m_currentLanguage == .English ? .system(size: 30)  : .system(size: 10) )
+                    .font(m_currentLanguage == .English ? .system(size: 20)  : .system(size: 10) )
                     .foregroundColor(m_currentLanguage == .English ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
                     .background(Color.blue)
                     .cornerRadius(10)
             }
         }.padding()
+
 
         //LanguageButtonGroup()
         
@@ -146,12 +148,15 @@ struct PersonalPronounGames: View {
             highlightCurrentFunction()
             updateCurrentSentenceViewStuff()
         }){
-            HStack{
-                Text("Show: ").foregroundColor(.black)
-                Text(currentFunctionString)
-                    .padding()
-                Text("Pronoun equivalent: ").foregroundColor(.black)
-                Text(currentEquivalentPronoun)
+            VStack{
+                HStack{
+                    Text("\(currentFunctionString): ")
+                    Text(currentString)
+                }
+                HStack{
+                    Text("Pronoun equivalent: ").foregroundColor(.black)
+                    Text(currentEquivalentPronoun)
+                }
             }
         }.font(.subheadline)
         
@@ -179,6 +184,7 @@ struct PersonalPronounGames: View {
         .border(Color.green)
         .background(Color.white)
         
+        
         VStack{
             HStack(alignment: .center){
                 Spacer()
@@ -192,6 +198,7 @@ struct PersonalPronounGames: View {
                 Spacer()
             }
         }.onAppear{
+            
             cfModelView.createNewModel(language: .Agnostic)
             m_randomPronounPhrase = RandomPersonalPronounPhrase(wsp: cfModelView.getWordStringParser(), rft: .subjectPronounVerb)
             createRandomClause()
@@ -481,14 +488,22 @@ struct PersonalPronounGames: View {
         
         
         var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .Subject)
-        let subjList = result.0
-        print("Subject list = \(subjList)")
-        result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .DirectObject)
-        let doList = result.0
-        result  = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .IndirectObject)
-        let inDoList = result.0
+        let subjList = result.targetSingleList
+        let subjString = result.targetString
         
-        print ("Subj count: \(subjList.count), doCount: \(doList.count), inDoCount: \(inDoList.count)")
+        result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .DirectObject)
+        let doList = result.targetSingleList
+        let doString = result.targetString
+        
+        result  = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .IndirectObject)
+        let inDoList = result.targetSingleList
+        let inDoString = result.targetString
+        
+        print("Subject string = \(subjString)")
+        print("Direct string = \(doString)")
+        print("Indirect object string = \(inDoString)")
+        
+        //print ("Subj count: \(subjList.count), doCount: \(doList.count), inDoCount: \(inDoList.count)")
         
         let singleList = m_clause.getSingleList()
         
@@ -539,10 +554,15 @@ struct PersonalPronounGames: View {
         }
         currentFunctionString = Function[currentFunction].rawValue
         switch currentFunction {
-        case 0:  currentEquivalentPronoun = "none current"
-        case 1:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .SUBJECT)
-        case 2:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .DIRECT_OBJECT)
-        case 3:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .INDIRECT_OBJECT)
+        case 0:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .SUBJECT)
+            var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .Subject)
+            currentString = result.targetString
+        case 1:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .DIRECT_OBJECT)
+            var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .DirectObject)
+            currentString = result.targetString
+        case 2:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .INDIRECT_OBJECT)
+            var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .IndirectObject)
+            currentString = result.targetString
         default: break
         }
      

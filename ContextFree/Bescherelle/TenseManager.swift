@@ -21,7 +21,7 @@ struct TenseManager {
         }
         //turn on all simple indicative tenses and all simple subjunctive tenses
         toggleAllSimpleIndicativeTenses()
-        //toggleTense(tense: .presentPerfect)
+        toggleTense(tense: .presentPerfect)
         //toggleAllSimpleSubjunctiveTenses()
     }
 

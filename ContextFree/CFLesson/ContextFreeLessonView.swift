@@ -50,8 +50,8 @@ struct ContextFreeLessonView: View {
     @State private var namedPhraseCount = 0
     @State private var namedPhraseList = [NamedPhrase]()
     @State private var namedClause = NamedClause(clauseName: "Chuck's first clause")
-    @State private var m_clause = dIndependentAgnosticClause()
-    @State private var m_englishClause = dIndependentAgnosticClause()
+    @State private var m_clause : dIndependentAgnosticClause?
+    @State private var m_englishClause : dIndependentAgnosticClause?
     @State private var m_randomWordLists : RandomWordLists?
     
     @State private var m_cfLesson : ContextFreeLesson?
@@ -67,7 +67,7 @@ struct ContextFreeLessonView: View {
                 HStack{
                     Button(action: {
                         currentLanguage = .Spanish
-                        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+                        sentenceString = (m_clause?.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson))!
                     }){
                         Text("Spanish")
                     }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
@@ -75,7 +75,7 @@ struct ContextFreeLessonView: View {
                     
                     Button(action: {
                         currentLanguage = .French
-                        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+                        sentenceString = (m_clause?.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson))!
                     }){
                         Text("French")
                     }.font(currentLanguage == .French ? .title : .system(size: 20) )
@@ -83,7 +83,7 @@ struct ContextFreeLessonView: View {
                     
                     Button(action: {
                         currentLanguage = .English
-                        sentenceString = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
+                        sentenceString = (m_clause?.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson))!
                     }){
                         Text("English")
                     }.font(currentLanguage == .English ? .title : .system(size: 20) )

@@ -75,7 +75,7 @@ class BVerb : Word, Identifiable {
         case .Spanish:
             verbStuff = VerbUtilities().analyzeSpanishWordPhrase(testString: verbPhrase)
         case .French:
-            verbStuff = VerbUtilities().analyzeFrenchWordPhrase(testString: verbPhrase)
+            verbStuff = VerbUtilities().analyzeFrenchWordPhrase(phraseString: verbPhrase)
         case .English:
             verbStuff = VerbUtilities().analyzeEnglishWordPhrase(testString: verbPhrase)
         default:
@@ -92,6 +92,10 @@ class BVerb : Word, Identifiable {
     
     func isPhrasalVerb()->Bool{
         m_residualPhrase.count > 1
+    }
+    
+    func getResidualPhrase()->String{
+        m_residualPhrase
     }
     
     func getInfinitiveAndParticiples()->(String, String, String){

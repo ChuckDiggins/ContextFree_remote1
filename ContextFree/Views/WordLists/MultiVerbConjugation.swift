@@ -32,6 +32,9 @@ struct MultiVerbConjugation: View {
     @State var verb2String = ["","","","","",""]
     @State var verb3String = ["","","","","",""]
     
+    @State var showResidualPhrase = true
+    @State var showReflexivePronoun = true
+    
     //swipe gesture
     
     @State var startPos : CGPoint = .zero
@@ -236,35 +239,54 @@ struct MultiVerbConjugation: View {
         frenchPhrase = thisVerb.getWordAtLanguage(language: .French)
         
         if analyzeSpanishVerb() {
-            verb1String[0] = spanishVerb.getConjugateForm(tense: currentTense, person: .S1)
-            verb1String[1] = spanishVerb.getConjugateForm(tense: currentTense, person: .S2)
-            verb1String[2] = spanishVerb.getConjugateForm(tense: currentTense, person: .S3)
-            verb1String[3] = spanishVerb.getConjugateForm(tense: currentTense, person: .P1)
-            verb1String[4] = spanishVerb.getConjugateForm(tense: currentTense, person: .P2)
-            verb1String[5] = spanishVerb.getConjugateForm(tense: currentTense, person: .P3)
+            verb1String[0] = constructConjugateForm(language: .Spanish, tense: currentTense, person: .S1)
+            verb1String[1] = constructConjugateForm(language: .Spanish, tense: currentTense, person: .S2)
+            verb1String[2] = constructConjugateForm(language: .Spanish, tense: currentTense, person: .S3)
+            verb1String[3] = constructConjugateForm(language: .Spanish, tense: currentTense, person: .P1)
+            verb1String[4] = constructConjugateForm(language: .Spanish, tense: currentTense, person: .P2)
+            verb1String[5] = constructConjugateForm(language: .Spanish, tense: currentTense, person: .P3)
         }
+        
         if analyzeFrenchVerb() {
-            verb2String[0] = frenchVerb.getConjugateForm(tense: currentTense, person: .S1)
-            verb2String[1] = frenchVerb.getConjugateForm(tense: currentTense, person: .S2)
-            verb2String[2] = frenchVerb.getConjugateForm(tense: currentTense, person: .S3)
-            verb2String[3] = frenchVerb.getConjugateForm(tense: currentTense, person: .P1)
-            verb2String[4] = frenchVerb.getConjugateForm(tense: currentTense, person: .P2)
-            verb2String[5] = frenchVerb.getConjugateForm(tense: currentTense, person: .P3)
+            verb2String[0] = constructConjugateForm(language: .French, tense: currentTense, person: .S1)
+            verb2String[1] = constructConjugateForm(language: .French, tense: currentTense, person: .S2)
+            verb2String[2] = constructConjugateForm(language: .French, tense: currentTense, person: .S3)
+            verb2String[3] = constructConjugateForm(language: .French, tense: currentTense, person: .P1)
+            verb2String[4] = constructConjugateForm(language: .French, tense: currentTense, person: .P2)
+            verb2String[5] = constructConjugateForm(language: .French, tense: currentTense, person: .P3)
         }
         
         if analyzeEnglishVerb() {
-            verb3String[0] = englishVerb.getConjugateForm(tense: currentTense, person: .S1)
-            verb3String[1] = englishVerb.getConjugateForm(tense: currentTense, person: .S2)
-            verb3String[2] = englishVerb.getConjugateForm(tense: currentTense, person: .S3)
-            verb3String[3] = englishVerb.getConjugateForm(tense: currentTense, person: .P1)
-            verb3String[4] = englishVerb.getConjugateForm(tense: currentTense, person: .P2)
-            verb3String[5] = englishVerb.getConjugateForm(tense: currentTense, person: .P3)
+            verb3String[0] = constructConjugateForm(language: .English, tense: currentTense, person: .S1)
+            verb3String[1] = constructConjugateForm(language: .English, tense: currentTense, person: .S2)
+            verb3String[2] = constructConjugateForm(language: .English, tense: currentTense, person: .S3)
+            verb3String[3] = constructConjugateForm(language: .English, tense: currentTense, person: .P1)
+            verb3String[4] = constructConjugateForm(language: .English, tense: currentTense, person: .P2)
+            verb3String[5] = constructConjugateForm(language: .English, tense: currentTense, person: .P3)
         }
         
     }
     
+    // - MARK: Conjugation here
+    
+    func constructConjugateForm(language: LanguageType, tense: Tense, person: Person)->String{
+        var conjugateString = ""
+        
+        switch (language){
+        case .Spanish:
+            conjugateString = spanishVerb.getConjugateForm(tense: tense, person: person, showResidualPhrase: showResidualPhrase)
+        case .French:
+            conjugateString = frenchVerb.getConjugateForm(tense: tense, person: person, showResidualPhrase: showResidualPhrase)
+        case .English:
+            conjugateString = englishVerb.getConjugateForm(tense: tense, person: person, showResidualPhrase: showResidualPhrase)
+        default: break
+        }
+        
+        return conjugateString
+    }
+    
     func analyzeSpanishVerb()->Bool{
-        if frenchPhrase.count > 0 {
+        if spanishPhrase.count > 0 {
             let result = cfModelView.analyzeAndCreateBVerb_SPIFE(language: .Spanish, verbPhrase: spanishPhrase)
             if result.0 {
                 let verb = result.1  //BVerb

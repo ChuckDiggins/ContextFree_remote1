@@ -361,7 +361,7 @@ class dPhrase : dCluster {
                         let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
                         bv.setPatterns(verbModel : verbModel)
                         fv.setBVerb(bVerb: bv)
-                        conjStr = fv.getConjugateForm(tense: sd.tense, person: sd.person)
+                        conjStr = fv.getConjugateForm(tense: sd.tense, person: sd.person, showResidualPhrase: true)
                         str += conjStr + " "
                     case .French:
                         let v = c.getClusterWord()
@@ -370,7 +370,7 @@ class dPhrase : dCluster {
                         let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
                         bv.setPatterns(verbModel : verbModel)
                         fv.setBVerb(bVerb: bv)
-                        conjStr = fv.getConjugateForm(tense: sd.tense, person: sd.person)
+                        conjStr = fv.getConjugateForm(tense: sd.tense, person: sd.person, showResidualPhrase: true)
                         str += conjStr + " "
                     case .English:
                         let v = c.getClusterWord()
@@ -379,7 +379,7 @@ class dPhrase : dCluster {
                         let verbModel = m_englishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
                         bv.setModel(verbModel : verbModel)
                         ev.setBVerb(bVerb: bv)
-                        conjStr = ev.getConjugateForm(tense: sd.tense, person: sd.person)
+                        conjStr = ev.getConjugateForm(tense: sd.tense, person: sd.person, showResidualPhrase: true)
                         str += conjStr + " "
                     default:
                         str += "unknown language in dPhrase"

@@ -293,7 +293,10 @@ class MorphStruct  {
     }
     
     func finalVerbForm()->String {
-        getMorphStep(index: morphArray.count-1).verbForm.lowercased()
+        var ms = getMorphStep(index: morphArray.count-1)
+        var finalVerbForm = getMorphStep(index: morphArray.count-1).verbForm.lowercased()
+        finalVerbForm = getMorphStep(index: morphArray.count-1).verbForm
+        return finalVerbForm
     }
     
     func getCurrentMorphStep()->MorphStep {

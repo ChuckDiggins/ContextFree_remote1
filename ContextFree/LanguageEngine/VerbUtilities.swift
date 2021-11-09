@@ -371,7 +371,8 @@ struct VerbUtilities {
         if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
             || input == "ü" || input == "ñ"
-            || input == "ç" || input == "è"  || input == "ê" || input == "î" {
+            || input == "ç" || input == "è"  || input == "ê" || input == "î"
+            || input == "'" {
            return true
         }
      return false
@@ -389,7 +390,7 @@ struct VerbUtilities {
     }
     
     func isPunctuation(input: Character)->Bool {
-        if input == "." || input == "," || input == "?" || input == "¿"
+        if input == "." || input == "," || input == "?" || input == "¿" || input == "'"
                 || input == "!" || input == "¡" || input == ":" || input == ";" || input == "\'" || input == "\""
         { return true }
         return false
@@ -420,6 +421,37 @@ struct VerbUtilities {
         return (verb : verbWord, bIsReflexive: isReflexive)
     }
     
+    func testForFrenchReflexiveEnding (testWord: String) -> (verb:String, bIsReflexive: Bool)
+    {
+        var  isReflexive = false
+        var  workingWord = testWord
+    
+        //if verbWord is reflexive, strip off final two letters
+    
+        if workingWord.hasPrefix("se ") {
+            isReflexive = true
+            workingWord = removeFirstLetters(characterArray: workingWord, removeCount: 3)
+        }
+        else if workingWord.hasPrefix("s'") {
+            isReflexive = true
+            workingWord = removeFirstLetters(characterArray: workingWord, removeCount: 2)
+        }
+        return (verb : workingWord, bIsReflexive: isReflexive)
+    }
+    
+    func removeFirstLetters(characterArray: String, removeCount: Int)->String{
+        var ss = String()
+        var charIndex = 0
+        
+        for c in characterArray {
+            if charIndex >= removeCount {
+                ss += String(c)
+            }
+            charIndex += 1
+        }
+        return ss
+    }
+
     func  analyzeEnglishWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
         let wordList = getListOfWords(characterArray: testString)
@@ -488,8 +520,20 @@ struct VerbUtilities {
         return (verbWord:verbWord, verbEnding: verbEnding, residualPhrase: residualPhrase, isReflexive: isReflexive)
     }
         
-    func  analyzeFrenchWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
+    func  analyzeFrenchWordPhrase(phraseString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
+        var testString = phraseString
+        var verbWord = ""
+        var residualPhrase = ""
+        var isReflexive = false
+    
+        if ( testString.count > 2 ){
+            //if word is a verb with a reflexive ending, then return the word without the "se" ending
+            let result = testForFrenchReflexiveEnding(testWord: testString)
+            testString = result.0
+            isReflexive = result.1
+        }
+    
         let wordList = getListOfWords(characterArray: testString)
    
         //if analyzeWordPhrase returns an empty verbWord, the testString does not start with a legitimate Spanish verb
@@ -497,19 +541,8 @@ struct VerbUtilities {
             return  (verbWord:"", verbEnding:.none, residualPhrase:"", isReflexive:false)
         }
         
-        var verbWord = ""
-        var  residualPhrase = ""
-        var isReflexive = false
-
         verbWord = wordList[0]
-        
-        if ( verbWord.count > 2 ){
-            //if word is a verb with a reflexive ending, then return the word without the "se" ending
-            let result = testForReflexiveEnding(testWord: verbWord)
-            verbWord = result.0
-            isReflexive = result.1
-        }
-        
+  
         //check to see if the verbWord has a legitimate verb (ar, er, ir, ír or oir (french)) ending
         
         let verbEnding = determineVerbEnding(verbWord: verbWord)
@@ -593,7 +626,7 @@ struct VerbUtilities {
         
         return ss
     }//func removeNonAlphaCharactersButLeaveBlanks
-    
+
     func removeLastLetters(verbWord : String, letterCount : Int)->String {
         var newWord = verbWord
         
@@ -663,7 +696,7 @@ struct VerbUtilities {
         verbWord.remove(at: verbWord.index(before: verbWord.endIndex))
         return verbWord
     }
-
-
+    
+   
 }
 
