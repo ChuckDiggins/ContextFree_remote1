@@ -19,6 +19,10 @@ class WordStateData : Hashable, Equatable {
     var processedFrenchWord = "pfw"
     var processedEnglishWord = "pew"
     
+    var spanishContraction = "psw"
+    var frenchContraction = "pfw"
+    var englishContraction = "pew"
+    
     //states
     var language = LanguageType.Spanish
     var tense = Tense.infinitive

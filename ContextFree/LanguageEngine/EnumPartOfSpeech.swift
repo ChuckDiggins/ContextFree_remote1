@@ -21,7 +21,7 @@ enum PhraseType{
 
 enum  VerbEnding : String
 {
-    case AR, ER, IR, accentIR, OIR, RE, none
+    case AR, ER, IR, accentIR, umlautIR, OIR, RE, none
     
     func getEnding()->String {
         switch self{
@@ -33,6 +33,8 @@ enum  VerbEnding : String
             return "ir"
         case .accentIR:
             return "ír"
+        case .umlautIR:
+            return "ïr"
         case .OIR:
             return "oir"
         case .RE:

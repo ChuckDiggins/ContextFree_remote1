@@ -56,9 +56,44 @@ class BRomanceVerb: BVerb {
         return false
     }
     
+    func hasReplaceForm (tense: Tense, person: Person)->(String, String){
+        for form in replaceModelList{
+            if form.tense == tense && form.person == person {
+                return (form.fromWord, form.toWord)
+            }
+        }
+        return ("", "")
+    }
+    
+    func hasMultipleReplaceForm (tense: Tense, person: Person)->(String, String){
+        //pass through the multiple lists in case there is later (override) replacement for this tense/person
+        var fromWord = ""
+        var toWord = ""
+        for form in replaceMultipleList{
+            for p in form.personList {
+                if form.tense == tense && p == person {
+                    fromWord = form.fromWord
+                    toWord = form.toWord
+                    break
+                }
+            }
+        }
+        return (fromWord, toWord)
+    }
+    
+    
     func hasReplaceEndingForm (tense: Tense, person: Person)->(String, String){
         for form in replaceEndingList{
             if form.tense == tense && form.person == person {
+                return (form.fromWord, form.toWord)
+            }
+        }
+        return ("", "")
+    }
+    
+    func hasReplaceEndingForm (tense: Tense)->(String, String){
+        for form in replaceEndingList{
+            if form.tense == tense {
                 return (form.fromWord, form.toWord)
             }
         }
@@ -191,30 +226,6 @@ class BRomanceVerb: BVerb {
         return "Besch #\(bVerbModel.id) (\(bVerbModel.modelVerb))"
     }
     
-    func hasReplaceForm (tense: Tense, person: Person)->(String, String){
-        for form in replaceModelList{
-            if form.tense == tense && form.person == person {
-                return (form.fromWord, form.toWord)
-            }
-        }
-        return ("", "")
-    }
-    
-    func hasMultipleReplaceForm (tense: Tense, person: Person)->(String, String){
-        //pass through the multiple lists in case there is later (override) replacement for this tense/person
-        var fromWord = ""
-        var toWord = ""
-        for form in replaceMultipleList{
-            for p in form.personList {
-                if form.tense == tense && p == person {
-                    fromWord = form.fromWord
-                    toWord = form.toWord
-                    break
-                }
-            }
-        }
-        return (fromWord, toWord)
-    }
     
     func createPastParticiple()->String {
         return ""

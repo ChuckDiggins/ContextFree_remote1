@@ -147,6 +147,10 @@ class dVerbSingle : dSingle
         }
     }
     
+    func getPhraseVerb()->String{
+        return ""
+    }
+    
     override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()

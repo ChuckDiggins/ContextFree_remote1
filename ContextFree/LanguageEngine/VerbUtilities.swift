@@ -139,6 +139,11 @@ struct VerbUtilities {
         return newString
     }
     
+     func replaceSubstringInString(inputString: String, findString: String, replacementString: String)->String{
+        let replace = inputString.replacingOccurrences(of: findString, with: replacementString)
+        return replace
+    }
+        
     mutating func findIndexOfLastOccurenceOfTargetStringInInputString(inputString: String, targetString: String) -> Int {
         //var index = -1
         var inputStringCopy = inputString
@@ -638,8 +643,8 @@ struct VerbUtilities {
         //print("verbWord \(verbWord) ... newWord \(newWord)")
         
         //remove any remaining spaces
-        repeat { newWord.remove(at: newWord.index(before: newWord.endIndex)) }
-        while newWord.hasSuffix(" ")
+        //repeat { newWord.remove(at: newWord.index(before: newWord.endIndex)) }
+        //while newWord.hasSuffix(" ")
         
         return newWord
     }

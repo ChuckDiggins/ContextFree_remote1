@@ -111,7 +111,7 @@ class BEnglishVerb : BVerb {
     
     func createRegularDefaultForms(){
         prepareStemNew()
-        m_pastParticiple = m_preteriteStem + "d"
+        
         m_preteriteForm = m_preteriteStem + "d"
         m_presentS3Form = m_presentS3Stem + "s"
         
@@ -137,7 +137,7 @@ class BEnglishVerb : BVerb {
             m_preteriteForm = m_preteriteStem + "ed"
         }
         
-        
+        m_pastParticiple = m_preteriteForm
         //exception
         if m_verbWord == "have" {
             m_presentS3Form = "has"
@@ -152,9 +152,9 @@ class BEnglishVerb : BVerb {
         self.verbModel = verbModel
        
         
-        //if verbModel.id == 0 {
-        //     createRegularDefaultForms()
-        //}
+        if verbModel.id == 0 {
+             createRegularDefaultForms()
+        }
         
         if verbModel.id == 1 {
             m_gerund = "being"
@@ -188,7 +188,7 @@ class BEnglishVerb : BVerb {
     }
     
     func getBeForm(tense : Tense, person : Person)->String {
-        let stem = m_verbWord
+
         switch tense {
         case .present:
             switch person{
@@ -223,7 +223,7 @@ class BEnglishVerb : BVerb {
             return "would " + m_verbWord
         case .presentPerfect:
             if person == .S3 { return "has " + m_pastParticiple }
-            else { return "have " + stem}
+            else { return "have " + m_pastParticiple}
         case .pastPerfect:
             switch person{
             case .S1: return "was having " + m_gerund

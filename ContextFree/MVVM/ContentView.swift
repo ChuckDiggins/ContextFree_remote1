@@ -60,15 +60,15 @@ struct ContentView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 
-                NavigationLink(destination: AgnosticSentenceView()){
+                NavigationLink(destination: NewPhrasesIn3LanguagesView()){
                     Text("Phrases in 3 Languages")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
-                .background(Color.red)
+                .background(Color.gray)
                 .foregroundColor(.black)
                 .cornerRadius(10)
                 
-                NavigationLink(destination: SentenceGameView()){
+                NavigationLink(destination: PhraseInSingleLanguageView()){
                     Text("Phrases in 1 Language")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)

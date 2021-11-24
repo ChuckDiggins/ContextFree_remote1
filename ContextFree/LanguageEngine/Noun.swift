@@ -191,16 +191,73 @@ class SpanishNoun : RomanceNoun {
     
     override func constructPlural(){
         let util = VerbUtilities()
-        let root = word
+        var root = word
         //root.removeLast()
         
-        let suffix = util.getLastNCharactersInString(inputString: word, copyCount: 1)
+        //ó  á í é
         
-        if ( suffix == "l" || suffix == "n" || suffix == "r" ){
-            plural = word + "es"
+        switch root {
+        case "examen":
+            plural = "exámen"
+            return
+        case "joven":
+            plural = "jóvenes"
+            return
+        case "crimen":
+            plural = "crímenes"
+            return
+        case "ciempiés":
+            plural = "ciempiés"
+            return
+        case "pasapuré":
+            plural = "pasapuré"
+            return
+        case "análisis":
+            plural = "análisis"
+            return
+        case "jueves":
+            plural = "jueves"
+            return
+        case "tórax":
+            plural = "tórax"
+            return
+        default: break
         }
-        else if ( suffix == "s" ){ plural = root}
-        else{ plural = word + "s" }
+              
+        let suffix = util.getLastNCharactersInString(inputString: word, copyCount: 1)
+        switch suffix {
+        case "l", "n", "r", "d", "z", "j", "s","x":
+            plural = word + "es"
+            return
+        case "ú", "í":
+            plural = word + "es"
+            return
+        default:
+            break
+        }
+        
+        let suffix2  = util.getLastNCharactersInString(inputString: word, copyCount: 2)
+        switch suffix2 {
+        case "ch", "ay", "ey", "iy", "oy", "uy":
+            plural = word + "es"
+            return
+        default:
+            break
+        }
+        
+        switch suffix2 {
+        case "ón":  //ocasión = ocasiones
+            root.removeLast(2)
+            plural = root + "ones"
+            return
+        case "és":  //francés = franceses
+            root.removeLast(2)
+            plural = root + "eses"
+            return
+        default:
+            break
+        }
+        plural = word + "s"
     }
     
 }

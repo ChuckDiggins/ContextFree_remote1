@@ -7,7 +7,7 @@
 
 import Foundation
 
-class dIndependentAgnosticClause : dClause {
+class dIndependentAgnosticClause : dClause{
     var grammarLibrary = CFGrammarLibrary()
     var frenchGrammarLibrary = CFGrammarLibrary()
     var originalSentenceString = String()
@@ -123,6 +123,20 @@ class dIndependentAgnosticClause : dClause {
         return (targetSingleList, gender, number, person, targetString)
     }
     
+    func setTenseAndPersonAndCreateNewSentenceString(language: LanguageType, tense: Tense, person: Person)->String{
+        if ( headVerb.getClusterType() != .UNK){
+            let hvp = headVerb as! dVerbPhrase
+            hvp.setTense(value: tense)
+            hvp.setPerson(value: person)
+        }
+        
+        if ( headNoun.getClusterType() != .UNK){
+            let hnp = headNoun as! dNounPhrase
+            hnp.setPerson(value: person)
+            hnp.m_isSubject = true
+        }
+        return createNewSentenceString(language: language)
+    }
     
     func processInfo(){
         //print("dIndependentAgnosticClause: cluster count = \(sentence.getClusterList().count)")
@@ -148,19 +162,7 @@ class dIndependentAgnosticClause : dClause {
         }
     }
     
-    func setTenseAndPersonAndCreateNewSentenceString(language: LanguageType, tense: Tense, person: Person)->String{
-        if ( headVerb.getClusterType() != .UNK){
-            let hvp = headVerb as! dVerbPhrase
-            hvp.setTense(value: tense)
-            hvp.setPerson(value: person)
-        }
-        
-        if ( headNoun.getClusterType() != .UNK){
-            let hnp = headNoun as! dNounPhrase
-            hnp.setPerson(value: person)
-        }
-        return createNewSentenceString(language: language)
-    }
+    
     
     func getPronoun(language: LanguageType, type : PronounType)->Pronoun{
         switch type{
@@ -310,12 +312,12 @@ class dIndependentAgnosticClause : dClause {
             if  headNoun.getClusterType() == .N || headNoun.getClusterType() == .PersPro {hvp.setPerson(value: headNoun.getPerson())}
             else if headNoun.getClusterType() == .NP {
                 let hnp = headNoun as! dNounPhrase
-                let npPerson = hnp.getPerson()
+                //let npPerson = hnp.getPerson()
                 hvp.setPerson(value: hnp.getPerson())
-                let vpPerson = hvp.getPerson()
-                print("InformHeadVerb: npPerson \(npPerson) ... vpPerson \(vpPerson)")
-                print("... tense = \(hvp.getTense())")
-                
+                //let vpPerson = hvp.getPerson()
+//                print("InformHeadVerb: npPerson \(npPerson) ... vpPerson \(vpPerson)")
+//                print("... tense = \(hvp.getTense())")
+//
                 //inform the clause...
                 setGender(value: hnp.getGender())
                 setPerson(value: hnp.getPerson())
@@ -329,6 +331,29 @@ class dIndependentAgnosticClause : dClause {
     
     func getWorkingSingleList()->[dSingle]{
         return workingSingleList
+    }
+    
+    func dumpWorkingSingleList(language: LanguageType, showPronounTypes:Bool){
+        let workingSingleList = getWorkingSingleList()
+        print("dumpWorkingSingleList: ")
+        for index in 0 ..< workingSingleList.count {
+            let single = workingSingleList[index]
+            if showPronounTypes {
+                let ptype = single.getPronounType().rawValue
+               print("\(index).\(getWordString(language: language, single: single)), \(ptype)")
+            }
+            else{
+               print("\(index).\(getWordString(language: language, single: single))")
+            }
+        }
+    }
+        
+    func getWordString(language: LanguageType, single: dSingle)->String{
+        if single.isPersonalPronounType(){
+            let ppSingle = single as! dPersonalPronounSingle
+            return ppSingle.getWordStringAtLanguage(language: language)
+        }
+        return single.getProcessWordInWordStateData(language: language) + " "
     }
     
     func getSingleList()->[dSingle]{

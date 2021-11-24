@@ -14,29 +14,12 @@ struct CFMorphSentence {
     var indirectObjectPronoun = ""
     
     mutating func applyMorphModel(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
-        let currentLanguage = language
         let workingMorphStruct = inputMorphStruct
         
-        let workingSingleList = m_clause.getWorkingSingleList()
+        //let workingSingleList = m_clause.getWorkingSingleList()
         
         return workingMorphStruct
     }
-    
-    mutating func dumpWorkingSingleList(language: LanguageType, showPronounTypes:Bool){
-        let workingSingleList = m_clause.getWorkingSingleList()
-        print("dumpWorkingSingleList ")
-        for index in 0 ..< workingSingleList.count {
-            let single = workingSingleList[index]
-            if showPronounTypes {
-                let ptype = single.getPronounType().rawValue
-                print("\(index).\(getWordString(language: language, single: single)), \(ptype)")
-            }
-            else{
-                print("\(index).\(getWordString(language: language, single: single))")
-            }
-        }
-    }
-    
     
     //WorkInProgress
     
@@ -86,7 +69,7 @@ struct CFMorphSentence {
     */
     
     mutating func retrieveAppropriatPronounPhrase(language: LanguageType, inputMorphStruct:CFMorphStruct, cfMorphModel : CFMorphModel )->CFMorphStruct{
-        var workingMorphStruct = inputMorphStruct
+        let workingMorphStruct = inputMorphStruct
     
         for cfOperation in cfMorphModel.mpsList{
             print("\ncfOperation: \(cfOperation.morphOperation.rawValue)")
@@ -284,8 +267,6 @@ struct CFMorphSentence {
     */
         
     mutating func getEquivalentPronoun(clause: dIndependentAgnosticClause, type: PronounType, language: LanguageType)->([dSingle], Gender, Number, Person){
-        let equivalentPronoun = clause.getPronoun(language: language, type: .SUBJECT)
-        let equivalentPronounDescription = "subject pronoun"
         let result = clause.getCompositeSentenceString(language: language, targetFunction: .Subject)
         let phraseSingleList = result.0
         let gender = result.1
@@ -362,7 +343,7 @@ struct CFMorphSentence {
         var morphStep = CFMorphStep()
         var workingSingleList = m_clause.getWorkingSingleList()
         print("\nBefore replace")
-        dumpWorkingSingleList(language: language, showPronounTypes:true)
+        m_clause.dumpWorkingSingleList(language: language, showPronounTypes:true)
         var doPhrase = ""
         var breakIndex = 0
         for ssIndex in breakIndex ..< workingSingleList.count {
@@ -406,7 +387,7 @@ struct CFMorphSentence {
         m_clause.setWorkingSingleList(singleList: workingSingleList)
         //
         print("\nAfter replace")
-        dumpWorkingSingleList(language: language, showPronounTypes:true)
+        m_clause.dumpWorkingSingleList(language: language, showPronounTypes:true)
         
         print("\nReplace: \(equivalentPronounDescription) -\(doPhrase)- with \(equivalentPronounString)")
         print("MorphSteps: \(morphStep.part1) +  \(morphStep.part2) + \(morphStep.part3) ")

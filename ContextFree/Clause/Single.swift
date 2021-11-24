@@ -77,6 +77,17 @@ class dSingle  : dCluster
             return "no word string available"
         }
     }
+    
+    func getProcessedStringAtLanguage(language: LanguageType)->String{
+        switch(language){
+        case .English: return m_clusterWord.english
+        case .Spanish: return m_clusterWord.spanish
+        case .French: return m_clusterWord.french
+        default:
+            return "no word string available"
+        }
+    }
+    
     func    getWordString()->String{
         return getString()
     }
@@ -371,10 +382,10 @@ class dDeterminerSingle :  dSingle{
         switch sd.language{
         case .Spanish, .French:
             let det = word as! RomanceDeterminer
-            return det.getForm(gender: sd.gender, number: sd.number)
+            return det.getForm(number: sd.number, person: sd.person, gender: sd.gender)
         case .English:
             let det = word as! EnglishDeterminer
-            return det.getForm(number: sd.number)
+            return det.getForm(number: sd.number, person: sd.person, gender: sd.gender, wordStartsWithVowelSound: false)
         default: return ""
         }
     }
@@ -385,13 +396,13 @@ class dDeterminerSingle :  dSingle{
         switch language{
         case .Spanish:
             let det = SpanishDeterminer(word: word.spanish, type: sd.determinerType)
-            return det.getForm(gender: sd.gender, number: sd.number)
+            return det.getForm(number: sd.number, person: sd.person, gender: sd.gender)
         case .French:
             let det = FrenchDeterminer(word: word.french, type: sd.determinerType)
-            return det.getForm(gender: sd.gender, number: sd.number)
+            return det.getForm(number: sd.number, person: sd.person, gender: sd.gender)
         case .English:
             let det = EnglishDeterminer(word: word.english, type: sd.determinerType)
-            return det.getForm(number: sd.number)
+            return det.getForm(number: sd.number, person: sd.person, gender: sd.gender, wordStartsWithVowelSound: false)
         default: return ""
         }
     }
@@ -483,7 +494,10 @@ class dPersonalPronounSingle : dSingle
         return false
     }
     
-    func setPronounType(pronounType: PronounType){getSentenceData().pronounType = pronounType}
+    func setPronounType(pronounType: PronounType){
+        getSentenceData().pronounType = pronounType
+    }
+    
     override func getPronounType()->PronounType{return getSentenceData().pronounType}
         
     override func getWordStringAtLanguage(language: LanguageType)->String{

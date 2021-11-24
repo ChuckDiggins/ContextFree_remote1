@@ -10,7 +10,6 @@ import Foundation
 struct VerbModelManager{
     mutating func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
         var verb = BVerb()
-        let util = VerbUtilities()
         
         switch language {
         case .Spanish:

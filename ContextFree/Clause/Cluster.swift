@@ -79,8 +79,9 @@ class dCluster {
     func setPerson(value : Person){
         m_sentenceData.person = value    
     }
+    
     func getPerson()->Person{return m_sentenceData.person}
-
+    
     func setTense(value : Tense){
         m_sentenceData.tense = value
     }

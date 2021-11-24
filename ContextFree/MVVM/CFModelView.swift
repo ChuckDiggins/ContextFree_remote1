@@ -50,18 +50,6 @@ class CFModelView: ObservableObject {
         return (cfModel?.getRandomSentenceObject())!
     }
     
-    /*
-    func appendAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String){
-        return cfModel!.appendAgnosticWord(wordType: wordType, spanishWord : spanishWord, frenchWord : frenchWord, englishWord: englishWord)
-    }
-    
-
-    func analyzeAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String)->Bool {
-        return cfModel!.analyzeAgnosticWord(wordType: wordType, spanishWord : spanishWord, frenchWord : frenchWord, englishWord: englishWord)
-    }
-
-    */
-    
     func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
         return cfModel!.analyzeAndCreateBVerb_SPIFE(language: language, verbPhrase: verbPhrase)
     }
@@ -120,6 +108,14 @@ class CFModelView: ObservableObject {
         return cfModel!.getRandomSubjPronounSentence()
     }
     */
+
+    func getNextPerson(currentPerson:Person)->Person{
+        return cfModel!.getNextPerson(currentPerson: currentPerson)
+    }
+    
+    func getRandomPerson()->Person{
+        return cfModel!.getRandomPerson()
+    }
     
     func getRandomTense()->Tense{
         return cfModel!.getRandomTense()

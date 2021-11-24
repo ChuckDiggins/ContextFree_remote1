@@ -200,11 +200,11 @@ class dIndependentClause : dClause {
             if  headNoun.getClusterType() == .N || headNoun.getClusterType() == .PersPro {hvp.setPerson(value: headNoun.getPerson())}
             else if headNoun.getClusterType() == .NP {
                 let hnp = headNoun as! dNounPhrase
-                let npPerson = hnp.getPerson()
+                //let npPerson = hnp.getPerson()
                 hvp.setPerson(value: hnp.getPerson())
-                let vpPerson = hvp.getPerson()
-                print("InformHeadVerb: npPerson \(npPerson) ... vpPerson \(vpPerson)")
-                print("... tense = \(hvp.getTense())")
+                //let vpPerson = hvp.getPerson()
+//                print("InformHeadVerb: npPerson \(npPerson) ... vpPerson \(vpPerson)")
+//                print("... tense = \(hvp.getTense())")
             }
         }
     }

@@ -32,8 +32,7 @@ class dNounSingle : dSingle
     override func copyGuts(newSingle: dSingle){
         putClusterWord(word: newSingle.getClusterWord())
         setSentenceData(data: newSingle.getSentenceData())
-        let sd = getSentenceData()
-        print("in dNounSingle: \(sd.word.word):  \(sd.gender), \(sd.number)")
+        //let sd = getSentenceData()
     }
     
     
@@ -128,6 +127,17 @@ class dNounPhrase : dPhrase {
                 let adj = cluster as! dAdjectiveSingle
                 let adjStr = adj.getWordStringAtLanguage(language: language)
                 sd.setProcessedWord(language: language, str: adjStr)
+                //print("ds: \(adjStr) - sd.processedWord: \(sd.getProcessedWord(language: language))")
+            case .PersPro:
+                let sd = cluster.getSentenceData()
+                sd.gender = npSentenceData.gender
+                sd.number = npSentenceData.number
+                sd.personalPronounType = npSentenceData.personalPronounType
+                sd.pronounType = .SUBJECT
+                let pps = cluster as! dPersonalPronounSingle
+                let pronounString = pps.getWordStringAtLanguage(language: language)
+                sd.setProcessedWord(language: language, str: pronounString)
+                npSentenceData.pronounType = .SUBJECT
                 //print("ds: \(adjStr) - sd.processedWord: \(sd.getProcessedWord(language: language))")
             case .NP:
                 let np = cluster as! dNounPhrase

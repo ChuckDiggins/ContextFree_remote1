@@ -64,4 +64,18 @@ class Word : Hashable, Equatable {
         }
     }
     
+    func getFirstWordStringAtLanguage(language: LanguageType)->String{
+        switch language{
+        case .Spanish:
+            return spanish
+        case .French:
+            return french
+        case .English:
+            return english
+        default: return ""
+        }
+    }
+    
+    
+    
 }

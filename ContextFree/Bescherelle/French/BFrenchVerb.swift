@@ -66,18 +66,28 @@ class BFrenchVerb : BRomanceVerb {
 
         //do some other stuff while we are at it
         m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: m_verbEnding)
-        m_pastParticiple = createPastParticiple()
-        m_gerund = createGerund()
         m_verbModelParseList = bVerbModel.parseVerbModel()
         readModelParseStuff()
-        
+        m_pastParticiple = createPastParticiple()
+        m_gerund = createGerund()
     }//SetPatterns
     
     override func createPastParticiple()->String {
+        let result = hasReplaceEndingForm(tense: .pastParticiple)
+        if result.0.count > 0 {
+            var word = m_verbWord
+            word = VerbUtilities().removeLastLetters(verbWord: word, letterCount: result.0.count)
+            word += result.1
+            return word
+        }
+        
         let word = m_verbStem
         switch m_verbEnding {
         case .AR: return word + "ado"
-        case .ER, .IR, .accentIR: return word + "ido"
+        case .ER: return word + "é"
+        case .IR: return word + "i"
+        case .OIR: return word + "u"
+        case .RE: return word + "s"
         default: return word + "nada"
         }
     }

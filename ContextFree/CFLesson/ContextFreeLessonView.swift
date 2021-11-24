@@ -187,7 +187,7 @@ struct ContextFreeLessonView: View {
         VP.appendNamedPhrase(phrase: PP)
         VP.processPhraseInfo()
         
-        var NP1Copy = NamedPhrase(inputPhrase: NP1, phraseName: "NP1 copy")
+        let NP1Copy = NamedPhrase(inputPhrase: NP1, phraseName: "NP1 copy")
         
         namedPhraseList.removeAll()
         namedPhraseList.append(NP1)

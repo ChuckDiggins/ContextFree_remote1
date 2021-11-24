@@ -7,7 +7,9 @@
 
 import Foundation
 
-class dClause : dCluster {
+class dClause : dCluster, ObservableObject {
+    @Published private(set) var clause = dClause.self
+    
     
     override init(word: Word, clusterType : ContextFreeSymbol){
         super.init(word: word, clusterType: clusterType)

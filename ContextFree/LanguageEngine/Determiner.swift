@@ -68,18 +68,49 @@ class EnglishDeterminer : Determiner {
         super.init(word: word, type : type)
     }
     
-    func getForm(number: Number)->String{
-        switch number {
-        case .singular:
-            return word
-        case .plural:
-            if plural.count == 0 {
-                if type == .definite {plural = "the"}
-                else if type == .indefinite {plural = "some"}
-                else if type == .possessive {plural = "my"}
+    func getForm(number: Number, person: Person, gender: Gender, wordStartsWithVowelSound : Bool)->String{
+        var detForm = "the"
+        switch type {
+        case .definite:
+            detForm = "the"
+        case .indefinite:
+            if number == .singular {
+                detForm = "a"
+                if wordStartsWithVowelSound {detForm = "an"}
             }
-            return plural
+            else { detForm = "some" }
+        case .possessive:
+            switch person {
+            case .S1:
+                detForm = "my"
+            case .S2:
+                detForm = "your"
+            case .S3:
+                switch gender {
+                case .masculine:
+                    detForm = "his"
+                case .feminine:
+                    detForm = "her"
+                case .either:
+                    detForm = "their"
+                }
+                
+            case .P1:
+                detForm = "our"
+            case .P2:
+                detForm = "your"
+            case .P3:
+                detForm = "their"
+            }
+        case .demonstrative:
+            if number == .singular { detForm = "that"  }
+            else { detForm = "those"}
+        case .interrogative:
+            detForm = "this"
+        case .partative:
+            detForm = "the"
         }
+        return detForm
     }
     
     func isDeterminer(word: String)-> (Bool, DeterminerType, Number ){
@@ -114,7 +145,7 @@ class RomanceDeterminer : Determiner {
         super.init(json: json, language: language)
     }
     
-    func getForm(gender: Gender, number: Number)->String{
+    func getForm(number: Number, person: Person, gender: Gender)->String{
         switch gender {
         case .feminine:
             switch number {
@@ -157,14 +188,14 @@ class SpanishDeterminer : RomanceDeterminer {
         super.init(json: json, language: .Spanish)
     }
     
-    override func getForm(gender: Gender, number: Number)->String{
+    override func getForm(number: Number, person: Person, gender: Gender)->String{
         switch type{
         case .indefinite:
             return getIndefiniteForm(gender: gender, number : number)
         case .definite:
             return getDefiniteForm(gender: gender, number : number)
         case .possessive:
-            return getPossessiveForm( person: .S3, gender : gender, number : number)
+            return getPossessiveForm( person: person, gender : gender, number : number)
         case .demonstrative:
             return getDemonstrativeForm(gender: gender, number : number)
         case .interrogative:
@@ -342,14 +373,14 @@ class FrenchDeterminer : RomanceDeterminer {
         super.init()
     }
     
-    override func getForm(gender: Gender, number: Number)->String{
+    override func getForm(number: Number, person: Person, gender: Gender)->String{
         switch type{
         case .indefinite:
             return getIndefiniteForm(gender: gender, number : number)
         case .definite:
             return getDefiniteForm(gender: gender, number : number)
         case .possessive:
-            return getPossessiveForm( person: .S3, gender : gender, number : number)
+            return getPossessiveForm( person: person, gender : gender, number : number)
         case .demonstrative:
             return getDemonstrativeForm(gender: gender, number : number)
         case .interrogative:

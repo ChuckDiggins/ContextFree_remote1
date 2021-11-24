@@ -376,13 +376,13 @@ struct PersonalPronounGames: View {
     }
     
     func convertToEnglishWordOrder(){
-        var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
+        //var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
         morphStruct.clear()
         //morphStruct  = cfMorphSentence.applyMorphModel(language: currentLanguage, inputMorphStruct: morphStruct, cfMorphModel: m_englishPhraseCFMM)
     }
     
     func testCFMorphModel(){
-        var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
+//        var cfMorphSentence = CFMorphSentence(m_clause: m_clause)
         morphStruct.clear()
     
         //create the subject morph model first
@@ -486,7 +486,6 @@ struct PersonalPronounGames: View {
         
         print("Subject pronoun: \(subjectPronoun) \nDirect object pronoun: \(directObjectPronoun) \nIndirect object pronoun: \(indirectObjectPronoun)")
         
-        
         var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .Subject)
         let subjList = result.targetSingleList
         let subjString = result.targetString
@@ -504,6 +503,8 @@ struct PersonalPronounGames: View {
         print("Indirect object string = \(inDoString)")
         
         //print ("Subj count: \(subjList.count), doCount: \(doList.count), inDoCount: \(inDoList.count)")
+        
+        //MARK: <#singleList#>
         
         let singleList = m_clause.getSingleList()
         
@@ -555,13 +556,13 @@ struct PersonalPronounGames: View {
         currentFunctionString = Function[currentFunction].rawValue
         switch currentFunction {
         case 0:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .SUBJECT)
-            var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .Subject)
+            let result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .Subject)
             currentString = result.targetString
         case 1:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .DIRECT_OBJECT)
-            var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .DirectObject)
+            let result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .DirectObject)
             currentString = result.targetString
         case 2:  currentEquivalentPronoun = m_clause.getPronounString(language: m_currentLanguage, type: .INDIRECT_OBJECT)
-            var result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .IndirectObject)
+            let result = m_clause.getCompositeSentenceString(language: m_currentLanguage, targetFunction: .IndirectObject)
             currentString = result.targetString
         default: break
         }

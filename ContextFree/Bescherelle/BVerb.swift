@@ -82,7 +82,6 @@ class BVerb : Word, Identifiable {
             verbStuff = ("", .ER, "", false)
         }
         
-        let util = VerbUtilities()
         m_verbWord = verbStuff.verbWord
         m_residualPhrase = verbStuff.residualPhrase
         m_isReflexive = verbStuff.isReflexive

@@ -70,11 +70,11 @@ struct CFModel{
         
         m_randomWordLists = RandomWordLists(wsp: m_wsp)
         m_randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleClause)
-        
-        loadJsonPhrasesAndClauses()
-        for tense in m_tenseList {
-            print("active tense: \(tense.rawValue)")
-        }
+//
+//        loadJsonPhrasesAndClauses()
+//        for tense in m_tenseList {
+//            print("active tense: \(tense.rawValue)")
+//        }
         
     }
 
@@ -159,7 +159,7 @@ struct CFModel{
        
 
     
-    func getRandomSentenceObject()->RandomSentence{
+    func getRandomSentenceObject()->RandomSentence?{
         return m_randomSentence
     }
     
@@ -216,6 +216,17 @@ struct CFModel{
 
     func getParser()->WordStringParser{
         return m_wsp
+    }
+    
+    func getRandomPerson()->Person{
+        return Person.allCases[Int.random(in: 0 ..< 6)]
+    }
+    
+    func getNextPerson(currentPerson: Person)->Person{
+        var personIndex = currentPerson.rawValue
+        personIndex += 1
+        if personIndex > 5 {personIndex = 0}
+        return Person.allCases[personIndex]
     }
     
         
