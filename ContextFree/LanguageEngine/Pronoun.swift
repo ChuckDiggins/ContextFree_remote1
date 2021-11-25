@@ -231,6 +231,11 @@ class FrenchPronoun : Pronoun {
         }
     }
     
+    func getReflexive(person: Person, startsWithVowelSound: Bool)->String{
+        if startsWithVowelSound {return getReflexiveContraction(person: person)}
+        return getReflexive(person: person)
+    }
+    
     func getReflexive(person: Person)->String{
         switch person{
         case .S1: return "me"

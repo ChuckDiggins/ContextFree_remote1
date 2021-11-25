@@ -12,7 +12,7 @@ class BRomanceVerb: BVerb {
     var m_stemChanging = false
     var m_stemFrom = ""
     var m_stemTo = ""
-    
+    //----------------------------------
     var bVerbModel = RomanceVerbModel(id: -1, modelVerb: "")
     var m_orthoPresent = false
     var m_orthoPresentFrom = ""

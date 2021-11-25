@@ -42,6 +42,7 @@ var fromWord = ""
 var toWord = ""
 }
 
+//Chuck - NOvember 25
 class BVerb : Word, Identifiable {
     var id = UUID()
     

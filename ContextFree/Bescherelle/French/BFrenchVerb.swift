@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 enum EndingType {
     case RE_ENDING
     case RE_ENDING1

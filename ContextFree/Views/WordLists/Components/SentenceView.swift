@@ -51,7 +51,8 @@ struct SentenceView: View {
                                 clauseModel.currentSingleIndex = index
                                 clauseModel.newWordSelected[clauseModel.currentSingleIndex].toggle()
                                 self.changeWord()
-                            }){
+                            })
+                            {
                                 //Text("\(index)")
                                 switch language {
                                 case .English:
