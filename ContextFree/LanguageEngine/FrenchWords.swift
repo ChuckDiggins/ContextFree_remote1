@@ -17,7 +17,7 @@ struct FrenchWords{
     var articleList = Array<Word>()
     var conjunctionList = Array<Word>()
     var determinerList = Array<Word>()
-    var nounList = Array<Noun>()
+    var nounList = Array<Word>()
     var prepositionList = Array<Word>()
     var verbList = Array<Word>()
     var pronounList = Array<Word>()

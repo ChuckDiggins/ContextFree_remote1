@@ -28,8 +28,8 @@ class BRomanceVerb: BVerb {
     
     var restrictions = [String]()
     
-    var m_morphStruct = [MorphStruct]()
-    var m_initialMorphObject = [MorphStruct]()
+    //var m_morphStruct = [MorphStruct]()
+    //var m_initialMorphObject = [MorphStruct]()
 
     var replaceMultipleList = [ReplaceMultipleForm]()
     var replaceModelList = [ReplaceModelForm]()
@@ -194,39 +194,27 @@ class BRomanceVerb: BVerb {
     func isRE()->Bool{
         return m_verbEnding == VerbEnding.RE
     }
+     
+//    func initializeMorphStructs(){
+//        //create and initialize the morph struct
+//        
+//        for person in Person.allCases {
+//            var morphStep = MorphStep()
+//            var verbForm = m_verbWord
+//            if isReflexive() { verbForm = verbForm + "se" }
+//            morphStep.verbForm = verbForm
+//            morphStep.part1 = verbForm
+//            morphStep.comment = "start with the infinitive ->" + morphStep.part1
+//            let morphStruct = MorphStruct(person: person)
+//            morphStruct.append(morphStep : morphStep)
+//            morphStructManager.setBoth(person: person, ms: morphStruct)
+//        }
+//    }
     
-     
-     
-    func initializeMorphStructs(){
-        //create and initialize the morph struct
-        
-        for person in Person.allCases {
-            //m_initialMorphObject.clear()
-            m_initialMorphObject.append(MorphStruct(person: person))
-            m_morphStruct.append(MorphStruct(person: person))
-            var morphStep = MorphStep()
-            var verbForm = m_verbWord
-            if isReflexive() { verbForm = verbForm + "se" }
-            morphStep.index = 0
-            morphStep.morphType = .startWithInfinitive
-            morphStep.verbForm = verbForm
-            morphStep.part1 = verbForm
-            morphStep.comment = "start with the infinitive ->" + morphStep.part1
-            m_initialMorphObject[person.rawValue].clear()
-            m_initialMorphObject[person.rawValue].append(morphStep : morphStep)
-            m_morphStruct[person.rawValue].clear()
-            m_morphStruct[person.rawValue].append(morphStep : morphStep)
-            //if person == .S1 {
-            //    print("initialize:  morphStepCount = \( m_morphStruct[person.rawValue].count())")
-           // }
-        }
-
-    }
     func getBescherelleInfo()->String {
         return "Besch #\(bVerbModel.id) (\(bVerbModel.modelVerb))"
     }
-    
-    
+
     func createPastParticiple()->String {
         return ""
     }
@@ -236,8 +224,8 @@ class BRomanceVerb: BVerb {
     }
     
     func getConjugateForm(tense : Tense, person : Person)->String {
-        let ms = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
-        return ms.finalVerbForm()
+        getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
+        return morphStructManager.getFinalVerbForm(person: person)
     }
     
     func setPatterns (verbModel : RomanceVerbModel) {
@@ -283,16 +271,14 @@ class BRomanceVerb: BVerb {
         let vrp = Pronoun()
         
         for person in Person.allCases {
+            var morphStruct = MorphStruct(person: person)
             var morphStep = MorphStep()
-            morphStep.index = 0
-            morphStep.morphType = .nada
             morphStep.verbForm = m_verbWord
             morphStep.part1 = m_verbWord
             morphStep.part2 = "se"
             morphStep.comment = "grab the reflexive pronoun -> se"
-            m_initialMorphObject[person.rawValue].append(morphStep : morphStep)
-            m_morphStruct[person.rawValue].append(morphStep : morphStep)
-            
+            morphStruct.append(morphStep : morphStep)
+
             let startsWithVowelSound = VerbUtilities().startsWithVowelSound(characterArray: m_verbWord)
             
             var addSpace = false
@@ -305,70 +291,56 @@ class BRomanceVerb: BVerb {
             default: break
             }
             morphStep = MorphStep()
-            morphStep.index = 0
-            morphStep.morphType = .nada
             morphStep.part1 = ""
             morphStep.part2 = vrp.getReflexive(language: languageType, person: person, startsWithVowelSound: startsWithVowelSound)   //only relevant for French
             if addSpace { morphStep.part2 += " " }
             morphStep.part3 = m_verbWord
             morphStep.verbForm = morphStep.part1 + morphStep.part2 + morphStep.part3
             morphStep.comment = "convert to person and move to front of the verb"
-            m_initialMorphObject[person.rawValue].append(morphStep : morphStep)
-            m_morphStruct[person.rawValue].append(morphStep : morphStep)
+            morphStruct.append(morphStep : morphStep)
+            morphStructManager.setBoth(person: person, ms: morphStruct)
         }
 
     }
     
-    func setMorphStruct(person : Person, morphStruct : MorphStruct){
-        m_morphStruct[person.rawValue].copyContents(input: morphStruct)
-    }
- 
-    func resetMorphStructs() {
-        for p in 0..<6 {
-            m_morphStruct[p].clear()
-        }
-    }
-    
-    func resetMorphStructIndices() {
-        for p in 0..<6 {
-            m_morphStruct[p].resetMorphIndex()
-        }
-    }
-
-    func restartMorphSteps(person : Person){
-        m_morphStruct[person.rawValue].resetMorphIndex()
-    }
-    
-    func isFinalMorphStep(person : Person)->Bool{
-        return m_morphStruct[person.rawValue].isFinalMorphStep()
-    }
-    
-    func incrementMorphStep(person : Person)->MorphStep {
-        m_morphStruct[person.rawValue].incrementIndex()
-        return getCurrentMorphStep(person : person)
-    }
-    
-    func getCurrentMorphIndex(person : Person)-> Int {
-        return m_morphStruct[person.rawValue].getMorphIndex()
-    }
-    
-    func getFinalVerbForm(person: Person)->String{
-        getMorphStruct(person : person).finalVerbForm()
-    }
-    
-    func getCurrentMorphStep(person : Person)->MorphStep{
-        return m_morphStruct[person.rawValue].getCurrentMorphStep()
-    }
-    
-    func getMorphStepCount(person: Person)->Int{
-        return getMorphStruct(person : person).count()
-    }
-    
-    func getMorphStruct(person : Person)-> MorphStruct {
-        return m_morphStruct[person.rawValue]
-    }
-    
-
-
-  
+//    func setMorphStruct(person : Person, morphStruct : MorphStruct){
+//        morphStructManager.set(person: person, ms: morphStruct)
+//    }
+//
+//    func resetMorphStructs() {
+//        morphStructManager.restoreToInitialState()
+//    }
+//
+//    func resetMorphStructIndices() {
+//        morphStructManager.resetCurrentMorphStepIndices()
+//    }
+//
+//    func restartMorphSteps(person : Person){
+//        morphStructManager.resetCurrentMorphStepIndex(person: person)
+//    }
+//
+//    func isFinalMorphStep(person : Person)->Bool{
+//        morphStructManager.get(person: person).isFinalMorphStep()
+//    }
+//
+//    func incrementMorphStep(person : Person)->MorphStep {
+//        morphStructManager.getNextMorphStep(person: person)
+//    }
+//
+//    func getCurrentMorphIndex(person : Person)-> Int {
+//        morphStructManager.getCurrentMorphStepIndex(person: person)
+//    }
+//
+//    func getCurrentMorphStep(person : Person)->MorphStep{
+//        morphStructManager.getCurrentMorphStep(person: person)
+//    }
+//
+//    func getMorphStepCount(person: Person)->Int{
+//        morphStructManager.getMorphStepCount(person: person)
+//    }
+//
+//    func getMorphStruct(person : Person)-> MorphStruct {
+//        morphStructManager.get(person: person)
+//    }
+//
 }

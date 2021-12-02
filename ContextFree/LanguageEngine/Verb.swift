@@ -212,6 +212,8 @@ class Verb : Word {
         return jv
     }
     
+    func createBVerb(){
+    }
     
     func isNormal()->Bool{
         for vt in typeList{
@@ -242,6 +244,10 @@ class Verb : Word {
         getBVerb().getResidualPhrase()
     }
 
+    func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+        MorphStruct(person: person)
+    }
+    
 }
 
 class RomanceVerb : Verb {
@@ -276,6 +282,13 @@ class RomanceVerb : Verb {
         }
         return (false, .present, .S1)
     }
+    
+    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+        MorphStruct(person: person)
+    }
+    
+    override func createBVerb(){
+    }
 
 }
 
@@ -293,13 +306,16 @@ class FrenchVerb : RomanceVerb {
         super.init(word: word, type : type)
     }
     
-    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
+    override func createBVerb(){
         if ( bVerb.m_verbWord.count == 0){
             let bv = BFrenchVerb(verbPhrase: french)
             let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
             bv.setPatterns(verbModel : verbModel)
             setBVerb(bVerb: bv)
         }
+    }
+    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
+        createBVerb()
         let bFrVerb = bVerb as! BFrenchVerb
         switch tense {
         case .pastParticiple: return bFrVerb.getPastParticiple()
@@ -315,6 +331,11 @@ class FrenchVerb : RomanceVerb {
     func isReflexive()->Bool{
         let bFrVerb = bVerb as! BFrenchVerb
         return bFrVerb.m_isReflexive
+    }
+    
+    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+        getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
+        return getMorphStruct(tense: tense, person: person)
     }
 }
 
@@ -332,15 +353,18 @@ class SpanishVerb : RomanceVerb {
         super.init(word: word, type : type)
     }
     
-    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String {
+    override func createBVerb(){
         if ( bVerb.m_verbWord.count == 0){
             let bv = BSpanishVerb(verbPhrase: spanish)
             let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
             bv.setPatterns(verbModel : verbModel)
             setBVerb(bVerb: bv)
         }
+    }
+    
+    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String {
+        createBVerb()
         let bSpVerb = bVerb as! BSpanishVerb
-        
         
         switch tense {
         case .pastParticiple: return bSpVerb.getPastParticiple()
@@ -357,6 +381,11 @@ class SpanishVerb : RomanceVerb {
     func isReflexive()->Bool{
         let bSpVerb = bVerb as! BSpanishVerb
         return bSpVerb.m_isReflexive
+    }
+    
+    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+        getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
+        return getMorphStruct(tense: tense, person: person)
     }
     
 }
@@ -377,13 +406,26 @@ class EnglishVerb : Verb {
         singularForm = word + "s"
     }
     
+    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+        getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
+        return getMorphStruct(tense: tense, person: person)
+    }
+    
     func isConjugateForm(word: String)->(Bool, Tense, Person){
         if ( word == singularForm ){return (true, .present, .S3)}
         if ( word == self.word ){return (true, .present, .S1)}
         return (false, .present, .S1)
     }
     
+    override func createBVerb(){
+        if ( bVerb.m_verbWord.count == 0){
+            let bv = BEnglishVerb(verbPhrase: english, separable: .both)
+            setBVerb(bVerb: bv)
+        }
+    }
+    
     func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
+        createBVerb()
         let bEnglishVerb = bVerb as! BEnglishVerb
         switch tense {
         case .pastParticiple: return bEnglishVerb.getPastParticiple()

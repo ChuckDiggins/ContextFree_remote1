@@ -26,7 +26,7 @@ struct VerbModelManager{
         }
         
     }
-    
+
     
     mutating func createEnglishBVerb(verbPhrase: String, separable: Separable ) -> BEnglishVerb {
         let brv = BEnglishVerb(verbPhrase : verbPhrase, separable: separable)

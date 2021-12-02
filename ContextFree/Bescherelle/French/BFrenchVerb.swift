@@ -103,49 +103,56 @@ class BFrenchVerb : BRomanceVerb {
     }
     
     override func getConjugateForm(tense : Tense, person : Person)->String {
-        let ms = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
-        return ms.finalVerbForm()
+        getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
+        return morphStructManager.getFinalVerbForm(person: person)
     }
     
     //these patterns are not mutually exclusive
     
-    override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool) -> MorphStruct {
+    override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool) {
         
         //simple indicative tenses
         let tenseIndex =  tense.getIndex()
         
-        
+        var ms = self.morphStructManager.get(person: person)
+
         if tenseIndex <= Tense.future.getIndex() {
-            let ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
-            setMorphStruct(person: person, morphStruct: ms)
-            return ms
+            self.morphStructManager.dumpSkinny(message: " ... before verb conjugation ... person: \(person.rawValue) ... getConjugatedMorphStruct ")
+            ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
+            self.morphStructManager.dumpSkinny(message: "... after verb conjugation ... person: \(person.rawValue) ... getConjugatedMorphStruct")
         }
-        
+             
         if ( tenseIndex == Tense.imperative.getIndex()){
+            ms = ActiveVerbConjugationFrench().conjugateThisImperativeForm(verb: self, person: person, conjugateEntirePhrase: conjugateEntirePhrase)
             
-            let ms = ActiveVerbConjugationFrench().conjugateThisImperativeForm(verb: self, person: person, conjugateEntirePhrase: conjugateEntirePhrase)
-            setMorphStruct(person: person, morphStruct: ms)
-            return ms
+            
         }
         
         //simple subjunctive tenses
         
         if tenseIndex >= Tense.presentSubjunctive.getIndex() && tenseIndex <= Tense.imperfectSubjunctiveSE.getIndex() {
-            //print("get p3 verb word = \(getP3PreteriteForm())")
             let ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
-            setMorphStruct(person: person, morphStruct: ms)
-            return ms
         }
         
         //perfect tenses - indicative and subjunctive
         
         if tenseIndex >= Tense.presentPerfect.getIndex() && tenseIndex <= Tense.conditionalProgressive.getIndex() {
             let ms = ActiveVerbConjugationFrench().conjugateThisCompoundVerb( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
-            setMorphStruct(person: person, morphStruct: ms)
-            return ms
         }
     
-        return MorphStruct(person: person)
+        //add residual phrase here
+        if conjugateEntirePhrase && m_residualPhrase.count > 0 {
+            var finalForm = ms.finalVerbForm()
+            var morphStep = MorphStep()
+            morphStep.isFinalStep = true
+            morphStep.comment = "Add residual phrase -> \(m_residualPhrase)"
+            morphStep.part1 = finalForm
+            morphStep.part2 += " " + m_residualPhrase
+            morphStep.verbForm = finalForm + " " + m_residualPhrase
+            ms.append(morphStep : morphStep)
+        }
+        
+        setMorphStruct(person: person, morphStruct: ms)
     }
     
     func restoreMorphStructs()
@@ -157,8 +164,7 @@ class BFrenchVerb : BRomanceVerb {
     
     func restoreMorphStructs(person : Person)
     {
-        m_morphStruct[person.rawValue].clear()
-        m_morphStruct[person.rawValue].copyContents(input: m_initialMorphObject[person.rawValue])
+        morphStructManager.restoreToInitialState()
     }
 
     

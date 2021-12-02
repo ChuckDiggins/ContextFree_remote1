@@ -7,21 +7,6 @@
 
 import Foundation
 
-struct VerbSettings{
-    var tense : Tense
-    var person : Person
-}
-
-struct NounSettings{
-    var number : Number
-}
-
-
-
-struct SentenceData {
-    var word = Word()
-    var data = WordStateData()
-}
 
 struct Sentence  {
     var grammarLibrary = CFGrammarLibrary()

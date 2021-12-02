@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+//Chuck 11/25
 import UIKit
 
 class JsonPronoun: Codable, CustomStringConvertible {
@@ -52,7 +52,7 @@ class JsonPronounManager {
         clearWords()
         for v in myMultiLingualPronounList{
             myWordList.append(v)
-            print("JsonPronounManager: appending determiner \(v.spanish), \(v.french), \(v.english)")
+//            print("JsonPronounManager: appending determiner \(v.spanish), \(v.french), \(v.english)")
             if myWordList.count >= total {break}
         }
         encodeWords()

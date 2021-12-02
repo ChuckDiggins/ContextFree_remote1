@@ -181,6 +181,10 @@ struct ContextFreeMapping {
         return toNP
     }
     
+    func createMappingSubjectToSubjectPronoun(){
+        
+    }
+    
     func createMappingRomanceToEnglishNP1()->[MappingPair]{
         var pairList = [MappingPair]()
         pairList.append( MappingPair(cfs1: .Art, cfs2:.Art) )
