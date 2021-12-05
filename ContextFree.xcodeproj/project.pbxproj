@@ -39,6 +39,7 @@
 		6E228A31274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E228A30274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift */; };
 		6E273EAF26B9ACDB002D219A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E273EAE26B9ACDB002D219A /* HeaderView.swift */; };
 		6E273EB126B9B40A002D219A /* LanguageChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E273EB026B9B40A002D219A /* LanguageChooserView.swift */; };
+		6E30924C275D7E53009BEDB4 /* GitHubTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E30924B275D7E53009BEDB4 /* GitHubTest.swift */; };
 		6E32457526F0EEFE00863A46 /* JSONDictionaryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E32457426F0EEFE00863A46 /* JSONDictionaryManager.swift */; };
 		6E68AA8E26A7758200E53331 /* DetailedPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68AA8D26A7758200E53331 /* DetailedPhraseView.swift */; };
 		6E68AA9026A880AF00E53331 /* JSONLesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68AA8F26A880AF00E53331 /* JSONLesson.swift */; };
@@ -176,6 +177,7 @@
 		6E228A30274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPhrasesIn3LanguagesView.swift; sourceTree = "<group>"; };
 		6E273EAE26B9ACDB002D219A /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		6E273EB026B9B40A002D219A /* LanguageChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageChooserView.swift; sourceTree = "<group>"; };
+		6E30924B275D7E53009BEDB4 /* GitHubTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubTest.swift; path = "../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Utilities/GitHubTest.swift"; sourceTree = "<group>"; };
 		6E32457426F0EEFE00863A46 /* JSONDictionaryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDictionaryManager.swift; sourceTree = "<group>"; };
 		6E68AA8D26A7758200E53331 /* DetailedPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedPhraseView.swift; sourceTree = "<group>"; };
 		6E68AA8F26A880AF00E53331 /* JSONLesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONLesson.swift; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 		6ED7B90127514FBB004D5BBA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				6E30924B275D7E53009BEDB4 /* GitHubTest.swift */,
 				6ED7B90227514FCA004D5BBA /* EnumsNumberGenderPersonAndTense.swift */,
 				6EE7BDB0261A188100840EB7 /* EnumPartOfSpeech.swift */,
 				6EEAF2A3261F7DC40085E3C6 /* WordStringParser.swift */,
@@ -720,6 +723,7 @@
 				6E046442262F2F1D009A0937 /* SpanishVerbList.swift in Sources */,
 				6EAD8E102667E6A800ADC6F3 /* RegularFrenchVerb.swift in Sources */,
 				6E7A3EA32678094E0070364C /* JSONNouns.swift in Sources */,
+				6E30924C275D7E53009BEDB4 /* GitHubTest.swift in Sources */,
 				6EC671A5267EDAA300AEBE31 /* JSONPrepositions.swift in Sources */,
 				6E6A4929263C69A40096C36F /* RandomWords.swift in Sources */,
 				6E046444262F2F1D009A0937 /* StemChangingConjugation.swift in Sources */,
