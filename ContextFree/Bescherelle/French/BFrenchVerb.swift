@@ -63,7 +63,7 @@ class BFrenchVerb : BRomanceVerb {
        
         //bRomanceVerb specific
         initializeMorphStructs()
-        if isReflexive() { addReflexiveMorphing() }
+        if isReflexive() { addFrenchReflexiveMorphing() }
 
         //do some other stuff while we are at it
         m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: m_verbEnding)
@@ -117,32 +117,28 @@ class BFrenchVerb : BRomanceVerb {
         var ms = self.morphStructManager.get(person: person)
 
         if tenseIndex <= Tense.future.getIndex() {
-            self.morphStructManager.dumpSkinny(message: " ... before verb conjugation ... person: \(person.rawValue) ... getConjugatedMorphStruct ")
             ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
-            self.morphStructManager.dumpSkinny(message: "... after verb conjugation ... person: \(person.rawValue) ... getConjugatedMorphStruct")
         }
              
         if ( tenseIndex == Tense.imperative.getIndex()){
-            ms = ActiveVerbConjugationFrench().conjugateThisImperativeForm(verb: self, person: person, conjugateEntirePhrase: conjugateEntirePhrase)
-            
-            
+            ms = ActiveVerbConjugationFrench().conjugateThisImperativeForm(verb: self, person: person, conjugateEntirePhrase: conjugateEntirePhrase)       
         }
         
         //simple subjunctive tenses
         
         if tenseIndex >= Tense.presentSubjunctive.getIndex() && tenseIndex <= Tense.imperfectSubjunctiveSE.getIndex() {
-            let ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
+            ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
         }
         
         //perfect tenses - indicative and subjunctive
         
         if tenseIndex >= Tense.presentPerfect.getIndex() && tenseIndex <= Tense.conditionalProgressive.getIndex() {
-            let ms = ActiveVerbConjugationFrench().conjugateThisCompoundVerb( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
+            ms = ActiveVerbConjugationFrench().conjugateThisCompoundVerb( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
         }
     
         //add residual phrase here
         if conjugateEntirePhrase && m_residualPhrase.count > 0 {
-            var finalForm = ms.finalVerbForm()
+            let finalForm = ms.finalVerbForm()
             var morphStep = MorphStep()
             morphStep.isFinalStep = true
             morphStep.comment = "Add residual phrase -> \(m_residualPhrase)"
@@ -151,7 +147,6 @@ class BFrenchVerb : BRomanceVerb {
             morphStep.verbForm = finalForm + " " + m_residualPhrase
             ms.append(morphStep : morphStep)
         }
-        
         setMorphStruct(person: person, morphStruct: ms)
     }
     

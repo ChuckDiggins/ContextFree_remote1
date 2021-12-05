@@ -8,6 +8,10 @@
 import Foundation
 
 struct VerbModelManager{
+    var romanceVerbModel = RomanceVerbModel()
+    var englishVerbModel = EnglishVerbModel()
+    var modelName = ""
+    
     mutating func analyzeAndCreateBVerb_SPIFE(language: LanguageType, verbPhrase: String)->(isValid: Bool, verb: BVerb){
         var verb = BVerb()
         
@@ -30,26 +34,25 @@ struct VerbModelManager{
     
     mutating func createEnglishBVerb(verbPhrase: String, separable: Separable ) -> BEnglishVerb {
         let brv = BEnglishVerb(verbPhrase : verbPhrase, separable: separable)
-        
-        let verbModel = m_englishVerbModelConjugation.getVerbModel(verbWord: brv.m_verbWord)
-        brv.setModel(verbModel : verbModel)
-
+        englishVerbModel = m_englishVerbModelConjugation.getVerbModel(verbWord: brv.m_verbWord)
+        brv.setModel(verbModel : englishVerbModel)
+        modelName = brv.getBescherelleInfo()
         return brv
     }
 
     mutating func createSpanishBVerb(verbPhrase: String) -> BSpanishVerb {
         let brv = BSpanishVerb(verbPhrase : verbPhrase)
-        
-        let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: brv.m_verbWord)
-        brv.setPatterns(verbModel : verbModel)
+        romanceVerbModel = m_spanishVerbModelConjugation.getVerbModel(language: .Spanish, verbWord: brv.m_verbWord)
+        brv.setPatterns(verbModel : romanceVerbModel)
+        modelName = brv.getBescherelleInfo()
         return brv
     }
     
     mutating func createFrenchBVerb(verbPhrase: String) -> BFrenchVerb {
         let brv = BFrenchVerb(verbPhrase : verbPhrase)
-        
-        let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: brv.m_verbWord)
+        let verbModel = m_frenchVerbModelConjugation.getVerbModel(language: .French, verbWord: brv.m_verbWord)
         brv.setPatterns(verbModel : verbModel)
+        modelName = brv.getBescherelleInfo()
         return brv
     }
     

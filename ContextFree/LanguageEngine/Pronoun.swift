@@ -4,7 +4,7 @@
 //
 //  Created by Charles Diggins on 3/30/21.
 //
-
+//    ,,,
 import Foundation
 
 class Pronoun : Word {

@@ -13,7 +13,7 @@ class BRomanceVerb: BVerb {
     var m_stemFrom = ""
     var m_stemTo = ""
     //----------------------------------
-    var bVerbModel = RomanceVerbModel(id: -1, modelVerb: "")
+    var bVerbModel = RomanceVerbModel()
     var m_orthoPresent = false
     var m_orthoPresentFrom = ""
     var m_orthoPresentTo = ""
@@ -235,16 +235,6 @@ class BRomanceVerb: BVerb {
         initializeMorphStructs()
         if isReflexive() { addReflexiveMorphing() }
         
-        /*
-        let printThis = false
-        
-        if printThis {
-            for person in Person.allCases {
-                print("In SetPatterns creating morph structs - final form \(person.getIndex()) = \(getFinalVerbForm(person : person))")
-            }
-        }
-        
- */
         //do some other stuff while we are at it
         m_verbStem = getVerbStem(verbWord : m_verbWord , verbEnding: m_verbEnding)
         m_pastParticiple = createPastParticiple()
@@ -265,9 +255,51 @@ class BRomanceVerb: BVerb {
     
     // - MARK: Reflexive Morphing
 
-    func addReflexiveMorphing(){
+    func addFrenchReflexiveMorphing(){
+        
         //create and initialize the morph structs
         
+        let vrp = Pronoun()
+        let startsWithVowelSound = VerbUtilities().startsWithVowelSound(characterArray: m_verbWord)
+        
+        //for reflexive verbs, start morphing with grabbing the reflexive pronoun
+        
+        for person in Person.allCases {
+//            var morphStruct = morphStructManager.get(person: person)
+            var morphStruct = MorphStruct(person: person)
+            var morphStep = MorphStep()
+            morphStep.verbForm = m_verbWord
+            morphStep.part1 = ""
+            morphStep.part2 = "se "
+            morphStep.part3 = m_verbWord
+            morphStep.comment = "grab reflexive pronoun -> se"
+            morphStruct.append(morphStep : morphStep)
+            
+            //if this is a contraction, do not add space  m' or me
+            var contractThis = true
+            if person == .P1 || person == .P2 { contractThis = false }
+            if !startsWithVowelSound { contractThis = false }
+            
+            morphStep = MorphStep()
+            morphStep.part1 = ""
+            morphStep.part2 = vrp.getReflexive(language: languageType, person: person, startsWithVowelSound: startsWithVowelSound)   //only relevant for French
+            if !contractThis { morphStep.part2 += " " }
+            morphStep.part3 = m_verbWord
+            morphStep.verbForm = morphStep.part1 + morphStep.part2 + morphStep.part3
+            if startsWithVowelSound && contractThis {
+                morphStep.comment = "\(m_verbWord) starts with vowel sound: convert 'se' to \(morphStep.part2) "}
+            else {
+                morphStep.comment = "convert to \(morphStep.part2)"
+            }
+            morphStruct.append(morphStep : morphStep)
+            morphStructManager.setBoth(person: person, ms: morphStruct)
+        }
+
+    }
+    
+    func addReflexiveMorphing(){
+        
+        //create and initialize the morph structs  
         let vrp = Pronoun()
         
         for person in Person.allCases {
@@ -280,27 +312,15 @@ class BRomanceVerb: BVerb {
             morphStruct.append(morphStep : morphStep)
 
             let startsWithVowelSound = VerbUtilities().startsWithVowelSound(characterArray: m_verbWord)
-            
-            var addSpace = false
-            switch languageType {
-            case .Spanish:
-                addSpace = true
-            case .French:
-                if person == .P1 || person == .P2 { addSpace = true }
-                if !startsWithVowelSound { addSpace = true }
-            default: break
-            }
             morphStep = MorphStep()
             morphStep.part1 = ""
-            morphStep.part2 = vrp.getReflexive(language: languageType, person: person, startsWithVowelSound: startsWithVowelSound)   //only relevant for French
-            if addSpace { morphStep.part2 += " " }
+            morphStep.part2 = vrp.getReflexive(language: languageType, person: person, startsWithVowelSound: startsWithVowelSound) + " "
             morphStep.part3 = m_verbWord
             morphStep.verbForm = morphStep.part1 + morphStep.part2 + morphStep.part3
-            morphStep.comment = "convert to person and move to front of the verb"
+            morphStep.comment = "convert to \(morphStep.part2) and move in front of the verb"
             morphStruct.append(morphStep : morphStep)
             morphStructManager.setBoth(person: person, ms: morphStruct)
         }
-
     }
     
 //    func setMorphStruct(person : Person, morphStruct : MorphStruct){

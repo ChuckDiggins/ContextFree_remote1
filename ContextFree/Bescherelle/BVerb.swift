@@ -54,6 +54,7 @@ class BVerb : Word, Identifiable {
     var m_residualPhrase = ""
     var m_isReflexive = false           //not used for English
     var m_verbEnding = VerbEnding.AR    //not used for English
+    
     var m_pastParticiple = ""
     var m_gerund = ""
     private var m_isConjugated = false
@@ -106,9 +107,9 @@ class BVerb : Word, Identifiable {
             morphStruct.append(morphStep : morphStep)
             morphStructManager.setBoth(person: person, ms: morphStruct)
         }
-        morphStructManager.dumpSkinny(message: "BVerb: initializeMorphStructs")
-        
+        //morphStructManager.dumpSkinny(message: "BVerb: initializeMorphStructs")
     }
+    
     func isPhrasalVerb()->Bool{
         m_residualPhrase.count > 1
     }
