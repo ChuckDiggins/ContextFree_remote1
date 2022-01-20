@@ -94,10 +94,10 @@ struct BuildSingletonPhraseView : View {
                             }.font(.headline)
                             .foregroundColor(.orange)
                     ){
-                        ForEach( 0..<namedPhrase.getAssociatedWordsForCluster(index: 0).count, id:\.self) { index in
-                            Button(namedPhrase.getAssociatedWordsForCluster(index: 0)[index].word, action: {
-                                })
-                        }
+//                        ForEach( 0..<namedPhrase.getAssociatedWordsForCluster(index: 0).count, id:\.self) { index in
+//                            Button(namedPhrase.getAssociatedWordsForCluster(index: 0)[index].word, action: {
+//                                }
+//                        }
 //                        .onDelete(perform: delete)
 //                        .onMove(perform: move)
 

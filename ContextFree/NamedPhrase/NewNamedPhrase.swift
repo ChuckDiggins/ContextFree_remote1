@@ -18,6 +18,11 @@ class  NewNamedPhrase : dPhrase {
 
     private var m_randomWord : RandomWordLists!
 
+    override init(){
+        phraseName = "No name yet"
+        super.init(word: Word(), clusterType: ContextFreeSymbol.AMB, data: WordStateData())
+    }
+    
     init(inputPhrase: NewNamedPhrase, phraseName: String){
         m_randomWord = inputPhrase.m_randomWord
         self.phraseName = phraseName
@@ -47,25 +52,25 @@ class  NewNamedPhrase : dPhrase {
 
 
 
-
-func createPhrase(phraseType: ContextFreeSymbol){
-    switch phraseType{
-        //        case .N: m_phrase = dNounSingle()
-        //        case .V: m_phrase = dVerbSingle()
-        //        case .Adj: m_phrase = dAdjectiveSingle()
-        //        case .Det: m_phrase = dDeterminerSingle()
-        //        case .Adv: m_phrase = dAdverbSingle()
-        //        case .P: m_phrase = dPrepositionSingle()
-        //        case .C: m_phrase = dConjunctionSingle()
-
-        //        case .NP: m_phrase = dNounPhrase()
-        //        case .VP: m_phrase = dVerbPhrase()
-        //        case .AdvP: m_phrase = dAdverbPhrase()
-        //        case .PP: m_phrase = dPrepositionPhrase()
-        //        case .AP: m_phrase = dAdjectivePhrase()
-    default: break
-    }
-}
+//
+//func createPhrase(phraseType: ContextFreeSymbol){
+//    switch phraseType{
+//    case .N: self = dNounSingle()
+//    case .V: m_phrase = dVerbSingle()
+//    case .Adj: m_phrase = dAdjectiveSingle()
+//    case .Det: m_phrase = dDeterminerSingle()
+//    case .Adv: m_phrase = dAdverbSingle()
+//    case .P: m_phrase = dPrepositionSingle()
+//    case .C: m_phrase = dConjunctionSingle()
+//        
+//    case .NP: m_phrase = dNounPhrase()
+//    case .VP: m_phrase = dVerbPhrase()
+//    case .AdvP: m_phrase = dAdverbPhrase()
+//    case .PP: m_phrase = dPrepositionPhrase()
+//    case .AP: m_phrase = dAdjectivePhrase()
+//    default: break
+//    }
+//}
 
 func getAssociatedWordsForCluster(index: Int)->[Word]{
     return getCluster(index: index).getAssociatedWordList()

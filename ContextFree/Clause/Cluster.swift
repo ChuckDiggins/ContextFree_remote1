@@ -17,6 +17,7 @@ class dCluster : Hashable {
         hasher.combine(self.getClusterWord().spanish)
         hasher.combine(self.getClusterWord().french)
     }
+    private var m_clusterName = ""
     var m_clusterType : ContextFreeSymbol
     var m_parentClusterType = ContextFreeSymbol.UNK
     var m_clusterFunction = ContextFreeFunction.None
@@ -40,6 +41,14 @@ class dCluster : Hashable {
     
     func replaceWord(newWord: Word){
         m_clusterWord = newWord
+    }
+    
+    func setClusterName(name: String){
+        m_clusterName = name
+    }
+    
+    func getClusterName()->String{
+        return m_clusterName
     }
     
     func replaceClusterWordWithRandomAssociatedWord(){
