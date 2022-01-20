@@ -224,7 +224,7 @@ class BRomanceVerb: BVerb {
     }
     
     func getConjugateForm(tense : Tense, person : Person)->String {
-        getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
+        let _ = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
         return morphStructManager.getFinalVerbForm(person: person)
     }
     

@@ -9,7 +9,6 @@ import Foundation
 
 
 class dPhrase : dCluster {
-    
     override init(word: Word, clusterType : ContextFreeSymbol, data: WordStateData){
         super.init(word: word, clusterType: clusterType, data: data)
     }
@@ -18,11 +17,17 @@ class dPhrase : dCluster {
         super.init(word: Word(), clusterType: .UNK)
     }
     
-
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     var m_clusterList = Array<dCluster>()
     func getClusterCount()->Int{return m_clusterList.count}
     func getClusterList()->[dCluster]{ return m_clusterList}
+    
+    func getCluster(index: Int)->dCluster{
+        if ( index < m_clusterList.count ){ return m_clusterList[index] }
+
+        return dCluster()
+    }
+    
     func appendCluster(cluster: dCluster){
         if cluster.getWordType() == .N {
             m_sentenceData.gender = cluster.getGender()
@@ -279,7 +284,8 @@ class dPhrase : dCluster {
     }
     
     func processInfo(){
-
+        let parentClusterType = getClusterType()
+        
         //print("ClusterType: \(getClusterType().rawValue): clusterCount = \(getClusterList().count)")
         
         if getClusterType() == .NP {
@@ -292,6 +298,7 @@ class dPhrase : dCluster {
         let number = getNumber()
         
         for cluster in getClusterList() {
+            cluster.setParentClusterType(clusterType: parentClusterType)
             let clusterType = cluster.getClusterType()
             switch clusterType {
             case .Det:

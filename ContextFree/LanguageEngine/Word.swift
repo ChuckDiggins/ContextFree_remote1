@@ -16,9 +16,16 @@ class Word : Hashable, Equatable {
     var spanish = ""
     var french = ""
     
+    init(word: String, spanish: String, french: String, english: String, wordType: WordType){
+        self.word = word
+        self.wordType = wordType
+        self.english = english
+        self.spanish = spanish
+        self.french = french
+    }
+    
     init(word: String, wordType: WordType){
         self.word = word
-        //self.def = def
         self.wordType = wordType
         self.english = ""
         self.spanish = ""
@@ -27,7 +34,6 @@ class Word : Hashable, Equatable {
     
     init(){
         self.word = ""
-        //self.def = ""
         self.wordType = .unknown
     }
     
@@ -36,7 +42,7 @@ class Word : Hashable, Equatable {
     }
     
     static func ==(lhs: Word, rhs: Word)->Bool{
-        return lhs.word == rhs.word
+        return lhs.spanish == rhs.spanish && lhs.french == rhs.french && lhs.english == rhs.english && lhs.wordType == rhs.wordType
     }
     
     func getWordType()->WordType{

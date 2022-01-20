@@ -30,6 +30,14 @@ class JsonAdjective: Codable, CustomStringConvertible {
     }
 }
 
+//For Michelle Carpenter - Capítulo 3
+var MichelleCarpeterAdjectiveList3: [JsonAdjective] = [
+    JsonAdjective(spanish: "dulce", english: "sweet", french: "douce", adjectiveType : "A", nounLikes : "*", position: "F"),
+    JsonAdjective(spanish: "salado", english: "salty", french: "salé", adjectiveType : "A", nounLikes : "*", position: "F"),
+    JsonAdjective(spanish: "sabroso", english: "tasty", french: "délicieux", adjectiveType : "A", nounLikes : "*", position: "F"),
+    JsonAdjective(spanish: "picante", english: "spicy", french: "épicé", adjectiveType : "A", nounLikes : "*", position: "F"),
+    ]
+
 var myMultiLingualAdjList: [JsonAdjective] = [
     JsonAdjective(spanish: "este", english: "this",    french: "ce", adjectiveType : "D", nounLikes : "*", position: "P"),
     JsonAdjective(spanish: "amable", english: "friendly", french: "amical", adjectiveType : "A", nounLikes : "*", position: "F"),
@@ -91,6 +99,10 @@ var myMultiLingualAdjList: [JsonAdjective] = [
     JsonAdjective(spanish: "púrpura", english: "violet", french: "violet", adjectiveType : "A", nounLikes : "*", position: "F"),
     JsonAdjective(spanish: "viviendo", english: "vivid", french: "vivant", adjectiveType : "A", nounLikes : "*", position: "F"),
     JsonAdjective(spanish: "real", english: "true", french: "vrai", adjectiveType : "A", nounLikes : "*", position: "P"),
+    JsonAdjective(spanish: "dulce", english: "sweet", french: "douce", adjectiveType : "A", nounLikes : "*", position: "F"),
+    JsonAdjective(spanish: "salado", english: "salty", french: "salé", adjectiveType : "A", nounLikes : "*", position: "F"),
+    JsonAdjective(spanish: "sabroso", english: "tasty", french: "délicieux", adjectiveType : "A", nounLikes : "*", position: "F"),
+    JsonAdjective(spanish: "picante", english: "spicy", french: "épicé", adjectiveType : "A", nounLikes : "*", position: "F"),
     ]
 
 
@@ -106,9 +118,16 @@ class JsonAdjectiveManager {
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
-        for v in myMultiLingualAdjList{
+        var wordList = [JsonAdjective]()
+        switch collectionType {
+        case .All:
+            wordList = myMultiLingualAdjList
+        case .Simple:
+            wordList = myMultiLingualAdjList
+        }
+        for v in wordList{
             myWordList.append(v)
             print("JsonAdjectiveManager: appending adjective \(v.spanish), \(v.french), \(v.english)")
             if myWordList.count >= total {break}

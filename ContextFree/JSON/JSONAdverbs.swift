@@ -38,7 +38,11 @@ class JsonAdverb: Codable, CustomStringConvertible {
 // D = doubt - posiblemente, tal vez
 // A = affirmation - ciertamente
 // E = exclusion - apenas
+
 var myMultiLingualAdverbList: [JsonAdverb] = [
+    JsonAdverb(spanish: "siempre", english: "always", french: "toujours", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
+    JsonAdverb(spanish: "nunca", english: "never", french: "jamais", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
+    JsonAdverb(spanish: "jamás", english: "never", french: "jamais", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
     // M = manner - bien, así, mejor
     JsonAdverb(spanish: "bien", english: "well",    french: "bien", adverbType : "M", verbLikes : "*", adjLikes : "*", position: "P"),
     JsonAdverb(spanish: "mal", english: "badly",    french: "mal", adverbType : "M", verbLikes : "*", adjLikes : "*", position: "P"),
@@ -88,11 +92,10 @@ var myMultiLingualAdverbList: [JsonAdverb] = [
     JsonAdverb(spanish: "entonces", english: "then", french: "alors", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
     JsonAdverb(spanish: "aún", english: "yet", french: "encore", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
     JsonAdverb(spanish: "en fin", english: "at last", french: "à la fin", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
-    JsonAdverb(spanish: "siempre", english: "always", french: "toujours", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
-    JsonAdverb(spanish: "nunca", english: "never", french: "jamais", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
-    JsonAdverb(spanish: "jamás", english: "never", french: "jamais", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
+    
     JsonAdverb(spanish: "a veces", english: "sometimes", french: "parfois", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
     JsonAdverb(spanish: "de vez en cuando", english: "once in a while", french: "de temps en temps", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
+    JsonAdverb(spanish: "todos los dias", english: "everyday", french: "tous les jours", adverbType : "T", verbLikes : "*", adjLikes : "*", position: "P"),
     // I = intensity - poco, más, cuanto
     JsonAdverb(spanish: "poco", english: "a little", french: "en peu", adverbType : "I", verbLikes : "*", adjLikes : "*", position: "P"),
     JsonAdverb(spanish: "muy", english: "very", french: "très", adverbType : "I", verbLikes : "*", adjLikes : "*", position: "P"),
@@ -138,9 +141,16 @@ class JsonAdverbManager {
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
-        for v in myMultiLingualAdverbList{
+        var wordList = [JsonAdverb]()
+        switch collectionType {
+        case .All:
+            wordList = myMultiLingualAdverbList
+        case .Simple:
+            wordList = myMultiLingualAdverbList
+        }
+        for v in wordList{
             myWordList.append(v)
             print("JsonPrepositionManager: appending adverb \(v.spanish), \(v.french), \(v.english)")
             if myWordList.count >= total {break}

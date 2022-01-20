@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ShowNounStuffView: View {
-    @EnvironmentObject var cfModelView : CFModelView
+    @EnvironmentObject var awmModelView : AWMModelView
     @State var spanishPhrase: String
     @State var frenchPhrase: String
     @State var englishPhrase: String
@@ -16,7 +16,7 @@ struct ShowNounStuffView: View {
     var body: some View {
         VStack{
             Text("Noun plurals:")
-            Text("Spanish: \("")")
+            Text("Spanish: \(spanishPhrase)")
             Text("French: \(frenchPhrase)")
             Text("English: \(englishPhrase)")
         }
@@ -27,7 +27,7 @@ struct ShowNounStuffView: View {
 }
 
 struct ShowVerbStuffView: View {
-    @EnvironmentObject var cfModelView : CFModelView
+    @EnvironmentObject var awmModelView : AWMModelView
     @State var spanishPhrase: String
     @State var frenchPhrase: String
     @State var englishPhrase: String
@@ -42,7 +42,7 @@ struct ShowVerbStuffView: View {
 }
 
 struct ShowGenericWordStuffView: View {
-    @EnvironmentObject var cfModelView : CFModelView
+    @EnvironmentObject var awmModelView : AWMModelView
     @State var spanishPhrase: String
     @State var frenchPhrase: String
     @State var englishPhrase: String
@@ -58,8 +58,8 @@ struct ShowGenericWordStuffView: View {
 
 
 
-struct Add3Words: View {
-    @EnvironmentObject var cfModelView : CFModelView
+struct AddAgnosticWord: View {
+    @EnvironmentObject var awmModelView : AWMModelView
     
     var wordType : WordType
     @State var output: String = ""
@@ -74,17 +74,20 @@ struct Add3Words: View {
     
     var body: some View {
         Text("Fill \(wordType.rawValue)")
+        Text("Current \(wordType.rawValue) count")
+        
         VStack{
             HStack{
                 Text("Spanish:")
                 TextField("Spanish phrase:", text: $spanishPhrase, onEditingChanged: {
                     self.typing = $0
+                        
                     monitorTextEditFields()
                 }, onCommit: {
                     self.output = self.input
                     monitorTextEditFields()
                 }
-                )
+                ).foregroundColor(.black)
                     .background(Color.white)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
@@ -98,6 +101,7 @@ struct Add3Words: View {
                     self.output = self.input
                     monitorTextEditFields()
                 })
+                    .foregroundColor(.black)
                     .background(Color.white)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
@@ -111,6 +115,7 @@ struct Add3Words: View {
                     self.output = self.input
                     monitorTextEditFields()
                 })
+                    .foregroundColor(.black)
                     .background(Color.white)
                     .padding(.trailing,5 )
                 //.disableAutocorrection(true)
@@ -138,6 +143,8 @@ struct Add3Words: View {
                 ShowGenericWordStuffView(spanishPhrase: spanishPhrase, frenchPhrase: frenchPhrase, englishPhrase: englishPhrase)
             }
             
+        }.onAppear{
+//            awmModelView.getWordCount(wordType: wordType)
         }
     }
     
@@ -194,8 +201,8 @@ struct Add3Words: View {
 }
 
 
-struct Add3Words_Previews: PreviewProvider {
+struct AddAgnosticWord_Previews: PreviewProvider {
     static var previews: some View {
-        Add3Words(wordType: WordType.verb)
+        AddAgnosticWord(wordType: WordType.verb)
     }
 }

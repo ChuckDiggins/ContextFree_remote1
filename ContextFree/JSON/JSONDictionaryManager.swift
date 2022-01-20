@@ -24,6 +24,7 @@ struct JSONDictionaryManager {
     var jsonClauseManager = JsonClauseManager()
     let bUseJsonStarterFiles = true
     var verbModelManager = VerbModelManager()
+    var jsonWordCollection = JSONWordCollection()
     
     mutating func setWordStringParser(wsp: WordStringParser){
         m_wsp = wsp
@@ -32,34 +33,67 @@ struct JSONDictionaryManager {
     mutating func loadJsonWords(){
         if bUseJsonStarterFiles {
             //jsonNounManager.encodeWords()  //this should wipe out existing jsonVerbs
-            jsonNounManager.encodeInternalWords(total: 2000)
+            jsonNounManager.encodeInternalWords(collectionType: .All, total: 2000)
             
             //jsonVerbManager.encodeVerbs()  //this should wipe out existing jsonVerbs
-            jsonVerbManager.encodeInternalVerbs(total: 2000)
-            jsonAdjectiveManager.encodeInternalWords(total: 2000)
-            jsonPrepositionManager.encodeInternalWords(total: 2000)
-            jsonAdverbManager.encodeInternalWords(total: 2000)
+            jsonVerbManager.encodeInternalVerbs(collectionType: .All, total: 2000)
+            jsonAdjectiveManager.encodeInternalWords(collectionType: .All, total: 2000)
+            jsonPrepositionManager.encodeInternalWords(collectionType: .All, total: 2000)
+            jsonAdverbManager.encodeInternalWords(collectionType: .All, total: 2000)
             jsonConjunctionManager.encodeInternalWords(total: 2000)
             jsonDeterminerManager.encodeInternalWords(total: 2000)
             jsonPronounManager.encodeInternalWords(total: 2000)
+            jsonWordCollection.encodeInternalWords(total: 2000)
         }
         jsonVerbManager.decodeVerbs()
         createDictionaryFromJsonWords(wordType: .verb)
+        
         jsonNounManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .noun)
+        
         jsonAdjectiveManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .adjective)
+        
         jsonPrepositionManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .preposition)
+        
         jsonDeterminerManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .determiner)
-        jsonDeterminerManager.decodeWords()
+        
+        jsonAdverbManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .adverb)
-        jsonDeterminerManager.decodeWords()
+        
+        jsonConjunctionManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .conjunction)
+        
         jsonPronounManager.decodeWords()
         createDictionaryFromJsonWords(wordType: .pronoun)
+        
+        jsonWordCollection.decodeWords()
+        createWordGroupFromJsonWordCollection()
     }
+    
+    //use json-constructed word to find the existing word in the dictionaries
+    
+    mutating func createWordGroupFromJsonWordCollection(){
+        for i in 0 ..< jsonWordCollection.getWordCount() {
+            let jsonWord = jsonWordCollection.getWordAt(index: i)
+            let existingWord = m_wsp.findWordInDictionary(word: jsonWord)
+            if !existingWord.word.isEmpty {
+                print("Matched:  jsonWord \(jsonWord.wordType): \(jsonWord.spanish) - \(jsonWord.french) - \(jsonWord.english)")
+                m_wsp.addWordToWorkingDictionary(wd: existingWord)
+            } else {
+                print("Not matched: jsonWord \(jsonWord.wordType): \(jsonWord.spanish) - \(jsonWord.french) - \(jsonWord.english)")
+                }
+        }
+        print("Working noun count = \(m_wsp.getWorkingListOfType(wordType: .noun).count)")
+        print("Working verb count = \(m_wsp.getWorkingListOfType(wordType: .verb).count)")
+        print("Working adverb count = \(m_wsp.getWorkingListOfType(wordType: .adverb).count)")
+        print("Working adjective count = \(m_wsp.getWorkingListOfType(wordType: .adjective).count)")
+        print("Working preposition count = \(m_wsp.getWorkingListOfType(wordType: .preposition).count)")
+        print("createWordGroupFromJsonWordCollection: working word count =\(m_wsp.getWorkingList().count)")
+    }
+        
     
     mutating func createDictionaryFromJsonWords(wordType: WordType){
         switch wordType{
@@ -108,6 +142,21 @@ struct JSONDictionaryManager {
         }
     }
     
+//    mutating func createAndAppendAgnosticWordFromJsonWord(jn: JSONWord){
+//        var wordType = WordType.ambiguous
+//        switch jn.wordType {
+//        case "noun": wordType = WordType.noun
+//        case "verb": wordType = WordType.verb
+//        case "adjective": wordType = WordType.adjective
+//        case "adverb": wordType = WordType.adverb
+//        case "preposition": wordType = WordType.preposition
+//        case "conjunction": wordType = WordType.conjunction
+//        default: break
+//        }
+//        let word = Word(word: jn.english, spanish: jn.spanish, french: jn.french, english: jn.english, wordType: wordType)
+//        m_wsp.addNounToDictionary(noun: noun)
+//    }
+
     mutating func createAndAppendNounFromJsonNoun(jn: JsonNoun){
         let noun = Noun(jsonNoun: jn, language: .Agnostic)
         m_wsp.addNounToDictionary(noun: noun)

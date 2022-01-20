@@ -201,7 +201,49 @@ enum WordType : String {
     case unknown
 }
 
+func getClusterTypeFromString(str: String)->ContextFreeSymbol{
+    switch str{
+    case "N": return .N
+    case "V": return .V
+    case "Adj": return .Adj
+    case "Adv": return .Adv
+    case "P": return .P
+    case "C": return .C
+    case "NP": return .NP
+    case "VP": return .VP
+    case "PP": return .PP
+    case "AP": return .AP
+    case "AdvP": return .AdvP
+    default: return .AMB
+    }
+}
+        
+        
+func getWordTypeFromString(str: String)->WordType{
+    switch str{
+    case "noun": return .noun
+    case "verb": return .verb
+    case "adjective": return .adjective
+    case "adverb": return .adverb
+    case "preposition": return .preposition
+    case "conjunction": return .conjunction
+    default: return .ambiguous
+    }
+}
 
+
+func getWordType(clusterType: ContextFreeSymbol)->WordType{
+    switch clusterType{
+    case .Adj: return .adjective
+    case .Adv: return .adverb
+    case .Det: return .determiner
+    case .N: return .noun
+    case .P: return .preposition
+    case .C: return .conjunction
+    case .V: return .verb
+    default: return .ambiguous
+    }
+}
 
 enum PunctuationType  : String {
     case period
@@ -275,6 +317,7 @@ enum VerbType : Int, Codable{
     case phrasal
     case phrasalSeparable
     case impersonal //weather stuff:  orvallar(drizzle), llover(rain)
+    case passive
     case defective //
 }
 
@@ -295,6 +338,7 @@ func getVerbType(index:Int)->VerbType{
     case 6: return .phrasalSeparable
     case 7: return .defective
     case 8: return .impersonal //weather stuff:  orvallar(drizzle), llover(rain)
+    case 9: return .passive
     default: return .normal
     }
 }
@@ -310,6 +354,7 @@ func getVerbTypesAsStringList()->[String]{
     strList.append("S")
     strList.append("D")
     strList.append("I")
+    strList.append("B")
     return strList
 }
 
@@ -324,6 +369,7 @@ func getVerbTypeAsLetter(index:Int)->String{
     case 6: return "S"
     case 7: return "D"
     case 8: return "I"
+    case 9: return "B"
     default: return "N"
     }
 }
@@ -338,6 +384,7 @@ func getVerbTypeFromLetter(letter: String)->VerbType{
     case "P": return .phrasal
     case "S": return .phrasalSeparable
     case "D": return .defective
+    case "B": return .passive
     case "I": return .impersonal
     default:  return .normal
     }

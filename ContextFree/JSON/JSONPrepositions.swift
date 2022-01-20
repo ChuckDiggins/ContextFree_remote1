@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Foundation
-
 import UIKit
 
 class JsonPreposition: Codable, CustomStringConvertible {
@@ -27,6 +25,12 @@ class JsonPreposition: Codable, CustomStringConvertible {
         self.prepositionType = prepositionType
     }
 }
+
+//For Michelle Carpenter - Capítulo 3
+//var MichelleCarpeterPrepositionList3: [JsonPreposition] = [
+//    JsonPreposition(spanish: "con", english: "with", french: "avec", prepositionType : "G"),
+//    JsonPreposition(spanish: "sin", english: "without", french: "sans", prepositionType : "G"),
+//    ]
 
 var jsonPrepositionList: [JsonPreposition] = [
     JsonPreposition(spanish: "a", english: "to",    french: "à", prepositionType : "S"),
@@ -60,9 +64,17 @@ class JsonPrepositionManager {
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
-        for v in jsonPrepositionList{
+        var wordList = [JsonPreposition]()
+        switch collectionType {
+        case .All:
+            wordList = jsonPrepositionList
+        case .Simple:
+            wordList = jsonPrepositionList
+        }
+        
+        for v in wordList{
             myWordList.append(v)
             print("JsonPrepositionManager: appending preposition \(v.spanish), \(v.french), \(v.english)")
             if myWordList.count >= total {break}

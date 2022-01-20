@@ -9,29 +9,55 @@ import SwiftUI
 
 class  ClauseModel: ObservableObject {
     @Published var currentSingleIndex: Int
+    @Published var maxLines = 1
     @Published var singleIndexList : [[Int]]
     @Published var singleList : [dSingle]
     @Published var englishSingleList : [dSingle]
     @Published var newWordSelected : [Bool]
     @Published var backgroundColor : [Color]
     
-    init(currentSingleIndex: Int, singleIndexList: [[Int]], singleList : [dSingle], englishSingleList : [dSingle], newWordSelected : [Bool], backGroundColor : [Color]){
+    init(currentSingleIndex: Int, maxLines: Int, singleIndexListForEachLine: [[Int]],
+         singleList : [dSingle],
+         englishSingleList : [dSingle],
+         newWordSelected : [Bool], backGroundColor : [Color]){
         self.currentSingleIndex = currentSingleIndex
-        self.singleIndexList = singleIndexList
+        self.singleIndexList = singleIndexListForEachLine
         self.singleList = singleList
         self.englishSingleList = englishSingleList
         self.newWordSelected = newWordSelected
         self.backgroundColor = backGroundColor
+        self.maxLines = maxLines
     }
     
     init(){
-        self.currentSingleIndex = 1
+        self.currentSingleIndex = 0
         self.singleIndexList = [[Int]]()
         self.singleList = [dSingle]()
         self.englishSingleList = [dSingle]()
         self.newWordSelected = [Bool]()
         self.backgroundColor = [Color]()
+        self.maxLines = 0
     }
+    
+    func set(currentSingleIndex: Int, maxLines: Int,
+             singleIndexListForEachLine: [[Int]],
+             singleList : [dSingle],
+             englishSingleList : [dSingle],
+             newWordSelected : [Bool],
+             backGroundColor : [Color]){
+        self.currentSingleIndex = currentSingleIndex
+        self.singleIndexList = singleIndexListForEachLine
+        self.singleList = singleList
+        self.englishSingleList = englishSingleList
+        self.newWordSelected = newWordSelected
+        self.backgroundColor = backGroundColor
+        self.maxLines = maxLines
+        
+        for single in singleList {
+            print("Clause model.set: \(single.getClusterWord().word)")
+        }
+    }
+    
 }
 
 struct SentenceView: View {
@@ -44,7 +70,7 @@ struct SentenceView: View {
     var body: some View {
 //        GeometryReader{ geometry in
             VStack {
-                ForEach((0..<2), id:\.self ){ line in
+                ForEach((0..<clauseModel.maxLines), id:\.self ){ line in
                     HStack{
                         ForEach(clauseModel.singleIndexList[line], id: \.self){index in
                             Button(action: {
@@ -53,7 +79,6 @@ struct SentenceView: View {
                                 self.changeWord()
                             })
                             {
-                                //Text("\(index)")
                                 switch language {
                                 case .English:
                                     Text(clauseModel.englishSingleList[index].getProcessWordInWordStateData(language: language))

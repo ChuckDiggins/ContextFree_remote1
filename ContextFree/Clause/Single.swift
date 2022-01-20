@@ -8,12 +8,14 @@
 import Foundation
 
 
-class dSingle  : dCluster
+class dSingle  : dCluster, Identifiable
 /*------------------------------------------------------------------
  Purpose: provide a general class for handling general single  word
  classes.
  ------------------------------------------------------------------*/
 {
+
+    
     //var m_clusterWord : Word
     
     override init(word: Word, clusterType : ContextFreeSymbol, data: WordStateData){
@@ -24,13 +26,15 @@ class dSingle  : dCluster
         super.init(word: Word(), clusterType: .UNK)
     }
     
-    static func ==(lhs: dSingle, rhs: dSingle) -> Bool {
-        return lhs.getClusterWord() == rhs.getClusterWord() && lhs.getSentenceData() == rhs.getSentenceData()
+    init(clusterType: ContextFreeSymbol){
+        super.init(word: Word(), clusterType: clusterType)
     }
+    
     
     func startsWithVowelSound()->Bool{
         return VerbUtilities().startsWithVowelSound(characterArray: getClusterWord().word)
     }
+    
     
     var m_partOfPronounPhrase = PronounType.none
     
@@ -46,6 +50,7 @@ class dSingle  : dCluster
         putClusterWord(word: newSingle.getClusterWord())
         setSentenceData(data: newSingle.getSentenceData())
     }
+    
     
     func getClusterCount()->Int{return m_clusterList.count}
     func getClusterList()->[dCluster]{ return m_clusterList}

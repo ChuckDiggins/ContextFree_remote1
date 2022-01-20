@@ -652,33 +652,13 @@ struct VerbUtilities {
     //determineVerbEnding determines what type verb AR, ER or IR
     func  determineVerbEnding (verbWord: String)-> VerbEnding
     {
-        var verbType : VerbEnding
-        
-        if (verbWord.hasSuffix("ar"))
-        {
-            verbType = VerbEnding.AR
-        }
-        else if (verbWord.hasSuffix("er"))
-        {
-            verbType = VerbEnding.ER
-        }
-        else if (verbWord.hasSuffix("ir"))
-        {
-            verbType = VerbEnding.IR
-        }
-        else if (verbWord.hasSuffix("ír"))
-        {
-            verbType = VerbEnding.accentIR  //oír and reír
-        }
-        else if (verbWord.hasSuffix("re"))
-        {
-            verbType = VerbEnding.OIR
-        }
-        
-        else {
-            verbType = VerbEnding.none
-        }
-        return verbType
+    if verbWord.hasSuffix("oir"){ return  VerbEnding.OIR }
+    if  verbWord.hasSuffix("ar"){ return VerbEnding.AR }
+    if verbWord.hasSuffix("er") {return VerbEnding.ER  }
+    if verbWord.hasSuffix("ir")  { return VerbEnding.IR  }
+    if verbWord.hasSuffix("ír") { return VerbEnding.accentIR } //oír and reír
+    if verbWord.hasSuffix("re") { return VerbEnding.RE }   //joindre (French)
+     return VerbEnding.none
     }
 
 

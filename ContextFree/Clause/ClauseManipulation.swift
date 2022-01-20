@@ -8,32 +8,35 @@
 import Foundation
 
 struct clauseManipulation{
+    var m_clause = dIndependentAgnosticClause()
+    var m_englishClause = dIndependentAgnosticClause()
     
     func createRandomClause(cfModelView: CFModelView, tense: Tense, randomPhraseType: RandomPhraseType)->(dIndependentAgnosticClause, dIndependentAgnosticClause){
-        var clause = dIndependentAgnosticClause()
-        var englishClause = dIndependentAgnosticClause()
-        clause = cfModelView.getRandomAgnosticSentence(rft: randomPhraseType)
-        var currentPerson = clause.getPerson()
+        let clause = cfModelView.getRandomAgnosticSentence(rft: randomPhraseType)
+        let currentPerson = clause.getPerson()
         let fs  = clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: tense, person: currentPerson)
         print("French phrase: \(fs)")
         let ss  = clause.setTenseAndPersonAndCreateNewSentenceString(language: .Spanish, tense: tense, person: currentPerson)
         print("Spanish phrase: \(ss)")
         
-        englishClause = dIndependentAgnosticClause()
+        let englishClause = dIndependentAgnosticClause()
         englishClause.copy(inClause: clause)
         englishClause.convertRomancePhraseOrderToEnglishPhraseOrder()
         let es  = englishClause.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: tense, person: currentPerson)
         print("English phrase: \(es)")
-        currentPerson = clause.getPerson()
         return (clause, englishClause)
     }
     
-    func changeWordInClause(cfModelView: CFModelView, clause: dIndependentAgnosticClause, single: dSingle, isSubject: Bool){
+    func changeWordInClause(cfModelView: CFModelView, clause: dIndependentAgnosticClause, single: dSingle, isSubject: Bool)->dIndependentAgnosticClause{
         let randomSentence = cfModelView.getRandomSentenceObject()
         let tense = clause.getTense()
         var person = clause.getPerson()
         //let single = singleList[currentSingleIndex]
         var wsd = single.getSentenceData()
+//        var tempSingleList = clause.getSingleList()
+//        for single in tempSingleList {
+//            print("Before - changeWordInClause: \(single.getClusterWord().word)")
+//        }
         
         switch wsd.wordType {
         case .PersPro:
@@ -71,14 +74,18 @@ struct clauseManipulation{
         }
         wsd = single.getSentenceData()
         clause.processInfo()
-        
+
         //these are for resetting various parameters for each language/sentence 
 //        var sentenceString : String!
         _ = clause.setTenseAndPersonAndCreateNewSentenceString(language: .Spanish, tense: tense, person: person)
         _ = clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: tense, person: person)
         _ = clause.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: tense, person: person)
-        //updateCurrentSentenceViewStuff()
-        //wordSurgery(single: singleList[currentSingleIndex])
+        
+//        tempSingleList = clause.getSingleList()
+//        for single in tempSingleList {
+//            print("After after - changeWordInClause: \(single.getClusterWord().word)")
+//        }
+        return clause
     }
     
     enum FrenchContractionType{

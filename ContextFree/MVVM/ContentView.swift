@@ -13,23 +13,6 @@ struct ContentView: View {
         NavigationView {
             
             List {
-                
-                NavigationLink(destination: Add3Words(wordType: .noun)){
-                    Text("Add words in 3 Languages")
-                }.frame(width: 200, height: 50)
-                .foregroundColor(.black)
-                .padding(.leading, 10)
-                .background(Color(UIColor(named: "Color4")!))
-                .cornerRadius(25)
-                
-                NavigationLink(destination: AddVerbToDictionary()){
-                    Text("Add Verbs in 3 Languages")
-                }.frame(width: 200, height: 50)
-                .foregroundColor(.black)
-                .padding(.leading, 10)
-                .background(Color(UIColor(named: "Color5")!))
-                .cornerRadius(25)
-                
                 NavigationLink(destination: MultiVerbConjugation()){
                     Text("Multi Verbs")
                 }.frame(width: 200, height: 50)
@@ -38,12 +21,12 @@ struct ContentView: View {
                 .background(Color(UIColor(named: "Color1")!))
                 .cornerRadius(25)
                 
-//                NavigationLink(destination: SentenceParserView()){
-//                    Text("Sentence Parser")
-//                }.frame(width: 200, height: 50)
-//                .padding(.leading, 10)
-//                .background(Color.orange)
-//                .cornerRadius(10)
+                NavigationLink(destination: FilledPhraseView()){
+                    Text("Construct filled phrases")
+                }.frame(width: 200, height: 50)
+                .padding(.leading, 10)
+                .background(Color.orange)
+                .cornerRadius(10)
                 
                 NavigationLink(destination: PersonalPronounGames(colors: [Color.red, Color.blue, Color.green, Color.yellow])){
                     Text("Personal Pronouns Play")

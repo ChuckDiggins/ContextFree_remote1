@@ -32,10 +32,3 @@ struct CategoryView: View {
         }
     }
 }
-
-struct AdjectiveListView_Previews: PreviewProvider {
-    static var previews: some View {
-        //AdjectiveListView(onSelectedCategory: (String)->() )  //
-        CategoryView(onSelectedCategory: { _ in })  //ignores the category and doesn't do anything
-    }
-}

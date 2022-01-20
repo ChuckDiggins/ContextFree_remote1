@@ -20,7 +20,7 @@ class Verb : Word {
     var tense = Tense.present
     var person = Person.S1
     var tensePersonSet = false
-
+    var m_isPassive = false
     
     override init(){
         super.init(word: "", wordType : .verb)
@@ -42,6 +42,9 @@ class Verb : Word {
         typeList.append(type)
         self.person = person
         self.tense = tense
+        if type == .passive {
+            m_isPassive = true
+        }
         super.init(word: word, wordType: .verb)
     }
     
@@ -72,6 +75,11 @@ class Verb : Word {
         convertVerbTypeStringToVerbTypes(inputString: jsonVerb.verbType)
         convertFavoriteSubjectStringToFavoriteNouns(inputString: jsonVerb.subjectLikes)
         convertFavoriteObjectStringToFavoriteNouns(inputString: jsonVerb.objectLikes)
+        for type in typeList {
+            if type == .passive {
+                m_isPassive = true
+            }
+        }
     }
     
     func setBVerb(bVerb: BVerb){
@@ -104,17 +112,30 @@ class Verb : Word {
         transitivity = trans
     }
     
+    func isTransitive()->Bool{
+        if ( transitivity == .intransitive ){return false}
+            return true
+    }
+    
     func updatePassivity(pass : VerbPassivity){
         passivity = pass
     }
     
-    func updateVariables( vType: [String], subj : [String], obj : [String])
+    func isPassive()->Bool{
+        if ( passivity == .passive ){return true}
+            return false
+    }
+    
+    func updateType( vType: [String])
     {
         typeList.removeAll()
         for f in vType {
             typeList.append(getVerbTypeFromLetter(letter: f))
         }
-        
+    }
+
+    func updateSubjAndObj(subj : [String], obj : [String])
+    {     
         favoriteSubjects.removeAll()
         for f in subj {
             favoriteSubjects.append(getNounTypeFromString(str: f))
@@ -334,8 +355,8 @@ class FrenchVerb : RomanceVerb {
     }
     
     override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
-        getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
-        return getMorphStruct(tense: tense, person: person)
+        return getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
+        //return getMorphStruct(tense: tense, person: person)
     }
 }
 
@@ -384,8 +405,8 @@ class SpanishVerb : RomanceVerb {
     }
     
     override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
-        getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
-        return getMorphStruct(tense: tense, person: person)
+        return getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
+//        return getMorphStruct(tense: tense, person: person)
     }
     
 }
@@ -407,8 +428,8 @@ class EnglishVerb : Verb {
     }
     
     override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
-        getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
-        return getMorphStruct(tense: tense, person: person)
+        return getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
+        //return getMorphStruct(tense: tense, person: person)
     }
     
     func isConjugateForm(word: String)->(Bool, Tense, Person){

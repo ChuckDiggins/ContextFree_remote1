@@ -50,6 +50,7 @@ class BVerb : Word, Identifiable {
     var m_verbWord : String
     var languageType : LanguageType
     var m_isPassive = false
+//    var m_isBackward = false
     var m_isIrregular = false
     var m_residualPhrase = ""
     var m_isReflexive = false           //not used for English
@@ -132,6 +133,14 @@ class BVerb : Word, Identifiable {
     
     func getId()->UUID{return id}
     
+    func setIsPassive(isPassive: Bool){
+        m_isPassive = isPassive
+    }
+    
+    func isPassive()->Bool{
+        return m_isPassive
+    }
+    
     //if any form is irregular, then the verb is irregular
     func isIrregular()->Bool{
         return m_isIrregular
@@ -154,9 +163,10 @@ class BVerb : Word, Identifiable {
         return m_verbPhrase
     }
     
-    func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool) {
-        //morphStructManager.get(person: person)
+    func getConjugatedMorphStruct( tense : Tense, person : Person, conjugateEntirePhrase : Bool, isPassive: Bool=false) -> MorphStruct {
+        return morphStructManager.get(person: person)
     }
+    
     
     func getMorphStruct(person: Person) -> MorphStruct {
         morphStructManager.get(person: person)

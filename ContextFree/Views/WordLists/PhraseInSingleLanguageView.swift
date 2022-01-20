@@ -68,7 +68,7 @@ struct PhraseInSingleLanguageView: View {
                 singleIndexList[1][0] = 1
                 singleIndexList[2][0] = 2
                 currentLanguage = .Spanish
-                cfModelView.createNewModel(language: currentLanguage)
+                //cfModelView.createNewModel(language: currentLanguage)
                 m_randomSentence = cfModelView.getRandomSentenceObject()
                 createRandomClause()
                 hasClause.toggle()
@@ -104,7 +104,7 @@ struct PhraseInSingleLanguageView: View {
     
     func changeWord(){
         let single = singleList[currentSingleIndex]
-        let clauseManipulation = clauseManipulation()
+        let clauseManipulation = clauseManipulation(m_clause: m_clause, m_englishClause: m_englishClause)
         m_clause.setTense(value: currentTense)
         m_clause.setPerson(value: currentPerson)
         clauseManipulation.changeWordInClause(cfModelView: cfModelView, clause: m_clause, single: single, isSubject: isSubject)
@@ -115,7 +115,7 @@ struct PhraseInSingleLanguageView: View {
     }
     
     func createRandomClause(){
-        let clauseManipulation = clauseManipulation()
+        let clauseManipulation = clauseManipulation(m_clause: m_clause, m_englishClause: m_englishClause)
         let result = clauseManipulation.createRandomClause(cfModelView: cfModelView, tense: currentTense, randomPhraseType: .simpleClause)
         
         if currentLanguage == .English { m_clause = result.1 }

@@ -20,11 +20,11 @@ class Conjunction : Word {
         self.type = ConjunctionType.and
         
         switch(language){
-        case .Spanish:  super.init(word: json.spanish, wordType: .noun)
-        case .French:  super.init(word: json.french, wordType: .noun)
-        case .English:  super.init(word: json.english, wordType: .noun)
+        case .Spanish:  super.init(word: json.spanish, wordType: .conjunction)
+        case .French:  super.init(word: json.french, wordType: .conjunction)
+        case .English:  super.init(word: json.english, wordType: .conjunction)
         default:
-            super.init(word: json.spanish, wordType: .adjective)
+            super.init(word: json.spanish, wordType: .conjunction)
         }
         convertConjunctionTypeStringToConjunctionType(inputString: json.conjunctionType)
         self.spanish = json.spanish

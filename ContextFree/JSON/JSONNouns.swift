@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class JsonNoun: Codable, CustomStringConvertible {
     var english: String
     var french: String
@@ -46,6 +47,13 @@ class JsonNoun: Codable, CustomStringConvertible {
         self.adjLikes = ""
     }
 }
+
+var simpleWordList: [JsonNoun] = [
+    JsonNoun(spanish: "casa", english: "house",    french: "maison", spanishGender : "F", frenchGender : "F", englishPlural: "houses", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "hijo", english: "son",    french: "fils", spanishGender : "M", frenchGender : "M", englishPlural: "sons", nounType : "P", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "libro", english: "book ",    french: "livre", spanishGender : "M", frenchGender : "M", englishPlural: "books", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "mesa", english: "table",    french: "table", spanishGender : "F", frenchGender : "F", englishPlural: "tables", nounType : "T", verbLikes: "", adjLikes: ""),
+    ]
 
 var myMultiLingualWordList: [JsonNoun] = [
     JsonNoun(spanish: "amigo", english: "friend",    french: "ami", spanishGender : "M", frenchGender : "M", englishPlural: "friends", nounType : "P", verbLikes: "", adjLikes: ""),
@@ -90,11 +98,68 @@ var myMultiLingualWordList: [JsonNoun] = [
     JsonNoun(spanish: "vestido", english: "dress",    french: "robe", spanishGender : "M", frenchGender : "F", englishPlural: "dresses", nounType : "T", verbLikes: "", adjLikes: ""),
     JsonNoun(spanish: "zapato", english: "shoe",    french: "chaussure", spanishGender : "M", frenchGender : "F", englishPlural: "shoes", nounType : "T", verbLikes: "", adjLikes: ""),
     
-    
-    
-    
+    //For Michelle Carpenter - Capítulo 3
+    JsonNoun(spanish: "desayuno", english: "breakfast",    french: "petir déjeuner", spanishGender : "M", frenchGender : "M", englishPlural: "breakfasts", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "cereal", english: "cereal",    french: "céréale", spanishGender : "M", frenchGender : "F", englishPlural: "cereals", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "huevo", english: "egg",    french: "œef", spanishGender : "M", frenchGender : "M", englishPlural: "eggs", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pan", english: "bread",    french: "pain", spanishGender : "M", frenchGender : "M", englishPlural: "breads", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pan tostado", english: "toast",    french: "toast", spanishGender : "M", frenchGender : "M", englishPlural: "toast", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "plátano", english: "banana",    french: "banane", spanishGender : "M", frenchGender : "F", englishPlural: "bananas", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "salchicha", english: "sausage",    french: "sausisse", spanishGender : "F", frenchGender : "F", englishPlural: "sausages", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "tocino", english: "bacon",    french: "bacon", spanishGender : "M", frenchGender : "M", englishPlural: "bacon", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "yogur", english: "yogurt",    french: "yaourt", spanishGender : "M", frenchGender : "M", englishPlural: "yogurts", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "almuerzo", english: "lunch",    french: "déjeuner", spanishGender : "M", frenchGender : "M", englishPlural: "lunches", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "ensalada", english: "salad",    french: "salade", spanishGender : "F", frenchGender : "F", englishPlural: "salads", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "fresa", english: "strawberry",    french: "fraisier", spanishGender : "F", frenchGender : "F", englishPlural: "strawberries", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "galleta", english: "cookie",    french: "gâteau", spanishGender : "F", frenchGender : "M", englishPlural: "cookies", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "hamburguesa", english: "hamburger",    french: "hamburger", spanishGender : "M", frenchGender : "M", englishPlural: "hamburgers", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "jamón", english: "ham",    french: "jambon", spanishGender : "M", frenchGender : "M", englishPlural: "hams", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "papas fritas", english: "French fries",    french: "frites", spanishGender : "F", frenchGender : "M", englishPlural: "French fries", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "manzana", english: "apple",    french: "pomme", spanishGender : "F", frenchGender : "F", englishPlural: "apples", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "naranja", english: "orange",    french: "orange", spanishGender : "F", frenchGender : "M", englishPlural: "oranges", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "perro caliente", english: "hot dog",    french: "hot-dog", spanishGender : "M", frenchGender : "M", englishPlural: "hot dogs", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pizza", english: "pizza",    french: "pizza", spanishGender : "F", frenchGender : "F", englishPlural: "pizzas", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "queso", english: "cheese",    french: "fromage", spanishGender : "M", frenchGender : "M", englishPlural: "cheeses", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "sándwich de jamón y queso", english: "ham and cheese sandwich",    french: "sandwich jambon-fromage", spanishGender : "M", frenchGender : "M", englishPlural: "ham and cheese sandwiches", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "sopa", english: "soup",    french: "soupe", spanishGender : "F", frenchGender : "F", englishPlural: "soups", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "sopa de verduras", english: "vegetable soup",    french: "soupe aux légumes", spanishGender : "F", frenchGender : "F", englishPlural: "vegetable soup", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pollo", english: "chicken",    french: "poulet", spanishGender : "M", frenchGender : "M", englishPlural: "chickens", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "sal", english: "salt",    french: "sel", spanishGender : "M", frenchGender : "M", englishPlural: "salt", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "pimienta", english: "pepper",    french: "poivre", spanishGender : "M", frenchGender : "M", englishPlural: "pepper", nounType : "T", verbLikes: "", adjLikes: ""),
+    JsonNoun(spanish: "azúcar", english: "sugar",    french: "sucre", spanishGender : "M", frenchGender : "M", englishPlural: "sugar", nounType : "T", verbLikes: "", adjLikes: ""),
     ]
 
+//For Michelle Carpenter - Capítulo 3
+var MichelleCarpeterNounList3: [JsonNoun] = [
+JsonNoun(spanish: "desayuno", english: "breakfast",    french: "petir déjeuner", spanishGender : "M", frenchGender : "M", englishPlural: "breakfasts", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "cereal", english: "cereal",    french: "céréale", spanishGender : "M", frenchGender : "F", englishPlural: "cereals", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "huevo", english: "egg",    french: "œef", spanishGender : "M", frenchGender : "M", englishPlural: "eggs", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "pan", english: "bread",    french: "pain", spanishGender : "M", frenchGender : "M", englishPlural: "breads", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "pan tostado", english: "toast",    french: "toast", spanishGender : "M", frenchGender : "M", englishPlural: "toast", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "plátano", english: "banana",    french: "banane", spanishGender : "M", frenchGender : "F", englishPlural: "bananas", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "salchicha", english: "sausage",    french: "sausisse", spanishGender : "F", frenchGender : "F", englishPlural: "sausages", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "tocino", english: "bacon",    french: "bacon", spanishGender : "M", frenchGender : "M", englishPlural: "bacon", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "yogur", english: "yogurt",    french: "yaourt", spanishGender : "M", frenchGender : "M", englishPlural: "yogurts", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "almuerzo", english: "lunch",    french: "déjeuner", spanishGender : "M", frenchGender : "M", englishPlural: "lunches", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "ensalada", english: "salad",    french: "salade", spanishGender : "F", frenchGender : "F", englishPlural: "salads", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "fresa", english: "strawberry",    french: "fraisier", spanishGender : "F", frenchGender : "F", englishPlural: "strawberries", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "galleta", english: "cookie",    french: "gâteau", spanishGender : "F", frenchGender : "M", englishPlural: "cookies", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "hamburguesa", english: "hamburger",    french: "hamburger", spanishGender : "M", frenchGender : "M", englishPlural: "hamburgers", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "jamón", english: "ham",    french: "jambon", spanishGender : "M", frenchGender : "M", englishPlural: "hams", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "papas fritas", english: "French fries",    french: "frites", spanishGender : "F", frenchGender : "M", englishPlural: "French fries", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "manzana", english: "apple",    french: "pomme", spanishGender : "F", frenchGender : "F", englishPlural: "apples", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "naranja", english: "orange",    french: "orange", spanishGender : "F", frenchGender : "M", englishPlural: "oranges", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "perro caliente", english: "hot dog",    french: "hot-dog", spanishGender : "M", frenchGender : "M", englishPlural: "hot dogs", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "pizza", english: "pizza",    french: "pizza", spanishGender : "F", frenchGender : "F", englishPlural: "pizzas", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "queso", english: "cheese",    french: "fromage", spanishGender : "M", frenchGender : "M", englishPlural: "cheeses", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "sándwich de jamón y queso", english: "ham and cheese sandwich",    french: "sandwich jambon-fromage", spanishGender : "M", frenchGender : "M", englishPlural: "ham and cheese sandwiches", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "sopa", english: "soup",    french: "soupe", spanishGender : "F", frenchGender : "F", englishPlural: "soups", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "sopa de verduras", english: "vegetable soup",    french: "soupe aux légumes", spanishGender : "F", frenchGender : "F", englishPlural: "vegetable soup", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "pollo", english: "chicken",    french: "poulet", spanishGender : "M", frenchGender : "M", englishPlural: "chickens", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "sal", english: "salt",    french: "sel", spanishGender : "M", frenchGender : "M", englishPlural: "salt", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "pimienta", english: "pepper",    french: "poivre", spanishGender : "M", frenchGender : "M", englishPlural: "pepper", nounType : "T", verbLikes: "", adjLikes: ""),
+JsonNoun(spanish: "azúcar", english: "sugar",    french: "sucre", spanishGender : "M", frenchGender : "M", englishPlural: "sugar", nounType : "T", verbLikes: "", adjLikes: ""),
+]
 //create json from
 class JsonNounManager {
     var myWordList = [JsonNoun]()
@@ -107,9 +172,17 @@ class JsonNounManager {
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
-        for v in myMultiLingualWordList{
+        var nounList = [JsonNoun]()
+        switch collectionType {
+        case .All:
+            nounList = myMultiLingualWordList
+        case .Simple:
+            nounList = simpleWordList
+        }
+        
+        for v in nounList{
             myWordList.append(v)
             print("JsonVerbManager: appending noun \(v.spanish), \(v.french), \(v.english)")
             if myWordList.count >= total {break}

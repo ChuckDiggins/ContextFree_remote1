@@ -516,6 +516,15 @@ struct CFModel{
         return Array<Word>()
     }
     
+    func getAgnosticWordList(wordType: WordType)->Array<Word>{
+        return m_wsp.getWordList(wordType: wordType)
+    }
+    
+    func getAgnosticWorkingWordList(wordType: WordType)->Array<Word>{
+        return m_wsp.getWorkingListOfType(wordType: wordType)
+    }
+    
+    
     /*
     mutating func conjugateCurrentVerb(){
         currentTense = m_tenseList[m_currentTenseIndex]

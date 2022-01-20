@@ -7,9 +7,20 @@
 
 import Foundation
 
-class dCluster {
+class dCluster : Hashable {
+    
+    static func == (lhs : dCluster, rhs : dCluster) ->Bool{
+        return lhs.getClusterWord().spanish == rhs.getClusterWord().spanish && lhs.getClusterWord().french == rhs.getClusterWord().french
+    }
+    
+    func hash(into hasher: inout Hasher){
+        hasher.combine(self.getClusterWord().spanish)
+        hasher.combine(self.getClusterWord().french)
+    }
     var m_clusterType : ContextFreeSymbol
+    var m_parentClusterType = ContextFreeSymbol.UNK
     var m_clusterFunction = ContextFreeFunction.None
+    var m_associatedWordList = [Word]()
     
     init(){
         m_clusterWord = Word()
@@ -27,10 +38,48 @@ class dCluster {
         m_sentenceData = data
     }
     
+    func replaceWord(newWord: Word){
+        m_clusterWord = newWord
+    }
+    
+    func replaceClusterWordWithRandomAssociatedWord(){
+        var index = Int.random(in: 0..<m_associatedWordList.count)
+        m_clusterWord = m_associatedWordList[index]
+    }
+    
+    //associated words for this cluster
+    
+    func putAssociatedWordList(wordList: [Word]){ m_associatedWordList = wordList }
+    func clearAssociatedWordList(){ m_associatedWordList.removeAll() }
+    func appendWordToAssociatedWordList(word: Word){
+        m_associatedWordList.append(word)
+    }
+    
+    func getAssociatedWordList()->[Word]{
+        return m_associatedWordList
+    }
+    
+    func getAssociatedWordListCount()->Int{
+        return m_associatedWordList.count
+    }
+    
+    func getRandomAssociatedWord()->Word{
+        let i = Int.random(in: 0 ..< m_associatedWordList.count)
+        return m_associatedWordList[i]
+    }
+    
     var m_clusterWord : Word
 
     func putClusterWord(word: Word){m_clusterWord = word}
     func getClusterWord()->Word{return m_clusterWord}
+    
+    func getParentClusterType()->ContextFreeSymbol{
+        return m_parentClusterType
+    }
+    
+    func setParentClusterType(clusterType: ContextFreeSymbol){
+        m_parentClusterType = clusterType
+    }
     
     var m_sentenceData = WordStateData()
     

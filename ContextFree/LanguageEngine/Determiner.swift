@@ -24,11 +24,11 @@ class Determiner : Word {
         self.type = DeterminerType.indefinite
         
         switch(language){
-        case .Spanish:  super.init(word: json.spanish, wordType: .noun)
-        case .French:  super.init(word: json.french, wordType: .noun)
-        case .English:  super.init(word: json.english, wordType: .noun)
+        case .Spanish:  super.init(word: json.spanish, wordType: .determiner)
+        case .French:  super.init(word: json.french, wordType: .determiner)
+        case .English:  super.init(word: json.english, wordType: .determiner)
         default:
-            super.init(word: json.spanish, wordType: .adjective)
+            super.init(word: json.spanish, wordType: .determiner)
         }
         self.spanish = json.spanish
         self.french = json.french

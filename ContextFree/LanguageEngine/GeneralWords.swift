@@ -19,5 +19,7 @@ struct GeneralWords {
     var pronounList = Array<Word>()
     var ambiguousList = Array<Word>()
     
+    var workingList = Array<Word>()
+    
     
 }

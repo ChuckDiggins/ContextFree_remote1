@@ -40,6 +40,7 @@ func getPhraseFilters()->[PhraseFilter]{
     return phraseFilters
 }
 
+
 struct ContextFreeLessonView: View {
     @EnvironmentObject var cfModelView : CFModelView
     @State private var currentLanguage = LanguageType.Spanish
@@ -63,95 +64,97 @@ struct ContextFreeLessonView: View {
     
     var body: some View {
         //NavigationView {
-           // VStack{
-                HStack{
-                    Button(action: {
-                        currentLanguage = .Spanish
-                        sentenceString = (m_clause?.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson))!
-                    }){
-                        Text("Spanish")
-                    }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
-                        .foregroundColor(currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
-                    
-                    Button(action: {
-                        currentLanguage = .French
-                        sentenceString = (m_clause?.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson))!
-                    }){
-                        Text("French")
-                    }.font(currentLanguage == .French ? .title : .system(size: 20) )
-                        .foregroundColor(currentLanguage == .French ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
-                    
-                    Button(action: {
-                        currentLanguage = .English
-                        sentenceString = (m_clause?.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson))!
-                    }){
-                        Text("English")
-                    }.font(currentLanguage == .English ? .title : .system(size: 20) )
-                        .foregroundColor(currentLanguage == .English ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
-                }.onAppear{
-                    cfModelView.createNewModel(language: .Agnostic)
-                    m_randomWordLists = cfModelView.getRandomWordList()
-                }
-                .padding()
-                //                }
-                //
-                //                VStack{
-                Button(action: {
-                    createNamedPhrases()
-                }){
-                    Text("Create named phrase")
-                }
-                
-                Text("Phrase count : \(namedPhraseCount)")
-                Text("Phrase types:")
-                List{
-                    ForEach(0..<phraseCategories.count){ index in
-                        HStack {
-                            Button(action: {
-                                phraseCategories[index].isSelected = phraseCategories[index].isSelected ? false : true
-                                categoryIndex = index
-                                //fillFilteredVerbs(viperViewModel : viperViewModel, verbCategories : verbCategories, verbFilters : verbFilters)
-                                
-                                print("Category selected = \(index) -- selected \($phraseCategories[index].isSelected)")
-                            }) {
-                                HStack{
-                                    if phraseCategories[index].isSelected {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.green)
-                                            .animation(.easeIn)
-                                    } else {
-                                        Image(systemName: "circle")
-                                            .foregroundColor(.primary)
-                                            .animation(.easeOut)
-                                    }
-                                    Text(phraseCategories[index].name)
-                                }
-                            }.buttonStyle(BorderlessButtonStyle())
+        // VStack{
+        HStack{
+            Button(action: {
+                currentLanguage = .Spanish
+            }){
+                Text("Spanish")
+            }.font(currentLanguage == .Spanish ? .title : .system(size: 20) )
+                .foregroundColor(currentLanguage == .Spanish ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+            
+            Button(action: {
+                currentLanguage = .French
+            }){
+                Text("French")
+            }.font(currentLanguage == .French ? .title : .system(size: 20) )
+                .foregroundColor(currentLanguage == .French ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+            
+            Button(action: {
+                currentLanguage = .English
+            }){
+                Text("English")
+            }.font(currentLanguage == .English ? .title : .system(size: 20) )
+                .foregroundColor(currentLanguage == .English ? Color.red : Color(UIColor(named: "SurgeryBackground")!))
+        }.onAppear{
+            m_randomWordLists = cfModelView.getRandomWordList()
+        }
+        .padding()
+        //                }
+        //
+        //                VStack{
+        Button(action: {
+            createNamedPhrases()
+        }){
+            Text("Create named phrase")
+        }
+        
+        Text("Phrase count : \(namedPhraseCount)")
+        Text("Phrase types:")
+        VStack{
+            Text("\(namedPhraseList.count)")
+            List{
+                ForEach ((0..<namedPhraseList.count), id: \.self){ index in
+                    HStack{
+                        Text("\(namedPhraseList[index].getPhraseName())")
+                        NavigationLink(destination: DetailedPhraseView(namedPhrase: namedPhraseList[index], language: currentLanguage)){
                         }
                     }
                 }
                 
-                List{
-                    ForEach(0..<namedPhraseCount){ index in
-                        HStack{
-                            Text("\(namedPhraseList[index].getPhraseName())")
-                            NavigationLink(destination: DetailedPhraseView(namedPhrase: namedPhraseList[index], language: currentLanguage)){
+               .buttonStyle(PlainButtonStyle())
+                
+            }.font(.caption)
+            List{
+                ForEach ((0..<phraseCategories.count), id: \.self){ index in
+                    HStack {
+                        Button(action: {
+                            phraseCategories[index].isSelected = phraseCategories[index].isSelected ? false : true
+                            categoryIndex = index
+                            //fillFilteredVerbs(viperViewModel : viperViewModel, verbCategories : verbCategories, verbFilters : verbFilters)
+
+                            print("Category selected = \(index) -- selected \($phraseCategories[index].isSelected)")
+                        }) {
+                            HStack{
+                                if phraseCategories[index].isSelected {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                        .animation(.easeIn)
+                                } else {
+                                    Image(systemName: "circle")
+                                        .foregroundColor(.primary)
+                                        .animation(.easeOut)
+                                }
+                                Text(phraseCategories[index].name)
                             }
-                        }
-                    }.buttonStyle(PlainButtonStyle())
-                    
+                        }.buttonStyle(BorderlessButtonStyle())
+                    }
                 }
-                .onAppear{
-                    cfModelView.createNewModel(language: .Agnostic)
-                    m_randomWordLists = cfModelView.getRandomWordList()
-                    phraseCategories = getPhraseCategories()
-                    phraseFilters = getPhraseFilters()
-                    createNamedPhrases()
-                }
-                //.navigationTitle("Context Free Lessons")
-                .font(.title)
-            //Spacer()
+            }.font(.caption)
             
+            
+            .onAppear{
+                cfModelView.createNewModel(language: .Agnostic)
+                m_randomWordLists = cfModelView.getRandomWordList()
+                phraseCategories = getPhraseCategories()
+                phraseFilters = getPhraseFilters()
+                createNamedPhrases()
+            }
+            //.navigationTitle("Context Free Lessons")
+            .font(.title)
+        }
+        Spacer()
+        
     }
     
     func createLesson(){

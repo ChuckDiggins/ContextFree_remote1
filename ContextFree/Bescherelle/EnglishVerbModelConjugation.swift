@@ -43,7 +43,7 @@ class EnglishVerbModelConjugation : VerbModelConjugation{
         for i in 0 ..< vmCount {
             let vm = verbModels[i]
             if vm.isModelFor(verbWord: verbWord){
-                print("VerbWord \(verbWord) has verb model \(vm.id) - model verb \(vm.infinitive)")
+                //print("VerbWord \(verbWord) has verb model \(vm.id) - model verb \(vm.infinitive)")
                 return vm
             }
         }

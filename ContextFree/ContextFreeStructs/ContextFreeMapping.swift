@@ -11,6 +11,7 @@ enum Mapping {
     case OneToOne
     case ManyToOne
     case OneToMany
+    case ManyToMany
     case Question
     case Negative
     case Subjunctive
@@ -22,9 +23,15 @@ struct MappingPair {
 }
 
 struct ContextFreeMapping {
-    let cfs = ContextFreeSymbol.AMB
+    //let cfs = ContextFreeSymbol.AMB
+  
+    func getMapping(languageFrom: LanguageType, languageTo: LanguageType, phraseType: ContextFreeSymbol)->Mapping{
+        return Mapping.OneToOne
+    }
     
-    
+    //assumes that RomanceVP maps one-to-one with EnglishVP at the verb phrase level
+    //composite phrases such as NP and PP will have their own mapping
+    //does not address adjective phrases or adverbial phrases, etc.
     
     func fromRomanceVPToEnglishVP(fromVP: dVerbPhrase)->dVerbPhrase{
         let toVP = dVerbPhrase()

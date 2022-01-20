@@ -384,7 +384,32 @@ class dIndependentAgnosticClause : dClause{
         }
         return singleList
     }
+    
+    func getSingleStringList(language: LanguageType)->[String]{
+        var singleStringList = [String]()
+        for single in getSingleList(){
+            singleStringList.append(single.getProcessWordInWordStateData(language: language))
+        }
+        return singleStringList
+    }
  
+    func getWordTypeList()->[String]{
+        var wordTypeList = [String]()
+        for single in getSingleList(){
+            wordTypeList.append(single.getWordType().rawValue)
+        }
+        return wordTypeList
+    }
+ 
+    func getParentPhraseTypeList()->[String]{
+        var phraseTypeList = [String]()
+        for single in getSingleList(){
+            let clusterType = single.getParentClusterType()
+            phraseTypeList.append(clusterType.rawValue)
+        }
+        return phraseTypeList
+    }
+
     func getReconstructedSentenceString(language: LanguageType)->String {
         var ss = ""
         var str = ""

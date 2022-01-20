@@ -103,6 +103,29 @@ class WordStringParser {
         }
     }
     
+    func getWorkingList()->Array<Word>{
+        return generalWords.workingList
+    }
+    
+    func getWorkingListOfType(wordType: WordType)->Array<Word>{
+        var wordTypeWordList = Array<Word>()
+        for word in generalWords.workingList{
+            if word.wordType == wordType {
+                wordTypeWordList.append(word)
+            }
+        }
+        return wordTypeWordList
+    }
+    
+    func findWordInDictionary(word: Word)->Word{
+        let wordList = getWordList(wordType: word.wordType)
+        for w in wordList {
+            if w == word {return w}
+        }
+        return Word()
+    }
+   
+
     func getNounList()->Array<Word>{
         return generalWords.nounList
     }
@@ -245,7 +268,14 @@ class WordStringParser {
         return det
     }
     
-
+    func addWordToWorkingDictionary(wd: Word){
+        generalWords.workingList.append(wd)
+    }
+    
+    func getCurrentWorkingWords()->Array<Word>{
+        return generalWords.workingList
+    }
+    
     func addAdjectiveToDictionary(adj: Adjective){
         generalWords.adjectiveList.append(adj)
     }
@@ -279,8 +309,6 @@ class WordStringParser {
     }
     
     
-   
-
     
     func convertWordToSentenceData(word: Word, wordType: ContextFreeSymbol)->SentenceData{
         var sentenceData = SentenceData()

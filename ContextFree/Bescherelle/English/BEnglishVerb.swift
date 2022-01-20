@@ -241,7 +241,7 @@ class BEnglishVerb : BVerb {
             return "would have " + m_pastParticiple
         default: break
         }
-        return "this tense not implememted yet"
+        return "this tense not implemented yet"
     }
     
     func getRegularForm(tense : Tense, person : Person)->String {
@@ -274,7 +274,35 @@ class BEnglishVerb : BVerb {
             return "would have " + m_pastParticiple
         default: break
         }
-        return "this tense not implememted yet"
+        return "this tense not implemented yet"
+    }
+    
+    override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool, isPassive: Bool = false)->MorphStruct {
+        var ms = self.morphStructManager.get(person: person)
+        let verbForm = getConjugateForm(tense: tense, person: person)
+        var morphStep = MorphStep()
+        morphStep.isFinalStep = true
+        morphStep.verbForm = verbForm
+        morphStep.comment = "Conjugated form  -> \(verbForm)"
+        morphStep.part1 = verbForm
+        morphStep.part2 = " "
+        morphStep.part3 = " "
+        ms.append(morphStep : morphStep)
+        
+        //add residual phrase here
+        if conjugateEntirePhrase && m_residualPhrase.count > 0 {
+            let finalForm = ms.finalVerbForm()
+            var morphStep = MorphStep()
+            morphStep.isFinalStep = true
+            morphStep.comment = "Add residual phrase -> \(m_residualPhrase)"
+            morphStep.part1 = finalForm
+            morphStep.part2 += " " + m_residualPhrase
+            morphStep.verbForm = finalForm + " " + m_residualPhrase
+            ms.append(morphStep : morphStep)
+        }
+        
+        setMorphStruct(person: person, morphStruct: ms)
+        return ms
     }
     
     

@@ -7,7 +7,12 @@
 
 import Foundation
 
-struct RandomWordLists{
+struct RandomWordLists  {
+    var id = UUID()
+    static func == (lhs: RandomWordLists, rhs: RandomWordLists) -> Bool {
+        return lhs.m_language == rhs.m_language
+    }
+    
     var m_wsp : WordStringParser?
     var m_language = LanguageType.Spanish
     var m_subjects = Array<Word>()
@@ -83,10 +88,9 @@ struct RandomWordLists{
         for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
             //get language-converted noun from dictionary
             let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.noun, index: i)
-            let noun = w as! Noun
-            if (noun.nounType == .person || noun.nounType == .animal ){
-                m_subjects.append(w)
-            }
+//            let noun = w as! Noun
+//            if (noun.nounType == .person || noun.nounType == .animal ) {m_subjects.append(w)}
+            m_subjects.append(w)
         }
     }
     
@@ -95,10 +99,9 @@ struct RandomWordLists{
         for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
             //get language-converted noun from dictionary
             let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.noun, index: i)
-            let noun = w as! Noun
-            if (noun.nounType == .plant || noun.nounType == .thing || noun.nounType == .place){
-                m_objects.append(noun)
-            }
+//            let noun = w as! Noun
+//            if (noun.nounType == .plant || noun.nounType == .thing || noun.nounType == .place){m_objects.append(noun) }
+            m_objects.append(w)
         }
     }
     
@@ -287,6 +290,8 @@ struct RandomWordLists{
             break
         }
         
+//        let singleWord = single.getClusterWord().word
+//        print("getAgnosticRandomWordAsSingle: singleWord = \(singleWord)")
         return single
     }
     

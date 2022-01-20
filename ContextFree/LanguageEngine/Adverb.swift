@@ -20,11 +20,11 @@ class Adverb : Word {
         self.type = AdverbType.manner
         
         switch(language){
-        case .Spanish:  super.init(word: json.spanish, wordType: .noun)
-        case .French:  super.init(word: json.french,  wordType: .noun)
-        case .English:  super.init(word: json.english, wordType: .noun)
+        case .Spanish:  super.init(word: json.spanish, wordType: .adverb)
+        case .French:  super.init(word: json.french,  wordType: .adverb)
+        case .English:  super.init(word: json.english, wordType: .adverb)
         default:
-            super.init(word: json.spanish, wordType: .adjective)
+            super.init(word: json.spanish, wordType: .adverb)
         }
         convertAdverbTypeStringToAdverbType(inputString: json.adverbType)
         self.spanish = json.spanish

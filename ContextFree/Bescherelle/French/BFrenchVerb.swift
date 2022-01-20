@@ -19,6 +19,7 @@ enum EndingType {
     case OIR_ENDING1
     case OIR_ENDING2
     case OIR_ENDING3
+    case CHOIR_ENDING
     case overrideER
     case none
 }
@@ -103,13 +104,13 @@ class BFrenchVerb : BRomanceVerb {
     }
     
     override func getConjugateForm(tense : Tense, person : Person)->String {
-        getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
+        _ = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
         return morphStructManager.getFinalVerbForm(person: person)
     }
     
     //these patterns are not mutually exclusive
     
-    override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool) {
+    override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool, isPassive: Bool = false)->MorphStruct {
         
         //simple indicative tenses
         let tenseIndex =  tense.getIndex()
@@ -120,19 +121,19 @@ class BFrenchVerb : BRomanceVerb {
             ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
         }
              
-        if ( tenseIndex == Tense.imperative.getIndex()){
+        else if ( tenseIndex == Tense.imperative.getIndex()){
             ms = ActiveVerbConjugationFrench().conjugateThisImperativeForm(verb: self, person: person, conjugateEntirePhrase: conjugateEntirePhrase)       
         }
         
         //simple subjunctive tenses
         
-        if tenseIndex >= Tense.presentSubjunctive.getIndex() && tenseIndex <= Tense.imperfectSubjunctiveSE.getIndex() {
+        else if tenseIndex >= Tense.presentSubjunctive.getIndex() && tenseIndex <= Tense.imperfectSubjunctiveSE.getIndex() {
             ms = ActiveVerbConjugationFrench().conjugateThisSimpleIndicativeNew( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
         }
         
         //perfect tenses - indicative and subjunctive
         
-        if tenseIndex >= Tense.presentPerfect.getIndex() && tenseIndex <= Tense.conditionalProgressive.getIndex() {
+        else if tenseIndex >= Tense.presentPerfect.getIndex() && tenseIndex <= Tense.conditionalProgressive.getIndex() {
             ms = ActiveVerbConjugationFrench().conjugateThisCompoundVerb( verb: self, tense : tense, person : person, conjugateEntirePhrase : conjugateEntirePhrase )
         }
     
@@ -148,6 +149,7 @@ class BFrenchVerb : BRomanceVerb {
             ms.append(morphStep : morphStep)
         }
         setMorphStruct(person: person, morphStruct: ms)
+        return ms
     }
     
     func restoreMorphStructs()
@@ -242,6 +244,8 @@ class BFrenchVerb : BRomanceVerb {
             case .OIR_ENDING1: m_modelVerbEndingList.append(ModelVerbEnding(tense: parseStruct.tense, type: .OIR_ENDING1))
             case .OIR_ENDING2: m_modelVerbEndingList.append(ModelVerbEnding(tense: parseStruct.tense, type: .OIR_ENDING2))
             case .OIR_ENDING3: m_modelVerbEndingList.append(ModelVerbEnding(tense: parseStruct.tense, type: .OIR_ENDING3))
+            case .CHOIR_ENDING:
+                m_modelVerbEndingList.append(ModelVerbEnding(tense: parseStruct.tense, type: .CHOIR_ENDING))
             case .OVERRIDE_ER: m_modelVerbEndingList.append(ModelVerbEnding(tense: parseStruct.tense, type: .overrideER))
             default: break
             }

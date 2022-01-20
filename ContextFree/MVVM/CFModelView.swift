@@ -9,21 +9,49 @@ import Foundation
 
 class CFModelView: ObservableObject {
     private var cfModel : CFModel?
+    private var language : LanguageType
     
-    init(){
+    //private var currentCluster = dCluster()
+    private var activeCluster = dCluster()
+    private var activeWordType =  WordType.ambiguous
+    private var currentWordType : WordType
+    
+    init(language: LanguageType){
+        currentWordType = activeWordType
+        self.language = language
+        cfModel = CFModel(language: language)
     }
     
-    /*
-    func setCurrentLanguage(language: LanguageType){
-        cfModel!.m_currentLanguage = language
+    func getModel()->CFModel{
+        return cfModel!
     }
-    */
+    
+    func setCurrentClusterAndWordTypeForFilling(cluster: dCluster, wordType: WordType){
+        activeCluster = cluster
+        activeWordType = wordType
+    }
+    
+    func setActiveCluster(cluster: dCluster){
+        activeCluster = cluster
+        
+        let ct = activeCluster.getClusterType()
+        activeWordType = getWordType(clusterType: ct)
+    }
+    
+    func getActiveCluster()->dCluster{
+        return activeCluster
+    }
+    
+    func getActiveWordType()->WordType{
+        activeWordType = getWordType(clusterType: activeCluster.getClusterType())
+        return activeWordType
+    }
     
     func getParser()->WordStringParser{
         return cfModel!.getParser()
     }
     func createNewModel(language: LanguageType){
-        cfModel = CFModel(language: language)
+        //cfModel = CFModel(language: language)
     }
     
     func getVerbModel(language: LanguageType)->VerbModelConjugation{
@@ -91,6 +119,14 @@ class CFModelView: ObservableObject {
         return cfModel!.getModifierList(wordType: wordType)
     }
     
+    func getAgnosticWordList(wordType: WordType)->Array<Word>{
+        return cfModel!.getAgnosticWordList(wordType: wordType)
+    }
+    
+    func getAgnosticWorkingWordList(wordType: WordType)->Array<Word>{
+        return cfModel!.getAgnosticWorkingWordList(wordType: wordType)
+    }
+    
     func getNounList()->Array<Word>{
         return cfModel!.getNounList()
     }
@@ -136,5 +172,4 @@ class CFModelView: ObservableObject {
     func createIndependentClause(clauseString: String)->dIndependentClause{
         return cfModel!.createIndependentClause(clauseString: clauseString)
     }
-    
 }

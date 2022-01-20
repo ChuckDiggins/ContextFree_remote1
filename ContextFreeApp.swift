@@ -12,7 +12,7 @@ struct ContextFreeApp: App {
     var body: some Scene {
         WindowGroup {
             
-            let cfModelView = CFModelView()
+            let cfModelView = CFModelView(language: .Agnostic)
         
             //this initializes the view model in ViperView
             

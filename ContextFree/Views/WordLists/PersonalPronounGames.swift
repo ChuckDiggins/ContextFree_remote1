@@ -199,7 +199,7 @@ struct PersonalPronounGames: View {
             }
         }.onAppear{
             
-            cfModelView.createNewModel(language: .Agnostic)
+            //cfModelView.createNewModel(language: .Agnostic)
             m_randomPronounPhrase = RandomPersonalPronounPhrase(wsp: cfModelView.getWordStringParser(), rft: .subjectPronounVerb)
             createRandomClause()
             highlightCurrentFunction()
