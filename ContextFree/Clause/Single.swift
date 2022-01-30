@@ -15,9 +15,6 @@ class dSingle  : dCluster, Identifiable
  ------------------------------------------------------------------*/
 {
 
-    
-    //var m_clusterWord : Word
-    
     override init(word: Word, clusterType : ContextFreeSymbol, data: WordStateData){
         super.init(word: word, clusterType: clusterType, data: data)
     }
@@ -44,7 +41,6 @@ class dSingle  : dCluster, Identifiable
     var m_correction = dCorrection(m_inputInfo: WordStateData())
     var m_inputInfo = WordStateData()
     var m_outputInfo = WordStateData()
-    var m_clusterList = Array<dCluster>()
     
     func copyGuts(newSingle: dSingle){
         putClusterWord(word: newSingle.getClusterWord())
@@ -52,18 +48,7 @@ class dSingle  : dCluster, Identifiable
     }
     
     
-    func getClusterCount()->Int{return m_clusterList.count}
-    func getClusterList()->[dCluster]{ return m_clusterList}
-    func appendCluster(cluster: dCluster){m_clusterList.append(cluster)}
-    func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
-    func insertCluster(index: Int, cluster : dCluster){m_clusterList.insert(cluster, at: index)}
     
-    func replaceClusterRange(firstIndex: Int, lastIndex: Int, cluster: dCluster){
-        for _ in firstIndex...lastIndex {
-            deleteCluster(index: firstIndex)
-        }
-        insertCluster(index: firstIndex, cluster: cluster)
-    }
     func putOriginalString(str: String){m_originalString = str}
     func getOriginalString()->String {return m_originalString }
     

@@ -7,36 +7,35 @@
 
 import Foundation
 
-struct clauseManipulation{
-    var m_clause = dIndependentAgnosticClause()
+struct ClauseManipulation{
+    var m_clause : dIndependentAgnosticClause
     var m_englishClause = dIndependentAgnosticClause()
     
-    func createRandomClause(cfModelView: CFModelView, tense: Tense, randomPhraseType: RandomPhraseType)->(dIndependentAgnosticClause, dIndependentAgnosticClause){
-        let clause = cfModelView.getRandomAgnosticSentence(rft: randomPhraseType)
-        let currentPerson = clause.getPerson()
-        let fs  = clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: tense, person: currentPerson)
-        print("French phrase: \(fs)")
-        let ss  = clause.setTenseAndPersonAndCreateNewSentenceString(language: .Spanish, tense: tense, person: currentPerson)
-        print("Spanish phrase: \(ss)")
-        
-        let englishClause = dIndependentAgnosticClause()
-        englishClause.copy(inClause: clause)
-        englishClause.convertRomancePhraseOrderToEnglishPhraseOrder()
-        let es  = englishClause.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: tense, person: currentPerson)
-        print("English phrase: \(es)")
-        return (clause, englishClause)
+    func dumpClause(clause: dIndependentAgnosticClause){
+        let tempSingleList = clause.getSingleList()
+        for single in tempSingleList {
+            print("clauseManipulation: \(single.getClusterWord().word)")
+        }
+    }
+    
+    mutating func setClause(clause : dIndependentAgnosticClause ){
+        m_clause = clause
     }
     
     func changeWordInClause(cfModelView: CFModelView, clause: dIndependentAgnosticClause, single: dSingle, isSubject: Bool)->dIndependentAgnosticClause{
+        var tempSingleList = clause.getSingleList()
+        for single in tempSingleList {
+            print("Before - changeWordInClause: \(single.getClusterWord().word)")
+        }
         let randomSentence = cfModelView.getRandomSentenceObject()
         let tense = clause.getTense()
         var person = clause.getPerson()
         //let single = singleList[currentSingleIndex]
         var wsd = single.getSentenceData()
-//        var tempSingleList = clause.getSingleList()
-//        for single in tempSingleList {
-//            print("Before - changeWordInClause: \(single.getClusterWord().word)")
-//        }
+        tempSingleList = clause.getSingleList()
+        for single in tempSingleList {
+            print("Before - changeWordInClause: \(single.getClusterWord().word)")
+        }
         
         switch wsd.wordType {
         case .PersPro:
@@ -74,19 +73,70 @@ struct clauseManipulation{
         }
         wsd = single.getSentenceData()
         clause.processInfo()
-
-        //these are for resetting various parameters for each language/sentence 
-//        var sentenceString : String!
+        
+        //these are for resetting various parameters for each language/sentence
+        //        var sentenceString : String!
         _ = clause.setTenseAndPersonAndCreateNewSentenceString(language: .Spanish, tense: tense, person: person)
         _ = clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: tense, person: person)
         _ = clause.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: tense, person: person)
         
-//        tempSingleList = clause.getSingleList()
-//        for single in tempSingleList {
-//            print("After after - changeWordInClause: \(single.getClusterWord().word)")
-//        }
+        tempSingleList = clause.getSingleList()
+        for single in tempSingleList {
+            print("After after - changeWordInClause: \(single.getClusterWord().word)")
+        }
         return clause
     }
+    
+    func changeWordInClause(cfModelView: CFModelView, single: dSingle, isSubject: Bool){
+        let randomSentence = cfModelView.getRandomSentenceObject()
+        let tense = m_clause.getTense()
+        var person = m_clause.getPerson()
+        //let single = singleList[currentSingleIndex]
+        var wsd = single.getSentenceData()
+
+        switch wsd.wordType {
+        case .PersPro:
+            person = cfModelView.getNextPerson(currentPerson: person)
+            let newSingle = randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject: isSubject)
+            single.copyGuts(newSingle: newSingle)
+            if isSubject{
+                single.setPerson(value: person)
+                m_clause.setPerson(value: person)
+            }
+        case .V:
+            let newSingle = randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+            newSingle.setPerson(value: person)
+            single.copyGuts(newSingle: newSingle)
+            person = single.getPerson()
+        case .Adj, .Det, .Adv, .C:
+            let newSingle = randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+            //person = newSingle.getPerson()
+            single.copyGuts(newSingle: newSingle)
+            //person = single.getPerson()
+            m_clause.setPerson(value: person)
+        case .N:
+            let nounSingle = single as! dNounSingle
+            let newSingle = randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:nounSingle.isSubject())
+            nounSingle.copyGuts(newSingle: newSingle)
+            if nounSingle.isSubject() {
+                m_clause.setPerson(value: nounSingle.getPerson())
+                person = nounSingle.getPerson()
+            }
+        case .P:
+            let newSingle = randomSentence.m_randomWord.getAgnosticRandomWordAsSingle(wordType : wsd.wordType, isSubject:false)
+            single.copyGuts(newSingle: newSingle)
+        default: break
+        }
+        wsd = single.getSentenceData()
+        m_clause.processInfo()
+        
+        //these are for resetting various parameters for each language/sentence
+        //        var sentenceString : String!
+        _ = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .Spanish, tense: tense, person: person)
+        _ = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: tense, person: person)
+        _ = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: tense, person: person)
+    }
+    
     
     enum FrenchContractionType{
         case article, subject
@@ -123,7 +173,7 @@ struct clauseManipulation{
     }
     
     func handleContractions(language: LanguageType, wordList: [Word])->[Word]{
-
+        
         var wordListCopy = wordList
         switch language {
         case .Spanish:
@@ -151,27 +201,27 @@ struct clauseManipulation{
         return wordListCopy
     }
     
-//    func countStringLengths(clause: dIndependentAgnosticClause, englishClause: dIndependentAgnosticClause){
-//        let singleList = clause.getSingleList()
-//        let englishSingleList = englishClause.getSingleList()
-//        var spanishStringLength = 0
-//        var frenchStringLength = 0
-//        var englishStringLength = 0
-//        var singleIndex = 0
-//        for single in singleList {
-//            let frenchStr = single.getProcessWordInWordStateData(language: .French)
-//            let spanishStr = single.getProcessWordInWordStateData(language: .Spanish)
-//            let englishStr = single.getProcessWordInWordStateData(language: .English)
-//            frenchStringLength += frenchStr.count
-//            spanishStringLength += spanishStr.count
-//            englishStringLength += englishStr.count
-//        }
-//
-//        print("Spanish string length \(spanishStringLength)")
-//        print("French string length \(frenchStringLength)")
-//        print("English string length \(englishStringLength)")
-//
-//    }
+    //    func countStringLengths(clause: dIndependentAgnosticClause, englishClause: dIndependentAgnosticClause){
+    //        let singleList = clause.getSingleList()
+    //        let englishSingleList = englishClause.getSingleList()
+    //        var spanishStringLength = 0
+    //        var frenchStringLength = 0
+    //        var englishStringLength = 0
+    //        var singleIndex = 0
+    //        for single in singleList {
+    //            let frenchStr = single.getProcessWordInWordStateData(language: .French)
+    //            let spanishStr = single.getProcessWordInWordStateData(language: .Spanish)
+    //            let englishStr = single.getProcessWordInWordStateData(language: .English)
+    //            frenchStringLength += frenchStr.count
+    //            spanishStringLength += spanishStr.count
+    //            englishStringLength += englishStr.count
+    //        }
+    //
+    //        print("Spanish string length \(spanishStringLength)")
+    //        print("French string length \(frenchStringLength)")
+    //        print("English string length \(englishStringLength)")
+    //
+    //    }
     
 }
-    
+

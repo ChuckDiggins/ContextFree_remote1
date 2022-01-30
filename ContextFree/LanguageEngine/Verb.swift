@@ -15,8 +15,6 @@ class Verb : Word {
     var typeList = [VerbType]()
     var transitivity =  VerbTransitivity.transitive
     var passivity =  VerbPassivity.active
-    var favoriteSubjects = [NounType]()
-    var favoriteObjects = [NounType]()
     var tense = Tense.present
     var person = Person.S1
     var tensePersonSet = false
@@ -59,7 +57,6 @@ class Verb : Word {
     
     init(jsonVerb: JsonVerb, language: LanguageType){
         self.transitivity = jsonVerb.transitivity
-        self.passivity = jsonVerb.passivity ?? VerbPassivity.passive
         switch(language){
         case .Spanish:  super.init(word: jsonVerb.spanish, wordType: .verb)
         case .French:  super.init(word: jsonVerb.french, wordType: .verb)
@@ -73,8 +70,7 @@ class Verb : Word {
         self.english = jsonVerb.english
         
         convertVerbTypeStringToVerbTypes(inputString: jsonVerb.verbType)
-        convertFavoriteSubjectStringToFavoriteNouns(inputString: jsonVerb.subjectLikes)
-        convertFavoriteObjectStringToFavoriteNouns(inputString: jsonVerb.objectLikes)
+    
         for type in typeList {
             if type == .passive {
                 m_isPassive = true
@@ -95,10 +91,7 @@ class Verb : Word {
         self.french = jsonVerb.french
         self.spanish = jsonVerb.spanish
         self.transitivity = jsonVerb.transitivity
-        self.passivity = jsonVerb.passivity!
         convertVerbTypeStringToVerbTypes(inputString: jsonVerb.verbType)
-        convertFavoriteSubjectStringToFavoriteNouns(inputString: jsonVerb.subjectLikes)
-        convertFavoriteObjectStringToFavoriteNouns(inputString: jsonVerb.objectLikes)
         
     }
     
@@ -126,6 +119,15 @@ class Verb : Word {
             return false
     }
     
+    func isBackward()->Bool {
+        for type in typeList {
+            if type == VerbType.backward {
+                return true
+            }
+        }
+        return false
+    }
+    
     func updateType( vType: [String])
     {
         typeList.removeAll()
@@ -133,20 +135,6 @@ class Verb : Word {
             typeList.append(getVerbTypeFromLetter(letter: f))
         }
     }
-
-    func updateSubjAndObj(subj : [String], obj : [String])
-    {     
-        favoriteSubjects.removeAll()
-        for f in subj {
-            favoriteSubjects.append(getNounTypeFromString(str: f))
-        }
-
-        favoriteObjects.removeAll()
-        for f in obj {
-            favoriteObjects.append(getNounTypeFromString(str: f))
-        }
-    }
-
     func getWordAtLanguage(language: LanguageType)->String{
         switch(language){
         case .Spanish: return spanish
@@ -167,51 +155,8 @@ class Verb : Word {
         }
     }
     
-    func convertFavoriteSubjectStringToFavoriteNouns(inputString: String){
-        let util = VerbUtilities()
-        let strList = getNounTypesAsStringList()
-        for str in strList {
-            if util.doesWordContainLetter(inputString: inputString, letter: str) {
-                favoriteSubjects.append(getNounTypeFromString(str: str))}
-        }
-    }
-    
-    func convertFavoriteObjectStringToFavoriteNouns(inputString: String){
-        let util = VerbUtilities()
-        let strList = getNounTypesAsStringList()
-        for str in strList {
-            if util.doesWordContainLetter(inputString: inputString, letter: str) {
-                favoriteObjects.append(getNounTypeFromString(str: str))}
-        }
-    }
-    
-    func getFavoriteSubjects()->[NounType]{
-        return favoriteSubjects
-    }
-    
-    func getFavoriteObjects()->[NounType]{
-        return favoriteObjects
-    }
-    
     func getVerbTypes()->[VerbType]{
         return typeList
-    }
-    
-    func convertFavoriteSubjectsToCompositeString()->String{
-        var compositeString = ""
-        for nt in favoriteSubjects{
-            let fav = getNounTypeStringAtIndex(index: nt.rawValue)
-                compositeString.append(fav)
-        }
-        return compositeString
-    }
-    
-    func convertFavoriteObjectsToCompositeString()->String{
-        var compositeString = ""
-        for nt in favoriteObjects{
-            compositeString.append(getNounTypeStringAtIndex(index: nt.rawValue))
-        }
-        return compositeString
     }
     
     func convertVerbTypesToCompositeString()->String{
@@ -225,10 +170,10 @@ class Verb : Word {
     func createJsonVerb()->JsonVerb{
         let jv : JsonVerb
         if ( passivity == .passive ){
-            jv = JsonVerb(spanish: word, english: english, french: french, subjectLikes: convertFavoriteSubjectsToCompositeString())
+            jv = JsonVerb(spanish: word, english: english, french: french)
         }
         else {
-            jv = JsonVerb(spanish: word, english: english, french: french,   transitivity: transitivity, verbType : convertVerbTypesToCompositeString(),  passivity: passivity, subjectLikes: convertFavoriteSubjectsToCompositeString(), objectLikes: convertFavoriteObjectsToCompositeString())
+            jv = JsonVerb(spanish: word, english: english, french: french,   transitivity: transitivity, verbType : convertVerbTypesToCompositeString())
         }
         return jv
     }

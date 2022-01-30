@@ -23,19 +23,7 @@ class dClause : dCluster, ObservableObject {
     var m_headNounCluster = dCluster(word: Word(), clusterType: .N)
     var m_headVerbCluster = dCluster(word: Word(), clusterType: .V)
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
-    //var m_clusterList = [dCluster]()
-    var m_clusterList = Array<dCluster>()
     var m_singleList = Array<dSingle>()
-    
-    func clearClusterList(){m_clusterList.removeAll()}
-    func getClusterList()->[dCluster]{ return m_clusterList}
-    func appendCluster(cluster: dCluster){m_clusterList.append(cluster)}
-    func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
-    func insertCluster(index: Int, cluster : dCluster){
-        if ( index < m_clusterList.count ){
-            m_clusterList.insert(cluster, at: index)
-        }
-    }
 
     func appendSingle(single: dSingle){
         m_singleList.append(single)
@@ -53,27 +41,6 @@ class dClause : dCluster, ObservableObject {
         }
     }
     
-    func replaceClusterRange(firstIndex: Int, lastIndex: Int, cluster: dCluster){
-        for _ in firstIndex...lastIndex {
-            deleteCluster(index: firstIndex)
-        }
-        insertCluster(index: firstIndex, cluster: cluster)
-    }
-    
-    func replaceCluster(index: Int, cluster: dCluster){
-        m_clusterList[index] = cluster
-    }
-    
-    func getClusterCount()->Int{return m_clusterList.count}
-    func getFirstCluster()->dCluster{ return m_clusterList[0] }
-    func getLastCluster()->dCluster{ return m_clusterList[getClusterCount()-1] }
-    func getFirstSingle()->dSingle{
-        if getFirstCluster().getClusterType().isSingle() {
-            //let single = getFirstCluster() as! dSingle
-            return getFirstCluster() as! dSingle
-        }
-        return dSingle()
-    }
     
     func getLastSingle()->dSingle{
         if getLastCluster().getClusterType().isSingle() {
@@ -110,8 +77,6 @@ class dAdjectivalClause : dClause {
     init(word: Word){
         super.init(word: word, clusterType: .AdjCls)
     }
-    
-    //override init(){setWordType(value: .adjective)}
     
     var m_isComparative = false
     var m_isSuperlative = false
@@ -198,7 +163,7 @@ class dDependentClause : dClause {
     
 }
 
-class dSentence : dClause {
+class dSentenceA : dClause {
     
     override init(){
         super.init(word: Word(), clusterType: .S)

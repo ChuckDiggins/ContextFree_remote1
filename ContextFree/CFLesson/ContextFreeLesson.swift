@@ -11,7 +11,7 @@ struct ContextFreeLesson {
     var m_lessonName : String
     var m_wsp : WordStringParser!
     var m_randomWord : RandomWordLists!
-    private var namedPhraseList = [NamedPhrase]()
+    private var namedPhraseList = [dPhrase]()
     
     private var activeLanguage = LanguageType.Spanish
 
@@ -26,7 +26,7 @@ struct ContextFreeLesson {
         m_lessonName = lessonName
     }
 
-    mutating func appendNamedPhrase(namedPhrase: NamedPhrase){
+    mutating func appendNamedPhrase(namedPhrase: dPhrase){
         namedPhraseList.append(namedPhrase)
     }
     
@@ -38,14 +38,14 @@ struct ContextFreeLesson {
         return namedPhraseList.count
     }
     
-    func getNamedPhraseList()->[NamedPhrase]{
+    func getNamedPhraseList()->[dPhrase]{
         return namedPhraseList
     }
     
-    func getNamedPhraseAt(index: Int)->NamedPhrase{
+    func getNamedPhraseAt(index: Int)->dPhrase{
         if index >= 0 && index < getNamePhraseCount(){
             return namedPhraseList[index]}
-        return NamedPhrase()
+        return dPhrase()
     }
     
     mutating func createAClause(){}

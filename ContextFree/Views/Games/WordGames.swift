@@ -17,14 +17,14 @@ struct WordGames: View {
         .foregroundColor(.white)
         .cornerRadius(10)
         
-        NavigationLink(destination: AdjectiveGames()){
-            Text("Adjective Games")
-        }.frame(width: 200, height: 50)
-        .padding(.leading, 10)
-        .background(Color.blue)
-        .foregroundColor(.white)
-        .cornerRadius(10)
-        
+//        NavigationLink(destination: AdjectiveGames()){
+//            Text("Adjective Games")
+//        }.frame(width: 200, height: 50)
+//        .padding(.leading, 10)
+//        .background(Color.blue)
+//        .foregroundColor(.white)
+//        .cornerRadius(10)
+//        
         NavigationLink(destination: NounGames()){
             Text("Noun Games")
         }.frame(width: 200, height: 50)

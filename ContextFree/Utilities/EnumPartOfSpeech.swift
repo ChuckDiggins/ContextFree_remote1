@@ -201,35 +201,6 @@ enum WordType : String {
     case unknown
 }
 
-func getClusterTypeFromString(str: String)->ContextFreeSymbol{
-    switch str{
-    case "N": return .N
-    case "V": return .V
-    case "Adj": return .Adj
-    case "Adv": return .Adv
-    case "P": return .P
-    case "C": return .C
-    case "NP": return .NP
-    case "VP": return .VP
-    case "PP": return .PP
-    case "AP": return .AP
-    case "AdvP": return .AdvP
-    default: return .AMB
-    }
-}
-        
-        
-func getWordTypeFromString(str: String)->WordType{
-    switch str{
-    case "noun": return .noun
-    case "verb": return .verb
-    case "adjective": return .adjective
-    case "adverb": return .adverb
-    case "preposition": return .preposition
-    case "conjunction": return .conjunction
-    default: return .ambiguous
-    }
-}
 
 
 func getWordType(clusterType: ContextFreeSymbol)->WordType{
@@ -319,6 +290,7 @@ enum VerbType : Int, Codable{
     case impersonal //weather stuff:  orvallar(drizzle), llover(rain)
     case passive
     case defective //
+    case backward
 }
 
 enum Separable : Int, Codable{
@@ -338,7 +310,7 @@ func getVerbType(index:Int)->VerbType{
     case 6: return .phrasalSeparable
     case 7: return .defective
     case 8: return .impersonal //weather stuff:  orvallar(drizzle), llover(rain)
-    case 9: return .passive
+    case 9: return .backward
     default: return .normal
     }
 }
@@ -384,7 +356,7 @@ func getVerbTypeFromLetter(letter: String)->VerbType{
     case "P": return .phrasal
     case "S": return .phrasalSeparable
     case "D": return .defective
-    case "B": return .passive
+    case "B": return .backward
     case "I": return .impersonal
     default:  return .normal
     }

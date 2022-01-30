@@ -17,26 +17,19 @@ class dPhrase : dCluster {
         super.init(word: Word(), clusterType: .UNK)
     }
     
+    private var m_randomWord : RandomWordLists!
+    
+    init(randomWord:RandomWordLists, phraseName: String, phraseType: ContextFreeSymbol){
+        m_randomWord = randomWord
+        super.init(word: Word(), clusterType: phraseType, data: WordStateData())
+        setClusterName(name: phraseName)
+    }
+    
+    func setRandomWordList(randomWordList: RandomWordLists){
+        m_randomWord = randomWordList
+    }
+    
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
-    var m_clusterList = Array<dCluster>()
-    func getClusterCount()->Int{return m_clusterList.count}
-    func getClusterList()->[dCluster]{ return m_clusterList}
-    
-    func getCluster(index: Int)->dCluster{
-        if ( index < m_clusterList.count ){ return m_clusterList[index] }
-
-        return dCluster()
-    }
-    
-    func appendCluster(cluster: dCluster){
-        if cluster.getWordType() == .N {
-            m_sentenceData.gender = cluster.getGender()
-            m_sentenceData.number = cluster.getNumber()
-        }
-        m_clusterList.append(cluster)
-        if m_clusterList.count == 1 {m_sentenceData.language = cluster.getSentenceData().language}
-    }
-    
     func getClusterAtFunction(fn: ContextFreeFunction)->dCluster{
         for cluster in getClusterList(){
             if cluster.getClusterFunction() == fn {return cluster}
@@ -85,10 +78,34 @@ class dPhrase : dCluster {
         }
     }
     
+    func createNewRandomPhrase(){
+        var index = 0
+        var newCluster = dCluster()
+        var newClusterWord = Word()
+        var replaceClusterWord = false
+        for cluster in getClusterList(){
+            replaceClusterWord = false
+            if cluster.getAssociatedWordListCount()>0 {
+                cluster.replaceClusterWordWithRandomAssociatedWord()
+                newClusterWord = cluster.m_clusterWord
+                replaceClusterWord = true
+//                print("createNewPhrase: type \(cluster.getClusterType().rawValue): newWord \(newClusterWord.spanish)" )
+            }
+            //let single = cluster as! dSingle
+            newCluster = m_randomWord.getAgnosticRandomWordAsSingle(wordType: cluster.getClusterType(), isSubject:false)
+            if replaceClusterWord {
+                newCluster.m_clusterWord = newClusterWord
+                newCluster.putAssociatedWordList(wordList: cluster.getAssociatedWordList())
+            }
+            replaceCluster(index: index, cluster: newCluster)
+                //print("createNewRandomPhrase: index\(index), wordString = \(cluster.getStringAtLanguage(language: .Spanish))")
+            index += 1
+        }
+    }
+    
     func getReconstructedPhraseString(language: LanguageType)->String {
         var ss = ""
         var str = ""
-        //print ("getReconstructedSentenceString - dataList count = \(dataList.count)")
     
         for cluster in getClusterList() {
             let type = cluster.getClusterType()
@@ -114,24 +131,7 @@ class dPhrase : dCluster {
         return ss
     }
    
-    func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
-    func insertCluster(index: Int, cluster : dCluster){m_clusterList.insert(cluster, at: index)}
-    
-    func replaceClusterRange(firstIndex: Int, lastIndex: Int, cluster: dCluster){
-        for _ in firstIndex...lastIndex {
-            deleteCluster(index: firstIndex)
-        }
-        insertCluster(index: firstIndex, cluster: cluster)
-    }
 
-    func clearClusterList(){m_clusterList.removeAll()}
-    
-    func replaceCluster(index: Int, cluster: dCluster){
-        m_clusterList[index] = cluster
-    }
- 
-    func getFirstCluster()->dCluster{ return m_clusterList[0] }
-    func getLastCluster()->dCluster{ return m_clusterList[getClusterCount()-1] }
     func getFirstSingle()->dSingle{
         if getFirstCluster().getClusterType().isSingle() {
             //let single = getFirstCluster() as! dSingle
@@ -286,8 +286,6 @@ class dPhrase : dCluster {
     func processInfo(){
         let parentClusterType = getClusterType()
         
-        //print("ClusterType: \(getClusterType().rawValue): clusterCount = \(getClusterList().count)")
-        
         if getClusterType() == .NP {
             let np = self as! dNounPhrase
             let ns = np.getNounSingle()
@@ -339,12 +337,10 @@ class dPhrase : dCluster {
                 setTense(value: .present)
             }
         }
-        //if ( m_nounCount > 1){setNumber(value: .plural)}
     }
     
     func getStringAtLanguage(language: LanguageType )->String{
         var str = ""
-        //var tempStr = ""
         
         for cluster in getClusterList(){
             let type = cluster.getClusterType()

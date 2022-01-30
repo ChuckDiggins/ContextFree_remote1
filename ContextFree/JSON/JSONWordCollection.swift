@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct JSONWord : Codable, CustomStringConvertible {
     var spanish: String
     var english: String
@@ -14,54 +15,46 @@ struct JSONWord : Codable, CustomStringConvertible {
     var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
+    
+    func getWord()->Word{
+        let word = Word(word: spanish, spanish: spanish, french: french, english: english, wordType: getWordTypeFromString(str: wordType))
+        return word
+    }
 }
-    
-var CarpenterWordList: [JSONWord] = [
-    JSONWord(spanish: "siempre", english: "always", french: "toujours", wordType: "adverb"),
-    JSONWord(spanish: "nunca", english: "never", french: "jamais", wordType: "adverb"),
-    JSONWord(spanish: "todos los dias", english: "everyday", french: "tous les jours", wordType: "adverb"),
-    
-    JSONWord(spanish: "dulce", english: "sweet", french: "douce", wordType: "adjective"),
-    JSONWord(spanish: "salado", english: "salty", french: "salé", wordType: "adjective"),
-    JSONWord(spanish: "sabroso", english: "tasty", french: "délicieux", wordType: "adjective"),
-    JSONWord(spanish: "picante", english: "spicy", french: "épicé", wordType: "adjective"),
-    
-    JSONWord(spanish: "con", english: "with", french: "avec", wordType: "preposition"),
-    JSONWord(spanish: "sin", english: "without", french: "sans",wordType: "preposition"),
-    
-    JSONWord(spanish: "desayuno", english: "breakfast",    french: "petir déjeuner", wordType: "noun"),
-    JSONWord(spanish: "cereal", english: "cereal",    french: "céréale", wordType: "noun"),
-    JSONWord(spanish: "huevo", english: "egg",    french: "œef", wordType: "noun"),
-    JSONWord(spanish: "pan", english: "bread",    french: "pain", wordType: "noun"),
-    JSONWord(spanish: "pan tostado", english: "toast",    french: "toast", wordType: "noun"),
-    JSONWord(spanish: "plátano", english: "banana",    french: "banane", wordType: "noun"),
-    JSONWord(spanish: "salchicha", english: "sausage",    french: "sausisse", wordType: "noun"),
-    JSONWord(spanish: "tocino", english: "bacon",    french: "bacon", wordType: "noun"),
-    JSONWord(spanish: "yogur", english: "yogurt",    french: "yaourt", wordType: "noun"),
-    JSONWord(spanish: "almuerzo", english: "lunch",    french: "déjeuner", wordType: "noun"),
-    JSONWord(spanish: "ensalada", english: "salad",    french: "salade", wordType: "noun"),
-    JSONWord(spanish: "fresa", english: "strawberry",    french: "fraisier", wordType: "noun"),
-    JSONWord(spanish: "galleta", english: "cookie",    french: "gâteau", wordType: "noun"),
-    JSONWord(spanish: "hamburguesa", english: "hamburger",    french: "hamburger", wordType: "noun"),
-    JSONWord(spanish: "jamón", english: "ham",    french: "jambon", wordType: "noun"),
-    JSONWord(spanish: "papas fritas", english: "French fries",    french: "frites", wordType: "noun"),
-    JSONWord(spanish: "manzana", english: "apple",    french: "pomme", wordType: "noun"),
-    JSONWord(spanish: "naranja", english: "orange",    french: "orange", wordType: "noun"),
-    JSONWord(spanish: "perro caliente", english: "hot dog",    french: "hot-dog", wordType: "noun"),
-    JSONWord(spanish: "pizza", english: "pizza",    french: "pizza", wordType: "noun"),
-    JSONWord(spanish: "queso", english: "cheese",    french: "fromage", wordType: "noun"),
-    JSONWord(spanish: "sándwich de jamón y queso", english: "ham and cheese sandwich",    french: "sandwich jambon-fromage", wordType: "noun"),
-    JSONWord(spanish: "sopa", english: "soup",    french: "soupe", wordType: "noun"),
-    JSONWord(spanish: "sopa de verduras", english: "vegetable soup",    french: "soupe aux légumes", wordType: "noun"),
-    JSONWord(spanish: "pollo", english: "chicken",    french: "poulet", wordType: "noun"),
-    JSONWord(spanish: "sal", english: "salt",    french: "sel", wordType: "noun"),
-    JSONWord(spanish: "pimienta", english: "pepper",    french: "poivre", wordType: "noun"),
-    JSONWord(spanish: "azúcar", english: "sugar",    french: "sucre", wordType: "noun"),
 
-    JSONWord(spanish: "comer", english: "eat", french: "manger", wordType: "verb"),
-    JSONWord(spanish: "beber", english: "drink", french: "boire", wordType: "verb"),
-    JSONWord(spanish: "gustar", english: "be pleasing to", french: "aimer", wordType: "verb"),
-    ]
+struct JSONCollectionStruct : Codable, CustomStringConvertible {
+    var idNum: Int
+    var collectionName : String
+    var wordList = [JSONWord]()
+    var description: String {
+        return "\(self.collectionName) : wordCount =\(wordList.count)"
+    }
+    
+    init(idNum: Int, collectionName: String, wordList : [JSONWord]){
+        self.idNum = idNum
+        self.collectionName = collectionName
+        self.wordList = wordList
+    }
+    
+    func printThyself(){
+        print("\(idNum) - \(collectionName)")
+        var i = 0
+        for word in wordList {
+            print("Word \(i)- \(word.spanish), \(word.english), \(word.french)")
+            i += 1
+        }
+    }
+    
+    func convertToJLingCollection()->dWordCollection{
+        var newWordList = [Word]()
+        for jsonWord in wordList {
+            let wordType = getWordTypeFromString(str: jsonWord.wordType)
+            let word = Word(word: jsonWord.spanish, spanish: jsonWord.spanish, french: jsonWord.french, english: jsonWord.english, wordType: wordType)
+            newWordList.append(word)
+        }
+        return dWordCollection(idNum: idNum, collectionName: collectionName, wordList: newWordList)
+    }
+}
 
 class JSONWordCollection: Codable {
      
@@ -108,18 +101,18 @@ class JSONWordCollection: Codable {
         }
     }
     
-    func appendWord(adv: JSONWord){
+    func appendWord(jw: JSONWord){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
-            if v.spanish == adv.spanish && v.french == adv.french && v.english == adv.english{
+            if v.spanish == jw.spanish && v.french == jw.french && v.english == jw.english{
                 myWordList.remove(at: i)
-                myWordList.insert(adv, at:i)
+                myWordList.insert(jw, at:i)
                 appendThis = false
                 break
             }
         }
-        if ( appendThis ){myWordList.append(adv)}
+        if ( appendThis ){myWordList.append(jw)}
         encodeWords()
     }
     func clearWords(){
@@ -153,3 +146,4 @@ class JSONWordCollection: Codable {
     }
     
 }
+

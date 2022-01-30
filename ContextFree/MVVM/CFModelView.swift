@@ -26,6 +26,14 @@ class CFModelView: ObservableObject {
         return cfModel!
     }
     
+    func getBundleManager()->dBundleManager{
+        return cfModel!.bundleManager
+    }
+    
+    func getWordCollectionManager()->dWordCollectionManager{
+        return cfModel!.m_wsp.wordCollectionManager
+    }
+    
     func setCurrentClusterAndWordTypeForFilling(cluster: dCluster, wordType: WordType){
         activeCluster = cluster
         activeWordType = wordType
@@ -66,12 +74,8 @@ class CFModelView: ObservableObject {
         return (cfModel?.getWordStringParser())!
     }
     
-    func getRandomAgnosticSentence(rft: RandomPhraseType)->dIndependentAgnosticClause{
-        return (cfModel?.getRandomAgnosticSentence(rft: rft))!
-    }
-
-    func getRandomAgnosticPronounPhrase(rft: RandomPhraseType)->dIndependentAgnosticClause{
-        return (cfModel?.getRandomAgnosticSentence(rft: rft))!
+    func getRandomAgnosticSentence(clause: dIndependentAgnosticClause, rft: RandomPhraseType){
+        cfModel?.getRandomAgnosticSentence(clause: clause, rft: rft)
     }
 
     func getRandomSentenceObject()->RandomSentence{
@@ -111,10 +115,10 @@ class CFModelView: ObservableObject {
         return cfModel!.getRandomAgnosticSentence()
     }
     
-    func getAgnosticRandomSubjPronounSentence()->dIndependentAgnosticClause{
-        return cfModel!.getAgnosticRandomSubjPronounSentence()
-    }
-    
+//    func getAgnosticRandomSubjPronounSentence()->dIndependentAgnosticClause{
+//        return cfModel!.getAgnosticRandomSubjPronounSentence()
+//    }
+//    
     func getModifierList(wordType: WordType)->Array<Word>{
         return cfModel!.getModifierList(wordType: wordType)
     }
@@ -169,7 +173,7 @@ class CFModelView: ObservableObject {
         return cfModel!.getGrammarLibrary()
     }
     
-    func createIndependentClause(clauseString: String)->dIndependentClause{
-        return cfModel!.createIndependentClause(clauseString: clauseString)
-    }
+//    func createIndependentClause(clauseString: String)->dIndependentClause{
+//        return cfModel!.createIndependentClause(clauseString: clauseString)
+//    }
 }

@@ -32,7 +32,6 @@ class dVerbPhrase : dPhrase {
     func getSubjectCluster()->dCluster{return m_subjectCluster}
     
     override func setPerson(value: Person){
-        getSentenceData().person = value
         for cluster in getClusterList(){
             if cluster.getClusterType() == .V {
                 let v = cluster as! dVerbSingle
@@ -44,6 +43,21 @@ class dVerbPhrase : dPhrase {
             }
         }
     }
+    
+    override func getPerson()->Person{
+        for cluster in getClusterList(){
+            if cluster.getClusterType() == .V {
+                let v = cluster as! dVerbSingle
+                return v.getPerson()
+            }
+            if cluster.getClusterType() == .VP {
+                let vp = cluster as! dVerbPhrase
+                return vp.getPerson()
+            }
+        }
+        return .S1
+    }
+    
     
     override func setTense(value: Tense){
         for cluster in getClusterList(){
@@ -57,6 +71,20 @@ class dVerbPhrase : dPhrase {
             }
             
         }
+    }
+    
+    override func getTense()->Tense{
+        for cluster in getClusterList(){
+            if cluster.getClusterType() == .V {
+                let v = cluster as! dVerbSingle
+                return v.getTense()
+            }
+            if cluster.getClusterType() == .VP {
+                let vp = cluster as! dVerbPhrase
+                return vp.getTense()
+            }
+        }
+        return .infinitive
     }
     
 

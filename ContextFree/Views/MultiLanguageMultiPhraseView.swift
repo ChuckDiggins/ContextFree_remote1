@@ -1,20 +1,13 @@
 ////
-////  AgnosticSentenceView.swift
-////  ContextFree
+////  MultiLanguageMultiPhraseView.swift
+////  MultiLanguageMultiPhraseView
 ////
-////  Created by Charles Diggins on 6/25/21.
+////  Created by Charles Diggins on 1/22/22.
 ////
 //
 //import SwiftUI
 //
-//struct LanguageIndex {
-//    let language: LanguageType
-//    var englishIndices = Array<Int>()
-//    var spanishIndices = Array<Int>()
-//    var frenchIndices = Array<Int>()
-//}
-//
-//struct NewPhrasesIn3LanguagesView: View {
+//struct MultiLanguageMultiPhraseView: View {
 //    @EnvironmentObject var cfModelView : CFModelView
 //    @State var maxDisplayLines = 1
 //    @State var singleIndexList = [[Int]]()
@@ -34,8 +27,9 @@
 //    @State private var sentenceString: String = ""
 //    
 //    @State private var englishSingleList = [dSingle]()
-//    @State var m_clause : dIndependentAgnosticClause?
-//    @State var m_englishClause : dIndependentAgnosticClause?
+//    @State var m_clause : AgnosticClause?
+//    @State var m_englishClause : AgnosticClause?
+//    
 //    @State var defaultBackgroundColor = Color.yellow
 //    @State var highlightBackgroundColor = Color.black
 //    
@@ -46,10 +40,9 @@
 //    @State private var isSubject = false
 //    @State var showWorkSheet = false
 //    
-//    var languageType = ["Agnostic - all 3 languages",
-//                       "Spanish only",
-//                       "French only",
-//                        "English only"]
+//    @State var spanishActivated  = true
+//    @State var frenchActivated = false
+//    @State var englishActivated = true
 //    
 //    var phraseType = ["Subject pronoun / Verb",
 //                      "Simple noun phrase",
@@ -57,7 +50,7 @@
 //                      "Verb-adverb phrase",
 //                      "Simple clause"
 //    ]
-//    @State private var currentLanguage = LanguageType.Agnostic
+//    
 //    
 //    @State private var selectedPhraseIndex = 4
 //    @State var m_randomPhraseType = RandomPhraseType.simpleClause
@@ -66,6 +59,15 @@
 //    var body: some View {
 //        GeometryReader{ geometry in
 //            VStack{
+//                HStack(){
+//                    Toggle(isOn: $spanishActivated){  Text("Spanish")  }
+//                    Spacer()
+//                    Toggle(isOn: $frenchActivated){  Text("French")  }
+//                    Spacer()
+//                    Toggle(isOn: $englishActivated){  Text("English")  }
+//                }.frame(maxWidth: .infinity)
+//                .background(Color.purple.opacity(0.3))
+//                .font(.caption)
 //                VStack{
 //                    Picker("Phrase type picker:", selection: $selectedPhraseIndex, content: {
 //                        Text(phraseType[0]).tag(0).font(.subheadline)
@@ -75,7 +77,6 @@
 //                        Text(phraseType[4]).tag(4).font(.subheadline)
 //                    }
 //                    )
-//                    //processPhraseSelection()
 //                    Text("Selected phrase: \(phraseType[selectedPhraseIndex])").font(.subheadline)
 //                }
 //                .labelsHidden()
@@ -84,9 +85,13 @@
 //                Text("Random sentence:")
 //                VStack {
 //                    if ( hasClause ){
-//                        SentenceView(language: .Spanish, changeWord: {self.changeWord()}, clauseModel: clauseModel)
-//                        SentenceView(language: .French, changeWord: {self.changeWord()}, clauseModel: clauseModel)
-//                        SentenceView(language: .English, changeWord: {self.changeWord()}, clauseModel: clauseModel)
+//                        if ( spanishActivated ){
+//                            SentenceView(language: .Spanish, changeWord: {self.changeWord()}, clauseModel: clauseModel)}
+//                        if ( frenchActivated ){
+//                            SentenceView(language: .French, changeWord: {self.changeWord()}, clauseModel: clauseModel)}
+//                        if ( englishActivated ){
+//                            SentenceView(language: .English, changeWord: {self.changeWord()}, clauseModel: clauseModel)
+//                        }
 //                    }
 //                }.onAppear{
 //                    singleIndexList = Array(repeating: Array(repeating: 0, count: 10), count: 5)
@@ -134,10 +139,10 @@
 //                            .background(Color.white.cornerRadius(10))
 //                    })
 //                        .fullScreenCover(isPresented: $showWorkSheet, content: {
-//                            ClauseWorkSheet(m_clause: m_clause!, singleStringList: singleStringList,
-//                                            phraseStringList: phraseStringList,
-//                                            phraseColorList: phraseColorList,
-//                                            wordTypeList:  wordTypeList   )
+////                            ClauseWorkSheet(m_clause: m_clause!, singleStringList: singleStringList,
+////                                            phraseStringList: phraseStringList,
+////                                            phraseColorList: phraseColorList,
+////                                            wordTypeList:  wordTypeList   )
 //                        })
 //                }
 //            }
@@ -147,24 +152,40 @@
 //    
 //    
 //    func changeWord(){
+//        let tempSingleList = m_clause!.getSingleList()
+//        for single in tempSingleList {
+//            print("enter - changeWord: \(single.getClusterWord().word)")
+//        }
+//        processPhraseSelection()
+//        
 //        let single = singleList[clauseModel.currentSingleIndex]
-//        let clauseManipulation = clauseManipulation(m_clause: m_clause!, m_englishClause: m_englishClause!)
+//        let clauseManipulation = AgnosticClauseProcesses(m_clause: m_clause!, m_englishClause: m_englishClause!)
 //        m_clause!.setTense(value: currentTense)
 //        m_clause!.setPerson(value: currentPerson)
+//        
 //        let clause = clauseManipulation.changeWordInClause(cfModelView: cfModelView, clause: m_clause!, single: single, isSubject: isSubject)
 //        clauseManipulation.handleFrenchContractions(singleList: clause.getSingleList())
 //        currentPerson = m_clause!.getPerson()
 //        currentTense = m_clause!.getTense()
-//        
 //        m_clause = clause
 //        updateCurrentSentenceViewStuff(clause: clause, englishClause: m_englishClause!)
 //    }
 //    
 //    func generateRandomTense(){
+//        var tempSingleList = m_clause!.getSingleList()
+//        for single in tempSingleList {
+//            print("enter - generateRandomTense: \(single.getClusterWord().word)")
+//        }
 //        currentTense = cfModelView.getNextTense()
-//        sentenceString = m_clause!.setTenseAndPersonAndCreateNewSentenceString(language: .Spanish, tense: currentTense, person: currentPerson)
-//        sentenceString = m_clause!.setTenseAndPersonAndCreateNewSentenceString(language: .French, tense: currentTense, person: currentPerson)
-//        sentenceString = m_clause!.setTenseAndPersonAndCreateNewSentenceString(language: .English, tense: currentTense, person: currentPerson)
+//        m_clause!.setTenseAndPerson(tense: currentTense, person: currentPerson)
+//        sentenceString = m_clause!.createNewSentenceString(language: .Spanish)
+//        sentenceString = m_clause!.createNewSentenceString(language: .French)
+//        sentenceString = m_clause!.createNewSentenceString(language: .English)
+//        
+//        tempSingleList = m_clause!.getSingleList()
+//        for single in tempSingleList {
+//            print("pt 2 - generateRandomTense: \(single.getClusterWord().word)")
+//        }
 //        updateCurrentSentenceViewStuff(clause: m_clause!, englishClause: m_englishClause!)
 //    }
 //    
@@ -189,19 +210,19 @@
 //            currentTense = cfModelView.getRandomTense()
 //        }
 //        processPhraseSelection()
-////        let clauseManipulation = clauseManipulation()
-////        let result = clauseManipulation.createRandomClause(cfModelView: cfModelView, tense: currentTense, randomPhraseType: m_randomPhraseType)
-////        let clause = result.0
-////        let englishClause = result.1
-////
-////        m_clause = result.0
-////        m_englishClause = result.1
+//        let clauseManipulation = clauseManipulation()
+//        let result = clauseManipulation.createRandomClause(cfModelView: cfModelView, tense: currentTense, randomPhraseType: m_randomPhraseType)
+//        let clause = result.0
+//        let englishClause = result.1
+//        
+//        m_clause = result.0
+//        m_englishClause = result.1
 //        
 ////        let tempSingleList = clause.getSingleList()
 ////        for single in tempSingleList {
 ////            print("createRandomClause: \(single.getClusterWord().word)")
 ////        }
-////        updateCurrentSentenceViewStuff(clause: clause, englishClause: englishClause)
+//        updateCurrentSentenceViewStuff(clause: clause, englishClause: englishClause)
 //    }
 //    
 //    
@@ -218,7 +239,7 @@
 //        wordTypeList = clause.getWordTypeList()
 //        phraseStringList = clause.getParentPhraseTypeList()
 //        
-//        //AgnosticPhaseMapping 
+//        //AgnosticPhraseMapping
 //        for i in 0..<phraseStringList.count {
 //            phraseColorList.append(.green)
 //            let pim = PhraseIndexMapping(cfs : singleList[i].getWordType(), agnosticIndex: i, spanishIndex: i, frenchIndex: i, englishIndex: i)
@@ -252,10 +273,10 @@
 //            backgroundColor.append(defaultBackgroundColor)
 //        }
 //        
-////        let tempSingleList = clause.getSingleList()
-////        for single in tempSingleList {
-////            print("updateCurrentSentenceViewStuff: \(single.getClusterWord().word)")
-////        }
+//        let tempSingleList = clause.getSingleList()
+//        for single in tempSingleList {
+//            print("updateCurrentSentenceViewStuff: \(single.getClusterWord().word)")
+//        }
 //        
 //        clauseModel.set(currentSingleIndex: currentSingleIndex,
 //                                  maxLines: maxDisplayLines,
@@ -353,75 +374,12 @@
 //        
 //    }
 //    
-//    
-//    
+//
 //}
 //
-//struct WordCell: View {
-//    var thisLanguage: LanguageType
-//    //var m_clause: dIndependentAgnosticClause
-//    var wordText : String
-//    var backgroundColor: Color
-//    var foregroundColor: Color
-//    var fontSize : Font
-//    var function: (_ language: LanguageType) -> Void
-//    
-//    var body: some View {
-//        Button(wordText){
-//            function(thisLanguage)
-//        }
-//        .frame(minWidth: 50, maxWidth: .infinity, minHeight: 30)
-//        .background(backgroundColor)
-//        .foregroundColor(foregroundColor)
-//        .cornerRadius(8)
-//        .font(fontSize)
-//        
-//    }
-//    
-//    
-//}
 //
-//struct WordCellButton: View {
-//    //var language : LanguageType
-//    //var word: Word
-//    var wordText : String
-//    var backgroundColor: Color
-//    var foregroundColor: Color
-//    var fontSize : Font
-//    //var function: (_ word: Word) -> Void
-//    @State private var showingSheet = false
-//    
-//    var body: some View {
-//        Button(wordText)
-//        {
-//            showingSheet.toggle()
-//        }
-//        .rotationEffect(Angle.degrees(showingSheet ? 360 : 0))
-//                .animation(Animation.easeInOut)
-//        .frame(minWidth: 50, maxWidth: .infinity, minHeight: 30)
-//        .background(backgroundColor)
-//        .foregroundColor(foregroundColor)
-//        .cornerRadius(8)
-//        .font(fontSize)
-//        
-//        
-//        //        .sheet(isPresented: $showingSheet){
-//        //            switch word.wordType {
-//        //            case .adjective:
-//        //                AgnosticWordView(word: word)
-//        //            case .verb:
-//        //                AgnosticVerbView(word: word)
-//        //            default:
-//        //                AgnosticWordView(word: word)
-//        //            }
-//        
-//    }
-//}
-//
-//struct NewPhrasesIn3LanguagesView_Previews: PreviewProvider {
+//struct MultiLanguageMultiPhraseView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        NewPhrasesIn3LanguagesView()
+//        MultiLanguageMultiPhraseView()
 //    }
 //}
-//
-//

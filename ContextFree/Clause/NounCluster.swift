@@ -90,6 +90,10 @@ class dNounPhrase : dPhrase {
         super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
+    override init(randomWord:RandomWordLists, phraseName: String, phraseType: ContextFreeSymbol){
+        super.init(randomWord: randomWord, phraseName: phraseName, phraseType: phraseType)
+    }
+    
     init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }

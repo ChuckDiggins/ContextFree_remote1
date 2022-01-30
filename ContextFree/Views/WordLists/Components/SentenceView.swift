@@ -52,10 +52,6 @@ class  ClauseModel: ObservableObject {
         self.newWordSelected = newWordSelected
         self.backgroundColor = backGroundColor
         self.maxLines = maxLines
-        
-        for single in singleList {
-            print("Clause model.set: \(single.getClusterWord().word)")
-        }
     }
     
 }
@@ -64,7 +60,7 @@ struct SentenceView: View {
     var language: LanguageType
     var changeWord: () -> Void
     @ObservedObject var clauseModel: ClauseModel
-    var highlightColor = Color.white
+    var highlightColor = Color.blue
     var normalColor = Color.black
      
     var body: some View {
@@ -94,7 +90,6 @@ struct SentenceView: View {
                             }
                         }
                     }.onAppear{
-                        self.changeWord()
                     }
                }
             }

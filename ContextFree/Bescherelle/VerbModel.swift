@@ -8,7 +8,7 @@
 import Foundation
 
 
-//these verbs has special construction logic for several of their tenses
+//these verbs have special construction logic for several of their tenses
 enum SpecialVerbModel {
     case ESTAR
     case HABER

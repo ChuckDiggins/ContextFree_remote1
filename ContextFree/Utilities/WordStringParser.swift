@@ -17,6 +17,7 @@ class WordStringParser {
     private var spanVerbModel : RomanceVerbModelConjugation
     private var frenchVerbModel : RomanceVerbModelConjugation
     private var englishVerbModel : EnglishVerbModelConjugation
+    var wordCollectionManager = dWordCollectionManager()
     
     init(language: LanguageType, span: RomanceVerbModelConjugation, french: RomanceVerbModelConjugation, english : EnglishVerbModelConjugation){
         m_language = language
@@ -45,7 +46,6 @@ class WordStringParser {
     func getEnglishWords()->EnglishWords{
         return englishWords
     }
-    
     
     func isNewVerb(verb: Verb)->Bool{
         for word in generalWords.verbList {

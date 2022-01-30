@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6E03E80027909A0A0015DAED /* JSONWordCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E03E7FE27909A0A0015DAED /* JSONWordCollection.swift */; };
-		6E03E80127909A0A0015DAED /* JSONWordCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E03E7FF27909A0A0015DAED /* JSONWordCollectionManager.swift */; };
 		6E0463F726262814009A0937 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0463F626262813009A0937 /* Cluster.swift */; };
 		6E0463FB26262E54009A0937 /* DtsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0463FA26262E54009A0937 /* DtsInfo.swift */; };
 		6E0463FE26263D34009A0937 /* SentenceWordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0463FD26263D34009A0937 /* SentenceWordList.swift */; };
@@ -20,7 +19,6 @@
 		6E0464102628BA56009A0937 /* VerbCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E04640F2628BA56009A0937 /* VerbCluster.swift */; };
 		6E0464142629E523009A0937 /* WordRuleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0464132629E523009A0937 /* WordRuleManager.swift */; };
 		6E046419262C6F2C009A0937 /* Conjunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E046418262C6F2C009A0937 /* Conjunction.swift */; };
-		6E04641D262C8705009A0937 /* dIndependentClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E04641C262C8705009A0937 /* dIndependentClause.swift */; };
 		6E046423262E2870009A0937 /* BVerb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E046422262E286F009A0937 /* BVerb.swift */; };
 		6E046426262E28BC009A0937 /* BRomanceVerb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E046425262E28BC009A0937 /* BRomanceVerb.swift */; };
 		6E04642E262E2CEC009A0937 /* CreateVerbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E04642D262E2CEC009A0937 /* CreateVerbModel.swift */; };
@@ -39,25 +37,26 @@
 		6E0518BD27989DA700843352 /* NewNameAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518BC27989DA700843352 /* NewNameAlert.swift */; };
 		6E0518C12798BEE600843352 /* BuildSingletonPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518C02798BEE600843352 /* BuildSingletonPhraseView.swift */; };
 		6E0518C32798CB1100843352 /* BuildNounPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518C22798CB1100843352 /* BuildNounPhraseView.swift */; };
-		6E0518C52798D8CF00843352 /* NewNamedPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518C42798D8CF00843352 /* NewNamedPhrase.swift */; };
+		6E0518C72799DB1200843352 /* RegularWordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518C62799DB1200843352 /* RegularWordViewModel.swift */; };
+		6E0518C9279A00E500843352 /* BuildNamedPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518C8279A00E500843352 /* BuildNamedPhraseView.swift */; };
+		6E0518D1279B2F5000843352 /* PhrasesInAgnosticOrSingleLanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518D0279B2F5000843352 /* PhrasesInAgnosticOrSingleLanguageView.swift */; };
+		6E0518D3279C584400843352 /* AgnosticClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518D2279C584300843352 /* AgnosticClause.swift */; };
+		6E0518D5279C5CD500843352 /* ClausePronounPhraseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518D4279C5CD500843352 /* ClausePronounPhraseManager.swift */; };
+		6E0518D9279C62AF00843352 /* AgnosticClauseProcesses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0518D8279C62AF00843352 /* AgnosticClauseProcesses.swift */; };
 		6E098C8D274D9D9F00578DF0 /* SentenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E098C8C274D9D9F00578DF0 /* SentenceView.swift */; };
 		6E098C8F274EEC0600578DF0 /* LanguageSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E098C8E274EEC0600578DF0 /* LanguageSelectorView.swift */; };
 		6E0BF81E2783C0FA00CEC576 /* EnumExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0BF81D2783C0FA00CEC576 /* EnumExceptions.swift */; };
 		6E0BF8302789F7F300CEC576 /* Capitulo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0BF82F2789F7F300CEC576 /* Capitulo.swift */; };
 		6E0BF83B278B6A7800CEC576 /* JsonEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0BF83A278B6A7800CEC576 /* JsonEnums.swift */; };
 		6E0C03C927810B0100260899 /* PhraseIndexMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0C03C827810B0100260899 /* PhraseIndexMapping.swift */; };
-		6E11BA14279475860067B9A8 /* NamedPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E11BA13279475860067B9A8 /* NamedPhrase.swift */; };
 		6E1A08C926700D1A00917E81 /* JSONVerbs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A08C826700D1A00917E81 /* JSONVerbs.swift */; };
 		6E228A2F2748097700E26B86 /* WordSurgery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E228A2E2748097700E26B86 /* WordSurgery.swift */; };
-		6E228A31274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E228A30274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift */; };
 		6E273EAF26B9ACDB002D219A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E273EAE26B9ACDB002D219A /* HeaderView.swift */; };
 		6E273EB126B9B40A002D219A /* LanguageChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E273EB026B9B40A002D219A /* LanguageChooserView.swift */; };
 		6E30924C275D7E53009BEDB4 /* GitHubTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E30924B275D7E53009BEDB4 /* GitHubTest.swift */; };
 		6E32457526F0EEFE00863A46 /* JSONDictionaryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E32457426F0EEFE00863A46 /* JSONDictionaryManager.swift */; };
-		6E415E56279349F00059A21B /* WordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E415E55279349F00059A21B /* WordViewModel.swift */; };
 		6E68AA8E26A7758200E53331 /* DetailedPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68AA8D26A7758200E53331 /* DetailedPhraseView.swift */; };
 		6E68AA9026A880AF00E53331 /* JSONLesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68AA8F26A880AF00E53331 /* JSONLesson.swift */; };
-		6E68AA9226A8871100E53331 /* JsonPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68AA9126A8871100E53331 /* JsonPhrase.swift */; };
 		6E68AA9426AB30CC00E53331 /* JsonClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68AA9326AB30CC00E53331 /* JsonClause.swift */; };
 		6E6A49252639B3000096C36F /* ClusterResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A49242639B3000096C36F /* ClusterResolution.swift */; };
 		6E6A4927263A1F820096C36F /* WordStringResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A4926263A1F820096C36F /* WordStringResolution.swift */; };
@@ -91,7 +90,12 @@
 		6E83D97026A5F50B007912FE /* ContextFreeLessonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83D96F26A5F50B007912FE /* ContextFreeLessonView.swift */; };
 		6E87AE4D278B9D410089CDC3 /* FilledPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87AE4C278B9D410089CDC3 /* FilledPhraseView.swift */; };
 		6E87AE51278CDA700089CDC3 /* LoadWordsIntoPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87AE50278CDA700089CDC3 /* LoadWordsIntoPhraseView.swift */; };
-		6E87AE54278E00AF0089CDC3 /* NamedPhraseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87AE53278E00AF0089CDC3 /* NamedPhraseManager.swift */; };
+		6E87AE54278E00AF0089CDC3 /* PhraseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87AE53278E00AF0089CDC3 /* PhraseManager.swift */; };
+		6E87F4B427A6EE5D00317F8F /* WordCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87F4B327A6EE5D00317F8F /* WordCollection.swift */; };
+		6E87F4BA27A6EF8E00317F8F /* BundleRewrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87F4B927A6EF8E00317F8F /* BundleRewrite.swift */; };
+		6E87F4BC27A6F2F100317F8F /* JSONBundleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87F4BB27A6F2F100317F8F /* JSONBundleManager.swift */; };
+		6E87F4BE27A6F36600317F8F /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87F4BD27A6F36600317F8F /* Bundle.swift */; };
+		6E87F4C027A6F3B400317F8F /* BundleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87F4BF27A6F3B400317F8F /* BundleView.swift */; };
 		6EA1F2D727552D1E00830A6E /* JSONGrammarMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1F2D627552D1E00830A6E /* JSONGrammarMapping.swift */; };
 		6EA1F2DE2759814000830A6E /* MorphStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1F2DC2759814000830A6E /* MorphStep.swift */; };
 		6EA1F2DF2759814000830A6E /* MorphStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1F2DD2759814000830A6E /* MorphStruct.swift */; };
@@ -100,6 +104,15 @@
 		6EA1F2E5275983C900830A6E /* IrregularVerbsSpanish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1F2E4275983C900830A6E /* IrregularVerbsSpanish.swift */; };
 		6EA1F2E72759841700830A6E /* BSpanishVerbExtras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1F2E62759841700830A6E /* BSpanishVerbExtras.swift */; };
 		6EA22484273EC32B006D8A73 /* ClauseManipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA22483273EC32B006D8A73 /* ClauseManipulation.swift */; };
+		6EA79EB027A4753900E081E9 /* JSONNamedLoadedPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EAF27A4753900E081E9 /* JSONNamedLoadedPhrase.swift */; };
+		6EA79EB827A477DF00E081E9 /* WordCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EB427A477DF00E081E9 /* WordCollectionManager.swift */; };
+		6EA79EBB27A4787300E081E9 /* JSONWordCollectionStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EBA27A4787300E081E9 /* JSONWordCollectionStructs.swift */; };
+		6EA79EBD27A4789500E081E9 /* JSONCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EBC27A4789500E081E9 /* JSONCollectionManager.swift */; };
+		6EA79EBF27A4B97000E081E9 /* JSONBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EBE27A4B97000E081E9 /* JSONBundle.swift */; };
+		6EA79EC127A4BA8700E081E9 /* BundleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EC027A4BA8700E081E9 /* BundleManager.swift */; };
+		6EA79EC327A5A35F00E081E9 /* enumUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EC227A5A35F00E081E9 /* enumUtilities.swift */; };
+		6EA79EC527A5B49400E081E9 /* BundleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EC427A5B49400E081E9 /* BundleView.swift */; };
+		6EA79EC727A5D25E00E081E9 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA79EC627A5D25D00E081E9 /* CollectionView.swift */; };
 		6EAD8E0C2667E46800ADC6F3 /* RomanceVerbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E0B2667E46800ADC6F3 /* RomanceVerbModel.swift */; };
 		6EAD8E102667E6A800ADC6F3 /* RegularFrenchVerb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E0D2667E6A800ADC6F3 /* RegularFrenchVerb.swift */; };
 		6EAD8E112667E6A800ADC6F3 /* ActiveVerbConjugationFrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD8E0E2667E6A800ADC6F3 /* ActiveVerbConjugationFrench.swift */; };
@@ -131,7 +144,6 @@
 		6EE7BD872618C08300840EB7 /* ContextFreeRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD842618C08300840EB7 /* ContextFreeRule.swift */; };
 		6EE7BD882618C08300840EB7 /* ContextFreeGrammar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD852618C08300840EB7 /* ContextFreeGrammar.swift */; };
 		6EE7BD8E2619019900840EB7 /* WordGames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD8D2619019900840EB7 /* WordGames.swift */; };
-		6EE7BD91261901E700840EB7 /* PhraseInSingleLanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD90261901E700840EB7 /* PhraseInSingleLanguageView.swift */; };
 		6EE7BD9A2619040900840EB7 /* Unconjugate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD992619040900840EB7 /* Unconjugate.swift */; };
 		6EE7BD9D261912AE00840EB7 /* Sentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BD9C261912AE00840EB7 /* Sentence.swift */; };
 		6EE7BDAA261A177200840EB7 /* Adjective.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7BDA5261A177100840EB7 /* Adjective.swift */; };
@@ -159,7 +171,6 @@
 
 /* Begin PBXFileReference section */
 		6E03E7FE27909A0A0015DAED /* JSONWordCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONWordCollection.swift; sourceTree = "<group>"; };
-		6E03E7FF27909A0A0015DAED /* JSONWordCollectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONWordCollectionManager.swift; sourceTree = "<group>"; };
 		6E0463F626262813009A0937 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
 		6E0463FA26262E54009A0937 /* DtsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DtsInfo.swift; sourceTree = "<group>"; };
 		6E0463FD26263D34009A0937 /* SentenceWordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceWordList.swift; sourceTree = "<group>"; };
@@ -171,7 +182,6 @@
 		6E04640F2628BA56009A0937 /* VerbCluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbCluster.swift; sourceTree = "<group>"; };
 		6E0464132629E523009A0937 /* WordRuleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordRuleManager.swift; sourceTree = "<group>"; };
 		6E046418262C6F2C009A0937 /* Conjunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conjunction.swift; sourceTree = "<group>"; };
-		6E04641C262C8705009A0937 /* dIndependentClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dIndependentClause.swift; sourceTree = "<group>"; };
 		6E046422262E286F009A0937 /* BVerb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVerb.swift; sourceTree = "<group>"; };
 		6E046425262E28BC009A0937 /* BRomanceVerb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRomanceVerb.swift; sourceTree = "<group>"; };
 		6E04642D262E2CEC009A0937 /* CreateVerbModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVerbModel.swift; sourceTree = "<group>"; };
@@ -190,25 +200,26 @@
 		6E0518BC27989DA700843352 /* NewNameAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNameAlert.swift; sourceTree = "<group>"; };
 		6E0518C02798BEE600843352 /* BuildSingletonPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildSingletonPhraseView.swift; sourceTree = "<group>"; };
 		6E0518C22798CB1100843352 /* BuildNounPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildNounPhraseView.swift; sourceTree = "<group>"; };
-		6E0518C42798D8CF00843352 /* NewNamedPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNamedPhrase.swift; sourceTree = "<group>"; };
+		6E0518C62799DB1200843352 /* RegularWordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularWordViewModel.swift; sourceTree = "<group>"; };
+		6E0518C8279A00E500843352 /* BuildNamedPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildNamedPhraseView.swift; sourceTree = "<group>"; };
+		6E0518D0279B2F5000843352 /* PhrasesInAgnosticOrSingleLanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasesInAgnosticOrSingleLanguageView.swift; sourceTree = "<group>"; };
+		6E0518D2279C584300843352 /* AgnosticClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnosticClause.swift; sourceTree = "<group>"; };
+		6E0518D4279C5CD500843352 /* ClausePronounPhraseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClausePronounPhraseManager.swift; sourceTree = "<group>"; };
+		6E0518D8279C62AF00843352 /* AgnosticClauseProcesses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnosticClauseProcesses.swift; sourceTree = "<group>"; };
 		6E098C8C274D9D9F00578DF0 /* SentenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceView.swift; sourceTree = "<group>"; };
 		6E098C8E274EEC0600578DF0 /* LanguageSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectorView.swift; sourceTree = "<group>"; };
 		6E0BF81D2783C0FA00CEC576 /* EnumExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnumExceptions.swift; path = ../../../../SentenceParser/SentenceParser/SentenceParser/EnumExceptions.swift; sourceTree = "<group>"; };
 		6E0BF82F2789F7F300CEC576 /* Capitulo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capitulo.swift; sourceTree = "<group>"; };
 		6E0BF83A278B6A7800CEC576 /* JsonEnums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonEnums.swift; sourceTree = "<group>"; };
 		6E0C03C827810B0100260899 /* PhraseIndexMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseIndexMapping.swift; sourceTree = "<group>"; };
-		6E11BA13279475860067B9A8 /* NamedPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedPhrase.swift; sourceTree = "<group>"; };
 		6E1A08C826700D1A00917E81 /* JSONVerbs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONVerbs.swift; path = ../../../../SPIFE/WordGamesSPIFE/WordGamesSPIFE/JSON/JSONVerbs.swift; sourceTree = "<group>"; };
 		6E228A2E2748097700E26B86 /* WordSurgery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSurgery.swift; sourceTree = "<group>"; };
-		6E228A30274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPhrasesIn3LanguagesView.swift; sourceTree = "<group>"; };
 		6E273EAE26B9ACDB002D219A /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		6E273EB026B9B40A002D219A /* LanguageChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageChooserView.swift; sourceTree = "<group>"; };
 		6E30924B275D7E53009BEDB4 /* GitHubTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubTest.swift; path = "../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Utilities/GitHubTest.swift"; sourceTree = "<group>"; };
 		6E32457426F0EEFE00863A46 /* JSONDictionaryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDictionaryManager.swift; sourceTree = "<group>"; };
-		6E415E55279349F00059A21B /* WordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordViewModel.swift; sourceTree = "<group>"; };
 		6E68AA8D26A7758200E53331 /* DetailedPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedPhraseView.swift; sourceTree = "<group>"; };
 		6E68AA8F26A880AF00E53331 /* JSONLesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONLesson.swift; sourceTree = "<group>"; };
-		6E68AA9126A8871100E53331 /* JsonPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonPhrase.swift; sourceTree = "<group>"; };
 		6E68AA9326AB30CC00E53331 /* JsonClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonClause.swift; sourceTree = "<group>"; };
 		6E6A49242639B3000096C36F /* ClusterResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterResolution.swift; sourceTree = "<group>"; };
 		6E6A4926263A1F820096C36F /* WordStringResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordStringResolution.swift; sourceTree = "<group>"; };
@@ -242,7 +253,12 @@
 		6E83D96F26A5F50B007912FE /* ContextFreeLessonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextFreeLessonView.swift; sourceTree = "<group>"; };
 		6E87AE4C278B9D410089CDC3 /* FilledPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledPhraseView.swift; sourceTree = "<group>"; };
 		6E87AE50278CDA700089CDC3 /* LoadWordsIntoPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadWordsIntoPhraseView.swift; sourceTree = "<group>"; };
-		6E87AE53278E00AF0089CDC3 /* NamedPhraseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedPhraseManager.swift; sourceTree = "<group>"; };
+		6E87AE53278E00AF0089CDC3 /* PhraseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseManager.swift; sourceTree = "<group>"; };
+		6E87F4B327A6EE5D00317F8F /* WordCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordCollection.swift; sourceTree = "<group>"; };
+		6E87F4B927A6EF8E00317F8F /* BundleRewrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleRewrite.swift; sourceTree = "<group>"; };
+		6E87F4BB27A6F2F100317F8F /* JSONBundleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONBundleManager.swift; path = "../../../../SPIFE/AgnosticWordManager/AgnosticWordManager/Word Collections and Bundles Views/JSONBundleManager.swift"; sourceTree = "<group>"; };
+		6E87F4BD27A6F36600317F8F /* Bundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bundle.swift; path = "../../../../SPIFE/AgnosticWordManager/AgnosticWordManager/Word Collections and Bundles Views/Bundle.swift"; sourceTree = "<group>"; };
+		6E87F4BF27A6F3B400317F8F /* BundleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BundleView.swift; path = ContextFree/Bundle/BundleView.swift; sourceTree = SOURCE_ROOT; };
 		6EA1F2D627552D1E00830A6E /* JSONGrammarMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONGrammarMapping.swift; sourceTree = "<group>"; };
 		6EA1F2DC2759814000830A6E /* MorphStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MorphStep.swift; path = "../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Morph stuff/MorphStep.swift"; sourceTree = "<group>"; };
 		6EA1F2DD2759814000830A6E /* MorphStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MorphStruct.swift; path = "../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Morph stuff/MorphStruct.swift"; sourceTree = "<group>"; };
@@ -251,6 +267,15 @@
 		6EA1F2E4275983C900830A6E /* IrregularVerbsSpanish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IrregularVerbsSpanish.swift; path = "../../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /Spanish/IrregularVerbsSpanish.swift"; sourceTree = "<group>"; };
 		6EA1F2E62759841700830A6E /* BSpanishVerbExtras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BSpanishVerbExtras.swift; path = "../../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /Spanish/BSpanishVerbExtras.swift"; sourceTree = "<group>"; };
 		6EA22483273EC32B006D8A73 /* ClauseManipulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClauseManipulation.swift; sourceTree = "<group>"; };
+		6EA79EAF27A4753900E081E9 /* JSONNamedLoadedPhrase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONNamedLoadedPhrase.swift; sourceTree = "<group>"; };
+		6EA79EB427A477DF00E081E9 /* WordCollectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordCollectionManager.swift; sourceTree = "<group>"; };
+		6EA79EBA27A4787300E081E9 /* JSONWordCollectionStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONWordCollectionStructs.swift; sourceTree = "<group>"; };
+		6EA79EBC27A4789500E081E9 /* JSONCollectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONCollectionManager.swift; sourceTree = "<group>"; };
+		6EA79EBE27A4B97000E081E9 /* JSONBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONBundle.swift; sourceTree = "<group>"; };
+		6EA79EC027A4BA8700E081E9 /* BundleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleManager.swift; sourceTree = "<group>"; };
+		6EA79EC227A5A35F00E081E9 /* enumUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = enumUtilities.swift; sourceTree = "<group>"; };
+		6EA79EC427A5B49400E081E9 /* BundleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleView.swift; sourceTree = "<group>"; };
+		6EA79EC627A5D25D00E081E9 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		6EAD8E0B2667E46800ADC6F3 /* RomanceVerbModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RomanceVerbModel.swift; path = "../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /Bescherelle Book verb model/RomanceVerbModel.swift"; sourceTree = "<group>"; };
 		6EAD8E0D2667E6A800ADC6F3 /* RegularFrenchVerb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegularFrenchVerb.swift; path = "../../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /French/RegularFrenchVerb.swift"; sourceTree = "<group>"; };
 		6EAD8E0E2667E6A800ADC6F3 /* ActiveVerbConjugationFrench.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActiveVerbConjugationFrench.swift; path = "../../../../../SPIFE/VIperSpanish 2/VIperSpanish 2/Bescherelle /French/ActiveVerbConjugationFrench.swift"; sourceTree = "<group>"; };
@@ -284,7 +309,6 @@
 		6EE7BD842618C08300840EB7 /* ContextFreeRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextFreeRule.swift; sourceTree = "<group>"; };
 		6EE7BD852618C08300840EB7 /* ContextFreeGrammar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextFreeGrammar.swift; sourceTree = "<group>"; };
 		6EE7BD8D2619019900840EB7 /* WordGames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordGames.swift; sourceTree = "<group>"; };
-		6EE7BD90261901E700840EB7 /* PhraseInSingleLanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseInSingleLanguageView.swift; sourceTree = "<group>"; };
 		6EE7BD992619040900840EB7 /* Unconjugate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unconjugate.swift; sourceTree = "<group>"; };
 		6EE7BD9C261912AE00840EB7 /* Sentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sentence.swift; sourceTree = "<group>"; };
 		6EE7BDA5261A177100840EB7 /* Adjective.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Adjective.swift; sourceTree = "<group>"; };
@@ -325,7 +349,6 @@
 			isa = PBXGroup;
 			children = (
 				6E0463F626262813009A0937 /* Cluster.swift */,
-				6E6A49242639B3000096C36F /* ClusterResolution.swift */,
 				6E0463FA26262E54009A0937 /* DtsInfo.swift */,
 				6E6A4926263A1F820096C36F /* WordStringResolution.swift */,
 				6E0463FD26263D34009A0937 /* SentenceWordList.swift */,
@@ -335,9 +358,11 @@
 				6E0464062626448D009A0937 /* Correction.swift */,
 				6E046409262769E9009A0937 /* NounCluster.swift */,
 				6E04640F2628BA56009A0937 /* VerbCluster.swift */,
-				6E04641C262C8705009A0937 /* dIndependentClause.swift */,
 				6E8091A32686470F009E1CB5 /* dIndependentAgnosticClause.swift */,
 				6EA22483273EC32B006D8A73 /* ClauseManipulation.swift */,
+				6E0518D2279C584300843352 /* AgnosticClause.swift */,
+				6E0518D4279C5CD500843352 /* ClausePronounPhraseManager.swift */,
+				6E0518D8279C62AF00843352 /* AgnosticClauseProcesses.swift */,
 			);
 			path = Clause;
 			sourceTree = "<group>";
@@ -402,14 +427,15 @@
 				6E83D95A268A2FBD007912FE /* JSONAdverbs.swift */,
 				6E83D95C268A4345007912FE /* JSONConjunctions.swift */,
 				6E68AA8F26A880AF00E53331 /* JSONLesson.swift */,
-				6E68AA9126A8871100E53331 /* JsonPhrase.swift */,
 				6E68AA9326AB30CC00E53331 /* JsonClause.swift */,
 				6E32457426F0EEFE00863A46 /* JSONDictionaryManager.swift */,
 				6EA1F2D627552D1E00830A6E /* JSONGrammarMapping.swift */,
-				6E03E7FE27909A0A0015DAED /* JSONWordCollection.swift */,
-				6E03E7FF27909A0A0015DAED /* JSONWordCollectionManager.swift */,
 				6E0518B42797798100843352 /* JSONNamedPhrases.swift */,
+				6EA79EAF27A4753900E081E9 /* JSONNamedLoadedPhrase.swift */,
 				6E0518B627987B7F00843352 /* JSONNamedSingleton.swift */,
+				6E03E7FE27909A0A0015DAED /* JSONWordCollection.swift */,
+				6EA79EBC27A4789500E081E9 /* JSONCollectionManager.swift */,
+				6EA79EBA27A4787300E081E9 /* JSONWordCollectionStructs.swift */,
 			);
 			path = JSON;
 			sourceTree = "<group>";
@@ -430,10 +456,8 @@
 		6E6A4937264487D60096C36F /* WordLists */ = {
 			isa = PBXGroup;
 			children = (
-				6EE7BD90261901E700840EB7 /* PhraseInSingleLanguageView.swift */,
 				6E6A494E2645CC7C0096C36F /* WordComponent.swift */,
 				6EC671A0267D356800AEBE31 /* MultiVerbConjugation.swift */,
-				6E228A30274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift */,
 				6E83D960268F7D81007912FE /* PersonalPronounGames.swift */,
 				6E6A494D26459B4F0096C36F /* Components */,
 			);
@@ -480,13 +504,12 @@
 			children = (
 				6E87AE50278CDA700089CDC3 /* LoadWordsIntoPhraseView.swift */,
 				6E87AE4C278B9D410089CDC3 /* FilledPhraseView.swift */,
-				6E87AE53278E00AF0089CDC3 /* NamedPhraseManager.swift */,
-				6E415E55279349F00059A21B /* WordViewModel.swift */,
-				6E11BA13279475860067B9A8 /* NamedPhrase.swift */,
+				6E87AE53278E00AF0089CDC3 /* PhraseManager.swift */,
 				6E0518BC27989DA700843352 /* NewNameAlert.swift */,
 				6E0518C02798BEE600843352 /* BuildSingletonPhraseView.swift */,
 				6E0518C22798CB1100843352 /* BuildNounPhraseView.swift */,
-				6E0518C42798D8CF00843352 /* NewNamedPhrase.swift */,
+				6E0518C62799DB1200843352 /* RegularWordViewModel.swift */,
+				6E0518C8279A00E500843352 /* BuildNamedPhraseView.swift */,
 			);
 			path = NamedPhrase;
 			sourceTree = "<group>";
@@ -501,6 +524,32 @@
 				6E83D96826960834007912FE /* CFMorphSentence.swift */,
 			);
 			path = "Morph stuff";
+			sourceTree = "<group>";
+		};
+		6EA79EAA27A474EE00E081E9 /* Bundle */ = {
+			isa = PBXGroup;
+			children = (
+				6E87F4BD27A6F36600317F8F /* Bundle.swift */,
+				6E87F4B927A6EF8E00317F8F /* BundleRewrite.swift */,
+				6EA79EC027A4BA8700E081E9 /* BundleManager.swift */,
+				6EA79EBE27A4B97000E081E9 /* JSONBundle.swift */,
+				6E87F4BB27A6F2F100317F8F /* JSONBundleManager.swift */,
+				6E87F4B327A6EE5D00317F8F /* WordCollection.swift */,
+				6EA79EC427A5B49400E081E9 /* BundleView.swift */,
+				6EA79EB127A477DF00E081E9 /* Word Collections and Bundles Views */,
+				6EA79EC627A5D25D00E081E9 /* CollectionView.swift */,
+			);
+			path = Bundle;
+			sourceTree = "<group>";
+		};
+		6EA79EB127A477DF00E081E9 /* Word Collections and Bundles Views */ = {
+			isa = PBXGroup;
+			children = (
+				6E87F4BF27A6F3B400317F8F /* BundleView.swift */,
+				6EA79EB427A477DF00E081E9 /* WordCollectionManager.swift */,
+			);
+			name = "Word Collections and Bundles Views";
+			path = "../../../../SPIFE/AgnosticWordManager/AgnosticWordManager/Word Collections and Bundles Views";
 			sourceTree = "<group>";
 		};
 		6EB084012730665200ADCB11 /* Semantics */ = {
@@ -534,6 +583,7 @@
 				6EAD8E25266C2D4800ADC6F3 /* WordStateData.swift */,
 				6EEAF2A3261F7DC40085E3C6 /* WordStringParser.swift */,
 				6EEA95AA276155C500F73573 /* StringExtension.swift */,
+				6EA79EC227A5A35F00E081E9 /* enumUtilities.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -558,6 +608,7 @@
 		6EE7BD722618C01A00840EB7 /* ContextFree */ = {
 			isa = PBXGroup;
 			children = (
+				6EA79EAA27A474EE00E081E9 /* Bundle */,
 				6E87AE52278DFBFE0089CDC3 /* NamedPhrase */,
 				6EA1F2D22753D9B000830A6E /* Morph stuff */,
 				6ED7B90127514FBB004D5BBA /* Utilities */,
@@ -568,7 +619,7 @@
 				6E046428262E2910009A0937 /* Bescherelle */,
 				6E0463F926262E0B009A0937 /* Clause */,
 				6EE7BDA4261A175300840EB7 /* LanguageEngine */,
-				6EE7BDBE261A43C600840EB7 /* ContextFreeStructs */,
+				6EE7BDBE261A43C600840EB7 /* CF disambiguation */,
 				6EE7BD932619020D00840EB7 /* Views */,
 				6EE7BD992619040900840EB7 /* Unconjugate.swift */,
 				6EE7BD772618C02400840EB7 /* Assets.xcassets */,
@@ -597,6 +648,7 @@
 				6E6A4936264487AA0096C36F /* Games */,
 				6E273EB026B9B40A002D219A /* LanguageChooserView.swift */,
 				6EBD7BA8277D0CF300460AB7 /* ClauseWorkSpace.swift */,
+				6E0518D0279B2F5000843352 /* PhrasesInAgnosticOrSingleLanguageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -637,12 +689,13 @@
 			path = MVVM;
 			sourceTree = "<group>";
 		};
-		6EE7BDBE261A43C600840EB7 /* ContextFreeStructs */ = {
+		6EE7BDBE261A43C600840EB7 /* CF disambiguation */ = {
 			isa = PBXGroup;
 			children = (
 				6EC671A82681357400AEBE31 /* CFUniversal.swift */,
 				6E0464132629E523009A0937 /* WordRuleManager.swift */,
 				6EE7BD9C261912AE00840EB7 /* Sentence.swift */,
+				6E6A49242639B3000096C36F /* ClusterResolution.swift */,
 				6EE7BD852618C08300840EB7 /* ContextFreeGrammar.swift */,
 				6EE7BD842618C08300840EB7 /* ContextFreeRule.swift */,
 				6EEAF2B1262225C90085E3C6 /* ContextFreeGrammarConstruction.swift */,
@@ -650,7 +703,7 @@
 				6E7A3E9E2674F9770070364C /* Disambiguation.swift */,
 				6E7A3EA4267A582C0070364C /* ContextFreeMapping.swift */,
 			);
-			path = ContextFreeStructs;
+			path = "CF disambiguation";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -725,10 +778,10 @@
 				6EEAF29D261E59460085E3C6 /* Preposition.swift in Sources */,
 				6EE7BD9D261912AE00840EB7 /* Sentence.swift in Sources */,
 				6EEA95BD2762B80600F73573 /* AgnosticWord.swift in Sources */,
+				6E0518D5279C5CD500843352 /* ClausePronounPhraseManager.swift in Sources */,
 				6EEAF2A0261E60340085E3C6 /* Adverb.swift in Sources */,
 				6E87AE51278CDA700089CDC3 /* LoadWordsIntoPhraseView.swift in Sources */,
 				6EE7BD8E2619019900840EB7 /* WordGames.swift in Sources */,
-				6E415E56279349F00059A21B /* WordViewModel.swift in Sources */,
 				6E046431262E2D32009A0937 /* VerbModel.swift in Sources */,
 				6E046401262641F3009A0937 /* Clause.swift in Sources */,
 				6E0518B727987B7F00843352 /* JSONNamedSingleton.swift in Sources */,
@@ -740,12 +793,16 @@
 				6E6A494626457E8D0096C36F /* CategoryView.swift in Sources */,
 				6EEAF299261DF6100085E3C6 /* EnglishWords.swift in Sources */,
 				6EC671A3267E93D800AEBE31 /* JsonAdjectives.swift in Sources */,
+				6EA79EC727A5D25E00E081E9 /* CollectionView.swift in Sources */,
 				6E0463FE26263D34009A0937 /* SentenceWordList.swift in Sources */,
+				6E87F4B427A6EE5D00317F8F /* WordCollection.swift in Sources */,
 				6EEAF2A4261F7DC40085E3C6 /* WordStringParser.swift in Sources */,
 				6EE7BDC3261A464D00840EB7 /* CFModelView.swift in Sources */,
+				6EA79EC127A4BA8700E081E9 /* BundleManager.swift in Sources */,
 				6E0464142629E523009A0937 /* WordRuleManager.swift in Sources */,
 				6E83D961268F7D81007912FE /* PersonalPronounGames.swift in Sources */,
 				6EEAF2AD262115770085E3C6 /* Ambiguous.swift in Sources */,
+				6E87F4C027A6F3B400317F8F /* BundleView.swift in Sources */,
 				6E0464562637279A009A0937 /* BFrenchVerb.swift in Sources */,
 				6EAD8E1C2667EEF600ADC6F3 /* VerbModelJson.swift in Sources */,
 				6E046443262F2F1D009A0937 /* BSpanishVerb.swift in Sources */,
@@ -753,13 +810,13 @@
 				6EEAF2A72620E6CC0085E3C6 /* Punctuation.swift in Sources */,
 				6E04642E262E2CEC009A0937 /* CreateVerbModel.swift in Sources */,
 				6EA1F2E5275983C900830A6E /* IrregularVerbsSpanish.swift in Sources */,
-				6E0518C52798D8CF00843352 /* NewNamedPhrase.swift in Sources */,
 				6E273EAF26B9ACDB002D219A /* HeaderView.swift in Sources */,
 				6E7A3EA5267A582D0070364C /* ContextFreeMapping.swift in Sources */,
 				6E098C8F274EEC0600578DF0 /* LanguageSelectorView.swift in Sources */,
 				6E0463FB26262E54009A0937 /* DtsInfo.swift in Sources */,
 				6E046423262E2870009A0937 /* BVerb.swift in Sources */,
 				6E098C8D274D9D9F00578DF0 /* SentenceView.swift in Sources */,
+				6E0518D3279C584400843352 /* AgnosticClause.swift in Sources */,
 				6EE7BD742618C01A00840EB7 /* ContextFreeApp.swift in Sources */,
 				6EAD8E192667ED9E00ADC6F3 /* FrenchCreateVerbModel.swift in Sources */,
 				6E0464072626448D009A0937 /* Correction.swift in Sources */,
@@ -768,16 +825,17 @@
 				6E046442262F2F1D009A0937 /* SpanishVerbList.swift in Sources */,
 				6EAD8E102667E6A800ADC6F3 /* RegularFrenchVerb.swift in Sources */,
 				6E7A3EA32678094E0070364C /* JSONNouns.swift in Sources */,
+				6EA79EBF27A4B97000E081E9 /* JSONBundle.swift in Sources */,
 				6E30924C275D7E53009BEDB4 /* GitHubTest.swift in Sources */,
 				6EC671A5267EDAA300AEBE31 /* JSONPrepositions.swift in Sources */,
 				6E6A4929263C69A40096C36F /* RandomWords.swift in Sources */,
 				6E046444262F2F1D009A0937 /* StemChangingConjugation.swift in Sources */,
-				6E11BA14279475860067B9A8 /* NamedPhrase.swift in Sources */,
 				6EC671A7267F8AAE00AEBE31 /* JsonDeterminers.swift in Sources */,
 				6EAD8E1A2667ED9E00ADC6F3 /* SpanishCreateVerbModel.swift in Sources */,
 				6EC671A1267D356800AEBE31 /* MultiVerbConjugation.swift in Sources */,
 				6ED7B909275155AB004D5BBA /* MiscSentenceStructs.swift in Sources */,
 				6E83D96E26A47BFC007912FE /* ContextFreeLesson.swift in Sources */,
+				6EA79EC527A5B49400E081E9 /* BundleView.swift in Sources */,
 				6E0463F726262814009A0937 /* Cluster.swift in Sources */,
 				6E0518C32798CB1100843352 /* BuildNounPhraseView.swift in Sources */,
 				6E6A4927263A1F820096C36F /* WordStringResolution.swift in Sources */,
@@ -789,24 +847,24 @@
 				6E0518B52797798100843352 /* JSONNamedPhrases.swift in Sources */,
 				6E83D97026A5F50B007912FE /* ContextFreeLessonView.swift in Sources */,
 				6E04645226322382009A0937 /* AmbiguousPronoun.swift in Sources */,
-				6E68AA9226A8871100E53331 /* JsonPhrase.swift in Sources */,
+				6E0518D9279C62AF00843352 /* AgnosticClauseProcesses.swift in Sources */,
+				6EA79EC327A5A35F00E081E9 /* enumUtilities.swift in Sources */,
 				6E6A494A264591F20096C36F /* ConciseListView.swift in Sources */,
 				6E8091A42686470F009E1CB5 /* dIndependentAgnosticClause.swift in Sources */,
 				6E273EB126B9B40A002D219A /* LanguageChooserView.swift in Sources */,
 				6ED7B90D275156A1004D5BBA /* EnumsContentFree.swift in Sources */,
+				6E0518C72799DB1200843352 /* RegularWordViewModel.swift in Sources */,
 				6EC671A92681357500AEBE31 /* CFUniversal.swift in Sources */,
 				6E046419262C6F2C009A0937 /* Conjunction.swift in Sources */,
-				6E228A31274C61D700E26B86 /* NewPhrasesIn3LanguagesView.swift in Sources */,
 				6EB08405273090CD00ADCB11 /* SemanticsEnum.swift in Sources */,
 				6E83D95B268A2FBD007912FE /* JSONAdverbs.swift in Sources */,
-				6EE7BD91261901E700840EB7 /* PhraseInSingleLanguageView.swift in Sources */,
 				6E0BF83B278B6A7800CEC576 /* JsonEnums.swift in Sources */,
 				6E046448262F2F1D009A0937 /* ActiveVerbConjugationSpanish.swift in Sources */,
 				6E046446262F2F1D009A0937 /* PassiveVerbConjugationSpanish.swift in Sources */,
 				6EE7BDAA261A177200840EB7 /* Adjective.swift in Sources */,
+				6EA79EB027A4753900E081E9 /* JSONNamedLoadedPhrase.swift in Sources */,
 				6E04640426264394009A0937 /* Single.swift in Sources */,
 				6E228A2F2748097700E26B86 /* WordSurgery.swift in Sources */,
-				6E03E80127909A0A0015DAED /* JSONWordCollectionManager.swift in Sources */,
 				6E6A4933264467290096C36F /* VerbGames.swift in Sources */,
 				6EB084072731F61500ADCB11 /* VerbModelManager.swift in Sources */,
 				6E6A4931264467120096C36F /* ArticleGames.swift in Sources */,
@@ -821,15 +879,18 @@
 				6EAD8E112667E6A800ADC6F3 /* ActiveVerbConjugationFrench.swift in Sources */,
 				6E0464102628BA56009A0937 /* VerbCluster.swift in Sources */,
 				6E04644C262F80D7009A0937 /* TenseManager.swift in Sources */,
+				6E0518C9279A00E500843352 /* BuildNamedPhraseView.swift in Sources */,
 				6EA1F2E72759841700830A6E /* BSpanishVerbExtras.swift in Sources */,
 				6EBD7BA9277D0CF300460AB7 /* ClauseWorkSpace.swift in Sources */,
 				6E83D95F268BB7CD007912FE /* JSONPronouns.swift in Sources */,
 				6EE7BD9A2619040900840EB7 /* Unconjugate.swift in Sources */,
 				6EAD8E26266C2D4900ADC6F3 /* WordStateData.swift in Sources */,
+				6EA79EBB27A4787300E081E9 /* JSONWordCollectionStructs.swift in Sources */,
 				6E6A494C26459A3E0096C36F /* ExpandedAdjectiveView.swift in Sources */,
 				6E0518C12798BEE600843352 /* BuildSingletonPhraseView.swift in Sources */,
 				6EE7BDAE261A177200840EB7 /* Determiner.swift in Sources */,
 				6E0BF81E2783C0FA00CEC576 /* EnumExceptions.swift in Sources */,
+				6E87F4BA27A6EF8E00317F8F /* BundleRewrite.swift in Sources */,
 				6E6A492B263F08B20096C36F /* CFSentenceGeneratorRule.swift in Sources */,
 				6EB084032730669A00ADCB11 /* SemanticsAdjective.swift in Sources */,
 				6E7A3E9F2674F9770070364C /* Disambiguation.swift in Sources */,
@@ -838,22 +899,26 @@
 				6EA1F2E12759815E00830A6E /* MorphStructManager.swift in Sources */,
 				6E0518BD27989DA700843352 /* NewNameAlert.swift in Sources */,
 				6E6A492F264466F90096C36F /* NounGames.swift in Sources */,
+				6EA79EBD27A4789500E081E9 /* JSONCollectionManager.swift in Sources */,
 				6EAD8E222667F50000ADC6F3 /* Pronoun.swift in Sources */,
 				6EA1F2DF2759814000830A6E /* MorphStruct.swift in Sources */,
 				6EE7BD872618C08300840EB7 /* ContextFreeRule.swift in Sources */,
 				6EAD8E162667ED7600ADC6F3 /* RomanceVerbModelConjugation.swift in Sources */,
 				6E83D96926960835007912FE /* CFMorphSentence.swift in Sources */,
-				6E04641D262C8705009A0937 /* dIndependentClause.swift in Sources */,
 				6EA1F2DE2759814000830A6E /* MorphStep.swift in Sources */,
 				6E046426262E28BC009A0937 /* BRomanceVerb.swift in Sources */,
 				6EA22484273EC32B006D8A73 /* ClauseManipulation.swift in Sources */,
 				6E83D963268FA18B007912FE /* ContextFreePronouns.swift in Sources */,
+				6E87F4BC27A6F2F100317F8F /* JSONBundleManager.swift in Sources */,
 				6EAD8E122667E6A800ADC6F3 /* IrregularVerbsFrench.swift in Sources */,
 				6ECCB6CB267BA20200B24C00 /* BEnglishVerb.swift in Sources */,
 				6E6A49252639B3000096C36F /* ClusterResolution.swift in Sources */,
 				6EAD8E0C2667E46800ADC6F3 /* RomanceVerbModel.swift in Sources */,
+				6E87F4BE27A6F36600317F8F /* Bundle.swift in Sources */,
 				6E7A3EA126752F6B0070364C /* GeneralWords.swift in Sources */,
+				6E0518D1279B2F5000843352 /* PhrasesInAgnosticOrSingleLanguageView.swift in Sources */,
 				6EEAF296261DF54F0085E3C6 /* SpanishWords.swift in Sources */,
+				6EA79EB827A477DF00E081E9 /* WordCollectionManager.swift in Sources */,
 				6E1A08C926700D1A00917E81 /* JSONVerbs.swift in Sources */,
 				6EE7BD882618C08300840EB7 /* ContextFreeGrammar.swift in Sources */,
 				6E6A494F2645CC7C0096C36F /* WordComponent.swift in Sources */,
@@ -862,7 +927,7 @@
 				6E68AA9026A880AF00E53331 /* JSONLesson.swift in Sources */,
 				6E7A3EA7267A64620070364C /* EnglishCreateVerbModel.swift in Sources */,
 				6E04644F2631D16E009A0937 /* FrenchWords.swift in Sources */,
-				6E87AE54278E00AF0089CDC3 /* NamedPhraseManager.swift in Sources */,
+				6E87AE54278E00AF0089CDC3 /* PhraseManager.swift in Sources */,
 				6EEAF28D261B76750085E3C6 /* Word.swift in Sources */,
 				6EE7BDAB261A177200840EB7 /* Article.swift in Sources */,
 				6ED7B90327514FCA004D5BBA /* EnumsNumberGenderPersonAndTense.swift in Sources */,

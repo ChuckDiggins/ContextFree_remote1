@@ -13,12 +13,26 @@ struct ContentView: View {
         NavigationView {
             
             List {
+                NavigationLink(destination: BundleView()){
+                    Text("Bundles")
+                }.frame(width: 200, height: 50)
+                .padding(.leading, 10)
+                .background(Color.blue.opacity(0.5))
+                .cornerRadius(10)
+                
+                NavigationLink(destination: CollectionView()){
+                    Text("Word Collections")
+                }.frame(width: 200, height: 50)
+                .padding(.leading, 10)
+                .background(Color.green.opacity(0.5))
+                .cornerRadius(10)
+                
                 NavigationLink(destination: MultiVerbConjugation()){
                     Text("Multi Verbs")
                 }.frame(width: 200, height: 50)
                 .foregroundColor(.black)
                 .padding(.leading, 10)
-                .background(Color(UIColor(named: "Color1")!))
+                .background(Color.blue)
                 .cornerRadius(25)
                 
                 NavigationLink(destination: FilledPhraseView()){
@@ -35,27 +49,30 @@ struct ContentView: View {
                 .background(Color.purple)
                 .cornerRadius(10)
                 
-                NavigationLink(destination: ContextFreeLessonView()){
-                    Text("Context free lessons")
-                }.frame(width: 200, height: 50)
-                .padding(.leading, 10)
-                .background(Color.green)
-                .foregroundColor(.white)
-                .cornerRadius(10)
                 
-                NavigationLink(destination: NewPhrasesIn3LanguagesView()){
-                    Text("Phrases in 3 Languages")
-                }.frame(width: 200, height: 50)
-                .padding(.leading, 10)
-                .background(Color.gray)
-                .foregroundColor(.black)
-                .cornerRadius(10)
                 
-                NavigationLink(destination: PhraseInSingleLanguageView()){
-                    Text("Phrases in 1 Language")
+//                NavigationLink(destination: ContextFreeLessonView()){
+//                    Text("Context free lessons")
+//                }.frame(width: 200, height: 50)
+//                .padding(.leading, 10)
+//                .background(Color.green)
+//                .foregroundColor(.white)
+//                .cornerRadius(10)
+//                
+//                NavigationLink(destination: NewPhrasesIn3LanguagesView()){
+//                    Text("Phrases in 3 Languages")
+//                }.frame(width: 200, height: 50)
+//                .padding(.leading, 10)
+//                .background(Color.gray)
+//                .foregroundColor(.black)
+//                .cornerRadius(10)
+//                
+                NavigationLink(destination: PhrasesInAgnosticOrSingleLanguageView()){
+                    Text("Phrases in 3 or 1 Language")
                 }.frame(width: 200, height: 50)
                 .padding(.leading, 10)
                 .background(Color.yellow)
+                .foregroundColor(.black)
                 .cornerRadius(10)
             }
         }

@@ -17,11 +17,41 @@ class dCluster : Hashable {
         hasher.combine(self.getClusterWord().spanish)
         hasher.combine(self.getClusterWord().french)
     }
-    private var m_clusterName = ""
+    var m_clusterName = ""
+    func getClusterName()->String{
+        return m_clusterName
+    }
+    
     var m_clusterType : ContextFreeSymbol
     var m_parentClusterType = ContextFreeSymbol.UNK
     var m_clusterFunction = ContextFreeFunction.None
     var m_associatedWordList = [Word]()
+    
+    var m_clusterList = Array<dCluster>()
+    func getClusterCount()->Int{return m_clusterList.count}
+    func getCluster(index: Int)->dCluster{
+        if index >= 0 && index < getClusterCount() { return m_clusterList[index]}
+        return dCluster()
+    }
+    
+    func getClusterList()->[dCluster]{ return m_clusterList}
+    func setClusterList(clusterList: [dCluster]){ m_clusterList = clusterList}
+    func appendCluster(cluster: dCluster){m_clusterList.append(cluster)}
+    func deleteCluster(index: Int){if index < getClusterCount(){m_clusterList.remove(at : index)}}
+    func insertCluster(index: Int, cluster : dCluster){m_clusterList.insert(cluster, at: index)}
+    func clearClusterList(){ m_clusterList.removeAll()}
+    func getLastCluster()->dCluster{ return m_clusterList[getClusterCount()-1] }
+    func getFirstCluster()->dCluster{ return m_clusterList[0] }
+    func replaceClusterRange(firstIndex: Int, lastIndex: Int, cluster: dCluster){
+        for _ in firstIndex...lastIndex {
+            deleteCluster(index: firstIndex)
+        }
+        insertCluster(index: firstIndex, cluster: cluster)
+    }
+    func replaceCluster(index: Int, cluster: dCluster){
+        m_clusterList[index] = cluster
+    }
+ 
     
     init(){
         m_clusterWord = Word()
@@ -45,10 +75,6 @@ class dCluster : Hashable {
     
     func setClusterName(name: String){
         m_clusterName = name
-    }
-    
-    func getClusterName()->String{
-        return m_clusterName
     }
     
     func replaceClusterWordWithRandomAssociatedWord(){

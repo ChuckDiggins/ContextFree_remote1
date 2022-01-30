@@ -68,9 +68,9 @@ struct PhraseInSingleLanguageView: View {
                 singleIndexList[1][0] = 1
                 singleIndexList[2][0] = 2
                 currentLanguage = .Spanish
-                //cfModelView.createNewModel(language: currentLanguage)
-                m_randomSentence = cfModelView.getRandomSentenceObject()
+                cfModelView.createNewModel(language: .Agnostic)
                 createRandomClause()
+                m_randomSentence = cfModelView.getRandomSentenceObject()
                 hasClause.toggle()
             }
             
@@ -116,14 +116,20 @@ struct PhraseInSingleLanguageView: View {
     
     func createRandomClause(){
         let clauseManipulation = clauseManipulation(m_clause: m_clause, m_englishClause: m_englishClause)
-        let result = clauseManipulation.createRandomClause(cfModelView: cfModelView, tense: currentTense, randomPhraseType: .simpleClause)
-        
-        if currentLanguage == .English { m_clause = result.1 }
-        else { m_clause = result.0 }
-        
+//        let result = clauseManipulation.createRandomClause(cfModelView: cfModelView, tense: currentTense, randomPhraseType: .simpleClause)
+//
+//        if currentLanguage == .English { m_clause = result.1 }
+//        else { m_clause = result.0 }
+        m_clause = cfModelView.getRandomAgnosticSentence(rft: .simpleClause)
+        let tempSingleList = m_clause.getSingleList()
+        for single in tempSingleList {
+            print("createRandomClause: \(single.getClusterWord().word)")
+        }
         currentPerson = m_clause.getPerson()
         _  = m_clause.setTenseAndPersonAndCreateNewSentenceString(language: currentLanguage, tense: currentTense, person: currentPerson)
-        clauseManipulation.handleFrenchContractions(singleList: m_clause.getSingleList())
+        if currentLanguage == .French {
+            clauseManipulation.handleFrenchContractions(singleList: m_clause.getSingleList())
+        }
         updateCurrentSentenceViewStuff()
     }
     
@@ -134,6 +140,7 @@ struct PhraseInSingleLanguageView: View {
         singleList.removeAll()
         singleList = m_clause.getSingleList()
         currentSingleIndex = clauseModel.currentSingleIndex
+        var maxDisplayLines = 1
         
         for single in singleList {
             letterCount += single.getProcessWordInWordStateData(language: currentLanguage).count + 1
@@ -150,6 +157,7 @@ struct PhraseInSingleLanguageView: View {
             newWordSelected.append(false)
             backgroundColor.append(defaultBackgroundColor)
         }
+        if singleCount < singleList.count {maxDisplayLines = 2}
         for i in singleCount ..< singleList.count {
             singleIndexList[1].append(i)
             newWordSelected.append(false)
@@ -157,12 +165,12 @@ struct PhraseInSingleLanguageView: View {
         }
         backgroundColor[currentSingleIndex] = highlightBackgroundColor
         //fill the clause model
-        clauseModel.currentSingleIndex = currentSingleIndex
-        clauseModel.singleList = singleList
-        clauseModel.englishSingleList = singleList
-        clauseModel.singleIndexList = singleIndexList
-        clauseModel.newWordSelected = newWordSelected
-        clauseModel.backgroundColor = backgroundColor
+        clauseModel.set(currentSingleIndex: currentSingleIndex,
+                                  maxLines: maxDisplayLines,
+                                  singleIndexListForEachLine: singleIndexList,
+                                  singleList: singleList, englishSingleList: singleList,
+                                  newWordSelected: newWordSelected,
+                                  backGroundColor: backgroundColor)
     }
 
     func generateRandomTense(){

@@ -7,6 +7,30 @@
 
 import Foundation
 
+class dSentence : dClause {
+    override init(){
+        super.init(word: Word(), clusterType: .S)
+    }
+
+    init(word: Word){
+        super.init(word: word, clusterType: .S)
+    }
+
+    var subClauseList = Array<dClause>()
+
+    func appendNounClause(conj: Conjunction, clause: dNounClause){
+        //var conj = conj
+        subClauseList.append(clause)
+    }
+
+    func appendAdverbialClause(conj: Conjunction, clause: dAdverbialClause){
+        //let conj = conj
+        subClauseList.append(clause)
+    }
+
+}
+
+// struct "Sentence" has the logic for parsing sentences on the fly
 
 struct Sentence  {
     var grammarLibrary = CFGrammarLibrary()
@@ -184,7 +208,7 @@ struct Sentence  {
             }
             
             let lastIndex = firstClusterIndex + matchCount-1
-            sentence.replaceClusterRange(firstIndex: firstClusterIndex, lastIndex: lastIndex , cluster: newPhrase)
+//            replaceClusterRange(firstIndex: firstClusterIndex, lastIndex: lastIndex , cluster: newPhrase)
             return firstClusterIndex + 1
         }
         return -1
