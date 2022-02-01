@@ -7,23 +7,23 @@
 
 import Foundation
 
-class Adjective : Word {
+public class Adjective : Word {
 
     var plural = ""
     var type : AdjectiveType
     var preferredPosition = AdjectivePositionType.preceding
     
-    override init(){
+    public override init(){
         self.type = AdjectiveType.any
         super.init(word: "",  wordType: .adjective)
     }
     
-    init(word: String, type : AdjectiveType){
+    public init(word: String, type : AdjectiveType){
         self.type = type
         super.init(word: word, wordType: .adjective)
     }
 
-    init(jsonAdjective: JsonAdjective, language: LanguageType){
+    public init(jsonAdjective: JsonAdjective, language: LanguageType){
         self.type = AdjectiveType.any
         
         switch(language){
@@ -41,7 +41,7 @@ class Adjective : Word {
         convertFavoriteNounStringToFavoriteNouns(inputString: jsonAdjective.nounLikes)
     }
     
-    func convertAdjectiveTypeStringToAdjectiveTypes(inputString: String){
+    public func convertAdjectiveTypeStringToAdjectiveTypes(inputString: String){
         type = .any
         if ( inputString == "C" ){type = .color}
         if ( inputString == "D" ){type = .demonstrative}
@@ -49,7 +49,7 @@ class Adjective : Word {
         if ( inputString == "T" ){type = .nationality}
     }
     
-    func convertFavoriteNounStringToFavoriteNouns(inputString: String){
+    public func convertFavoriteNounStringToFavoriteNouns(inputString: String){
         /*let util = VerbUtilities()
         let strList = getNounTypesAsStringList()
         for str in strList {
@@ -61,17 +61,17 @@ class Adjective : Word {
  */
     }
     
-    func setPreferredPosition(position: AdjectivePositionType){
+    public func setPreferredPosition(position: AdjectivePositionType){
         preferredPosition = position
     }
     
-    func getPreferredPosition()->AdjectivePositionType{
+    public func getPreferredPosition()->AdjectivePositionType{
         return preferredPosition
     }
     
 }
 
-class RomanceAdjective : Adjective {
+public class RomanceAdjective : Adjective {
     
     var gender = Gender.feminine
     var number = Number.plural
@@ -79,17 +79,17 @@ class RomanceAdjective : Adjective {
     var mascPlural : String = ""
     var femPlural : String = ""
     
-    override init(word: String, type: AdjectiveType)
+    public override init(word: String, type: AdjectiveType)
     {
         super.init(word: word, type: type)
         super.setPreferredPosition(position: .following)
     }
     
-    override init(jsonAdjective: JsonAdjective, language: LanguageType){
+    public override init(jsonAdjective: JsonAdjective, language: LanguageType){
         super.init(jsonAdjective: jsonAdjective, language: language)
     }
     
-    func getForm(gender: Gender, number: Number)->String{
+    public func getForm(gender: Gender, number: Number)->String{
         switch gender{
         case .masculine, .either:
             switch (number){
@@ -104,11 +104,11 @@ class RomanceAdjective : Adjective {
         }
     }
     
-    func getForms()->(word: String, plural: String, femWord: String, femPlural: String){
+    public func getForms()->(word: String, plural: String, femWord: String, femPlural: String){
         return (word: word, plural: mascPlural, femWord: femWord, femPlural: femPlural)
     }
     
-    func createForms(){
+    public func createForms(){
         femWord = word
     }
 }
@@ -116,7 +116,7 @@ class RomanceAdjective : Adjective {
 
 //mostly spanish  -- these are the last letters to determine how to create a plural form
 
-enum SpanishAdjectiveEndingType : String{
+public enum SpanishAdjectiveEndingType : String{
     case O = "o"
     case L = "l"
     case Z = "z"
@@ -131,7 +131,7 @@ enum SpanishAdjectiveEndingType : String{
     case Unknown = "UNK"
 }
 
-enum FrenchAdjectiveEndingType : String{
+public enum FrenchAdjectiveEndingType : String{
     case e = "e"
     case x = "x"
     case f = "f"
@@ -149,19 +149,19 @@ enum FrenchAdjectiveEndingType : String{
 }
 
 
-class FrenchAdjective : RomanceAdjective {
-    override init(word: String, type: AdjectiveType)
+public class FrenchAdjective : RomanceAdjective {
+    public override init(word: String, type: AdjectiveType)
     {
         super.init(word: word, type: type)
         self.createFemaleForms()
         self.createSuperlatives()
     }
     
-    init(jsonAdjective: JsonAdjective){
+    public init(jsonAdjective: JsonAdjective){
         super.init(jsonAdjective: jsonAdjective, language: .French)
     }
     
-    func isAdjective(word: String) -> (Bool, Gender, Number)
+    public func isAdjective(word: String) -> (Bool, Gender, Number)
     {
         if ( word == self.word ){return (true, .masculine, .singular) }
         if ( word == self.femWord ){return (true, .feminine, .singular)}
@@ -170,7 +170,7 @@ class FrenchAdjective : RomanceAdjective {
         return (false, .masculine, .singular)
     }
     
-    func determineAdjectiveEnding()->FrenchAdjectiveEndingType{
+    public func determineAdjectiveEnding()->FrenchAdjectiveEndingType{
         let util = VerbUtilities()
         var endingType = FrenchAdjectiveEndingType.Unknown
         
@@ -204,15 +204,15 @@ class FrenchAdjective : RomanceAdjective {
         return endingType
     }
     
-    func createSuperlatives(){
+    public func createSuperlatives(){
         createFemaleForms()
     }
     
-    func createOtherForms(){
+    public func createOtherForms(){
         createFemaleForms()
     }
     
-    func createFemaleForms(){
+    public func createFemaleForms(){
          let endingType = determineAdjectiveEnding()
 
          var stem : String = ""
@@ -289,14 +289,14 @@ class FrenchAdjective : RomanceAdjective {
 
 }
 
-class FrenchPossessiveAdjective : RomanceAdjective {
+public class FrenchPossessiveAdjective : RomanceAdjective {
     
-    override init(word: String, type: AdjectiveType)
+    public override init(word: String, type: AdjectiveType)
     {
         super.init(word: "mon", type: type)
     }
     
-    func getForm(person : Person, gender: Gender)->String{
+    public func getForm(person : Person, gender: Gender)->String{
         switch gender{
         case .masculine:
             switch person{
@@ -329,9 +329,9 @@ class FrenchPossessiveAdjective : RomanceAdjective {
     }
 }
 
-class FrenchInterrogativeAdjective : RomanceAdjective {
+public class FrenchInterrogativeAdjective : RomanceAdjective {
     
-    override init(word: String, type: AdjectiveType)
+    public override init(word: String, type: AdjectiveType)
     {
         super.init(word: "quel", type: type)
         femWord = "quelle"
@@ -341,9 +341,9 @@ class FrenchInterrogativeAdjective : RomanceAdjective {
     
 }
 
-class FrenchDemonstrativeAdjective : RomanceAdjective {
+public class FrenchDemonstrativeAdjective : RomanceAdjective {
     
-    override init(word: String, type: AdjectiveType)
+    public override init(word: String, type: AdjectiveType)
     {
         super.init(word: "ce", type: type)
         femWord = "cette"
@@ -351,7 +351,7 @@ class FrenchDemonstrativeAdjective : RomanceAdjective {
         femPlural = "ces"
     }
     
-    func getSpecialForm()->String{  //masc, singular before a vowel sound
+    public func getSpecialForm()->String{  //masc, singular before a vowel sound
         return "cet"  //
     }
     
@@ -360,18 +360,18 @@ class FrenchDemonstrativeAdjective : RomanceAdjective {
 
 
 
-class SpanishAdjective : RomanceAdjective {
-    override init(word: String, type: AdjectiveType )
+public class SpanishAdjective : RomanceAdjective {
+    public override init(word: String, type: AdjectiveType )
     {
         super.init(word: word, type: type)
         self.createOtherForms()
     }
     
-    init(jsonAdjective: JsonAdjective){
+    public init(jsonAdjective: JsonAdjective){
         super.init(jsonAdjective: jsonAdjective, language: .Spanish)
     }
     
-    func determineAdjectiveEnding()->SpanishAdjectiveEndingType{
+    public func determineAdjectiveEnding()->SpanishAdjectiveEndingType{
         let util = VerbUtilities()
         var endingType = SpanishAdjectiveEndingType.Unknown
         
@@ -407,7 +407,7 @@ class SpanishAdjective : RomanceAdjective {
     }
     
 
-   func createOtherForms(){
+    public func createOtherForms(){
         let endingType = determineAdjectiveEnding()
 
         var stem : String = ""
@@ -493,7 +493,7 @@ class SpanishAdjective : RomanceAdjective {
 
     }
     
-    func isAdjective(word: String) -> (Bool, Gender, Number)
+    public func isAdjective(word: String) -> (Bool, Gender, Number)
     {
         if ( word == self.word ){return (true, .masculine, .singular) }
         if ( word == self.femWord ){return (true, .feminine, .singular)}
@@ -503,24 +503,25 @@ class SpanishAdjective : RomanceAdjective {
     }
 }
 
-class EnglishAdjective : Adjective {
+public class EnglishAdjective : Adjective {
     
-    override init(word: String, type: AdjectiveType){
+    public override init(word: String, type: AdjectiveType){
         super.init(word: word, type: type)
     }
     
-    override init(jsonAdjective: JsonAdjective, language: LanguageType){
+    public override init(jsonAdjective: JsonAdjective, language: LanguageType){
         super.init(jsonAdjective: jsonAdjective, language: language)
     }
     
-    func getForm(gender: Gender, number: Number)->String{
-        return word
-    }
-    func getForm()->String{
+    public func getForm(gender: Gender, number: Number)->String{
         return word
     }
     
-    func isAdjective(word: String) -> (Bool, Number)
+    public func getForm()->String{
+        return word
+    }
+    
+    public func isAdjective(word: String) -> (Bool, Number)
     {
         if ( word == self.word ) {return (true, .singular)}
         return (false, .singular)

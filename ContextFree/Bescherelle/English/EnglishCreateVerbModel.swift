@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct EnglishVerbModel : Identifiable{
-    let id : Int
+public struct EnglishVerbModel : Identifiable{
+    public let id : Int
     let infinitive: String
     let preterite: String
     let pastPart: String
     let gerund: String
     
-    init(id: Int, infinitive: String, preterite: String, pastPart: String, gerund: String){
+    public  init(id: Int, infinitive: String, preterite: String, pastPart: String, gerund: String){
         self.id = id
         self.infinitive = infinitive
         self.preterite = preterite
@@ -22,7 +22,7 @@ struct EnglishVerbModel : Identifiable{
         self.gerund = gerund
     }
     
-    init(){
+    public init(){
         id = 0
         infinitive = ""
         preterite = ""
@@ -30,13 +30,13 @@ struct EnglishVerbModel : Identifiable{
         gerund = ""
     }
     
-    func isModelFor(verbWord: String)->Bool{
+    public func isModelFor(verbWord: String)->Bool{
         if verbWord == infinitive { return true}
         return false
     }
 }
 
-func createEnglishVerbModels()->[EnglishVerbModel]{
+public func createEnglishVerbModels()->[EnglishVerbModel]{
     
 //    //setVerbModelList(verbModelList: verbModels)
     

@@ -9,7 +9,7 @@ import Foundation
 
 import UIKit
 
-struct JSONNamedLoadedPhrase: Codable {
+public struct JSONNamedLoadedPhrase: Codable {
     var language: String //agnostic means any language, otherwise it is language-specific
     var phraseType : String
     var phraseName: String
@@ -17,13 +17,13 @@ struct JSONNamedLoadedPhrase: Codable {
     var isSingle = false
     var clusterList: [Cluster]
     
-    struct Cluster: Codable {
+    public struct Cluster: Codable {
         var wordType: String  //if not named, then this is a single
         var clusterName: String?  //if named, then this is a phrase
         var isSubject: Bool
     }
     
-    init(language: LanguageType, phraseType: ContextFreeSymbol, phraseName: String, clusterList : [Cluster], wordList : [JSONWord]){
+    public init(language: LanguageType, phraseType: ContextFreeSymbol, phraseName: String, clusterList : [Cluster], wordList : [JSONWord]){
         self.language = language.rawValue
         self.phraseType = phraseType.rawValue
         self.phraseName = phraseName
@@ -31,28 +31,28 @@ struct JSONNamedLoadedPhrase: Codable {
         self.wordList = wordList
     }
     
-    init(language: LanguageType, phraseType: ContextFreeSymbol, phraseName: String, clusterList : [Cluster]){
+    public  init(language: LanguageType, phraseType: ContextFreeSymbol, phraseName: String, clusterList : [Cluster]){
         self.language = language.rawValue
         self.phraseType = phraseType.rawValue
         self.phraseName = phraseName
         self.clusterList = clusterList
     }
     
-    init(language: String, phraseType: String, phraseName: String, clusterList : [Cluster]){
+    public init(language: String, phraseType: String, phraseName: String, clusterList : [Cluster]){
         self.language = language
         self.phraseType = phraseType
         self.phraseName = phraseName
         self.clusterList = clusterList
     }
     
-    init(){
+    public init(){
         language = ""
         phraseType =  " "
         phraseName = ""
         self.clusterList = [Cluster]()
     }
     
-    func createCluster()->dCluster{
+    public func createCluster()->dCluster{
         var newCluster = dCluster()
         
         switch phraseType{
@@ -83,24 +83,24 @@ struct JSONNamedLoadedPhrase: Codable {
         return newCluster
     }
     
-    func wordListCount()->Int{
+    public func wordListCount()->Int{
         return wordList.count
     }
 }
 
 //create json from
-class JsonPhraseManager {
+public class JsonPhraseManager {
     var myList = [JSONNamedLoadedPhrase]()
     
-    func printPhrases(){
+    public func printPhrases(){
         print(myList)
     }
     
-    func printOne(jv: JSONNamedLoadedPhrase){
+    public func printOne(jv: JSONNamedLoadedPhrase){
         print(jv)
     }
     
-    func encodeInternalPhrases(total: Int){
+    public func encodeInternalPhrases(total: Int){
         clearPhrases()
         for v in myPhraseList{
             myList.append(v)
@@ -110,11 +110,11 @@ class JsonPhraseManager {
         encodePhrases()
     }
     
-    func getLastPhrase()->JSONNamedLoadedPhrase{
+    public func getLastPhrase()->JSONNamedLoadedPhrase{
         return myList.last!
     }
     
-    func encodePhrases(){
+    public func encodePhrases(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedPreps = try? encoder.encode( myList){
@@ -123,7 +123,7 @@ class JsonPhraseManager {
         }
     }
     
-    func decodePhrases(){
+    public func decodePhrases(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JSONNamedLoadedPhrase].self, from: data){
@@ -132,7 +132,7 @@ class JsonPhraseManager {
         }
     }
     
-    func getPhraseAtName(language: String, name: String)->JSONNamedLoadedPhrase{
+    public func getPhraseAtName(language: String, name: String)->JSONNamedLoadedPhrase{
         for i in 0..<myList.count {
             let v = myList[i]
             if v.language == language && v.phraseName == name { return v }
@@ -140,7 +140,7 @@ class JsonPhraseManager {
         return JSONNamedLoadedPhrase()  //empty
     }
     
-    func appendPhrase(jl: JSONNamedLoadedPhrase){
+    public func appendPhrase(jl: JSONNamedLoadedPhrase){
         var appendThis = true
         for i in 0..<myList.count {
             let v = myList[i]
@@ -155,20 +155,20 @@ class JsonPhraseManager {
         encodePhrases()
     }
     
-    func clearPhrases(){
+    public func clearPhrases(){
         myList.removeAll()
     }
     
-    func getLessonAt(index: Int)->JSONNamedLoadedPhrase{
+    public func getLessonAt(index: Int)->JSONNamedLoadedPhrase{
         if index > myList.count-1 { return myList[0] }
         return myList[index]
     }
     
-    func getCount()->Int{
+    public func getCount()->Int{
         return myList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEPhrases").appendingPathExtension("json")
     }

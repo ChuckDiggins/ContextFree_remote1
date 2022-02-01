@@ -7,7 +7,7 @@
 
 import Foundation
 
-class JsonGrammarMapping: Codable, CustomStringConvertible {
-    var description: String
+public class JsonGrammarMapping: Codable, CustomStringConvertible {
+    public var description: String
 
 }

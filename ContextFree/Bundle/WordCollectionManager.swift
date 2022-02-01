@@ -7,36 +7,36 @@
 
 import Foundation
 
-struct dWordCollectionManager{
+public struct dWordCollectionManager{
     private var collectionList = Array<dWordCollection>()
     
-    mutating func append(collection: dWordCollection){
+    public mutating func append(collection: dWordCollection){
         if !doesExist(collection: collection) {
             collectionList.append(collection)
         }
     }
     
-    func getCount()->Int{
+    public func getCount()->Int{
         return collectionList.count
     }
     
-    func getCollectionList()->[dWordCollection]{
+    public func getCollectionList()->[dWordCollection]{
         return collectionList
     }
     
-    func getCollection(index: Int)->dWordCollection{
+    public func getCollection(index: Int)->dWordCollection{
         if index < collectionList.count { return collectionList[index]}
         return dWordCollection()
     }
     
-    func doesExist(collection: dWordCollection)->Bool{
+    public func doesExist(collection: dWordCollection)->Bool{
         for c in collectionList {
             if collection == c {return true}
         }
         return false
     }
     
-    func getCollectionByName(collectionName: String)->dWordCollection{
+    public func getCollectionByName(collectionName: String)->dWordCollection{
         for collection in collectionList{
             if collection.collectionName == collectionName {return collection}
         }

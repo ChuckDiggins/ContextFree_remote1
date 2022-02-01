@@ -7,36 +7,36 @@
 
 import Foundation
 
-class EnglishVerbModelConjugation : VerbModelConjugation{
+public class EnglishVerbModelConjugation : VerbModelConjugation{
     
-    init(){
+    public init(){
         super.init(currentLanguage: .English)
     }
     
     var verbModels = [EnglishVerbModel]()
     
-    func createVerbModels(){
+    public func createVerbModels(){
         if verbModels.count == 0 {
             verbModels = createEnglishVerbModels()
             test()
         }
     }
     
-    func loadVerbModels(){
+    public func loadVerbModels(){
         if verbModels.count == 0 {
             createVerbModels()
         }
     }
     
     
-    func test(){
+    public  func test(){
         loadVerbModels()
         let vm = getVerbModel(verbWord: "bleed")
         dumpModel(index: vm.id, vm: vm)
     }
     
     
-    func getVerbModel(verbWord: String)->EnglishVerbModel{
+    public func getVerbModel(verbWord: String)->EnglishVerbModel{
         loadVerbModels()
         let nullVerbModel = EnglishVerbModel()
         let vmCount = verbModels.count
@@ -50,7 +50,7 @@ class EnglishVerbModelConjugation : VerbModelConjugation{
         return nullVerbModel
     }
     
-    func listVerbModels(){
+    public func listVerbModels(){
         var vmIndex = 0
         print("Start of model dump\n\n")
         for vm in verbModels {
@@ -66,7 +66,7 @@ class EnglishVerbModelConjugation : VerbModelConjugation{
         
     }
     
-    func dumpModel(index: Int, vm : EnglishVerbModel){
+    public func dumpModel(index: Int, vm : EnglishVerbModel){
         print ("vm id = \(vm.id), forms = \(vm.infinitive) : \(vm.preterite) : \(vm.pastPart)")
     }
 }

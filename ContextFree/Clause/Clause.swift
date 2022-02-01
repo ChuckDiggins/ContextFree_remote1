@@ -7,15 +7,15 @@
 
 import Foundation
 
-class dClause : dCluster, ObservableObject {
+public class dClause : dCluster, ObservableObject {
     @Published private(set) var clause = dClause.self
     
     
-    override init(word: Word, clusterType : ContextFreeSymbol){
+    public override init(word: Word, clusterType : ContextFreeSymbol){
         super.init(word: word, clusterType: clusterType)
     }
     
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: .UNK)
     }
     
@@ -25,56 +25,56 @@ class dClause : dCluster, ObservableObject {
     var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
     var m_singleList = Array<dSingle>()
 
-    func appendSingle(single: dSingle){
+    public func appendSingle(single: dSingle){
         m_singleList.append(single)
     }
     
-    func insertSingle(index: Int, single : dSingle){
+    public func insertSingle(index: Int, single : dSingle){
         if ( index < m_singleList.count ){
             m_singleList.insert(single, at: index)
         }
     }
     
-    func replaceSingle(index: Int, single : dSingle){
+    public func replaceSingle(index: Int, single : dSingle){
         if ( index < m_singleList.count ){
             m_singleList[index] = single
         }
     }
     
     
-    func getLastSingle()->dSingle{
+    public func getLastSingle()->dSingle{
         if getLastCluster().getClusterType().isSingle() {
             //let single = getFirstCluster() as! dSingle
             return getLastCluster() as! dSingle
         }
         return dSingle()
     }
-    func setRule(rule: ContextFreeRule){m_cfr = rule}
+    public func setRule(rule: ContextFreeRule){m_cfr = rule}
     
-    func getString( wordList : SentenceWordList)->String{
+    public func getString( wordList : SentenceWordList)->String{
         var wordListCopy = wordList
         return wordListCopy.getString()
     }
 }
 
-class dAdverbialClause : dClause {
+public class dAdverbialClause : dClause {
     
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: .AdjCls)
     }
     
-    init(word: Word){
+    public init(word: Word){
         super.init(word: word, clusterType: .AdjCls)
     }
 }
 
-class dAdjectivalClause : dClause {
+public class dAdjectivalClause : dClause {
     
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: .AdjCls)
     }
     
-    init(word: Word){
+    public init(word: Word){
         super.init(word: word, clusterType: .AdjCls)
     }
     
@@ -88,29 +88,29 @@ class dAdjectivalClause : dClause {
     
     
     
-    func setSuperState(superState: AdjectiveSuperState){
+    public func setSuperState(superState: AdjectiveSuperState){
         m_superState = superState
     }
-    func  setAdjectiveType (adjType : AdjectiveType){
+    public func  setAdjectiveType (adjType : AdjectiveType){
         m_adjType = adjType
     }
     
-    func setAdjectivePositionType (posType : AdjectivePositionType){m_adjPosType = posType}
+    public func setAdjectivePositionType (posType : AdjectivePositionType){m_adjPosType = posType}
     
-    func getAdjectiveType()->AdjectiveType{return m_adjType}
+    public func getAdjectiveType()->AdjectiveType{return m_adjType}
     
-    func getAdjectivePositionType()->AdjectivePositionType{return m_adjPosType}
+    public func getAdjectivePositionType()->AdjectivePositionType{return m_adjPosType}
     
-    func setIsComparative (isComparative : Bool){
+    public func setIsComparative (isComparative : Bool){
         m_isComparative = isComparative
     }
     
-    func setIsSuperlative (isSuperlative : Bool){m_isSuperlative = isSuperlative}
+    public func setIsSuperlative (isSuperlative : Bool){m_isSuperlative = isSuperlative}
     
-    func isComparative ()->Bool { return m_isComparative}
-    func isSuperlative ()->Bool { return m_isSuperlative}
+    public func isComparative ()->Bool { return m_isComparative}
+    public func isSuperlative ()->Bool { return m_isSuperlative}
     
-    func processInfo(){
+    public func processInfo(){
         //if head subject cluster is not found in this process,
         // then the parent/modified noun phrase must provide the person, number, gender
         
@@ -140,47 +140,47 @@ class dAdjectivalClause : dClause {
 } //dAdjectiveClause
 
 
-class dRelativePronounClause: dClause {
-    override init(){
+public class dRelativePronounClause: dClause {
+    public override init(){
         super.init(word: Word(), clusterType: .RelP)
     }
     
-    init(word: Word){
+    public init(word: Word){
         super.init(word: word, clusterType: .RelP)
     }
     
     
 }
-class dDependentClause : dClause {
-    override init(){
+public class dDependentClause : dClause {
+    public override init(){
         super.init(word: Word(), clusterType: .RelP)
     }
     
-    init(word: Word){
+    public init(word: Word){
         super.init(word: word, clusterType: .RelP)
     }
     
     
 }
 
-class dSentenceA : dClause {
+public class dSentenceA : dClause {
     
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: .S)
     }
     
-    init(word: Word){
+    public init(word: Word){
         super.init(word: word, clusterType: .S)
     }
     
     var subClauseList = Array<dClause>()
     
-    func appendNounClause(conj: Conjunction, clause: dNounClause){
+    public  func appendNounClause(conj: Conjunction, clause: dNounClause){
         //var conj = conj
         subClauseList.append(clause)
     }
     
-    func appendAdverbialClause(conj: Conjunction, clause: dAdverbialClause){
+    public func appendAdverbialClause(conj: Conjunction, clause: dAdverbialClause){
         //let conj = conj
         subClauseList.append(clause)
     }

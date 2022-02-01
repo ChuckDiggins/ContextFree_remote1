@@ -9,14 +9,14 @@ import Foundation
 
 import UIKit
 
-class JsonAdjective: Codable, CustomStringConvertible {
+public class JsonAdjective: Codable, CustomStringConvertible {
     var english: String
     var french: String
     var spanish: String
     var adjectiveType: String  //"D" - demonstrative (this), "P" possessive (my), "A" any
     var nounLikes : String   //"*" - place holder
     var position : String  //"P" preceding, "F" following, "B" both
-    var description: String {
+    public var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
@@ -107,18 +107,18 @@ var myMultiLingualAdjList: [JsonAdjective] = [
 
 
 //create json from
-class JsonAdjectiveManager {
+public class JsonAdjectiveManager {
     var myWordList = [JsonAdjective]()
     
-    func printWords(){
+    public func printWords(){
         print(myWordList)
     }
     
-    func printOne(jv: JsonNoun){
+    public func printOne(jv: JsonAdjective){
         print(jv)
     }
     
-    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
+    public func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
         var wordList = [JsonAdjective]()
         switch collectionType {
@@ -135,11 +135,11 @@ class JsonAdjectiveManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonAdjective{
+    public func getLastWord()->JsonAdjective{
         return myWordList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedAdjs = try? encoder.encode(myWordList){
@@ -148,7 +148,7 @@ class JsonAdjectiveManager {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonAdjective].self, from: data){
@@ -157,7 +157,7 @@ class JsonAdjectiveManager {
         }
     }
     
-    func appendWord(verb: JsonAdjective){
+    public func appendWord(verb: JsonAdjective){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -172,20 +172,20 @@ class JsonAdjectiveManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getWordAt(index: Int)->JsonAdjective{
+    public func getWordAt(index: Int)->JsonAdjective{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEMultiLingualAdjectives").appendingPathExtension("json")
     }

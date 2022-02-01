@@ -7,16 +7,16 @@
 
 import Foundation
 
-class Adverb : Word {
+public class Adverb : Word {
 
     var type: AdverbType
     
-    init(word: String, type : AdverbType){
+    public init(word: String, type : AdverbType){
         self.type = type
         super.init(word: word, wordType: .adverb)
     }
     
-    init(json: JsonAdverb, language: LanguageType){
+    public  init(json: JsonAdverb, language: LanguageType){
         self.type = AdverbType.manner
         
         switch(language){
@@ -39,7 +39,7 @@ class Adverb : Word {
     // D = doubt - posiblemente, tal vez
     // A = affirmation - ciertamente
     // E = exclusion - apenas
-    func convertAdverbTypeStringToAdverbType(inputString: String){
+    public func convertAdverbTypeStringToAdverbType(inputString: String){
         type = .manner
         if ( inputString == "M" ){type = .manner}
         else if ( inputString == "P" ){type = .place}
@@ -50,18 +50,18 @@ class Adverb : Word {
         else if ( inputString == "E" ){type = .exclusion}
     }
     
-    func isAdverb(word:String)->Bool{
+    public func isAdverb(word:String)->Bool{
         if word == self.word {return true}
         return false
     }
 }
 
-class RomanceAdverb : Adverb {
-    override init(word: String, type : AdverbType){
+public class RomanceAdverb : Adverb {
+    public override init(word: String, type : AdverbType){
         super.init(word: word, type: type)
     }
     
-    override init(json: JsonAdverb, language: LanguageType){
+    public override init(json: JsonAdverb, language: LanguageType){
         super.init(json: json, language: language)
     }
     
@@ -69,60 +69,60 @@ class RomanceAdverb : Adverb {
 
 
 
-class FrenchAdverb : RomanceAdverb {
-    override init(word: String, type : AdverbType){
+public class FrenchAdverb : RomanceAdverb {
+    public override init(word: String, type : AdverbType){
         super.init(word: word, type: type)
     }
     
-    init(json: JsonAdverb){
+    public init(json: JsonAdverb){
         super.init(json: json, language: .French)
     }
     
-    override func isAdverb(word:String)->Bool{
+    public override func isAdverb(word:String)->Bool{
         if word == self.french {return true}
         return false
     }
     
-    func getForm()->String{
+    public func getForm()->String{
         return french
     }
 }
 
 
-class SpanishAdverb : Adverb {
-    override init(word: String, type : AdverbType){
+public  class SpanishAdverb : Adverb {
+    public override init(word: String, type : AdverbType){
         super.init(word: word,type: type)
     }
     
-    init(json: JsonAdverb){
+    public init(json: JsonAdverb){
         super.init(json: json, language: .Spanish)
     }
     
-    override func isAdverb(word:String)->Bool{
+    public override func isAdverb(word:String)->Bool{
         if word == self.spanish {return true}
         return false
     }
     
-    func getForm()->String{
+    public func getForm()->String{
         return spanish
     }
 }
 
-class EnglishAdverb : Adverb {
-    override init(word: String, type : AdverbType){
+public class EnglishAdverb : Adverb {
+    public override init(word: String, type : AdverbType){
         super.init(word: word, type: type)
     }
     
-    init(json: JsonAdverb){
+    public init(json: JsonAdverb){
         super.init(json: json, language: .English)
     }
     
-    override func isAdverb(word:String)->Bool{
+    public override func isAdverb(word:String)->Bool{
         if word == self.english {return true}
         return false
     }
     
-    func getForm()->String{
+    public func getForm()->String{
         return english
     }
 }

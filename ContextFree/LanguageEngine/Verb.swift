@@ -10,7 +10,7 @@ import Foundation
 
 //----------------------------------------------------------------------------------------
 
-class Verb : Word {
+public class Verb : Word {
     var bVerb = BVerb()
     var typeList = [VerbType]()
     var transitivity =  VerbTransitivity.transitive
@@ -20,23 +20,23 @@ class Verb : Word {
     var tensePersonSet = false
     var m_isPassive = false
     
-    override init(){
+    public override init(){
         super.init(word: "", wordType : .verb)
     }
      
-    init(spanish: String, french: String, english: String){
+    public init(spanish: String, french: String, english: String){
         super.init(word: spanish, wordType: .verb)
         self.spanish = spanish
         self.french = french
         self.english = english
     }
     
-    init(word: String, type : VerbType){
+    public init(word: String, type : VerbType){
         typeList.append(type)
         super.init(word: word, wordType: .verb)
     }
     
-    init(word: String, type : VerbType, tense: Tense, person: Person){
+    public init(word: String, type : VerbType, tense: Tense, person: Person){
         typeList.append(type)
         self.person = person
         self.tense = tense
@@ -46,7 +46,7 @@ class Verb : Word {
         super.init(word: word, wordType: .verb)
     }
     
-    init(word: String, wsd: WordStateData){
+    public init(word: String, wsd: WordStateData){
         typeList.append(wsd.verbType)
         self.person = wsd.person
         self.tense = wsd.tense
@@ -55,7 +55,7 @@ class Verb : Word {
         super.init(word: word, wordType: .verb)
     }
     
-    init(jsonVerb: JsonVerb, language: LanguageType){
+    public init(jsonVerb: JsonVerb, language: LanguageType){
         self.transitivity = jsonVerb.transitivity
         switch(language){
         case .Spanish:  super.init(word: jsonVerb.spanish, wordType: .verb)
@@ -78,15 +78,15 @@ class Verb : Word {
         }
     }
     
-    func setBVerb(bVerb: BVerb){
+    public func setBVerb(bVerb: BVerb){
         self.bVerb = bVerb
     }
     
-    func getBVerb()->BVerb{
+    public func getBVerb()->BVerb{
         return bVerb
     }
     
-    func updateInfo(jsonVerb: JsonVerb){
+    public func updateInfo(jsonVerb: JsonVerb){
         self.english = jsonVerb.english
         self.french = jsonVerb.french
         self.spanish = jsonVerb.spanish
@@ -95,31 +95,31 @@ class Verb : Word {
         
     }
     
-    func updateWords(english: String, french: String){
+    public func updateWords(english: String, french: String){
         self.english = english
         self.french = french
         self.spanish = word
     }
     
-    func updateTransitivity(trans : VerbTransitivity){
+    public func updateTransitivity(trans : VerbTransitivity){
         transitivity = trans
     }
     
-    func isTransitive()->Bool{
+    public func isTransitive()->Bool{
         if ( transitivity == .intransitive ){return false}
             return true
     }
     
-    func updatePassivity(pass : VerbPassivity){
+    public func updatePassivity(pass : VerbPassivity){
         passivity = pass
     }
     
-    func isPassive()->Bool{
+    public func isPassive()->Bool{
         if ( passivity == .passive ){return true}
             return false
     }
     
-    func isBackward()->Bool {
+    public func isBackward()->Bool {
         for type in typeList {
             if type == VerbType.backward {
                 return true
@@ -128,14 +128,14 @@ class Verb : Word {
         return false
     }
     
-    func updateType( vType: [String])
+    public func updateType( vType: [String])
     {
         typeList.removeAll()
         for f in vType {
             typeList.append(getVerbTypeFromLetter(letter: f))
         }
     }
-    func getWordAtLanguage(language: LanguageType)->String{
+    public func getWordAtLanguage(language: LanguageType)->String{
         switch(language){
         case .Spanish: return spanish
         case .English: return english
@@ -145,7 +145,7 @@ class Verb : Word {
         }
     }
     
-    func convertVerbTypeStringToVerbTypes(inputString: String){
+    public func convertVerbTypeStringToVerbTypes(inputString: String){
         let util = VerbUtilities()
         let strList = getVerbTypesAsStringList()
         for str in strList {
@@ -159,7 +159,7 @@ class Verb : Word {
         return typeList
     }
     
-    func convertVerbTypesToCompositeString()->String{
+    public func convertVerbTypesToCompositeString()->String{
         var compositeString = ""
         for vt in typeList{
             compositeString.append(getVerbTypeAsLetter(index: vt.rawValue))
@@ -167,7 +167,7 @@ class Verb : Word {
         return compositeString
     }
     
-    func createJsonVerb()->JsonVerb{
+    public func createJsonVerb()->JsonVerb{
         let jv : JsonVerb
         if ( passivity == .passive ){
             jv = JsonVerb(spanish: word, english: english, french: french)
@@ -178,70 +178,70 @@ class Verb : Word {
         return jv
     }
     
-    func createBVerb(){
+    public func createBVerb(){
     }
     
-    func isNormal()->Bool{
+    public func isNormal()->Bool{
         for vt in typeList{
             if vt == .normal { return true}
         }
         return false
     }
     
-    func isTensePersonSet()->Bool {
+    public func isTensePersonSet()->Bool {
         return tensePersonSet
     }
     
-    func setTensePerson(tense : Tense, person: Person ){
+    public func setTensePerson(tense : Tense, person: Person ){
         self.tense = tense
         self.person = person
         self.tensePersonSet = true
     }
     
-    func getTense()->Tense{
+    public func getTense()->Tense{
         return tense
     }
 
-    func getPerson()->Person{
+    public func getPerson()->Person{
         return person
     }
     
-    func getResidualPhrase()->String {
+    public func getResidualPhrase()->String {
         getBVerb().getResidualPhrase()
     }
 
-    func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+    public func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
         MorphStruct(person: person)
     }
     
 }
 
-class RomanceVerb : Verb {
+public class RomanceVerb : Verb {
     
     var verbForm = Array<String>()
     var pastParticiple = ""
     var presentParticiple = ""
     
-    override init(jsonVerb: JsonVerb, language: LanguageType){
+    public override init(jsonVerb: JsonVerb, language: LanguageType){
         super.init(jsonVerb: jsonVerb, language: language)
     }
     
-    override init(word: String, type: VerbType, tense: Tense, person: Person){
+    public override init(word: String, type: VerbType, tense: Tense, person: Person){
         super.init(word: word, type : type)
         setTensePerson(tense: tense, person: person)
     }
     
-    override init(word: String, type: VerbType){
+    public override init(word: String, type: VerbType){
         super.init(word: word, type : type)
     }
     
-    func getConjugateForm()->String{
+    public func getConjugateForm()->String{
         return getConjugateForm(tense: tense, person: person, showResidualPhrase: false)
     }
     
-    func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{ return verbForm[person.getIndex()] }
+    public func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{ return verbForm[person.getIndex()] }
     
-    func isConjugateForm(word: String)->(Bool, Tense, Person){
+    public func isConjugateForm(word: String)->(Bool, Tense, Person){
         for p in 0..<6 {
             let person = Person.allCases[p]
             if word == verbForm[p]{return (true, .present, person)}
@@ -249,30 +249,30 @@ class RomanceVerb : Verb {
         return (false, .present, .S1)
     }
     
-    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+    public override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
         MorphStruct(person: person)
     }
     
-    override func createBVerb(){
+    public override func createBVerb(){
     }
 
 }
 
 
-class FrenchVerb : RomanceVerb {   
-    init(){
+public class FrenchVerb : RomanceVerb {
+    public init(){
         super.init(word: "", type : .normal)
     }
     
-    init(jsonVerb: JsonVerb){
+    public init(jsonVerb: JsonVerb){
         super.init(jsonVerb: jsonVerb, language: .French)
     }
     
-    override init(word: String, type: VerbType){
+    public override init(word: String, type: VerbType){
         super.init(word: word, type : type)
     }
     
-    override func createBVerb(){
+    public override func createBVerb(){
         if ( bVerb.m_verbWord.count == 0){
             let bv = BFrenchVerb(verbPhrase: french)
             let verbModel = m_frenchVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
@@ -280,7 +280,7 @@ class FrenchVerb : RomanceVerb {
             setBVerb(bVerb: bv)
         }
     }
-    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
+    public override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
         createBVerb()
         let bFrVerb = bVerb as! BFrenchVerb
         switch tense {
@@ -294,32 +294,32 @@ class FrenchVerb : RomanceVerb {
         }
     }
     
-    func isReflexive()->Bool{
+    public func isReflexive()->Bool{
         let bFrVerb = bVerb as! BFrenchVerb
         return bFrVerb.m_isReflexive
     }
     
-    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+    public override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
         return getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
         //return getMorphStruct(tense: tense, person: person)
     }
 }
 
-class SpanishVerb : RomanceVerb {
+public class SpanishVerb : RomanceVerb {
     
-    init(){
+    public init(){
         super.init(word: "", type : .normal)
     }
     
-    init(jsonVerb: JsonVerb){
+    public init(jsonVerb: JsonVerb){
         super.init(jsonVerb: jsonVerb, language: .Spanish)
     }
     
-    override init(word: String, type: VerbType){
+    public override init(word: String, type: VerbType){
         super.init(word: word, type : type)
     }
     
-    override func createBVerb(){
+    public override func createBVerb(){
         if ( bVerb.m_verbWord.count == 0){
             let bv = BSpanishVerb(verbPhrase: spanish)
             let verbModel = m_spanishVerbModelConjugation.getVerbModel(verbWord: bv.m_verbWord)
@@ -328,7 +328,7 @@ class SpanishVerb : RomanceVerb {
         }
     }
     
-    override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String {
+    public override func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String {
         createBVerb()
         let bSpVerb = bVerb as! BSpanishVerb
         
@@ -344,53 +344,53 @@ class SpanishVerb : RomanceVerb {
         }
     }
     
-    func isReflexive()->Bool{
+    public func isReflexive()->Bool{
         let bSpVerb = bVerb as! BSpanishVerb
         return bSpVerb.m_isReflexive
     }
     
-    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+    public override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
         return getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
 //        return getMorphStruct(tense: tense, person: person)
     }
     
 }
 
-class EnglishVerb : Verb {
-    var singularForm = ""
+public class EnglishVerb : Verb {
+    public var singularForm = ""
     
-    override init(){
+    public override init(){
         super.init(word: "", type : .normal)
     }
     
-    init(jsonVerb: JsonVerb){
+    public init(jsonVerb: JsonVerb){
         super.init(jsonVerb: jsonVerb, language: .English)
     }
     
-    override init(word: String, type: VerbType){
+    public override init(word: String, type: VerbType){
         super.init(word: word, type : type)
         singularForm = word + "s"
     }
     
-    override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
+    public override func getMorphStruct(tense: Tense, person: Person)->MorphStruct{
         return getBVerb().getConjugatedMorphStruct(tense: tense, person: person, conjugateEntirePhrase : true )
         //return getMorphStruct(tense: tense, person: person)
     }
     
-    func isConjugateForm(word: String)->(Bool, Tense, Person){
+    public func isConjugateForm(word: String)->(Bool, Tense, Person){
         if ( word == singularForm ){return (true, .present, .S3)}
         if ( word == self.word ){return (true, .present, .S1)}
         return (false, .present, .S1)
     }
     
-    override func createBVerb(){
+    public override func createBVerb(){
         if ( bVerb.m_verbWord.count == 0){
             let bv = BEnglishVerb(verbPhrase: english, separable: .both)
             setBVerb(bVerb: bv)
         }
     }
     
-    func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
+    public func getConjugateForm(tense: Tense, person : Person, showResidualPhrase: Bool)->String{
         createBVerb()
         let bEnglishVerb = bVerb as! BEnglishVerb
         switch tense {
@@ -405,7 +405,7 @@ class EnglishVerb : Verb {
         }
     }
     
-    func isReflexive()->Bool{
+    public func isReflexive()->Bool{
         false
     }
     

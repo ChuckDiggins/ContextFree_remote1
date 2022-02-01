@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct VerbSettings{
+public struct VerbSettings{
     var tense : Tense
     var person : Person
 }
 
-struct NounSettings{
+public struct NounSettings{
     var number : Number
 }
 
-struct SentenceData {
+public struct SentenceData {
     var word = Word()
     var data = WordStateData()
 }

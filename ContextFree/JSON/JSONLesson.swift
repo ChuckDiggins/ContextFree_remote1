@@ -9,14 +9,14 @@ import Foundation
 
 import UIKit
 
-class JsonLesson: Codable, CustomStringConvertible {
+public class JsonLesson: Codable, CustomStringConvertible {
     var language: String //agnostic means any language, otherwise it is language-specific
     var lessonName : String
-    var description: String {
+    public var description: String {
         return "\(self.lessonName) "
     }
     
-    init(language: LanguageType, lessonName : String){
+    public init(language: LanguageType, lessonName : String){
         self.language = language.rawValue
         self.lessonName = lessonName
     }
@@ -28,18 +28,18 @@ var myLessonList: [JsonLesson] = [
 ]
 
 //create json from
-class JsonLessonManager {
+public class JsonLessonManager {
     var myLessonList = [JsonLesson]()
     
-    func printWords(){
+    public func printWords(){
         print(myLessonList)
     }
     
-    func printOne(jv: JsonLesson){
+    public func printOne(jv: JsonLesson){
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    public func encodeInternalWords(total: Int){
         clearWords()
         for v in myLessonList{
             myLessonList.append(v)
@@ -49,11 +49,11 @@ class JsonLessonManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonLesson{
+    public func getLastWord()->JsonLesson{
         return myLessonList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedPreps = try? encoder.encode( myLessonList){
@@ -62,7 +62,7 @@ class JsonLessonManager {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonLesson].self, from: data){
@@ -71,7 +71,7 @@ class JsonLessonManager {
         }
     }
     
-    func appendLesson(jl: JsonLesson){
+    public func appendLesson(jl: JsonLesson){
         var appendThis = true
         for i in 0..<myLessonList.count {
             let v = myLessonList[i]
@@ -86,20 +86,20 @@ class JsonLessonManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myLessonList.removeAll()
     }
     
-    func getLessonAt(index: Int)->JsonLesson{
+    public func getLessonAt(index: Int)->JsonLesson{
         if index > myLessonList.count-1 { return myLessonList[0] }
         return myLessonList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myLessonList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFELessons").appendingPathExtension("json")
     }

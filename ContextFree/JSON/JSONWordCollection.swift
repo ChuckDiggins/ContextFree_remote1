@@ -8,16 +8,16 @@
 import Foundation
 
 
-struct JSONWord : Codable, CustomStringConvertible {
+public struct JSONWord : Codable, CustomStringConvertible {
     var spanish: String
     var english: String
     var french: String
     var wordType: String
-    var description: String {
+    public  var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
-    func getWord()->Word{
+    public func getWord()->Word{
         let word = Word(word: spanish, spanish: spanish, french: french, english: english, wordType: getWordTypeFromString(str: wordType))
         return word
     }
@@ -25,30 +25,30 @@ struct JSONWord : Codable, CustomStringConvertible {
     
 }
 
-struct JSONCollectionStruct : Codable, CustomStringConvertible {
+public struct JSONCollectionStruct : Codable, CustomStringConvertible {
     var idNum: Int
     var collectionName : String
     var wordList = [JSONWord]()
-    var description: String {
+    public var description: String {
         return "\(self.collectionName) : wordCount =\(wordList.count)"
     }
     
-    init(idNum: Int, collectionName: String, wordList : [JSONWord]){
+    public init(idNum: Int, collectionName: String, wordList : [JSONWord]){
         self.idNum = idNum
         self.collectionName = collectionName
         self.wordList = wordList
     }
     
-    init(idNum: Int, collectionName: String){
+    public init(idNum: Int, collectionName: String){
         self.idNum = idNum
         self.collectionName = collectionName
     }
     
-    mutating func appendJsonWord(jw: JSONWord){
+    public mutating func appendJsonWord(jw: JSONWord){
         wordList.append(jw)
     }
     
-    func printThyself(){
+    public func printThyself(){
         print("\(idNum) - \(collectionName)")
         var i = 0
         for word in wordList {
@@ -57,7 +57,7 @@ struct JSONCollectionStruct : Codable, CustomStringConvertible {
         }
     }
     
-    func convertToJLingCollection()->dWordCollection{
+    public func convertToJLingCollection()->dWordCollection{
         var newWordList = [Word]()
         for jsonWord in wordList {
             let wordType = getWordTypeFromString(str: jsonWord.wordType)
@@ -68,19 +68,19 @@ struct JSONCollectionStruct : Codable, CustomStringConvertible {
     }
 }
 
-class JSONWordCollection: Codable {
+public class JSONWordCollection: Codable {
      
     var myWordList = [JSONWord]()
     
-    func printWords(){
+    public func printWords(){
         print(myWordList)
     }
     
-    func printOne(jv: JSONWord){
+    public func printOne(jv: JSONWord){
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    public func encodeInternalWords(total: Int){
         clearWords()
         let wordList = CarpenterWordList
         
@@ -91,7 +91,7 @@ class JSONWordCollection: Codable {
         encodeWords()
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedPreps = try? encoder.encode(myWordList){
@@ -99,7 +99,7 @@ class JSONWordCollection: Codable {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         
         if let data = try? Data.init(contentsOf: getURL()){
@@ -109,7 +109,7 @@ class JSONWordCollection: Codable {
         }
     }
     
-    func appendWord(jw: JSONWord){
+    public func appendWord(jw: JSONWord){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -123,16 +123,16 @@ class JSONWordCollection: Codable {
         if ( appendThis ){myWordList.append(jw)}
         encodeWords()
     }
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getJsonWordAt(index: Int)->JSONWord{
+    public func getJsonWordAt(index: Int)->JSONWord{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordAt(index: Int)->Word{
+    public func getWordAt(index: Int)->Word{
         if index > myWordList.count-1 {
             return Word()
         }
@@ -143,11 +143,11 @@ class JSONWordCollection: Codable {
         }
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEWordCollection").appendingPathExtension("json")
     }

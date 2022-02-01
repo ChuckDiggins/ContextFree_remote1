@@ -8,7 +8,7 @@
 import UIKit
 
 
-class JsonNoun: Codable, CustomStringConvertible {
+public class JsonNoun: Codable, CustomStringConvertible {
     var english: String
     var french: String
     var spanish: String
@@ -18,11 +18,11 @@ class JsonNoun: Codable, CustomStringConvertible {
     var nounType: String  //"RTA"
     var verbLikes : String   //"AbCdEf" - Furniture, Idea, Thing
     var adjLikes : String
-    var description: String {
+    public var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
-    init(spanish: String, english: String, french: String, spanishGender: String, frenchGender: String, englishPlural: String, nounType : String, verbLikes: String, adjLikes: String){
+    public init(spanish: String, english: String, french: String, spanishGender: String, frenchGender: String, englishPlural: String, nounType : String, verbLikes: String, adjLikes: String){
         self.spanish = spanish
         self.english = english
         self.french = french
@@ -35,7 +35,7 @@ class JsonNoun: Codable, CustomStringConvertible {
         
     }
     
-    init(spanish: String, english: String, french: String, spanishGender: String, frenchGender: String, englishPlural: String, verbLikes: String){
+    public init(spanish: String, english: String, french: String, spanishGender: String, frenchGender: String, englishPlural: String, verbLikes: String){
         self.spanish = spanish
         self.english = english
         self.french = french
@@ -161,18 +161,18 @@ JsonNoun(spanish: "pimienta", english: "pepper",    french: "poivre", spanishGen
 JsonNoun(spanish: "azúcar", english: "sugar",    french: "sucre", spanishGender : "M", frenchGender : "M", englishPlural: "sugar", nounType : "T", verbLikes: "", adjLikes: ""),
 ]
 //create json from
-class JsonNounManager {
-    var myWordList = [JsonNoun]()
+public class JsonNounManager {
+    public var myWordList = [JsonNoun]()
     
-    func printVerbs(){
+    public func printNouns(){
         print(myWordList)
     }
     
-    func printOne(jv: JsonNoun){
+    public func printOne(jv: JsonNoun){
         print(jv)
     }
     
-    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
+    public func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
         var nounList = [JsonNoun]()
         switch collectionType {
@@ -190,11 +190,11 @@ class JsonNounManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonNoun{
+    public func getLastWord()->JsonNoun{
         return myWordList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedNouns = try? encoder.encode(myWordList){
@@ -203,7 +203,7 @@ class JsonNounManager {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonNoun].self, from: data){
@@ -212,7 +212,7 @@ class JsonNounManager {
         }
     }
     
-    func appendWord(verb: JsonNoun){
+    public func appendWord(verb: JsonNoun){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -227,22 +227,20 @@ class JsonNounManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getWordAt(index: Int)->JsonNoun{
+    public func getWordAt(index: Int)->JsonNoun{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
     
-    
-    
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEMultiLingualNouns").appendingPathExtension("json")
     }

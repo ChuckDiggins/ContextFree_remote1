@@ -7,7 +7,7 @@
 
 import Foundation
 
-class JsonAdverb: Codable, CustomStringConvertible {
+public class JsonAdverb: Codable, CustomStringConvertible {
     var english: String
     var french: String
     var spanish: String
@@ -15,7 +15,7 @@ class JsonAdverb: Codable, CustomStringConvertible {
     var verbLikes : String   //"*" - place holder
     var adjLikes : String   //"*" - place holder
     var position : String  //"P" preceding, "F" following, "B" both
-    var description: String {
+    public var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
@@ -130,18 +130,18 @@ var myMultiLingualAdverbList: [JsonAdverb] = [
     
     
 //create json from
-class JsonAdverbManager {
+public class JsonAdverbManager {
     var myWordList = [JsonAdverb]()
     
-    func printWords(){
+    public func printWords(){
         print(myWordList)
     }
     
-    func printOne(jv: JsonAdverb){
+    public func printOne(jv: JsonAdverb){
         print(jv)
     }
     
-    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
+    public func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
         var wordList = [JsonAdverb]()
         switch collectionType {
@@ -158,11 +158,11 @@ class JsonAdverbManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonAdverb{
+    public func getLastWord()->JsonAdverb{
         return myWordList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedPreps = try? encoder.encode(myWordList){
@@ -180,7 +180,7 @@ class JsonAdverbManager {
         }
     }
     
-    func appendWord(adv: JsonAdverb){
+    public func appendWord(adv: JsonAdverb){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -195,20 +195,20 @@ class JsonAdverbManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getWordAt(index: Int)->JsonAdverb{
+    public func getWordAt(index: Int)->JsonAdverb{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEMultiLingualAdverbs").appendingPathExtension("json")
     }

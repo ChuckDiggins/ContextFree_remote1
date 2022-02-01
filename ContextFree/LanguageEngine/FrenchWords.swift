@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FrenchWords{
+public struct FrenchWords{
     var adjectiveList = Array<Word>()
     var demonstrativeAdjectiveList = Array<Word>()
     var interrogativeAdjectiveList = Array<Word>()

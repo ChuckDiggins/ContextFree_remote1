@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BEnglishVerb : BVerb {
+public class BEnglishVerb : BVerb {
     
     var verbModel = EnglishVerbModel()
     var m_presentS3Form = ""
@@ -25,18 +25,18 @@ class BEnglishVerb : BVerb {
     var m_baseString = ""
     var m_separable = Separable.both
     
-    init(verbPhrase: String, separable: Separable){
+    public init(verbPhrase: String, separable: Separable){
         m_separable = separable
         super.init(verbPhrase: verbPhrase, languageType: .English)
         createRegularDefaultForms()  //these will be overridden later if there is a model for this verb
     }
     
-    func getBescherelleInfo()->String {
+    public func getBescherelleInfo()->String {
         if verbModel.id == 0 {return "Regular verb"}
         return "Besch #\(verbModel.id) (\(verbModel.infinitive))"
     }
     
-    func prepareStemNew(){
+    public func prepareStemNew(){
         let util = VerbUtilities()
         m_baseString = m_verbWord
         m_presentS3Stem = m_verbWord
@@ -109,7 +109,7 @@ class BEnglishVerb : BVerb {
         }
     }
     
-    func createRegularDefaultForms(){
+    public func createRegularDefaultForms(){
         prepareStemNew()
         
         m_preteriteForm = m_preteriteStem + "d"
@@ -144,11 +144,11 @@ class BEnglishVerb : BVerb {
         }
     }
     
-    func createGerund(){
+    public func createGerund(){
         m_gerund = m_verbWord + "ing"
     }
     
-    func setModel(verbModel: EnglishVerbModel){
+    public func setModel(verbModel: EnglishVerbModel){
         self.verbModel = verbModel
        
         
@@ -176,7 +176,7 @@ class BEnglishVerb : BVerb {
         }
     }
     
-    func getConjugateForm(tense : Tense, person : Person)->String {
+    public func getConjugateForm(tense : Tense, person : Person)->String {
         switch verbModel.id{
         case 0:
             return getRegularForm(tense: tense, person: person)
@@ -187,7 +187,7 @@ class BEnglishVerb : BVerb {
         }
     }
     
-    func getBeForm(tense : Tense, person : Person)->String {
+    public func getBeForm(tense : Tense, person : Person)->String {
 
         switch tense {
         case .present:
@@ -244,7 +244,7 @@ class BEnglishVerb : BVerb {
         return "this tense not implemented yet"
     }
     
-    func getRegularForm(tense : Tense, person : Person)->String {
+    public func getRegularForm(tense : Tense, person : Person)->String {
         switch tense {
         case .present:
             if person == .S3 {
@@ -277,7 +277,7 @@ class BEnglishVerb : BVerb {
         return "this tense not implemented yet"
     }
     
-    override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool, isPassive: Bool = false)->MorphStruct {
+    public override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool, isPassive: Bool = false)->MorphStruct {
         var ms = self.morphStructManager.get(person: person)
         let verbForm = getConjugateForm(tense: tense, person: person)
         var morphStep = MorphStep()

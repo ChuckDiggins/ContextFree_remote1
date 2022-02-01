@@ -7,24 +7,24 @@
 
 import Foundation
 
-struct dCorrection {
+public struct dCorrection {
     var m_error = false
     var m_inputInfo : WordStateData
     var m_outputInfo = WordStateData()
     
-    func getInputInfo()->WordStateData{
+    public func getInputInfo()->WordStateData{
         return m_inputInfo
     }
     
-    func getOutputInfo()->WordStateData{
+    public  func getOutputInfo()->WordStateData{
         return m_outputInfo
     }
     
-    mutating func setOutputInfo(outputInfo: WordStateData){
+    public mutating func setOutputInfo(outputInfo: WordStateData){
         m_outputInfo = outputInfo
     }
     
-    func hasError()->Bool {
+    public func hasError()->Bool {
         return m_error
     }
     

@@ -172,34 +172,34 @@ struct ClauseManipulation{
         else { return (false, inputString)}
     }
     
-    func handleContractions(language: LanguageType, wordList: [Word])->[Word]{
-        
-        var wordListCopy = wordList
-        switch language {
-        case .Spanish:
-            let sw = SpanishWords()
-            var contractionFound  = true
-            while contractionFound {
-                for (i, word) in wordListCopy.enumerated() {
-                    let result = sw.isContraction(word: word.word)
-                    //if is contraction, then remove it and replace it
-                    if result.0 {
-                        wordListCopy.remove(at: i)
-                        let word1 = Word(word: result.2, wordType : .unknown)
-                        let word2 = Word(word: result.1, wordType : .unknown)
-                        wordListCopy.insert(word2, at:i)
-                        wordListCopy.insert(word1, at:i)
-                        contractionFound = true
-                        break
-                    }
-                    contractionFound = false
-                }
-            }
-        default:
-            return wordListCopy
-        }
-        return wordListCopy
-    }
+//    func handleContractions(language: LanguageType, wordList: [Word])->[Word]{
+//        
+//        var wordListCopy = wordList
+//        switch language {
+//        case .Spanish:
+//            let sw = SpanishWords()
+//            var contractionFound  = true
+//            while contractionFound {
+//                for (i, word) in wordListCopy.enumerated() {
+//                    let result = sw.isContraction(word: word.word)
+//                    //if is contraction, then remove it and replace it
+//                    if result.0 {
+//                        wordListCopy.remove(at: i)
+//                        let word1 = Word(word: result.2, wordType : .unknown)
+//                        let word2 = Word(word: result.1, wordType : .unknown)
+//                        wordListCopy.insert(word2, at:i)
+//                        wordListCopy.insert(word1, at:i)
+//                        contractionFound = true
+//                        break
+//                    }
+//                    contractionFound = false
+//                }
+//            }
+//        default:
+//            return wordListCopy
+//        }
+//        return wordListCopy
+//    }
     
     //    func countStringLengths(clause: dIndependentAgnosticClause, englishClause: dIndependentAgnosticClause){
     //        let singleList = clause.getSingleList()

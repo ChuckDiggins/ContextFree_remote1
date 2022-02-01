@@ -17,12 +17,12 @@ let jc = JsonClause(language: .Agnostic, name: "Simple clause 1",
                         JsonClause.Phrase(phraseName: "Simple verb phrase")
                         ])
 
-struct JsonClause:  Codable {
-    struct Phrase : Codable {
+public struct JsonClause:  Codable {
+    public struct Phrase : Codable {
         var phraseName : String
     }
     
-    init(language: LanguageType, name: String, phraseList : [Phrase]){
+    public init(language: LanguageType, name: String, phraseList : [Phrase]){
         self.language = language.rawValue
         self.clauseName = name
         self.phraseList = phraseList
@@ -30,13 +30,13 @@ struct JsonClause:  Codable {
     }
     
 
-    init(language: String, phraseType: String, name: String, phraseList : [Phrase]){
+    public init(language: String, phraseType: String, name: String, phraseList : [Phrase]){
         self.language = language
         self.clauseName = name
         self.phraseList = phraseList
     }
     
-    init(){
+    public init(){
         language = ""
         clauseName = ""
         self.phraseList = [Phrase]()
@@ -51,18 +51,18 @@ struct JsonClause:  Codable {
 
 
 //create json from
-class JsonClauseManager {
+public class JsonClauseManager {
     var myList = [JsonClause]()
     
-    func printClauses(){
+    public func printClauses(){
         print(myList)
     }
     
-    func printOne(jv: JsonClause){
+    public func printOne(jv: JsonClause){
         print(jv)
     }
     
-    func encodeInternalClauses(total: Int){
+    public func encodeInternalClauses(total: Int){
         clearClauses()
         for v in myList{
             myList.append(v)
@@ -72,11 +72,11 @@ class JsonClauseManager {
         encodeClauses()
     }
     
-    func getLastClause()->JsonClause{
+    public func getLastClause()->JsonClause{
         return myList.last!
     }
     
-    func encodeClauses(){
+    public func encodeClauses(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedPreps = try? encoder.encode( myList){
@@ -85,7 +85,7 @@ class JsonClauseManager {
         }
     }
     
-    func decodeClauses(){
+    public func decodeClauses(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonClause].self, from: data){
@@ -94,7 +94,7 @@ class JsonClauseManager {
         }
     }
     
-    func getClauseAtName(name: String)->JsonClause{
+    public func getClauseAtName(name: String)->JsonClause{
         for i in 0..<myList.count {
             let v = myList[i]
             if v.clauseName == name { return v }
@@ -102,7 +102,7 @@ class JsonClauseManager {
         return JsonClause()  //empty
     }
     
-    func appendClause(jl: JsonClause){
+    public func appendClause(jl: JsonClause){
         var appendThis = true
         for i in 0..<myList.count {
             let v = myList[i]
@@ -117,20 +117,20 @@ class JsonClauseManager {
         encodeClauses()
     }
     
-    func clearClauses(){
+    public func clearClauses(){
         myList.removeAll()
     }
     
-    func getClauseAt(index: Int)->JsonClause{
+    public func getClauseAt(index: Int)->JsonClause{
         if index > myList.count-1 { return myList[0] }
         return myList[index]
     }
     
-    func getCount()->Int{
+    public func getCount()->Int{
         return myList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEClauses").appendingPathExtension("json")
     }

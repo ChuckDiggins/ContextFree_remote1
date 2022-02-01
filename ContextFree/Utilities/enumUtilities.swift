@@ -7,7 +7,7 @@
 
 import Foundation
 
-func getClusterTypeFromString(str: String)->ContextFreeSymbol{
+public func getClusterTypeFromString(str: String)->ContextFreeSymbol{
     switch str{
     case "N": return .N
     case "V": return .V
@@ -24,7 +24,7 @@ func getClusterTypeFromString(str: String)->ContextFreeSymbol{
     }
 }
                 
-func getWordTypeFromString(str: String)->WordType{
+public func getWordTypeFromString(str: String)->WordType{
     switch str{
     case "determiner": return .determiner
     case "noun": return .noun
@@ -37,7 +37,7 @@ func getWordTypeFromString(str: String)->WordType{
     }
 }
 
-func getStringFromWordType(wordType: WordType)->String{
+public func getStringFromWordType(wordType: WordType)->String{
     switch wordType{
     case .noun: return "noun"
     case .verb: return "verb"
@@ -51,7 +51,7 @@ func getStringFromWordType(wordType: WordType)->String{
 }
 
 
-func getTenseFromString(str: String)->Tense{
+public func getTenseFromString(str: String)->Tense{
     switch str.lowercased(){
     case "present": return .present
     case "imperfect": return .imperfect

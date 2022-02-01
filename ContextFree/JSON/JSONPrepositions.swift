@@ -9,16 +9,16 @@ import Foundation
 
 import UIKit
 
-class JsonPreposition: Codable, CustomStringConvertible {
+public class JsonPreposition: Codable, CustomStringConvertible {
     var english: String
     var french: String
     var spanish: String
     var prepositionType: String  //"D" - demonstrative (this), "P" possessive (my), "A" any
-    var description: String {
+    public var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
-    init(spanish: String, english: String, french: String, prepositionType : String){
+    public init(spanish: String, english: String, french: String, prepositionType : String){
         self.spanish = spanish
         self.english = english
         self.french = french
@@ -53,18 +53,18 @@ var jsonPrepositionList: [JsonPreposition] = [
 
 
 //create json from
-class JsonPrepositionManager {
+public class JsonPrepositionManager {
     var myWordList = [JsonPreposition]()
     
-    func printWords(){
+    public func printWords(){
         print(myWordList)
     }
     
-    func printOne(jv: JsonPreposition){
+    public func printOne(jv: JsonPreposition){
         print(jv)
     }
     
-    func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
+    public func encodeInternalWords(collectionType: JsonCollectionTypes, total: Int){
         clearWords()
         var wordList = [JsonPreposition]()
         switch collectionType {
@@ -82,11 +82,11 @@ class JsonPrepositionManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonPreposition{
+    public func getLastWord()->JsonPreposition{
         return myWordList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedPreps = try? encoder.encode(myWordList){
@@ -95,7 +95,7 @@ class JsonPrepositionManager {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonPreposition].self, from: data){
@@ -104,7 +104,7 @@ class JsonPrepositionManager {
         }
     }
     
-    func appendWord(prep: JsonPreposition){
+    public func appendWord(prep: JsonPreposition){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -119,20 +119,20 @@ class JsonPrepositionManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getWordAt(index: Int)->JsonPreposition{
+    public func getWordAt(index: Int)->JsonPreposition{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEMultiLingualPrepositions").appendingPathExtension("json")
     }

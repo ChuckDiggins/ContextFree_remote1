@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BRomanceVerb: BVerb {
+public class BRomanceVerb: BVerb {
     var m_verbStem = ""
     var m_stemChanging = false
     var m_stemFrom = ""
@@ -37,26 +37,26 @@ class BRomanceVerb: BVerb {
     var dropLettersList = [DropLettersForm]()
     var replaceEndingList = [ReplaceEndingForm]()
     
-    init(verbPhrase: String, language: LanguageType){
+    public init(verbPhrase: String, language: LanguageType){
         super.init(verbPhrase: verbPhrase, languageType: language)
     }
     
-    override init(){
+    public override init(){
         super.init(verbPhrase: "", languageType: .Agnostic)
     }
 
-    func isOrthoPresent(tense: Tense, person: Person)->Bool{
+    public func isOrthoPresent(tense: Tense, person: Person)->Bool{
         if ( (tense == .present && person == .S1 ) || tense == .presentSubjunctive) && m_orthoPresent { return true }
         return false
     }
 
     
-    func isOrthoPreterite(tense: Tense, person: Person)->Bool{
+    public func isOrthoPreterite(tense: Tense, person: Person)->Bool{
         if ( (tense == .preterite && person == .S1 ) || tense == .presentSubjunctive) && m_orthoPreterite { return true }
         return false
     }
     
-    func hasReplaceForm (tense: Tense, person: Person)->(String, String){
+    public func hasReplaceForm (tense: Tense, person: Person)->(String, String){
         for form in replaceModelList{
             if form.tense == tense && form.person == person {
                 return (form.fromWord, form.toWord)
@@ -65,7 +65,7 @@ class BRomanceVerb: BVerb {
         return ("", "")
     }
     
-    func hasMultipleReplaceForm (tense: Tense, person: Person)->(String, String){
+    public func hasMultipleReplaceForm (tense: Tense, person: Person)->(String, String){
         //pass through the multiple lists in case there is later (override) replacement for this tense/person
         var fromWord = ""
         var toWord = ""
@@ -82,7 +82,7 @@ class BRomanceVerb: BVerb {
     }
     
     
-    func hasReplaceEndingForm (tense: Tense, person: Person)->(String, String){
+    public func hasReplaceEndingForm (tense: Tense, person: Person)->(String, String){
         for form in replaceEndingList{
             if form.tense == tense && form.person == person {
                 return (form.fromWord, form.toWord)
@@ -91,7 +91,7 @@ class BRomanceVerb: BVerb {
         return ("", "")
     }
     
-    func hasReplaceEndingForm (tense: Tense)->(String, String){
+    public func hasReplaceEndingForm (tense: Tense)->(String, String){
         for form in replaceEndingList{
             if form.tense == tense {
                 return (form.fromWord, form.toWord)
@@ -100,7 +100,7 @@ class BRomanceVerb: BVerb {
         return ("", "")
     }
     
-    func hasStemSingleForm (tense: Tense, person: Person)->(String, String){
+    public func hasStemSingleForm (tense: Tense, person: Person)->(String, String){
         for form in stemSingleList{
             if form.tense == tense && form.person == person {
                 return (form.fromWord, form.toWord)
@@ -109,7 +109,7 @@ class BRomanceVerb: BVerb {
         return ("", "")
     }
     
-    func hasDropLettersForm (tense: Tense, person: Person)->(String){
+    public func hasDropLettersForm (tense: Tense, person: Person)->(String){
         //pass through the multiple lists in case there is later (override) replacement for this tense/person
         var fromWord = ""
 
@@ -124,7 +124,7 @@ class BRomanceVerb: BVerb {
         return (fromWord)
     }
 
-    func setRestrictions(){
+    public func setRestrictions(){
         //var restrictions = [String]()
         if isStemChanging() { restrictions.append("stm")}
         if isOrthographicPresent() || isOrthographicPreterite() { restrictions.append("ort")}
@@ -134,31 +134,31 @@ class BRomanceVerb: BVerb {
         if hasPreposition() {restrictions.append("cls")}
     }
     
-    func isSpecial()->Bool{
+    public func isSpecial()->Bool{
         return false
     }
 
-    func isOrthographicPresent()->Bool{
+    public func isOrthographicPresent()->Bool{
         return m_orthoPresent
     }
     
-    func isOrthographicPreterite()->Bool{
+    public func isOrthographicPreterite()->Bool{
         return m_orthoPreterite
     }
     
-    func isReflexive()->Bool{
+    public func isReflexive()->Bool{
         return m_isReflexive
     }
     
-    func isVerbPhrase()->Bool{
+    public func isVerbPhrase()->Bool{
         return m_residualPhrase.count>0
     }
  
-    func hasPreposition()->Bool{
+    public func hasPreposition()->Bool{
         return m_residualPhrase.count>0
     }
     
-    func getVerbStem(verbWord: String, verbEnding : VerbEnding )->String {
+    public func getVerbStem(verbWord: String, verbEnding : VerbEnding )->String {
         var verbStem = verbWord
         verbStem.remove(at: verbStem.index(before: verbStem.endIndex))
         verbStem.remove(at: verbStem.index(before: verbStem.endIndex))
@@ -168,30 +168,30 @@ class BRomanceVerb: BVerb {
         return verbStem
     }
 
-    func isStemChanging()->Bool {
+    public func isStemChanging()->Bool {
         return m_stemChanging
         //return bVerbModel.isStemChanging
     }
 
-    func isPersonStem(person: Person)->Bool {
+    public func isPersonStem(person: Person)->Bool {
         if person == .P1 || person == .P2 {return false}
         return true
     }
     
-    func isAR()->Bool{
+    public func isAR()->Bool{
         return m_verbEnding == VerbEnding.AR
     }
     
-    func isER()->Bool{
+    public func isER()->Bool{
         return m_verbEnding == VerbEnding.ER
     }
     
     
-    func isIR()->Bool{
+    public func isIR()->Bool{
         return m_verbEnding == VerbEnding.IR
     }
     
-    func isRE()->Bool{
+    public func isRE()->Bool{
         return m_verbEnding == VerbEnding.RE
     }
      
@@ -211,24 +211,24 @@ class BRomanceVerb: BVerb {
 //        }
 //    }
     
-    func getBescherelleInfo()->String {
+    public func getBescherelleInfo()->String {
         return "Besch #\(bVerbModel.id) (\(bVerbModel.modelVerb))"
     }
 
-    func createPastParticiple()->String {
+    public func createPastParticiple()->String {
         return ""
     }
     
-    func createGerund()->String {
+    public func createGerund()->String {
         return ""
     }
     
-    func getConjugateForm(tense : Tense, person : Person)->String {
+    public func getConjugateForm(tense : Tense, person : Person)->String {
         let _ = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
         return morphStructManager.getFinalVerbForm(person: person)
     }
     
-    func setPatterns (verbModel : RomanceVerbModel) {
+    public func setPatterns (verbModel : RomanceVerbModel) {
         bVerbModel = verbModel
        
         //bRomanceVerb specific
@@ -255,7 +255,7 @@ class BRomanceVerb: BVerb {
     
     // - MARK: Reflexive Morphing
 
-    func addFrenchReflexiveMorphing(){
+    public func addFrenchReflexiveMorphing(){
         
         //create and initialize the morph structs
         
@@ -297,7 +297,7 @@ class BRomanceVerb: BVerb {
 
     }
     
-    func addReflexiveMorphing(){
+    public func addReflexiveMorphing(){
         
         //create and initialize the morph structs  
         let vrp = Pronoun()

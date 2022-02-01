@@ -7,9 +7,9 @@
 
 import Foundation
 
-class WordStateData : Hashable, Equatable {
+public class WordStateData : Hashable, Equatable {
     var title: String = ""
-    func hash(into hasher: inout Hasher){
+    public func hash(into hasher: inout Hasher){
         hasher.combine(title)
     }
     
@@ -55,23 +55,23 @@ class WordStateData : Hashable, Equatable {
     var verbType = VerbType.normal
     var bescherelleInfo = ""
     
-    static func == (lhs: WordStateData, rhs: WordStateData) -> Bool {
+    public static func == (lhs: WordStateData, rhs: WordStateData) -> Bool {
         return lhs.word.word == rhs.word.word
     }
     
-    func getWordType()->ContextFreeSymbol{
+    public func getWordType()->ContextFreeSymbol{
         return wordType
     }
     
-    func getWordTypeString()->String{
+    public func getWordTypeString()->String{
         return wordType.rawValue
     }
     
-   func setProcessedWord(str: String){
+    public func setProcessedWord(str: String){
         processedWord = str
     }
     
-    func setProcessedWord(language: LanguageType, str: String){
+    public func setProcessedWord(language: LanguageType, str: String){
         switch language{
         case .Spanish:
             processedSpanishWord = str
@@ -84,11 +84,11 @@ class WordStateData : Hashable, Equatable {
         }
      }
      
-    func getProcessedWord()->String{
+    public func getProcessedWord()->String{
         return processedWord
     }
     
-    func getProcessedWord(language: LanguageType)->String{
+    public func getProcessedWord(language: LanguageType)->String{
         switch language{
         case .Spanish:
             return processedSpanishWord

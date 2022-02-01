@@ -7,11 +7,11 @@
 
 import Foundation
 
-enum  LanguageType : String {
+public enum  LanguageType : String {
     case English, Spanish, French, Italian, Portuguese, Agnostic
 }
 
-enum PhraseType{
+public enum PhraseType{
     case NounPhrase
     case VerbPhrase
     case PrepositionPhrase
@@ -19,7 +19,7 @@ enum PhraseType{
     case AdverbPhrase
 }
 
-enum  VerbEnding : String
+public enum  VerbEnding : String
 {
     case AR, ER, IR, accentIR, umlautIR, OIR, RE, none
     
@@ -44,7 +44,7 @@ enum  VerbEnding : String
         }
     }
     
-    func getSpanishEndings()->Array<VerbEnding>{
+    public func getSpanishEndings()->Array<VerbEnding>{
         var verbEndingList = Array<VerbEnding>()
         verbEndingList.append(.AR)
         verbEndingList.append(.ER)
@@ -85,18 +85,18 @@ enum  ReflexivePronoun: String
 */
 
 
-enum Mood : String {
+public enum Mood : String {
      case   indicative,
         imperative,
         subjunctive
 }
 
-enum AmbiguousType {
+public enum AmbiguousType {
     case general
     case pronoun  //in Spanish, "me" can be a reflexive pronoun, direct object pronoun, for example
 }
 
-enum AdjectiveType : String {
+public enum AdjectiveType : String {
     case regular
     case demonstrative
     case possessive
@@ -121,7 +121,7 @@ enum AdjectiveType : String {
     }
 }
 
-enum  AdjectivePositionType  : String
+public enum  AdjectivePositionType  : String
 {
     case preceding
     case following
@@ -129,7 +129,7 @@ enum  AdjectivePositionType  : String
 }
 
 
-enum DeterminerType  : String {
+public enum DeterminerType  : String {
     case definite
     case indefinite
     case possessive
@@ -138,7 +138,7 @@ enum DeterminerType  : String {
     case partative   //french - du, de la, de l', des
 }
 
-enum  AdverbType  : String
+public enum  AdverbType  : String
 {
     case manner // M = manner - bien, así, mejor
     case place // P = place - aquí, arriba, dónde
@@ -149,7 +149,7 @@ enum  AdverbType  : String
     case exclusion // E = exclusion - apenas
 }
 
-enum ArticleType  : String
+public enum ArticleType  : String
 {
     case definite
     case indefinite
@@ -157,7 +157,7 @@ enum ArticleType  : String
     case unknown
 }
 
-enum  ConjunctionType  : String
+public enum  ConjunctionType  : String
 {
     case and     //adds objects
     case or       //
@@ -170,7 +170,7 @@ enum  ConjunctionType  : String
     case subordinating
 }
 
-enum WordType : String {
+public enum WordType : String {
     case article
     case determiner
     case adjective
@@ -201,9 +201,7 @@ enum WordType : String {
     case unknown
 }
 
-
-
-func getWordType(clusterType: ContextFreeSymbol)->WordType{
+public func getWordType(clusterType: ContextFreeSymbol)->WordType{
     switch clusterType{
     case .Adj: return .adjective
     case .Adv: return .adverb
@@ -216,7 +214,7 @@ func getWordType(clusterType: ContextFreeSymbol)->WordType{
     }
 }
 
-enum PunctuationType  : String {
+public enum PunctuationType  : String {
     case period
     case questionMark
     case upsideDownQuestionMark
@@ -230,7 +228,7 @@ enum PunctuationType  : String {
     case none
 }
 
-enum VerbTransitivity : Int, Codable {
+public enum VerbTransitivity : Int, Codable {
     case transitive     //can take direct object "I see the house"
     case ditransitive     //can take two objects "I gave her the ball"
     case intransitive   //cannot take a direct object "I sleep"
@@ -238,7 +236,7 @@ enum VerbTransitivity : Int, Codable {
     case ergative        //takes nothing after verb - "the ship sank"
 }
 
-enum VerbModality  : String {
+public enum VerbModality  : String {
     case modalAuxiliary    //can, could, may, might, must, shall, should, will, would,
                          // also: dare, need, ought
     case modal          //querer ... yo quiero una pelota / yo quiero ir a la casa
@@ -246,7 +244,7 @@ enum VerbModality  : String {
     case notModal
 }
 
-enum VerbPassivity : Int, Codable {
+public enum VerbPassivity : Int, Codable {
     case active
     case passive    //gustar
     case both
@@ -254,7 +252,7 @@ enum VerbPassivity : Int, Codable {
     
 }
 
-func getTransitivity(index:Int)->VerbTransitivity{
+public func getTransitivity(index:Int)->VerbTransitivity{
     switch (index){
     case 0: return .transitive
     case 1: return .ditransitive
@@ -265,7 +263,7 @@ func getTransitivity(index:Int)->VerbTransitivity{
 }
 
 
-func getPassivity(index:Int)->VerbPassivity{
+public func getPassivity(index:Int)->VerbPassivity{
     switch (index){
     case 0: return .active
     case 1: return .passive
@@ -273,13 +271,13 @@ func getPassivity(index:Int)->VerbPassivity{
     }
 }
 
-enum VerbPronomality {
+public enum VerbPronomality {
     case pronominal     //casarse - get married, "ellos se casaron" - they got married
     case reflexive
     case notPronominal
 }
 
-enum VerbType : Int, Codable{
+public enum VerbType : Int, Codable{
     case normal
     case auxiliary  //haber, esta
     case copulative //ser, estar, to be,
@@ -293,13 +291,13 @@ enum VerbType : Int, Codable{
     case backward
 }
 
-enum Separable : Int, Codable{
+public enum Separable : Int, Codable{
     case notSeparable   //laugh about it
     case separable      //call me up
     case both          //put this up, put up this
 }
 
-func getVerbType(index:Int)->VerbType{
+public func getVerbType(index:Int)->VerbType{
     switch (index){
     case 0: return .normal
     case 1: return .auxiliary
@@ -315,7 +313,7 @@ func getVerbType(index:Int)->VerbType{
     }
 }
 
-func getVerbTypesAsStringList()->[String]{
+public func getVerbTypesAsStringList()->[String]{
     var strList = [String]()
     strList.append("N")
     strList.append("A")
@@ -330,7 +328,7 @@ func getVerbTypesAsStringList()->[String]{
     return strList
 }
 
-func getVerbTypeAsLetter(index:Int)->String{
+public func getVerbTypeAsLetter(index:Int)->String{
     switch (index){
     case 0: return "N"
     case 1: return "A"
@@ -346,7 +344,7 @@ func getVerbTypeAsLetter(index:Int)->String{
     }
 }
 
-func getVerbTypeFromLetter(letter: String)->VerbType{
+public func getVerbTypeFromLetter(letter: String)->VerbType{
     switch (letter){
     case "N": return .normal
     case "A": return .auxiliary
@@ -363,7 +361,7 @@ func getVerbTypeFromLetter(letter: String)->VerbType{
 }
 
 
-enum  VerbPreference   //for subject and/or  object
+public enum  VerbPreference   //for subject and/or  object
 {
     case animate       //person, animal
     case inanimate    //object
@@ -376,13 +374,13 @@ enum  VerbPreference   //for subject and/or  object
 }
 
 
-enum NounSubjectivity  //LOL
+public enum NounSubjectivity  //LOL
 {
     case goodSubject
     case goodObject
     case either
 }
-enum NounType : Int {
+public enum NounType : Int {
     case person  //= "Pr"   //person type
     case animal   //= "An"   //dog, cat, horse, insect type
     case place     //= "Pl"   //place type
@@ -397,7 +395,7 @@ enum NounType : Int {
         [NounType.person, .animal]
 }
 
-func getNounTypeFromString(str: String)->NounType{
+public func getNounTypeFromString(str: String)->NounType{
     switch(str){
     case "Pr": return .person
     case "An": return .animal
@@ -412,7 +410,7 @@ func getNounTypeFromString(str: String)->NounType{
     }
 }
 
-func getNounTypeStringAtIndex(index: Int)->String{
+public func getNounTypeStringAtIndex(index: Int)->String{
     switch(index){
     case 0: return "Pr"
     case 1: return "An"
@@ -427,7 +425,7 @@ func getNounTypeStringAtIndex(index: Int)->String{
     }
 }
 
-func getNounTypesAsStringList()->[String]{
+public func getNounTypesAsStringList()->[String]{
     var strList = [String]()
     strList.append("Pr")
     strList.append("An")
@@ -442,7 +440,7 @@ func getNounTypesAsStringList()->[String]{
 }
 
 
-enum PrepositionType  : String
+public enum PrepositionType  : String
 {
     case spatial        //behind, around, between, inside, etc.
     case temporal      //after, before, until, during
@@ -452,7 +450,7 @@ enum PrepositionType  : String
 }
 
 
-enum   PronounType  : String
+public enum   PronounType  : String
 {
     case PERSONAL         //could be subject or object - the boy and you (subj, obj?)
     case SUBJECT          //NOMINATIVE_CASE  I, you, he  ...
@@ -468,7 +466,7 @@ enum   PronounType  : String
     case NON_PRONOUN                //for noun phrases
 }
 
-enum  AuxiliaryType   : String //English
+public enum  AuxiliaryType   : String //English
 {
     case future         //will
     case conditional    //would

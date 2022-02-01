@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Noun : Word {
+public class Noun : Word {
 
     var plural = ""
     var englishPlural = ""
@@ -15,17 +15,17 @@ class Noun : Word {
     var frenchGender = Gender.masculine
     var nounType: NounType
     
-    override init(){
+    public override init(){
         self.nounType = NounType.any
         super.init(word: "", wordType: .noun)
     }
     
-    init(word: String, type : NounType){
+    public init(word: String, type : NounType){
         self.nounType = type
         super.init(word: word,  wordType: .noun)
     }
     
-    init(jsonNoun: JsonNoun, language: LanguageType){
+    public init(jsonNoun: JsonNoun, language: LanguageType){
         self.nounType = NounType.any
 
         switch(language){
@@ -57,13 +57,13 @@ class Noun : Word {
         //convertFavoriteAdjectiveStringToFavoriteAdjectives(inputString: jsonNoun.adjectiveLikes)
     }
     
-    func createJsonNoun()->JsonNoun{
+    public func createJsonNoun()->JsonNoun{
         return JsonNoun(spanish: word, english: english, french: french,  spanishGender: spanishGender.rawValue, frenchGender: frenchGender.rawValue, englishPlural: englishPlural, nounType : "",
                         verbLikes: "", adjLikes: "")
     }
     
     
-    func convertNounTypeStringToNounTypes(inputString: String){
+    public func convertNounTypeStringToNounTypes(inputString: String){
         nounType = .person
         if ( inputString == "Any" ){nounType = .any}
         if ( inputString == "Pl" ){nounType = .place}
@@ -71,7 +71,7 @@ class Noun : Word {
         if ( inputString == "T" ){nounType = .thing}
     }
     
-    func convertFavoriteVerbStringToFavoriteVerbs(inputString: String){
+    public func convertFavoriteVerbStringToFavoriteVerbs(inputString: String){
         let util = VerbUtilities()
         let strList = getNounTypesAsStringList()
         for str in strList {
@@ -82,7 +82,7 @@ class Noun : Word {
         }
     }
     
-    func convertFavoriteAdjectiveStringToFavoriteAdjectives(inputString: String){
+    public func convertFavoriteAdjectiveStringToFavoriteAdjectives(inputString: String){
         let util = VerbUtilities()
         let strList = getNounTypesAsStringList()
         //let strList = getAdjectiveTypesAsStringList()
@@ -99,38 +99,38 @@ class Noun : Word {
     }
 }
 
-class RomanceNoun : Noun {
+public class RomanceNoun : Noun {
     var gender : Gender
     var number : Number = .singular
     
-    override init(jsonNoun: JsonNoun, language: LanguageType){
+    public override init(jsonNoun: JsonNoun, language: LanguageType){
         gender = .masculine
         super.init(jsonNoun: jsonNoun, language: language)
     }
     
-    init(word: String, type: NounType, gender: Gender){
+    public init(word: String, type: NounType, gender: Gender){
         self.gender = gender
         super.init(word: word, type : type)
         constructPlural()
     }
     
-    func setNumber(number: Number){ self.number = number  }
-    func getNumber()->Number{return number}
-    func setGender(gender: Gender){ self.gender = gender  }
-    func getGender ()->Gender {return gender }
+    public func setNumber(number: Number){ self.number = number  }
+    public func getNumber()->Number{return number}
+    public func setGender(gender: Gender){ self.gender = gender  }
+    public func getGender ()->Gender {return gender }
     
-    func getNounString(number : Number)->String {
+    public func getNounString(number : Number)->String {
         if number == .singular { return word }
         return plural
     }
     
-    func isNoun(word: String)->(Bool, NounType, Number, Gender){
+    public func isNoun(word: String)->(Bool, NounType, Number, Gender){
         if word == self.word { return (true, nounType, .singular, gender)}
         if word == self.plural { return (true, nounType, .plural, gender)}
         return (false, nounType, .plural, gender)
     }
     
-    func constructPlural(){
+    public func constructPlural(){
         let util = VerbUtilities()
         var root = word
         root.removeLast()
@@ -146,21 +146,21 @@ class RomanceNoun : Noun {
     
 }
 
-class FrenchNoun : RomanceNoun {
+public  class FrenchNoun : RomanceNoun {
     var startsWithVowelSound = false
-    init(jsonNoun: JsonNoun){
+    public init(jsonNoun: JsonNoun){
         super.init(jsonNoun: jsonNoun, language: .French)
         constructPlural()
         gender = frenchGender
     }
     
-    override init(word: String, type: NounType, gender: Gender ){
+    public override init(word: String, type: NounType, gender: Gender ){
         super.init(word:word, type:type, gender: gender)
         constructPlural()
     }
     
     
-    override func constructPlural(){
+    public override func constructPlural(){
         let util = VerbUtilities()
         var root = word
         root.removeLast()
@@ -176,20 +176,20 @@ class FrenchNoun : RomanceNoun {
     
 }
 
-class SpanishNoun : RomanceNoun {
+public class SpanishNoun : RomanceNoun {
     
-    override init(word: String, type: NounType, gender: Gender ){
+    public override init(word: String, type: NounType, gender: Gender ){
         super.init(word:word, type:type, gender: gender)
         constructPlural()
     }
     
-    init(jsonNoun: JsonNoun){
+    public init(jsonNoun: JsonNoun){
         super.init(jsonNoun: jsonNoun, language: .Spanish)
         constructPlural()
         gender = spanishGender
     }
     
-    override func constructPlural(){
+    public override func constructPlural(){
         let util = VerbUtilities()
         var root = word
         //root.removeLast()
@@ -263,34 +263,34 @@ class SpanishNoun : RomanceNoun {
 }
 
 
-class EnglishNoun : Noun {
+public class EnglishNoun : Noun {
     var m_baseString = ""
     var endsInY = false
     var endsInE = false
         
-    init(word: String, type: NounType, englishPlural: String ){
+    public init(word: String, type: NounType, englishPlural: String ){
         super.init(word:word, type:type)
         plural = englishPlural
     }
     
-    override init(word: String, type: NounType ){
+    public override init(word: String, type: NounType ){
         super.init(word:word, type:type)
         constructPlural()
     }
     
-    init(jsonNoun: JsonNoun){
+    public init(jsonNoun: JsonNoun){
         super.init(jsonNoun: jsonNoun, language: .English)
         if jsonNoun.englishPlural.count > 0 {plural = englishPlural}
         else { constructPlural()}
     }
     
-    func isNoun(word: String)->(Bool, NounType, Number){
+    public func isNoun(word: String)->(Bool, NounType, Number){
         if word == word { return (true, nounType, .singular)}
         if word == plural { return (true, nounType, .plural)}
         return (false, nounType, .plural)
     }
     
-    func constructPlural(){
+    public func constructPlural(){
         if englishPlural.count > 0 {return}
         var root = word
         root.removeLast()
@@ -303,7 +303,7 @@ class EnglishNoun : Noun {
         else { plural = stem + "s" }
     }
     
-    func prepareStem()->String{
+    public func prepareStem()->String{
         let util = VerbUtilities()
         m_baseString = word
         var stem = word
@@ -331,7 +331,7 @@ class EnglishNoun : Noun {
         return stem
     }
     
-    func getString(number: Number)->String{
+    public func getString(number: Number)->String{
         switch number {
         case .singular:
             return word

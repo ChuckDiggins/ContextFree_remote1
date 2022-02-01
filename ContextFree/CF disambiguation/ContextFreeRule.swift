@@ -9,7 +9,7 @@ import Foundation
 
 
 
-struct ContextFreeSymbolStruct{
+public struct ContextFreeSymbolStruct{
     let cfs : ContextFreeSymbol
     var word : Word
     var sd : SentenceData?
@@ -18,13 +18,13 @@ struct ContextFreeSymbolStruct{
     var optional = false
     var multiple = false
     
-    init(cfs: ContextFreeSymbol, word : Word){
+    public init(cfs: ContextFreeSymbol, word : Word){
         self.cfs = cfs
         self.word = word
         self.symbolString = self.cfs.rawValue
     }
     
-    init(cfs: ContextFreeSymbol, word : Word, isHead : Bool){
+    public init(cfs: ContextFreeSymbol, word : Word, isHead : Bool){
         self.cfs = cfs
         self.word = word
         self.symbolString = self.cfs.rawValue
@@ -32,7 +32,7 @@ struct ContextFreeSymbolStruct{
     }
     
     
-    init(cfs: ContextFreeSymbol, word : Word, optional: Bool, multiple: Bool){
+    public init(cfs: ContextFreeSymbol, word : Word, optional: Bool, multiple: Bool){
         self.cfs = cfs
         self.word = word
         self.symbolString = self.cfs.rawValue
@@ -40,50 +40,50 @@ struct ContextFreeSymbolStruct{
         self.multiple = multiple
     }
     
-    init(){
+    public init(){
         self.cfs = ContextFreeSymbol.UNK
         self.word = Word()
     }
     
-    func getSymbol()->ContextFreeSymbol{
+    public func getSymbol()->ContextFreeSymbol{
         return cfs
     }
     
-    func getSymbolString()->String{
+    public func getSymbolString()->String{
         if ( optional ){ return "( \(symbolString) )"}
         if ( multiple ){ return "\(symbolString) +"}
         return symbolString
     }
     
-    func isOptional()->Bool{
+    public func isOptional()->Bool{
         return optional
     }
     
-    func isMultiple()->Bool{
+    public func isMultiple()->Bool{
         return multiple
     }
     
-    func isHead()->Bool{
+    public func isHead()->Bool{
         return head
     }
     
-    mutating func setWord(word: Word){
+    public mutating func setWord(word: Word){
         self.word = word
     }
     
-    func getWord()->Word{
+    public func getWord()->Word{
         return word
     }
     
-    mutating func setSentenceData(sd: SentenceData){
+    public mutating func setSentenceData(sd: SentenceData){
         self.sd = sd
     }
     
-    mutating func getSentenceData()->SentenceData{
+    public mutating func getSentenceData()->SentenceData{
         return sd!
     }
     
-    func getWordType()->WordType{
+    public func getWordType()->WordType{
         switch cfs {
         case .N: return .noun
         case .V: return .verb
@@ -105,7 +105,7 @@ struct ContextFreeSymbolStruct{
 //headSymbol is the ContextFreeSymbol associated with the head struct in cfSymbolStructList
 //for example, a ContextFreeRule of type NP should contain a component struct of type either NP or N
 
-struct ContextFreeRule{
+public struct ContextFreeRule{
     var headSymbolStruct : ContextFreeSymbolStruct
     var cfSymbolStructList = Array<ContextFreeSymbolStruct>()
     //var sdList = Array<SentenceData>()
@@ -119,41 +119,41 @@ struct ContextFreeRule{
     var headSymbol = ContextFreeSymbol.UNK
     
     
-    init(start: ContextFreeSymbolStruct){
+    public init(start: ContextFreeSymbolStruct){
         self.headSymbolStruct = start
     }
     
-    init(start: ContextFreeSymbolStruct, name: String){
+    public init(start: ContextFreeSymbolStruct, name: String){
         self.headSymbolStruct = start
         ruleName = name
     }
     
     
-    func getRuleName()->String {
+    public func getRuleName()->String {
         return ruleName
     }
     
-    mutating func appendRule(rule: ContextFreeRule){
+    public mutating func appendRule(rule: ContextFreeRule){
         ruleList.append(rule)
         bHasRules = true
     }
     
-    func hasSymbols()->Bool{
+    public func hasSymbols()->Bool{
         return bHasSymbols
     }
     
-    func hasRules()->Bool{
+    public func hasRules()->Bool{
         return bHasRules
     }
     
     
     
-    func getHeadSymbol()->ContextFreeSymbol{
+    public func getHeadSymbol()->ContextFreeSymbol{
         return headSymbol
     }
     
 
-     mutating func appendSymbolStruct(sym: ContextFreeSymbolStruct){
+    public mutating func appendSymbolStruct(sym: ContextFreeSymbolStruct){
          cfSymbolStructList.append(sym)
          if ( sym.isHead()){headSymbol = sym.getSymbol()}
          bHasSymbols = true
@@ -161,36 +161,36 @@ struct ContextFreeRule{
     
     
    
-     mutating func setSentenceDataAt(index: Int, sd: SentenceData ){
+    public mutating func setSentenceDataAt(index: Int, sd: SentenceData ){
          cfSymbolStructList[index].setSentenceData(sd: sd)
      }
     
-    mutating func getSentenceDataAt(index: Int)->SentenceData{
+    public mutating func getSentenceDataAt(index: Int)->SentenceData{
         return cfSymbolStructList[index].getSentenceData()
     }
     
-     func getHeadCFSymbolStruct()->ContextFreeSymbolStruct{
+    public func getHeadCFSymbolStruct()->ContextFreeSymbolStruct{
          return headSymbolStruct
      }
 
-    func getHeadWordString()->String{
+    public func getHeadWordString()->String{
         return headSymbolStruct.word.word
     }
     
-    func getHeadWord()->Word{
+    public func getHeadWord()->Word{
         return headSymbolStruct.word
     }
     
-    func getHeadWordType()->WordType{
+    public func getHeadWordType()->WordType{
         return headSymbolStruct.getWordType()
     }
     
-    mutating func setHeadWord(word: Word){
+    public  mutating func setHeadWord(word: Word){
         headSymbolStruct.word = word
     }
 
    
-    func getSymbolList()->[ContextFreeSymbol]{
+    public func getSymbolList()->[ContextFreeSymbol]{
         var symList = [ContextFreeSymbol]()
         for sym in cfSymbolStructList {
             symList.append(sym.getSymbol())
@@ -198,11 +198,11 @@ struct ContextFreeRule{
         return symList
     }
     
-    func getSymbolStrList()->[ContextFreeSymbolStruct]{
+    public func getSymbolStrList()->[ContextFreeSymbolStruct]{
         return cfSymbolStructList
     }
     
-    func getRuleWordTypes()->[WordType]{
+    public func getRuleWordTypes()->[WordType]{
         var wtList = [WordType]()
         for sym in cfSymbolStructList {
             wtList.append(sym.getWordType())
@@ -210,33 +210,33 @@ struct ContextFreeRule{
         return wtList
     }
     
-    func getSymbolStructCount()->Int{
+    public func getSymbolStructCount()->Int{
         return cfSymbolStructList.count
     }
     
-    func getSymbolAt(index: Int)->ContextFreeSymbolStruct{
+    public func getSymbolAt(index: Int)->ContextFreeSymbolStruct{
         return cfSymbolStructList[index]
     }
     
-    mutating func getWordAt(index: Int)->Word{
+    public mutating func getWordAt(index: Int)->Word{
         
         return cfSymbolStructList[index].getWord()
     }
     
-    mutating func getWordStringAt(index: Int)->String{
+    public mutating func getWordStringAt(index: Int)->String{
         return cfSymbolStructList[index].getWord().word
     }
 
-    mutating func setWordAt(index: Int, word: Word){
+    public mutating func setWordAt(index: Int, word: Word){
         cfSymbolStructList[index].setWord(word: word)
     }
     
     
-    func getSymbolString(index: Int)->String {
+    public func getSymbolString(index: Int)->String {
         return cfSymbolStructList[index].symbolString
     }
     
-    func getComponentWordStrings()->String {
+    public func getComponentWordStrings()->String {
         var cfString = "Phrase words "
         let count = cfSymbolStructList.count
         if ( count > 0 ){
@@ -249,7 +249,7 @@ struct ContextFreeRule{
         return cfString
     }
 
-    func getSymbolString()->String {
+    public  func getSymbolString()->String {
         
         var cfString = headSymbolStruct.getSymbolString()
         let count = cfSymbolStructList.count

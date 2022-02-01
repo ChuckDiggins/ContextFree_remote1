@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct JSONDictionaryManager {
+public struct JSONDictionaryManager {
 
     var m_wsp : WordStringParser!
     
@@ -26,11 +26,11 @@ struct JSONDictionaryManager {
     var jsonWordCollectionManager = JSONCollectionManager()
     
     
-    mutating func setWordStringParser(wsp: WordStringParser){
+    public mutating func setWordStringParser(wsp: WordStringParser){
         m_wsp = wsp
     }
     
-    mutating func loadJsonWords(){
+    public mutating func loadJsonWords(){
         if bUseJsonStarterFiles {
             //jsonNounManager.encodeWords()  //this should wipe out existing jsonVerbs
             jsonNounManager.encodeInternalWords(collectionType: .All, total: 2000)
@@ -90,12 +90,12 @@ struct JSONDictionaryManager {
 //        return createWordCollectionsFromJsonWordCollectionManager()
 //    }
     
-    func getExistingWord(jsonWord: JSONWord)->Word{
+    public func getExistingWord(jsonWord: JSONWord)->Word{
         let word = jsonWord.getWord()
         return m_wsp.findWordInDictionary(word: word)
     }
     
-    mutating func createWordCollectionsFromJsonWordCollectionManager(){
+    public mutating func createWordCollectionsFromJsonWordCollectionManager(){
         
         for i in 0 ..< jsonWordCollectionManager.getCollectionCount() {
             var wordList = [Word]()
@@ -123,7 +123,7 @@ struct JSONDictionaryManager {
       
     //use json-constructed word to find the existing word in the dictionaries
     
-    mutating func createWordGroupFromJsonWordCollection(){
+    public mutating func createWordGroupFromJsonWordCollection(){
         for i in 0 ..< jsonWordCollection.getWordCount() {
             let jsonWord = jsonWordCollection.getWordAt(index: i)
             let existingWord = m_wsp.findWordInDictionary(word: jsonWord)
@@ -144,7 +144,7 @@ struct JSONDictionaryManager {
       
     
     
-    mutating func createDictionaryFromJsonWords(wordType: WordType){
+    public mutating func createDictionaryFromJsonWords(wordType: WordType){
         switch wordType{
         case .adjective:
             for i in 0 ..< jsonAdjectiveManager.getWordCount() {
@@ -206,72 +206,72 @@ struct JSONDictionaryManager {
 //        m_wsp.addNounToDictionary(noun: noun)
 //    }
 
-    mutating func createAndAppendNounFromJsonNoun(jn: JsonNoun){
+    public mutating func createAndAppendNounFromJsonNoun(jn: JsonNoun){
         let noun = Noun(jsonNoun: jn, language: .Agnostic)
         m_wsp.addNounToDictionary(noun: noun)
     }
     
-    mutating func createAndAppendAdjectiveFromJsonAdjective(jn: JsonAdjective){
+    public mutating func createAndAppendAdjectiveFromJsonAdjective(jn: JsonAdjective){
         let adj = Adjective(jsonAdjective: jn, language: .Agnostic)
         m_wsp.addAdjectiveToDictionary(adj: adj)
     }
     
-    mutating func createAndAppendAdverbFromJsonAdverb(jn: JsonAdverb){
+    public mutating func createAndAppendAdverbFromJsonAdverb(jn: JsonAdverb){
         let adv = Adverb(json: jn, language: .Agnostic)
         m_wsp.addAdverbToDictionary(wd: adv)
     }
     
-    mutating func createAndAppendPrepositionFromJsonPreposition(jn: JsonPreposition){
+    public mutating func createAndAppendPrepositionFromJsonPreposition(jn: JsonPreposition){
         let p = Preposition(json: jn, language: .Agnostic)
         m_wsp.addPrepositionToDictionary(wd: p)
 
     }
     
-    mutating func createAndAppendPronounFromJsonPronoun(jn: JsonPronoun){
+    public mutating func createAndAppendPronounFromJsonPronoun(jn: JsonPronoun){
         let p = Pronoun(json: jn, language: .Agnostic)
         m_wsp.addPronounToDictionary(wd: p)
         
     }
     
-    mutating func createAndAppendConjunctionFromJsonConjunction(jn: JsonConjunction){
+    public mutating func createAndAppendConjunctionFromJsonConjunction(jn: JsonConjunction){
         let wd = Conjunction(json: jn, language: .Agnostic)
         m_wsp.addConjuctionToDictionary(wd: wd)
         
     }
     
-    mutating func createAndAppendDeterminerFromJsonDeterminer(jn: JsonDeterminer){
+    public mutating func createAndAppendDeterminerFromJsonDeterminer(jn: JsonDeterminer){
         let p = Determiner(json: jn, language: .Agnostic)
         m_wsp.addDeterminerToDictionary(wd: p)
     }
     
-    mutating func createJsonNoun(noun: Noun){
+    public mutating func createJsonNoun(noun: Noun){
         appendJsonNoun(jsonNoun: noun.createJsonNoun())
     }
     
-    mutating func appendJsonNoun(jsonNoun: JsonNoun){
+    public mutating func appendJsonNoun(jsonNoun: JsonNoun){
         jsonNounManager.appendWord(verb: jsonNoun)
         createAndAppendNounFromJsonNoun(jn: jsonNoun)
     }
     
-    mutating func createJsonVerb(verb: Verb)->Int{
+    public mutating func createJsonVerb(verb: Verb)->Int{
         return appendJsonVerb(jsonVerb: verb.createJsonVerb())
     }
     
-    mutating func appendJsonVerb(jsonVerb: JsonVerb)->Int{
+    public mutating func appendJsonVerb(jsonVerb: JsonVerb)->Int{
         jsonVerbManager.appendVerb(verb: jsonVerb)
         createAndAppendVerbFromJsonVerb(jv: jsonVerb)
         jsonVerbManager.printVerbs()
         return jsonVerbManager.getVerbCount()
     }
     
-    mutating func createVerbDictionaryFromJsonVerbs(){
+    public mutating func createVerbDictionaryFromJsonVerbs(){
         for i in 0 ..< jsonVerbManager.getVerbCount() {
             let jsonVerb = jsonVerbManager.getVerbAt(index: i)
             createAndAppendVerbFromJsonVerb(jv: jsonVerb)
         }
     }
     
-    mutating func createAndAppendVerbFromJsonVerb(jv: JsonVerb){
+    public mutating func createAndAppendVerbFromJsonVerb(jv: JsonVerb){
         //var cfModelTemp = cfModel
         
         //determine if this is a legitimate verb in all three languages
@@ -286,11 +286,11 @@ struct JSONDictionaryManager {
     }
 
     
-    func appendAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String){
+    public func appendAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String){
         
     }
     
-    func analyzeAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String)->Bool {
+    public func analyzeAgnosticWord(wordType: WordType, spanishWord : String, frenchWord : String, englishWord: String)->Bool {
         return true
     }
 }

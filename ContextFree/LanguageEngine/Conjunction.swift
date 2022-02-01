@@ -7,16 +7,16 @@
 
 import Foundation
 
-class Conjunction : Word {
+public class Conjunction : Word {
 
     var type: ConjunctionType
     
-    init(word: String, type : ConjunctionType){
+    public  init(word: String, type : ConjunctionType){
         self.type = type
         super.init(word: word, wordType: .conjunction)
     }
     
-    init(json: JsonConjunction, language: LanguageType){
+    public init(json: JsonConjunction, language: LanguageType){
         self.type = ConjunctionType.and
         
         switch(language){
@@ -32,85 +32,85 @@ class Conjunction : Word {
         self.english = json.english
     }
     
-    func convertConjunctionTypeStringToConjunctionType(inputString: String){
+    public func convertConjunctionTypeStringToConjunctionType(inputString: String){
         type = .and
         if ( inputString == "C" ){type = .and}
         else if ( inputString == "S" ){type = .subordinating}
     }
     
     
-    func isConjunction(word:String)->Bool{
+    public func isConjunction(word:String)->Bool{
         if word == self.word {return true}
         return false
     }
 }
 
-class RomanceConjunction : Conjunction {
-    override init(word: String, type : ConjunctionType){
+public class RomanceConjunction : Conjunction {
+    public override init(word: String, type : ConjunctionType){
         super.init(word: word, type: type)
     }
     
-    override init(json: JsonConjunction, language: LanguageType){
+    public override init(json: JsonConjunction, language: LanguageType){
         super.init(json: json, language: language)
     }
 }
 
-class FrenchConjunction : RomanceConjunction {
+public class FrenchConjunction : RomanceConjunction {
 
-    override init(word: String, type : ConjunctionType){
+    public override init(word: String, type : ConjunctionType){
         super.init(word: word, type: type)
     }
 
-    init(json: JsonConjunction){
+    public init(json: JsonConjunction){
         super.init(json: json, language: .French)
     }
     
-    override func isConjunction(word:String)->Bool{
+    public override func isConjunction(word:String)->Bool{
         if word == self.french {return true}
         return false
     }
     
-    func getForm()->String{
+    public func getForm()->String{
         return french
     }
     
 }
 
-class SpanishConjunction : RomanceConjunction {
+public class SpanishConjunction : RomanceConjunction {
 
-    override init(word: String, type : ConjunctionType){
+    public override init(word: String, type : ConjunctionType){
         super.init(word: word, type: type)
     }
 
-    init(json: JsonConjunction){
+    public init(json: JsonConjunction){
         super.init(json: json, language: .Spanish)
     }
     
-    override func isConjunction(word:String)->Bool{
+    public  override func isConjunction(word:String)->Bool{
         if word == self.spanish {return true}
         return false
     }
-    func getForm()->String{
+    public func getForm()->String{
         return spanish
     }
 }
 
 
-class EnglishConjunction : Conjunction {
-    override init(word: String, type : ConjunctionType){
+public class EnglishConjunction : Conjunction {
+    public  override init(word: String, type : ConjunctionType){
         super.init(word: word, type: type)
     }
     
-    init(json: JsonConjunction){
+    public init(json: JsonConjunction){
         super.init(json: json, language: .English)
     }
     
-    override func isConjunction(word:String)->Bool{
+    public override func isConjunction(word:String)->Bool{
         if word == self.english {return true}
         return false
     }
     
-    func getForm()->String{
+    public func getForm()->String{
         return english
     }
 }

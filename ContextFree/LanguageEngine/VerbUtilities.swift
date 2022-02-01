@@ -21,24 +21,24 @@ import Foundation
 //
 
 
-struct VerbUtilities {
+public struct VerbUtilities {
 
  
-    func doesWordContainLetter(inputString: String, letter: String)->Bool{
+    public func doesWordContainLetter(inputString: String, letter: String)->Bool{
         if let _: Range<String.Index> = inputString.range(of: letter) {
             return true
         }
         return false
     }
     
-    func reconstructVerbPhrase(verbWord: String, residualPhrase: String, isReflexive: Bool)->String{
+    public func reconstructVerbPhrase(verbWord: String, residualPhrase: String, isReflexive: Bool)->String{
         var verbPhrase = verbWord
         if  isReflexive {verbPhrase += "se"}
         if residualPhrase.count > 0 { verbPhrase += " " + residualPhrase}
         return verbPhrase
     }
    
-    func isVowel(letter: String)->Bool{
+    public func isVowel(letter: String)->Bool{
         if (letter == "a" || letter == "e" || letter == "i" || letter == "o" || letter == "u" ){return true}
         if (letter == "á" || letter == "é" || letter == "í" || letter == "ó" || letter == "ú" ){return true}
         if (letter == "ü" || letter == "û") {return true}
@@ -46,7 +46,7 @@ struct VerbUtilities {
         return false
     }
 
-    func doesWordContainSubstring(inputString: String, subString: String)->(Bool, Int, Int){
+    public func doesWordContainSubstring(inputString: String, subString: String)->(Bool, Int, Int){
         if let range: Range<String.Index> = inputString.range(of: subString) {
             let index1: Int = inputString.distance(from: inputString.startIndex, to: range.lowerBound)
             let index2: Int = inputString.distance(from: inputString.startIndex, to: range.upperBound)
@@ -57,7 +57,7 @@ struct VerbUtilities {
         return (false, 0, 0)
     }
     
-    func doesWordListContainSubstringList(inputWordList: [Word], subStringList: [String], startIndex : Int)->(Int){
+    public func doesWordListContainSubstringList(inputWordList: [Word], subStringList: [String], startIndex : Int)->(Int){
         var wordIndex = startIndex
         var matching = false
         let subStringCount = subStringList.count
@@ -88,7 +88,7 @@ struct VerbUtilities {
         return -1
     }
     
-    func doesStringListContainSubstringList(inputStringList: [String], subStringList: [String], startIndex : Int)->(Int){
+    public func doesStringListContainSubstringList(inputStringList: [String], subStringList: [String], startIndex : Int)->(Int){
         var wordIndex = startIndex
         var matching = false
         let subStringCount = subStringList.count
@@ -119,7 +119,7 @@ struct VerbUtilities {
         return -1
     }
     
-    func getLastNCharactersInString(inputString: String, copyCount: Int) -> String {
+    public func getLastNCharactersInString(inputString: String, copyCount: Int) -> String {
         var newString = ""
         
         //if we only want the last letter and there is only one letter, then return it
@@ -139,12 +139,12 @@ struct VerbUtilities {
         return newString
     }
     
-     func replaceSubstringInString(inputString: String, findString: String, replacementString: String)->String{
+    public func replaceSubstringInString(inputString: String, findString: String, replacementString: String)->String{
         let replace = inputString.replacingOccurrences(of: findString, with: replacementString)
         return replace
     }
         
-    mutating func findIndexOfLastOccurenceOfTargetStringInInputString(inputString: String, targetString: String) -> Int {
+    public mutating func findIndexOfLastOccurenceOfTargetStringInInputString(inputString: String, targetString: String) -> Int {
         //var index = -1
         var inputStringCopy = inputString
         let inputLetterCount = inputStringCopy.count
@@ -165,7 +165,7 @@ struct VerbUtilities {
         return -1
     }
 
-    mutating func replaceSubrange(inputString : String, fromString : String, toString : String)-> String {
+    public mutating func replaceSubrange(inputString : String, fromString : String, toString : String)-> String {
         var startIndex = findIndexOfLastOccurenceOfTargetStringInInputString(inputString: inputString, targetString: fromString)
         if startIndex < 0 {startIndex = inputString.count - 1}  //if not found, then start at the end of the input string
         let endIndex = startIndex + fromString.count
@@ -190,7 +190,7 @@ struct VerbUtilities {
         return ( outputWord)
     }
     
-    mutating func replaceSubrangeAndGetBeforeAndAfterStrings(inputString : String, fromString : String, toString : String)-> (String, String, String) {
+    public mutating func replaceSubrangeAndGetBeforeAndAfterStrings(inputString : String, fromString : String, toString : String)-> (String, String, String) {
         var startIndex = findIndexOfLastOccurenceOfTargetStringInInputString(inputString: inputString, targetString: fromString)
         if startIndex < 0 {startIndex = inputString.count - 1}  //if not found, then start at the end of the input string
         let endIndex = startIndex + fromString.count
@@ -221,12 +221,12 @@ struct VerbUtilities {
         return ( outputWord, part1, part2)
     }
     
-    func getStringCharacterAt(input : String, charIndex : Int)->String{
+    public func getStringCharacterAt(input : String, charIndex : Int)->String{
         let char = input[input.index(input.startIndex, offsetBy: charIndex)]
         return String(char)
     }
     
-    func getListOfWords(characterArray: String) -> [String] {
+    public func getListOfWords(characterArray: String) -> [String] {
         var wordList = [String]()
         let word = removeLeadingOrFollowingBlanks(characterArray: characterArray)
         var outputWord = ""
@@ -251,7 +251,7 @@ struct VerbUtilities {
         return wordList
     }
     
-    func makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: String)->String{
+    public func makeSentenceByEliminatingExtraBlanksAndDoingOtherStuff(characterArray: String)->String{
         var sentenceString = ""
         if characterArray.isEmpty {return ""}
         
@@ -275,7 +275,7 @@ struct VerbUtilities {
         return sentenceString
     }
     
-    func getListOfWordsIncludingPunctuation(characterArray: String) -> [String] {
+    public func getListOfWordsIncludingPunctuation(characterArray: String) -> [String] {
         var wordList = [String]()
         var word = removeLeadingOrFollowingBlanks(characterArray: characterArray)
         word = separatePunctuationFromCharactersInString(characterArray: word)
@@ -303,7 +303,7 @@ struct VerbUtilities {
     }
     
     //This allows getListOfWordsIncludingPunctuation to see punctuation as words
-    func removeLeadingOrFollowingBlanks(characterArray: String)->String
+    public func removeLeadingOrFollowingBlanks(characterArray: String)->String
     {
         var ss = ""
         
@@ -334,7 +334,7 @@ struct VerbUtilities {
     
 
     //removes any leading or following blanks
-    func separatePunctuationFromCharactersInString(characterArray: String)->String
+    public func separatePunctuationFromCharactersInString(characterArray: String)->String
     {
         var ss = ""
         
@@ -356,7 +356,7 @@ struct VerbUtilities {
         return ss
     }//func removeLeadingOrFollowingBlanks
     
-    func startsWithVowelSound(characterArray: String)->Bool{
+    public func startsWithVowelSound(characterArray: String)->Bool{
         for c in characterArray
         {
             //separate it by blanks
@@ -372,7 +372,7 @@ struct VerbUtilities {
         return false
     }
     
-    func isCharacter(input: Character)->Bool {
+    public func isCharacter(input: Character)->Bool {
         if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
             || input == "ü" || input == "ñ"
@@ -383,7 +383,7 @@ struct VerbUtilities {
      return false
     }
     
-    func isCharacterIncludingPunctuation(input: Character)->Bool {
+    public func isCharacterIncludingPunctuation(input: Character)->Bool {
         if (input >= "a" && input <= "z") || (input >= "A" && input <= "Z")
             || input == "á" || input == "é" || input == "í" || input == "ó" || input == "ú"
             || input == "ü" || input == "ñ"
@@ -394,14 +394,14 @@ struct VerbUtilities {
      return false
     }
     
-    func isPunctuation(input: Character)->Bool {
+    public func isPunctuation(input: Character)->Bool {
         if input == "." || input == "," || input == "?" || input == "¿" || input == "'"
                 || input == "!" || input == "¡" || input == ":" || input == ";" || input == "\'" || input == "\""
         { return true }
         return false
     }
     
-    func containsOnlyLetters(input: String) -> Bool {
+    public func containsOnlyLetters(input: String) -> Bool {
        for chr in input {
           if (!(chr >= "a" && chr <= "z") && !(chr >= "A" && chr <= "Z") ) {
              return false
@@ -410,7 +410,7 @@ struct VerbUtilities {
        return true
     }
     //sample verb word = "tenerse" -> tener + true
-    func testForReflexiveEnding (testWord: String) -> (verb:String, bIsReflexive: Bool)
+    public func testForReflexiveEnding (testWord: String) -> (verb:String, bIsReflexive: Bool)
     {
         var  isReflexive = false
         var  verbWord = testWord
@@ -426,7 +426,7 @@ struct VerbUtilities {
         return (verb : verbWord, bIsReflexive: isReflexive)
     }
     
-    func testForFrenchReflexiveEnding (testWord: String) -> (verb:String, bIsReflexive: Bool)
+    public func testForFrenchReflexiveEnding (testWord: String) -> (verb:String, bIsReflexive: Bool)
     {
         var  isReflexive = false
         var  workingWord = testWord
@@ -444,7 +444,7 @@ struct VerbUtilities {
         return (verb : workingWord, bIsReflexive: isReflexive)
     }
     
-    func removeFirstLetters(characterArray: String, removeCount: Int)->String{
+    public func removeFirstLetters(characterArray: String, removeCount: Int)->String{
         var ss = String()
         var charIndex = 0
         
@@ -457,7 +457,7 @@ struct VerbUtilities {
         return ss
     }
 
-    func  analyzeEnglishWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
+    public func  analyzeEnglishWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
         let wordList = getListOfWords(characterArray: testString)
    
@@ -484,7 +484,7 @@ struct VerbUtilities {
     return (verbWord:verbWord, verbEnding:.none, residualPhrase: residualPhrase, isReflexive: false)
     }//func analyzeEnglishWordPhrase
 
-    func  analyzeSpanishWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
+    public func  analyzeSpanishWordPhrase(testString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
         let wordList = getListOfWords(characterArray: testString)
    
@@ -525,7 +525,7 @@ struct VerbUtilities {
         return (verbWord:verbWord, verbEnding: verbEnding, residualPhrase: residualPhrase, isReflexive: isReflexive)
     }
         
-    func  analyzeFrenchWordPhrase(phraseString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
+    public func  analyzeFrenchWordPhrase(phraseString: String) -> (verbWord:String, verbEnding: VerbEnding, residualPhrase:String, isReflexive: Bool)
     {
         var testString = phraseString
         var verbWord = ""
@@ -568,7 +568,7 @@ struct VerbUtilities {
         return (verbWord:verbWord, verbEnding: verbEnding, residualPhrase: residualPhrase, isReflexive: isReflexive)
     }//func analyzeWordPhrase
 
-    mutating func getVerbStem(verbWord: String, verbEnding : VerbEnding )->String {
+    public mutating func getVerbStem(verbWord: String, verbEnding : VerbEnding )->String {
         var verbStem = verbWord
         verbStem.remove(at: verbStem.index(before: verbStem.endIndex))
         verbStem.remove(at: verbStem.index(before: verbStem.endIndex))
@@ -581,7 +581,7 @@ struct VerbUtilities {
 
     //removeExtraBlanks looks at a verb phrase and removes anything more that a single blank between each word
     
-    func removeExtraBlanks (verbString: String)->String
+    public func removeExtraBlanks (verbString: String)->String
     {
         var ss = ""
         
@@ -617,7 +617,7 @@ struct VerbUtilities {
 
     
     //removes any leading or following blanks
-    func removeNonAlphaCharactersButLeaveBlanks(characterArray: String)->String
+    public func removeNonAlphaCharactersButLeaveBlanks(characterArray: String)->String
     {
         var ss = ""
          
@@ -632,7 +632,7 @@ struct VerbUtilities {
         return ss
     }//func removeNonAlphaCharactersButLeaveBlanks
 
-    func removeLastLetters(verbWord : String, letterCount : Int)->String {
+    public func removeLastLetters(verbWord : String, letterCount : Int)->String {
         var newWord = verbWord
         
         for _ in 0..<letterCount {
@@ -650,7 +650,7 @@ struct VerbUtilities {
     }
 
     //determineVerbEnding determines what type verb AR, ER or IR
-    func  determineVerbEnding (verbWord: String)-> VerbEnding
+    public func  determineVerbEnding (verbWord: String)-> VerbEnding
     {
     if verbWord.hasSuffix("oir"){ return  VerbEnding.OIR }
     if  verbWord.hasSuffix("ar"){ return VerbEnding.AR }
@@ -664,7 +664,7 @@ struct VerbUtilities {
 
     //remove2LetterVerbEnding removes verb ending (ar, er, ir) ... assumes this word has already been tested to have legitimate verb ending
     // for the current language:
-    func remove2LetterVerbEnding (word: String)->String
+    public func remove2LetterVerbEnding (word: String)->String
     {
         var verbWord = word
         verbWord.remove(at: verbWord.index(before: verbWord.endIndex))
@@ -673,7 +673,7 @@ struct VerbUtilities {
     }
 
     // French has the oir-ending
-    func remove3LetterVerbEnding (word: String)->String
+    public func remove3LetterVerbEnding (word: String)->String
     {
         var verbWord = word
         verbWord.remove(at: verbWord.index(before: verbWord.endIndex))

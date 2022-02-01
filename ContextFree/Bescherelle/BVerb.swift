@@ -7,35 +7,35 @@
 
 import Foundation
 
-struct ReplaceModelForm {
+public struct ReplaceModelForm {
 var tense = Tense.present
 var person = Person.S1
 var fromWord = ""
 var toWord = ""
 }
 
-struct ReplaceMultipleForm {
+public struct ReplaceMultipleForm {
     var tense = Tense.present
     var personList = [Person]()
     var fromWord = ""
     var toWord = ""
 }
 
-struct DropLettersForm {
+public struct DropLettersForm {
     var tense = Tense.present
     var personList = [Person]()
     var fromWord = ""
 }
 
 
-struct ReplaceEndingForm {
+public struct ReplaceEndingForm {
 var tense = Tense.present
 var person = Person.S1
 var fromWord = ""
 var toWord = ""
 }
 
-struct StemSingleForm {
+public struct StemSingleForm {
 var tense = Tense.present
 var person = Person.S1
 var fromWord = ""
@@ -43,8 +43,8 @@ var toWord = ""
 }
 
 //Chuck - NOvember 25
-class BVerb : Word, Identifiable {
-    var id = UUID()
+public class BVerb : Word, Identifiable {
+    public var id = UUID()
     
     var m_verbPhrase : String
     var m_verbWord : String
@@ -63,7 +63,7 @@ class BVerb : Word, Identifiable {
     
     let verbStuff : (verbWord: String, verbEnding: VerbEnding, residualPhrase: String, isReflexive: Bool)
     
-    override init(){
+    public  override init(){
         self.morphStructManager = MorphStructManager(verbPhrase: "", tense: .present)
         self.m_verbPhrase = ""
         self.m_verbWord = ""
@@ -72,7 +72,7 @@ class BVerb : Word, Identifiable {
         super.init(word: "", wordType: .verb)
     }
     
-    init(verbPhrase: String, languageType: LanguageType){
+    public init(verbPhrase: String, languageType: LanguageType){
         self.m_verbPhrase = verbPhrase
         self.languageType = languageType
         
@@ -94,7 +94,7 @@ class BVerb : Word, Identifiable {
         super.init(word: m_verbWord, wordType: .verb)
     }
     
-    func initializeMorphStructs(){
+    public func initializeMorphStructs(){
         //create and initialize the morph struct
         
         for person in Person.allCases {
@@ -111,108 +111,108 @@ class BVerb : Word, Identifiable {
         //morphStructManager.dumpSkinny(message: "BVerb: initializeMorphStructs")
     }
     
-    func isPhrasalVerb()->Bool{
+    public func isPhrasalVerb()->Bool{
         m_residualPhrase.count > 1
     }
     
-    func getResidualPhrase()->String{
+    public func getResidualPhrase()->String{
         m_residualPhrase
     }
     
-    func getInfinitiveAndParticiples()->(String, String, String){
+    public func getInfinitiveAndParticiples()->(String, String, String){
         return (word, m_pastParticiple, m_gerund)
     }
     
-    func getPresentParticiple()->String{
+    public func getPresentParticiple()->String{
         m_gerund
     }
     
-    func getPastParticiple()->String{
+    public func getPastParticiple()->String{
         return m_pastParticiple
     }
     
-    func getId()->UUID{return id}
+    public func getId()->UUID{return id}
     
-    func setIsPassive(isPassive: Bool){
+    public func setIsPassive(isPassive: Bool){
         m_isPassive = isPassive
     }
     
-    func isPassive()->Bool{
+    public func isPassive()->Bool{
         return m_isPassive
     }
     
     //if any form is irregular, then the verb is irregular
-    func isIrregular()->Bool{
+    public func isIrregular()->Bool{
         return m_isIrregular
     }
     
-    func unConjugate(verbForm : String)->BVerb{
+    public func unConjugate(verbForm : String)->BVerb{
         let verb = BVerb()
         return verb
     }
     
-    func isConjugated()->Bool{
+    public func isConjugated()->Bool{
         return m_isConjugated
     }
     
-    func setIsConjugated(flag: Bool){
+    public func setIsConjugated(flag: Bool){
         m_isConjugated = flag
     }
     
-    func getPhrase()->String{
+    public func getPhrase()->String{
         return m_verbPhrase
     }
     
-    func getConjugatedMorphStruct( tense : Tense, person : Person, conjugateEntirePhrase : Bool, isPassive: Bool=false) -> MorphStruct {
+    public func getConjugatedMorphStruct( tense : Tense, person : Person, conjugateEntirePhrase : Bool, isPassive: Bool=false) -> MorphStruct {
         return morphStructManager.get(person: person)
     }
     
     
-    func getMorphStruct(person: Person) -> MorphStruct {
+    public func getMorphStruct(person: Person) -> MorphStruct {
         morphStructManager.get(person: person)
     }
     
-    func getMorphStructManager()->MorphStructManager{
+    public func getMorphStructManager()->MorphStructManager{
         morphStructManager
     }
 
-    func getFinalVerbForm(person: Person)->String{
+    public func getFinalVerbForm(person: Person)->String{
         morphStructManager.getFinalVerbForm(person: person)
     }
 
-    func setMorphStruct(person : Person, morphStruct : MorphStruct){
+    public func setMorphStruct(person : Person, morphStruct : MorphStruct){
         morphStructManager.set(person: person, ms: morphStruct)
     }
  
-    func resetMorphStructs() {
+    public func resetMorphStructs() {
         morphStructManager.restoreToInitialState()
     }
     
-    func resetMorphStructIndices() {
+    public func resetMorphStructIndices() {
         morphStructManager.resetCurrentMorphStepIndices()
     }
 
-    func restartMorphSteps(person : Person){
+    public func restartMorphSteps(person : Person){
         morphStructManager.resetCurrentMorphStepIndex(person: person)
     }
     
-    func isFinalMorphStep(person : Person)->Bool{
+    public func isFinalMorphStep(person : Person)->Bool{
         morphStructManager.get(person: person).isFinalMorphStep()
     }
    
-    func incrementMorphStep(person : Person)->MorphStep {
+    public func incrementMorphStep(person : Person)->MorphStep {
         morphStructManager.getNextMorphStep(person: person)
     }
     
-    func getCurrentMorphIndex(person : Person)-> Int {
+    public func getCurrentMorphIndex(person : Person)-> Int {
         morphStructManager.getCurrentMorphStepIndex(person: person)
     }
     
-    func getCurrentMorphStep(person : Person)->MorphStep{
+    public func getCurrentMorphStep(person : Person)->MorphStep{
         morphStructManager.getCurrentMorphStep(person: person)
     }
     
-    func getMorphStepCount(person: Person)->Int{
+    public func getMorphStepCount(person: Person)->Int{
         morphStructManager.getMorphStepCount(person: person)
     }
     

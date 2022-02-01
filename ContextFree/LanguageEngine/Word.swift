@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Word : Hashable, Equatable {
+public class Word : Hashable, Equatable {
     let word : String
     //let def : String
     let wordType : WordType
@@ -16,7 +16,7 @@ class Word : Hashable, Equatable {
     var spanish = ""
     var french = ""
     
-    init(word: String, spanish: String, french: String, english: String, wordType: WordType){
+    public init(word: String, spanish: String, french: String, english: String, wordType: WordType){
         self.word = word
         self.wordType = wordType
         self.english = english
@@ -24,7 +24,7 @@ class Word : Hashable, Equatable {
         self.french = french
     }
     
-    init(word: String, wordType: WordType){
+    public init(word: String, wordType: WordType){
         self.word = word
         self.wordType = wordType
         self.english = ""
@@ -32,33 +32,33 @@ class Word : Hashable, Equatable {
         self.french = ""
     }
     
-    init(){
+    public init(){
         self.word = ""
         self.wordType = .unknown
     }
     
-    func hash(into hasher: inout Hasher){
+    public func hash(into hasher: inout Hasher){
         hasher.combine(word)
     }
     
-    static func ==(lhs: Word, rhs: Word)->Bool{
+    public static func ==(lhs: Word, rhs: Word)->Bool{
         return lhs.spanish == rhs.spanish && lhs.french == rhs.french && lhs.english == rhs.english && lhs.wordType == rhs.wordType
     }
     
-    func getWordType()->WordType{
+    public func getWordType()->WordType{
         return wordType
     }
     
-    func getWordTypeString()->String{
+    public func getWordTypeString()->String{
         return wordType.rawValue
     }
     
-    func isUnknown()->Bool{
+    public func isUnknown()->Bool{
         if wordType == .unknown{return true}
         return false
     }
     
-    func getWordStringAtLanguage(language: LanguageType)->String{
+    public func getWordStringAtLanguage(language: LanguageType)->String{
         switch language{
         case .Spanish:
             return spanish
@@ -70,7 +70,7 @@ class Word : Hashable, Equatable {
         }
     }
     
-    func getFirstWordStringAtLanguage(language: LanguageType)->String{
+    public func getFirstWordStringAtLanguage(language: LanguageType)->String{
         switch language{
         case .Spanish:
             return spanish

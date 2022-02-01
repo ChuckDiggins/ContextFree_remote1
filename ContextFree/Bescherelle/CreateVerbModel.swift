@@ -7,7 +7,7 @@
 
 import Foundation
 
-func createVerbModels()->[VerbModel]{
+public func createVerbModels()->[VerbModel]{
     
     //setVerbModelList(verbModelList: verbModels)
     

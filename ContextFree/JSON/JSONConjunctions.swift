@@ -7,12 +7,12 @@
 
 import Foundation
 
-class JsonConjunction: Codable, CustomStringConvertible {
+public class JsonConjunction: Codable, CustomStringConvertible {
     var english: String
     var french: String
     var spanish: String
     var conjunctionType: String  //"D" - demonstrative (this), "P" possessive (my), "A" any
-    var description: String {
+    public var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
@@ -40,18 +40,18 @@ var myMultiLingualConjunctionList: [JsonConjunction] = [
     ]
 
 //create json from
-class JsonConjunctionManager {
+public class JsonConjunctionManager {
     var myWordList = [JsonConjunction]()
     
-    func printWords(){
+    public func printWords(){
         print(myWordList)
     }
     
-    func printOne(jv: JsonAdverb){
+    public func printOne(jv: JsonAdverb){
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    public func encodeInternalWords(total: Int){
         clearWords()
         for v in myMultiLingualConjunctionList{
             myWordList.append(v)
@@ -61,11 +61,11 @@ class JsonConjunctionManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonConjunction{
+    public func getLastWord()->JsonConjunction{
         return myWordList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedPreps = try? encoder.encode(myWordList){
@@ -74,7 +74,7 @@ class JsonConjunctionManager {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonConjunction].self, from: data){
@@ -83,7 +83,7 @@ class JsonConjunctionManager {
         }
     }
     
-    func appendWord(c: JsonConjunction){
+    public func appendWord(c: JsonConjunction){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -98,20 +98,20 @@ class JsonConjunctionManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getWordAt(index: Int)->JsonConjunction{
+    public func getWordAt(index: Int)->JsonConjunction{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEMultiLingualConjunctions").appendingPathExtension("json")
     }

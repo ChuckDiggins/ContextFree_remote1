@@ -26,61 +26,61 @@ struct ClusterResolution {
         return sentenceCopy
     }
     
-    mutating func lookForCompoundVerbs(sdList : Array<SentenceData>)->Array<SentenceData>{
-        var sentenceDataList = sdList
-        var compoundVerbFound = true
-        
-        while compoundVerbFound {
-            for sdIndex in 0 ..< sdList.count-1 {
-                compoundVerbFound = false
-                let sd = sdList[sdIndex]
-                
-                //first word should be a progressiveVerb
-                let wordData = m_wsp.getVerb(wordString: sd.word.word)
-                
-                //if the verb is auxiliary, check to see if the next word is either progressive or perfect
-                if wordData.data.verbType == .auxiliary {
-                    let nextSD = sdList[sdIndex+1]
-                    var nextWordData : SentenceData
-                    //if this word has already been determined to be a verb and is a present or past participle, then use as is
-                    
-                    let wordType = nextSD.data.wordType
-                    var tense = nextSD.data.tense
-                    
-                    if  wordType == .V && tense == .presentParticiple {
-                        nextWordData = nextSD
-                    }
-                    else if wordType == .V && tense == .pastParticiple {
-                        nextWordData = nextSD
-                    }
-                    //else scan for it
-                    else { nextWordData = m_wsp.getVerb(wordString: nextSD.word.word) }
-                    
-                    //if a participle, then combine the two verbs into a single verb using nextSD and convert the tense appropriately
-                    
-                    tense = nextWordData.data.tense
-                    if tense == .pastParticiple {
-                        let newSD = nextWordData
-                        let newTense = wordData.data.tense.getPerfectTense()
-                        newSD.data.tense = newTense
-                        sentenceDataList.remove(at: sdIndex)
-                        sentenceDataList.remove(at: sdIndex)
-                        sentenceDataList.insert(newSD, at: sdIndex)
-                        compoundVerbFound = true
-                    }
-                    else if tense == .presentParticiple {
-                        let newSD = nextWordData
-                        newSD.data.tense = wordData.data.tense.getProgressiveTense()
-                        sentenceDataList.remove(at: sdIndex)
-                        sentenceDataList.remove(at: sdIndex)
-                        sentenceDataList.insert(newSD, at: sdIndex)
-                        compoundVerbFound = true
-                    }
-                }
-            }
-        }
-        return sentenceDataList
-    }
+//    mutating func lookForCompoundVerbs(sdList : Array<SentenceData>)->Array<SentenceData>{
+//        var sentenceDataList = sdList
+//        var compoundVerbFound = true
+//        
+//        while compoundVerbFound {
+//            for sdIndex in 0 ..< sdList.count-1 {
+//                compoundVerbFound = false
+//                let sd = sdList[sdIndex]
+//                
+//                //first word should be a progressiveVerb
+//                let wordData = m_wsp.getVerb(wordString: sd.word.word)
+//                
+//                //if the verb is auxiliary, check to see if the next word is either progressive or perfect
+//                if wordData.data.verbType == .auxiliary {
+//                    let nextSD = sdList[sdIndex+1]
+//                    var nextWordData : SentenceData
+//                    //if this word has already been determined to be a verb and is a present or past participle, then use as is
+//                    
+//                    let wordType = nextSD.data.wordType
+//                    var tense = nextSD.data.tense
+//                    
+//                    if  wordType == .V && tense == .presentParticiple {
+//                        nextWordData = nextSD
+//                    }
+//                    else if wordType == .V && tense == .pastParticiple {
+//                        nextWordData = nextSD
+//                    }
+//                    //else scan for it
+//                    else { nextWordData = m_wsp.getVerb(wordString: nextSD.word.word) }
+//                    
+//                    //if a participle, then combine the two verbs into a single verb using nextSD and convert the tense appropriately
+//                    
+//                    tense = nextWordData.data.tense
+//                    if tense == .pastParticiple {
+//                        let newSD = nextWordData
+//                        let newTense = wordData.data.tense.getPerfectTense()
+//                        newSD.data.tense = newTense
+//                        sentenceDataList.remove(at: sdIndex)
+//                        sentenceDataList.remove(at: sdIndex)
+//                        sentenceDataList.insert(newSD, at: sdIndex)
+//                        compoundVerbFound = true
+//                    }
+//                    else if tense == .presentParticiple {
+//                        let newSD = nextWordData
+//                        newSD.data.tense = wordData.data.tense.getProgressiveTense()
+//                        sentenceDataList.remove(at: sdIndex)
+//                        sentenceDataList.remove(at: sdIndex)
+//                        sentenceDataList.insert(newSD, at: sdIndex)
+//                        compoundVerbFound = true
+//                    }
+//                }
+//            }
+//        }
+//        return sentenceDataList
+//    }
 
     /*
        mutating func resolveCompoundVerbs(sentenceData: Array<SentenceData>)->Array<SentenceData>{

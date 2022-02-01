@@ -7,23 +7,23 @@
 
 import Foundation
 
-struct dBundleManager{
+public struct dBundleManager{
     var m_bundleList = [dBundle]()
     
-    mutating func appendBundle(bundle: dBundle){
+    public mutating func appendBundle(bundle: dBundle){
         m_bundleList.append(bundle)
     }
     
-    func getBundle(index: Int)->dBundle{
+    public func getBundle(index: Int)->dBundle{
         if index >= 0 && index < m_bundleList.count { return m_bundleList[index] }
         return dBundle()
     }
     
-    func getBundleCount()->Int{
+    public func getBundleCount()->Int{
         return m_bundleList.count
     }
     
-    mutating func clear(){
+    public mutating func clear(){
         m_bundleList.removeAll()
     }
 }

@@ -7,41 +7,41 @@
 
 import Foundation
 
-class Ambiguous : Word {
+public class Ambiguous : Word {
 
     var type: AmbiguousType
     
     var wordList = Array<Word>()
     var pronounList = Array<PronounType>()
     
-    init(word: String,type : AmbiguousType){
+    public init(word: String,type : AmbiguousType){
         self.type =  type
         super.init(word: word, wordType: .ambiguous)
     }
     
-    func setAmbiguousType(type: AmbiguousType){
+    public func setAmbiguousType(type: AmbiguousType){
         self.type = type
     }
     
-    func append(word: Word){
+    public func append(word: Word){
         wordList.append(word)
     }
     
-    func setPronounList(list: Array<PronounType>){
+    public func setPronounList(list: Array<PronounType>){
         pronounList = list
     }
     
     //this ambiguity should be between subject and prepositional pronoun in Spanish
     // in French this can be more involved with "nous", for example
     
-    func isPossibleSubjectPronoun()->Bool{
+    public func isPossibleSubjectPronoun()->Bool{
         for pt in pronounList {
             if pt == .SUBJECT {return true}
         }
         return false
     }
     
-    func isPossiblePrepositionalPronoun()->Bool{
+    public func isPossiblePrepositionalPronoun()->Bool{
         for pt in pronounList {
             if pt == .PREPOSITIONAL {return true}
         }
@@ -49,14 +49,14 @@ class Ambiguous : Word {
     }
    
     
-    func isPossibleArticle()->Bool{
+    public func isPossibleArticle()->Bool{
         for word in wordList {
             if word.wordType == .article {return true}
         }
         return false
     }
     
-    func getList()->Array<Word>{
+    public func getList()->Array<Word>{
         return wordList
     }
     

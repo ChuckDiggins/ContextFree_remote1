@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct JSONBundle : Codable, CustomStringConvertible {
+public struct JSONBundle : Codable, CustomStringConvertible {
     var idNum: Int
 //    var language : String
     var teacher : String
@@ -16,11 +16,11 @@ struct JSONBundle : Codable, CustomStringConvertible {
     var collectionList = [JSONCollectionStruct]()
     var phraseList = [JSONNamedLoadedPhrase]()
     
-    var description: String {
+    public var description: String {
         return "\(self.bundleName) : tenseList =\(tenseList.count), phraseList = \(phraseList.count)"
     }
     
-    init(idNum: Int, teacher: String, bundleName: String,  tenseList : [String], collectionList : [JSONCollectionStruct], phraseList : [JSONNamedLoadedPhrase] ){
+    public init(idNum: Int, teacher: String, bundleName: String,  tenseList : [String], collectionList : [JSONCollectionStruct], phraseList : [JSONNamedLoadedPhrase] ){
         self.idNum = idNum
 //        self.language = language
         self.teacher = teacher
@@ -30,7 +30,7 @@ struct JSONBundle : Codable, CustomStringConvertible {
         self.phraseList = phraseList
     }
     
-    func printThyself(){
+    public func printThyself(){
         print("\(idNum) - \(bundleName)")
         var i = 0
         for collection in collectionList {
@@ -39,7 +39,7 @@ struct JSONBundle : Codable, CustomStringConvertible {
         }
     }
     
-    func convertFromJSONToJLingCollection(jsonCollection: JSONCollectionStruct)->dWordCollection{
+    public func convertFromJSONToJLingCollection(jsonCollection: JSONCollectionStruct)->dWordCollection{
         var wordList = [Word]()
         for jsonWord in jsonCollection.wordList {
             let wordType = getWordTypeFromString(str: jsonWord.wordType)

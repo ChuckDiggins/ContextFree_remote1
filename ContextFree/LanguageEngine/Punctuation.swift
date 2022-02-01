@@ -7,16 +7,16 @@
 
 import Foundation
 
-class Punctuation : Word {
+public class Punctuation : Word {
 
     var type: PunctuationType
     
-    init(word: String, def: String, type : PunctuationType){
+    public init(word: String, def: String, type : PunctuationType){
         self.type = type
         super.init(word: word, wordType: .punctuation)
     }
     
-    func isPunctuation(word: String)->PunctuationType {
+    public func isPunctuation(word: String)->PunctuationType {
         if word == "." { return .period}
         if word == "," { return .comma}
         if word == "?" { return .questionMark}
@@ -31,7 +31,7 @@ class Punctuation : Word {
     }
     
     
-    func get(type: PunctuationType)-> String{
+    public func get(type: PunctuationType)-> String{
         switch type{
         case .period:
             return "."

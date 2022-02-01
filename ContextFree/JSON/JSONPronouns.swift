@@ -10,16 +10,16 @@ import Foundation
 //Chuck 11/25
 import UIKit
 
-class JsonPronoun: Codable, CustomStringConvertible {
+public class JsonPronoun: Codable, CustomStringConvertible {
     var english: String
     var french: String
     var spanish: String
     var pronounType: String  //"S" - subject, "DO" -direct object, "A" any
-    var description: String {
+    public var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
-    init(spanish: String, english: String, french: String, pronounType : String){
+    public init(spanish: String, english: String, french: String, pronounType : String){
         self.spanish = spanish
         self.english = english
         self.french = french
@@ -37,18 +37,18 @@ var myMultiLingualPronounList: [JsonPronoun] = [
 
 
 //create json from
-class JsonPronounManager {
+public class JsonPronounManager {
     var myWordList = [JsonPronoun]()
     
-    func printWords(){
+    public func printWords(){
         print(myWordList)
     }
     
-    func printOne(jv: JsonPronoun){
+    public func printOne(jv: JsonPronoun){
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    public func encodeInternalWords(total: Int){
         clearWords()
         for v in myMultiLingualPronounList{
             myWordList.append(v)
@@ -58,11 +58,11 @@ class JsonPronounManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonPronoun{
+    public func getLastWord()->JsonPronoun{
         return myWordList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedDets = try? encoder.encode(myWordList){
@@ -71,7 +71,7 @@ class JsonPronounManager {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonPronoun].self, from: data){
@@ -80,7 +80,7 @@ class JsonPronounManager {
         }
     }
     
-    func appendWord(det: JsonPronoun){
+    public func appendWord(det: JsonPronoun){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -95,20 +95,20 @@ class JsonPronounManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getWordAt(index: Int)->JsonPronoun{
+    public func getWordAt(index: Int)->JsonPronoun{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEMultiLingualPronouns").appendingPathExtension("json")
     }

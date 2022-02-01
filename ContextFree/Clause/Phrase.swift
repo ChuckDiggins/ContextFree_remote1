@@ -8,36 +8,37 @@
 import Foundation
 
 
-class dPhrase : dCluster {
-    override init(word: Word, clusterType : ContextFreeSymbol, data: WordStateData){
+public class dPhrase : dCluster {
+    var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
+    public override init(word: Word, clusterType : ContextFreeSymbol, data: WordStateData){
         super.init(word: word, clusterType: clusterType, data: data)
     }
     
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: .UNK)
     }
     
     private var m_randomWord : RandomWordLists!
     
-    init(randomWord:RandomWordLists, phraseName: String, phraseType: ContextFreeSymbol){
+    public init(randomWord:RandomWordLists, phraseName: String, phraseType: ContextFreeSymbol){
         m_randomWord = randomWord
         super.init(word: Word(), clusterType: phraseType, data: WordStateData())
         setClusterName(name: phraseName)
     }
     
-    func setRandomWordList(randomWordList: RandomWordLists){
+    public func setRandomWordList(randomWordList: RandomWordLists){
         m_randomWord = randomWordList
     }
     
-    var m_cfr = ContextFreeRule(start: ContextFreeSymbolStruct())
-    func getClusterAtFunction(fn: ContextFreeFunction)->dCluster{
+
+    public func getClusterAtFunction(fn: ContextFreeFunction)->dCluster{
         for cluster in getClusterList(){
             if cluster.getClusterFunction() == fn {return cluster}
         }
         return dCluster()
     }
 
-    func dumpClusterInfo(str: String){
+    public func dumpClusterInfo(str: String){
         print(str)
         //let npSentenceData = getSentenceData()
         for cluster in getClusterList(){
@@ -78,7 +79,7 @@ class dPhrase : dCluster {
         }
     }
     
-    func createNewRandomPhrase(){
+    public func createNewRandomPhrase(){
         var index = 0
         var newCluster = dCluster()
         var newClusterWord = Word()
@@ -103,7 +104,7 @@ class dPhrase : dCluster {
         }
     }
     
-    func getReconstructedPhraseString(language: LanguageType)->String {
+    public func getReconstructedPhraseString(language: LanguageType)->String {
         var ss = ""
         var str = ""
     
@@ -132,7 +133,7 @@ class dPhrase : dCluster {
     }
    
 
-    func getFirstSingle()->dSingle{
+    public func getFirstSingle()->dSingle{
         if getFirstCluster().getClusterType().isSingle() {
             //let single = getFirstCluster() as! dSingle
             return getFirstCluster() as! dSingle
@@ -140,21 +141,21 @@ class dPhrase : dCluster {
         return dSingle()
     }
     
-    func getLastSingle()->dSingle{
+    public func getLastSingle()->dSingle{
         if getLastCluster().getClusterType().isSingle() {
             //let single = getFirstCluster() as! dSingle
             return getLastCluster() as! dSingle
         }
         return dSingle()
     }
-    func setRule(rule: ContextFreeRule){m_cfr = rule}
+    public func setRule(rule: ContextFreeRule){m_cfr = rule}
     
-    func getString( wordList : SentenceWordList)->String{
+    public func getString( wordList : SentenceWordList)->String{
         var wordListCopy = wordList
         return wordListCopy.getString()
     }
 
-    override func hasClusterFunction(fn: ContextFreeFunction) -> Bool {
+    public override func hasClusterFunction(fn: ContextFreeFunction) -> Bool {
         for cluster in getClusterList(){
             if cluster.getClusterFunction() == fn {return true}
         }
@@ -162,7 +163,7 @@ class dPhrase : dCluster {
     }
     
     
-    func getEquivalentPronounString(language: LanguageType, type: PronounType)->String{
+    public  func getEquivalentPronounString(language: LanguageType, type: PronounType)->String{
         switch language{
         case .Spanish:
             let p = SpanishPronoun(word: "", type: type)
@@ -177,7 +178,7 @@ class dPhrase : dCluster {
         }
     }
 
-    func getEquivalentPronoun(language: LanguageType, type: PronounType)->Pronoun{
+    public func getEquivalentPronoun(language: LanguageType, type: PronounType)->Pronoun{
         switch language{
         case .Spanish:
             return SpanishPronoun(word: "", type: type)
@@ -190,7 +191,7 @@ class dPhrase : dCluster {
     }
 
    
-    func getSingleList(inputSingleList: [dSingle])->[dSingle]{
+    public func getSingleList(inputSingleList: [dSingle])->[dSingle]{
         var singleList = inputSingleList
         for cluster in getClusterList(){
             let type = cluster.getClusterType()
@@ -237,7 +238,7 @@ class dPhrase : dCluster {
         return singleList
     }
     
-    func getWordStateList(inputWordList: [WordStateData])->[WordStateData]{
+    public func getWordStateList(inputWordList: [WordStateData])->[WordStateData]{
         var wordList = inputWordList
         for cluster in getClusterList(){
             let type = cluster.getClusterType()
@@ -283,7 +284,7 @@ class dPhrase : dCluster {
         return wordList
     }
     
-    func processInfo(){
+    public func processInfo(){
         let parentClusterType = getClusterType()
         
         if getClusterType() == .NP {
@@ -339,7 +340,7 @@ class dPhrase : dCluster {
         }
     }
     
-    func getStringAtLanguage(language: LanguageType )->String{
+    public func getStringAtLanguage(language: LanguageType )->String{
         var str = ""
         
         for cluster in getClusterList(){
@@ -455,7 +456,7 @@ class dPhrase : dCluster {
         return str
     }
 
-    func getString( )->String{
+    public func getString( )->String{
         var str = ""
         //var tempStr = ""
         
@@ -524,44 +525,44 @@ class dPhrase : dCluster {
 
 }
 
-class dAdjectivePhrase : dPhrase {
+public class dAdjectivePhrase : dPhrase {
     var type = ContextFreeSymbol.AP
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: WordStateData ){
+    public init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
     var m_adjectiveType = AdjectiveType.any
-    func setAdjectiveType(type: AdjectiveType){m_adjectiveType = type}
-    func getAdjectiveType()->AdjectiveType{return m_adjectiveType}
+    public func setAdjectiveType(type: AdjectiveType){m_adjectiveType = type}
+    public func getAdjectiveType()->AdjectiveType{return m_adjectiveType}
 }
 
 
-class dAdverbPhrase : dPhrase {
+public class dAdverbPhrase : dPhrase {
     var type = ContextFreeSymbol.AdvP
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: WordStateData ){
+    public init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
     var m_adverbType = AdverbType.manner
-    func setAdverbType(type: AdverbType){m_adverbType = type}
-    func getAdverbType()->AdverbType{return m_adverbType}
+    public func setAdverbType(type: AdverbType){m_adverbType = type}
+    public func getAdverbType()->AdverbType{return m_adverbType}
 }
 
-class dPrepositionPhrase : dPhrase {
+public class dPrepositionPhrase : dPhrase {
     var type = ContextFreeSymbol.PP
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: WordStateData ){
+    public init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -571,19 +572,19 @@ class dPrepositionPhrase : dPhrase {
     var isSuppressPrep  = false
     var m_prepositionType = PrepositionType.general;
     
-    func setPrepositionType (type : PrepositionType){m_prepositionType = type}
-    func getPrepositionType()->PrepositionType{return m_prepositionType}
+    public func setPrepositionType (type : PrepositionType){m_prepositionType = type}
+    public func getPrepositionType()->PrepositionType{return m_prepositionType}
     
-    func setIsPersonal (flag : Bool){m_isPersonal = flag}
-    func getIsPersonal()->Bool{return m_isPersonal}
-    func setIsInfinitive (flag : Bool){m_isInfinitive = flag}
-    func getIsInfinitive()->Bool{return m_isInfinitive}
-    func setIsPossessive (flag : Bool){isPossessive = flag}
-    func getIsPossessive()->Bool{return isPossessive}
-    func setIsSuppressPrep (flag : Bool){isSuppressPrep = flag}
-    func getIsSuppressPrep()->Bool{return isSuppressPrep}
+    public func setIsPersonal (flag : Bool){m_isPersonal = flag}
+    public func getIsPersonal()->Bool{return m_isPersonal}
+    public func setIsInfinitive (flag : Bool){m_isInfinitive = flag}
+    public func getIsInfinitive()->Bool{return m_isInfinitive}
+    public func setIsPossessive (flag : Bool){isPossessive = flag}
+    public func getIsPossessive()->Bool{return isPossessive}
+    public func setIsSuppressPrep (flag : Bool){isSuppressPrep = flag}
+    public func getIsSuppressPrep()->Bool{return isSuppressPrep}
     
-    func reconcileForLanguage(language: LanguageType){
+    public func reconcileForLanguage(language: LanguageType){
         for cluster in getClusterList(){
             let sym = cluster.getClusterType()
             if ( sym == .Art || sym == .Adj ){
@@ -606,7 +607,7 @@ class dPrepositionPhrase : dPhrase {
         }
     }
     
-    func reconcile(){
+    public func reconcile(){
         for cluster in getClusterList(){
             let sym = cluster.getClusterType()
             if ( sym == .Art || sym == .Adj ){
@@ -630,7 +631,7 @@ class dPrepositionPhrase : dPhrase {
     }
     
 
-    func appendThisCluster(cluster : dCluster){
+    public func appendThisCluster(cluster : dCluster){
         switch(cluster.getClusterType()){
         case .P:
             let prep = cluster as! dPrepositionSingle

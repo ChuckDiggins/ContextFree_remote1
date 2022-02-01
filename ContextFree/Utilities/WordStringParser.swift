@@ -7,7 +7,7 @@
 
 import Foundation
 
-class WordStringParser {
+public class WordStringParser {
     
     private var spanishWords = SpanishWords()
     private var frenchWords = FrenchWords()

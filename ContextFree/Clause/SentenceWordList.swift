@@ -8,20 +8,20 @@
 import Foundation
 
 
-struct SentenceWordList{
+public struct SentenceWordList{
     var m_wordStringList = Array<String>()
-    func getCount()->Int{return m_wordStringList.count}
-    func getWordStringAt(index: Int)->String{
+    public func getCount()->Int{return m_wordStringList.count}
+    public func getWordStringAt(index: Int)->String{
         if ( index < getCount() ){
         return m_wordStringList[index]
         }
         return ""
     }
     
-    mutating func clear(){m_wordStringList.removeAll()}
-    mutating func append(wordString: String){m_wordStringList.append(wordString)}
-    mutating func delete(index: Int){m_wordStringList.remove(at: index)}
-    mutating func getString()->String{
+    public mutating func clear(){m_wordStringList.removeAll()}
+    public mutating func append(wordString: String){m_wordStringList.append(wordString)}
+    public mutating func delete(index: Int){m_wordStringList.remove(at: index)}
+    public mutating func getString()->String{
         var str = ""
         for wordString in m_wordStringList {
             str += wordString + " "

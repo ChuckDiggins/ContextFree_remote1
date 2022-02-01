@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WordStringResolution {
+public struct WordStringResolution {
     
     // tests whether the input word is a progressive with pronouns attached.
     // for example, "comprándonoslos"
@@ -16,7 +16,7 @@ struct WordStringResolution {
     // 2.  result.1 is the progressive with the accented letter replaced ---> "comprando"
     // 3.  result.2 is the pronoun suffix ---> "noslos" (this has to be disambiguated in another func)
     
-    mutating func containsProgressiveAndAppendedObjectPronounSuffixes(word: String)->(Bool, String, String, String){
+    public mutating func containsProgressiveAndAppendedObjectPronounSuffixes(word: String)->(Bool, String, String, String){
         var result : (Bool, String, String)
         var str = ""
         var pronounSuffix = ""
@@ -47,7 +47,7 @@ struct WordStringResolution {
         return (true, str, result2.0, result2.1)
     }
 
-    mutating func processPronounSuffix(word: String)->(String, String){
+    public mutating func processPronounSuffix(word: String)->(String, String){
         
         //comprándomelos  - buying them for me
         
@@ -92,7 +92,7 @@ struct WordStringResolution {
         return (indirect, direct)
     }
 
-    mutating func removeBuriedProgressiveEndingAndReturnPronounSuffix(word: String, buriedString: String, replacementString: String)->(Bool, String, String){
+    public mutating func removeBuriedProgressiveEndingAndReturnPronounSuffix(word: String, buriedString: String, replacementString: String)->(Bool, String, String){
         var str = word
         let result = VerbUtilities().doesWordContainSubstring(inputString: str, subString: buriedString)
         if result.0 {

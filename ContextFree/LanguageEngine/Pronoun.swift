@@ -7,21 +7,21 @@
 //    ,,,
 import Foundation
 
-class Pronoun : Word {
+public class Pronoun : Word {
     var type: PronounType
     
-    init(word: String, type : PronounType){
+    public init(word: String, type : PronounType){
         self.type = type
         super.init(word: word, wordType: .pronoun)
     }
     
-    override init(){
+    public override init(){
         self.type = PronounType.PERSONAL
         super.init(word: "", wordType: .pronoun)
     }
     
     
-    init(json: JsonPronoun, language: LanguageType){
+    public init(json: JsonPronoun, language: LanguageType){
         type = PronounType.SUBJECT
         super.init(word: json.spanish, wordType: .pronoun)
         self.spanish = json.spanish
@@ -30,7 +30,7 @@ class Pronoun : Word {
         convertPronounTypeStringToPronounType(inputString: json.pronounType)
     }
     
-    func convertPronounTypeStringToPronounType(inputString: String){
+    public func convertPronounTypeStringToPronounType(inputString: String){
         type = .SUBJECT
         if ( inputString == "S" ){type = .SUBJECT}
         if ( inputString == "IO" ){type = .INDIRECT_OBJECT}
@@ -39,7 +39,7 @@ class Pronoun : Word {
         if ( inputString == "R" ){type = .REFLEXIVE}
     }
     
-    func isPronoun(word: String)->[PronounType]{
+    public func isPronoun(word: String)->[PronounType]{
         var pt = Array<PronounType>()
         
         var result =  isSubjectPronoun(word: word)
@@ -56,7 +56,7 @@ class Pronoun : Word {
         return pt
     }
     
-    func getReflexive(language: LanguageType, person: Person, startsWithVowelSound: Bool)->String{
+    public func getReflexive(language: LanguageType, person: Person, startsWithVowelSound: Bool)->String{
         switch language {
         case .Spanish: return SpanishPronoun().getReflexive(person: person)
         case .French:
@@ -68,11 +68,11 @@ class Pronoun : Word {
         return ""
     }
     
-    func isReflexivePronoun(word: String)->(PronounType, Gender, Person){
+    public func isReflexivePronoun(word: String)->(PronounType, Gender, Person){
         return(.none, .masculine, .S1)
     }
     
-    func isIndirectObjectPronoun(word: String)->(PronounType, Gender, Person){
+    public func isIndirectObjectPronoun(word: String)->(PronounType, Gender, Person){
         return(.none, .masculine, .S1)
     }
     
@@ -80,19 +80,19 @@ class Pronoun : Word {
         return(.none, .masculine, .S1)
     }
     
-    func isPrepositionalPronoun(word: String)->(PronounType, Gender, Person){
+    public func isPrepositionalPronoun(word: String)->(PronounType, Gender, Person){
         return(.none, .masculine, .S1)
     }
     
-    func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
+    public func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
         return(.none, .masculine, .S1)
     }
     
 }
 
-class EnglishPronoun : Pronoun {
+public class EnglishPronoun : Pronoun {
 
-    func getForm(gender:Gender, person: Person)->String {
+    public func getForm(gender:Gender, person: Person)->String {
         switch type {
         case .SUBJECT: return getSubject(gender: gender, person: person)
         case .DIRECT_OBJECT: return getDirectObject(gender: gender, person: person)
@@ -103,7 +103,7 @@ class EnglishPronoun : Pronoun {
         }
     }
     
-    func getSubject(gender: Gender, person: Person)->String{
+    public func getSubject(gender: Gender, person: Person)->String{
         switch person{
         case .S1: return "I"
         case .S2: return "you"
@@ -116,7 +116,7 @@ class EnglishPronoun : Pronoun {
         }
     }
 
-    func getReflexive(person: Person)->String{
+    public func getReflexive(person: Person)->String{
         switch person{
         case .S1: return "myself"
         case .S2: return "yourself"
@@ -127,7 +127,7 @@ class EnglishPronoun : Pronoun {
         }
     }
     
-    func getIndirectObject(gender: Gender, person: Person)->String{
+    public func getIndirectObject(gender: Gender, person: Person)->String{
             switch person{
             case .S1: return "me"
             case .S2: return "you"
@@ -140,7 +140,7 @@ class EnglishPronoun : Pronoun {
             }
     }
     
-    func getDirectObject(gender: Gender, person: Person)->String{
+    public func getDirectObject(gender: Gender, person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "you"
@@ -157,7 +157,7 @@ class EnglishPronoun : Pronoun {
         }
     }
     
-    func getPrepositional(gender: Gender, person: Person)->String{
+    public func getPrepositional(gender: Gender, person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "you"
@@ -174,9 +174,7 @@ class EnglishPronoun : Pronoun {
         }
     }
 
-
-    
-    override func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "I"){return(.SUBJECT, .masculine, .S1)}
         if (word == "you"){return(.SUBJECT, .masculine, .S2)}
         if (word == "he"){return(.SUBJECT, .masculine, .S3)}
@@ -189,15 +187,15 @@ class EnglishPronoun : Pronoun {
     
 }
 
-enum ThirdPersonForm{
+public enum ThirdPersonForm{
     case el
     case ella
     case usted
     case si
 }
 
-class FrenchPronoun : Pronoun {
-    func getForm(gender:Gender, person: Person)->String {
+public class FrenchPronoun : Pronoun {
+    public func getForm(gender:Gender, person: Person)->String {
         switch type {
         case .SUBJECT: return getSubject(gender: gender, person: person, formal: false)
         case .DIRECT_OBJECT: return getDirectObject(gender: gender, person: person)
@@ -208,7 +206,7 @@ class FrenchPronoun : Pronoun {
         }
     }
     
-    func getSubject(gender:Gender, person: Person, formal: Bool)->String{
+    public func getSubject(gender:Gender, person: Person, formal: Bool)->String{
         switch gender {
         case .masculine, .either:
             switch person{
@@ -231,12 +229,12 @@ class FrenchPronoun : Pronoun {
         }
     }
     
-    func getReflexive(person: Person, startsWithVowelSound: Bool)->String{
+    public func getReflexive(person: Person, startsWithVowelSound: Bool)->String{
         if startsWithVowelSound {return getReflexiveContraction(person: person)}
         return getReflexive(person: person)
     }
     
-    func getReflexive(person: Person)->String{
+    public func getReflexive(person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"
@@ -247,7 +245,7 @@ class FrenchPronoun : Pronoun {
         }
     }
     
-    func getReflexiveContraction(person: Person)->String{
+    public func getReflexiveContraction(person: Person)->String{
         switch person{
         case .S1: return "m'"
         case .S2: return "t'"
@@ -258,7 +256,7 @@ class FrenchPronoun : Pronoun {
         }
     }
     
-    func getIndirectObject(person: Person)->String{
+    public func getIndirectObject(person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"
@@ -269,7 +267,7 @@ class FrenchPronoun : Pronoun {
         }
     }
     
-    func getDirectObject(gender: Gender, person: Person)->String{
+    public func getDirectObject(gender: Gender, person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"
@@ -288,7 +286,7 @@ class FrenchPronoun : Pronoun {
         }
     }
     
-    func getPrepositional(person: Person, thirdPersonForm : ThirdPersonForm)->String{
+    public func getPrepositional(person: Person, thirdPersonForm : ThirdPersonForm)->String{
         switch person{
         case .S1: return "moi"
         case .S2: return "toi"
@@ -310,7 +308,7 @@ class FrenchPronoun : Pronoun {
     }
     
     
-    override func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "je"){return(.SUBJECT, .masculine, .S1)}
         if (word == "tu"){return(.SUBJECT, .masculine, .S2)}
         if (word == "il" ){return(.SUBJECT, .masculine, .S3)}
@@ -321,7 +319,7 @@ class FrenchPronoun : Pronoun {
         return(.none, .masculine, .S1)
     }
     
-    override func isReflexivePronoun(word: String)->(PronounType, Gender, Person){
+    public override func isReflexivePronoun(word: String)->(PronounType, Gender, Person){
         if (word == "me"){return(.REFLEXIVE, .masculine, .S1)}
         if (word == "te"){return(.REFLEXIVE, .masculine, .S2)}
         if (word == "se"){return(.REFLEXIVE, .masculine, .S3)}  //first one
@@ -330,7 +328,7 @@ class FrenchPronoun : Pronoun {
         return(.none, .masculine, .S1)
     }
     
-    override func isPrepositionalPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isPrepositionalPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "moi"){return(.PREPOSITIONAL, .masculine, .S1)}
         if (word == "toi"){return(.PREPOSITIONAL, .masculine, .S2)}
         if (word == "lui" ){return(.PREPOSITIONAL, .masculine, .S3)}
@@ -342,7 +340,7 @@ class FrenchPronoun : Pronoun {
         return(.none, .masculine, .S1)
     }
     
-    override func isDirectObjectPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isDirectObjectPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "me"){return(.DIRECT_OBJECT, .masculine, .S1)}
         if (word == "te"){return(.DIRECT_OBJECT, .masculine, .S2)}
         if (word == "le"){return(.DIRECT_OBJECT, .masculine, .S3)}
@@ -352,7 +350,7 @@ class FrenchPronoun : Pronoun {
         return(.none, .masculine, .S1)
     }
     
-    override func isIndirectObjectPronoun(word: String)->(PronounType, Gender, Person){
+    public  override func isIndirectObjectPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "me"){return(.INDIRECT_OBJECT, .masculine, .S1)}
         if (word == "te"){return(.INDIRECT_OBJECT, .masculine, .S2)}
         if (word == "lui"){return(.INDIRECT_OBJECT, .masculine, .S3)}  //first one
@@ -365,8 +363,8 @@ class FrenchPronoun : Pronoun {
 }
 
 
-class SpanishPronoun : Pronoun {
-    func getForm(gender:Gender, person: Person)->String {
+public class SpanishPronoun : Pronoun {
+    public func getForm(gender:Gender, person: Person)->String {
         switch type {
         case .SUBJECT: return getSubject(gender: gender, person: person, formal: false)
         case .DIRECT_OBJECT: return getDirectObject(gender: gender, person: person)
@@ -377,7 +375,7 @@ class SpanishPronoun : Pronoun {
         }
     }
     
-    func getSubject(gender:Gender, person: Person, formal: Bool)->String{
+    public func getSubject(gender:Gender, person: Person, formal: Bool)->String{
         
         if formal {
             switch gender {
@@ -425,7 +423,7 @@ class SpanishPronoun : Pronoun {
         
     }
     
-    func getReflexive(person: Person)->String{
+    public func getReflexive(person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"
@@ -438,7 +436,7 @@ class SpanishPronoun : Pronoun {
     
     
     
-    func getIndirectObject(person: Person)->String{
+    public func getIndirectObject(person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"
@@ -450,7 +448,7 @@ class SpanishPronoun : Pronoun {
     }
     
     
-    func getDirectObject(gender: Gender, person: Person)->String{
+    public func getDirectObject(gender: Gender, person: Person)->String{
         switch person{
         case .S1: return "me"
         case .S2: return "te"
@@ -470,7 +468,7 @@ class SpanishPronoun : Pronoun {
     }
     
     
-    func getPrepositional(person: Person, thirdPersonForm : ThirdPersonForm)->String{
+    public func getPrepositional(person: Person, thirdPersonForm : ThirdPersonForm)->String{
         switch person{
         case .S1: return "mí"
         case .S2: return "ti"
@@ -493,7 +491,7 @@ class SpanishPronoun : Pronoun {
         }
     }
     
-    override func isDirectObjectPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isDirectObjectPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "me"){return(.DIRECT_OBJECT, .masculine, .S1)}
         if (word == "te"){return(.DIRECT_OBJECT, .masculine, .S2)}
         if (word == "lo"){return(.DIRECT_OBJECT, .masculine, .S3)}
@@ -506,7 +504,7 @@ class SpanishPronoun : Pronoun {
     }
     
     
-    override func isPrepositionalPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isPrepositionalPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "mí"){return(.PREPOSITIONAL, .masculine, .S1)}
         if (word == "ti"){return(.PREPOSITIONAL, .masculine, .S2)}
         if (word == "él" || word == "sí"){return(.PREPOSITIONAL, .masculine, .S3)}
@@ -521,7 +519,7 @@ class SpanishPronoun : Pronoun {
         return(.none, .masculine, .S1)
     }
     
-    override func isReflexivePronoun(word: String)->(PronounType, Gender, Person){
+    public override func isReflexivePronoun(word: String)->(PronounType, Gender, Person){
         if (word == "me"){return(.REFLEXIVE, .masculine, .S1)}
         if (word == "te"){return(.REFLEXIVE, .masculine, .S2)}
         if (word == "se"){return(.REFLEXIVE, .masculine, .S3)}  //first one
@@ -530,7 +528,7 @@ class SpanishPronoun : Pronoun {
         return(.none, .masculine, .S1)
     }
     
-    override func isIndirectObjectPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isIndirectObjectPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "me"){return(.INDIRECT_OBJECT, .masculine, .S1)}
         if (word == "te"){return(.INDIRECT_OBJECT, .masculine, .S2)}
         if (word == "le"){return(.INDIRECT_OBJECT, .masculine, .S3)}  //first one
@@ -540,9 +538,7 @@ class SpanishPronoun : Pronoun {
         return(.none, .masculine, .S1)
     }
     
-    
-    
-    override func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
+    public override func isSubjectPronoun(word: String)->(PronounType, Gender, Person){
         if (word == "yo"){return(.SUBJECT, .masculine, .S1)}
         if (word == "tú"){return(.SUBJECT, .masculine, .S2)}
         if (word == "él" ){return(.SUBJECT, .masculine, .S3)}

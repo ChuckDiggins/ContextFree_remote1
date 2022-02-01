@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum EndingType {
+public enum EndingType {
     case RE_ENDING
     case RE_ENDING1
     case RE_ENDING2
@@ -24,12 +24,12 @@ enum EndingType {
     case none
 }
 
-struct ModelVerbEnding{
+public struct ModelVerbEnding{
     var tense = Tense.gerund
     var type = EndingType.none
 }
 
-class BFrenchVerb : BRomanceVerb {
+public class BFrenchVerb : BRomanceVerb {
     
     var p3PreteriteWord = ""
 
@@ -51,15 +51,15 @@ class BFrenchVerb : BRomanceVerb {
     
     var m_verbModelParseList = [ParsedExceptionStruct]()
     
-    init(verbPhrase: String){
+    public init(verbPhrase: String){
         super.init(verbPhrase: verbPhrase, language: .French)
     }
     
-     override init(){
+    public override init(){
          super.init(verbPhrase: "", language: .French)
     }
     
-    override func setPatterns (verbModel : RomanceVerbModel) {
+    public  override func setPatterns (verbModel : RomanceVerbModel) {
         bVerbModel = verbModel
        
         //bRomanceVerb specific
@@ -74,7 +74,7 @@ class BFrenchVerb : BRomanceVerb {
         m_gerund = createGerund()
     }//SetPatterns
     
-    override func createPastParticiple()->String {
+    public  override func createPastParticiple()->String {
         let result = hasReplaceEndingForm(tense: .pastParticiple)
         if result.0.count > 0 {
             var word = m_verbWord
@@ -94,7 +94,7 @@ class BFrenchVerb : BRomanceVerb {
         }
     }
     
-    override func createGerund()->String {
+    public override func createGerund()->String {
         let word = m_verbStem
         switch m_verbEnding {
         case .AR: return word + "ando"
@@ -103,14 +103,14 @@ class BFrenchVerb : BRomanceVerb {
         }
     }
     
-    override func getConjugateForm(tense : Tense, person : Person)->String {
+    public override func getConjugateForm(tense : Tense, person : Person)->String {
         _ = getConjugatedMorphStruct( tense : tense, person : person , conjugateEntirePhrase : false)
         return morphStructManager.getFinalVerbForm(person: person)
     }
     
     //these patterns are not mutually exclusive
     
-    override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool, isPassive: Bool = false)->MorphStruct {
+    public override func getConjugatedMorphStruct( tense : Tense, person : Person , conjugateEntirePhrase : Bool, isPassive: Bool = false)->MorphStruct {
         
         //simple indicative tenses
         let tenseIndex =  tense.getIndex()
@@ -152,20 +152,20 @@ class BFrenchVerb : BRomanceVerb {
         return ms
     }
     
-    func restoreMorphStructs()
+    public func restoreMorphStructs()
     {
         for person in Person.allCases {
             restoreMorphStructs(person: person)
         }
     }
     
-    func restoreMorphStructs(person : Person)
+    public func restoreMorphStructs(person : Person)
     {
         morphStructManager.restoreToInitialState()
     }
 
     
-    func readModelParseStuff(){
+    public func readModelParseStuff(){
         
         for parseStruct in m_verbModelParseList {
             if ( parseStruct.pattern == .IMPERSONAL1){

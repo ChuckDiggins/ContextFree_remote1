@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum JsonCollectionTypes : String {
+public enum JsonCollectionTypes : String {
     case All
     //case CarpenterChapter3
     case Simple
 }
 //fdfd
-enum JsonWordType : String, Decodable {
+public enum JsonWordType : String, Decodable {
     case adjective
     case adverb
     case noun
@@ -23,7 +23,7 @@ enum JsonWordType : String, Decodable {
     case conjunction
 }
 
-enum JsonClusterType : String, Decodable {
+public enum JsonClusterType : String, Decodable {
     case N
     case V
     case Adj

@@ -18,12 +18,12 @@ import Foundation
 
 import UIKit
 
-class JsonDeterminer: Codable, CustomStringConvertible {
+public class JsonDeterminer: Codable, CustomStringConvertible {
     var english: String
     var french: String
     var spanish: String
     var determinerType: String  //"D" - demonstrative (this), "P" possessive (my), "A" any
-    var description: String {
+    public var description: String {
         return "\(self.spanish) \(self.english) \(self.french)"
     }
     
@@ -46,18 +46,18 @@ var myMultiLingualDeterminerList: [JsonDeterminer] = [
 
 
 //create json from
-class JsonDeterminerManager {
+public class JsonDeterminerManager {
     var myWordList = [JsonDeterminer]()
     
-    func printWords(){
+    public func printWords(){
         print(myWordList)
     }
     
-    func printOne(jv: JsonDeterminer){
+    public func printOne(jv: JsonDeterminer){
         print(jv)
     }
     
-    func encodeInternalWords(total: Int){
+    public func encodeInternalWords(total: Int){
         clearWords()
         for v in myMultiLingualDeterminerList{
             myWordList.append(v)
@@ -67,11 +67,11 @@ class JsonDeterminerManager {
         encodeWords()
     }
     
-    func getLastWord()->JsonDeterminer{
+    public func getLastWord()->JsonDeterminer{
         return myWordList.last!
     }
     
-    func encodeWords(){
+    public func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
         if let encodedDets = try? encoder.encode(myWordList){
@@ -80,7 +80,7 @@ class JsonDeterminerManager {
         }
     }
     
-    func decodeWords(){
+    public func decodeWords(){
         let decoder = JSONDecoder()
         if let data = try? Data.init(contentsOf: getURL()){
             if let decodedWords = try? decoder.decode([JsonDeterminer].self, from: data){
@@ -89,7 +89,7 @@ class JsonDeterminerManager {
         }
     }
     
-    func appendWord(det: JsonDeterminer){
+    public func appendWord(det: JsonDeterminer){
         var appendThis = true
         for i in 0..<myWordList.count {
             let v = myWordList[i]
@@ -104,20 +104,20 @@ class JsonDeterminerManager {
         encodeWords()
     }
     
-    func clearWords(){
+    public func clearWords(){
         myWordList.removeAll()
     }
     
-    func getWordAt(index: Int)->JsonDeterminer{
+    public func getWordAt(index: Int)->JsonDeterminer{
         if index > myWordList.count-1 { return myWordList[0] }
         return myWordList[index]
     }
     
-    func getWordCount()->Int{
+    public func getWordCount()->Int{
         return myWordList.count
     }
      
-    func getURL()->URL{
+    public func getURL()->URL{
         let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         return docsURL.appendingPathComponent("SPIFEMultiLingualDeterminers").appendingPathExtension("json")
     }

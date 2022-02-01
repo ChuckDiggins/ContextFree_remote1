@@ -7,17 +7,17 @@
 
 import Foundation
 
-class dNounSingle : dSingle
+public class dNounSingle : dSingle
 /*------------------------------------------------------------------
  Purpose: provide a phrase for handling noun
  single word clusters.
  ------------------------------------------------------------------*/
 {
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: .N, data: WordStateData())
     }
     
-    init(word: Word, data: WordStateData ){
+    public init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: .N, data: data)
         setGender(value: data.gender)
     }
@@ -29,14 +29,14 @@ class dNounSingle : dSingle
     func    setIsSubject(flag:Bool){m_isSubject = flag}
     func   isSubject()->Bool{return m_isSubject}
     
-    override func copyGuts(newSingle: dSingle){
+    public override func copyGuts(newSingle: dSingle){
         putClusterWord(word: newSingle.getClusterWord())
         setSentenceData(data: newSingle.getSentenceData())
         //let sd = getSentenceData()
     }
     
     
-    override func    getWordString()->String{
+    public override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         
@@ -52,7 +52,7 @@ class dNounSingle : dSingle
         }
     }
     
-    override func    getWordStringAtLanguage(language: LanguageType)->String{
+    public override func    getWordStringAtLanguage(language: LanguageType)->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         let cn = word as! Noun
@@ -72,38 +72,38 @@ class dNounSingle : dSingle
         }
     }
     
-    override func getString()->String
+    public override func getString()->String
     {
         return getWordString()
     }
     
 } //dNounSingle
 
-class dNounPhrase : dPhrase {
+public class dNounPhrase : dPhrase {
     var      m_isSubject = false
     var      m_nounType  = NounType.any
     var      m_nounCount = 0   //can we use cluster.number for this?
     var      m_isPlural  = false
     
     var type = ContextFreeSymbol.NP
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    override init(randomWord:RandomWordLists, phraseName: String, phraseType: ContextFreeSymbol){
+    public override init(randomWord:RandomWordLists, phraseName: String, phraseType: ContextFreeSymbol){
         super.init(randomWord: randomWord, phraseName: phraseName, phraseType: phraseType)
     }
     
-    init(word: Word, data: WordStateData ){
+    public init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
-    func startsWithVowelSound()->Bool{
+    public func startsWithVowelSound()->Bool{
         return getNounSingle().startsWithVowelSound()
     }
     
     
-    func getNounSingle()->dNounSingle{
+    public func getNounSingle()->dNounSingle{
         let nounSingle = dNounSingle()
         for cluster in getClusterList(){
             if cluster.getClusterType() == .N {return cluster as! dNounSingle}
@@ -111,7 +111,7 @@ class dNounPhrase : dPhrase {
         return nounSingle
     }
     
-    func reconcileForLanguage(language: LanguageType){
+    public func reconcileForLanguage(language: LanguageType){
         let npSentenceData = getSentenceData()
         for cluster in getClusterList(){
             let sym = cluster.getClusterType()
@@ -154,7 +154,7 @@ class dNounPhrase : dPhrase {
         }
     }
     
-    func reconcile(){
+    public func reconcile(){
         let npSentenceData = getSentenceData()
         for cluster in getClusterList(){
             let sym = cluster.getClusterType()
@@ -190,7 +190,7 @@ class dNounPhrase : dPhrase {
     }
     
     
-    override func getPerson()->Person{
+    public override func getPerson()->Person{
         for cluster in getClusterList() {
             let clusterType = cluster.getClusterType()
             if clusterType == .PersPro {
@@ -210,14 +210,14 @@ class dNounPhrase : dPhrase {
         return .S3
     }
     
-    func setAsSubject(flag : Bool){
+    public func setAsSubject(flag : Bool){
         m_isSubject = flag
     }
     
-    func    setNounType (type : NounType){m_nounType = type}
-    func    getNounType ()->NounType{return m_nounType}
+    public func    setNounType (type : NounType){m_nounType = type}
+    public func    getNounType ()->NounType{return m_nounType}
     
-    override func setPerson(value: Person){
+    public override func setPerson(value: Person){
         for cluster in getClusterList() {
             let clusterType = cluster.getClusterType()
             if clusterType == .PersPro {
@@ -231,14 +231,14 @@ class dNounPhrase : dPhrase {
     
 }
 
-class dNounClause : dClause {
+public class dNounClause : dClause {
     
     var type = ContextFreeSymbol.NP
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: type)
     }
     
-    init(word: Word, data: WordStateData ){
+    public init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type)
     }
     

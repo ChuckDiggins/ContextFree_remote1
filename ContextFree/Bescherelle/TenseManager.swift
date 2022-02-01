@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct TenseManager {
+public struct TenseManager {
     private var activated = [Bool]()
     private var tenseList = [Tense]()
     private var activatedIndex = 0
     
     //var currentTense = Tense.present
     
-    init(){
+    public init(){
         for tense in Tense.allCases {
             activated.append(false)
             tenseList.append(tense)
@@ -25,21 +25,21 @@ struct TenseManager {
         //toggleAllSimpleSubjunctiveTenses()
     }
 
-    func isActivated(tense: Tense)->Bool{
+    public func isActivated(tense: Tense)->Bool{
         return activated[tense.getIndex()]
     }
     
-    func getTense(tenseIndex: Int)->Tense{
+    public func getTense(tenseIndex: Int)->Tense{
         return tenseList[tenseIndex]
     }
     
-    func getRandomTense()->Tense{
+    public func getRandomTense()->Tense{
         let tenseList = getActiveTenseList()
         let i = Int.random(in: 0 ..< tenseList.count)
         return tenseList[i]
     }
     
-    func getActiveTenseList()->[Tense]{
+    public func getActiveTenseList()->[Tense]{
         var outputTenseList = [Tense]()
         var index = 0
         for active in activated {
@@ -51,7 +51,7 @@ struct TenseManager {
         return outputTenseList
     }
     
-    func areActivated(tenseList: [Tense])->[Bool]{
+    public func areActivated(tenseList: [Tense])->[Bool]{
         var activatedList = [Bool]()
         
         for tense in tenseList {
@@ -60,37 +60,37 @@ struct TenseManager {
         return activatedList
     }
 
-    mutating func toggleTense(tense: Tense){
+    public mutating func toggleTense(tense: Tense){
         activatedIndex = 0
         activated[tense.getIndex()].toggle()
     }
     
-    mutating func toggleAllSimpleIndicativeTenses(){
+    public mutating func toggleAllSimpleIndicativeTenses(){
         for tense in Tense.indicativeAll {
             activated[tense.getIndex()].toggle()
         }
     }
     
-    mutating func toggleAllCompoundIndicativeTenses(){
+    public mutating func toggleAllCompoundIndicativeTenses(){
         for tense in Tense.perfectIndicateAll {
             activated[tense.getIndex()].toggle()
         }
     }
 
-    mutating func toggleAllSimpleSubjunctiveTenses(){
+    public mutating func toggleAllSimpleSubjunctiveTenses(){
         for tense in Tense.subjunctiveAll {
             activated[tense.getIndex()].toggle()
         }
     }
     
-    mutating func toggleAllCompoundSubjunctiveTenses(){
+    public mutating func toggleAllCompoundSubjunctiveTenses(){
         for tense in Tense.perfectSubjunctiveAll {
             activated[tense.getIndex()].toggle()
         }
     }
 
 
-    func getActivatedCount() -> Int {
+    public func getActivatedCount() -> Int {
         var activatedCount = 0
         for active in activated {
             if active {activatedCount += 1}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ContextFreeFunction : String, CaseIterable {
+public enum ContextFreeFunction : String, CaseIterable {
     case Subject = "Subject"
     case DirectObject = "Direct Object"
     case IndirectObject = "Indirect Object"
@@ -17,7 +17,7 @@ enum ContextFreeFunction : String, CaseIterable {
 }
 
 
-enum ContextFreeSymbol : String, CaseIterable {
+public enum ContextFreeSymbol : String, CaseIterable {
     case arrow = "->"
     case AMB
     case UNK = "UNK"
@@ -79,7 +79,7 @@ enum ContextFreeSymbol : String, CaseIterable {
     case NCls = "NCls"
     case S = "S"   //sentence
     
-    func isSingle()->Bool{
+    public func isSingle()->Bool{
         switch self{
         case .N, .ProperName, .PersPro, .ReflP, .ImpP, .RelP, .IntP, .DemP:return true
         case .V, .AuxV, .PerfV, .ProgV, .PastPV, .GV, .SV: return true
@@ -88,21 +88,21 @@ enum ContextFreeSymbol : String, CaseIterable {
         }
     }
 
-    func isPhrase()->Bool{
+    public func isPhrase()->Bool{
         switch self{
         case .AP, .NP, .PP, .VP, .VinfP, .Vger, .AdvP: return true
         default: return false
         }
     }
     
-    func isClause()->Bool{
+    public func isClause()->Bool{
         switch self{
         case .DCls, .RCls, .AdjCls, .AdvCls, .NCls, .S: return true
         default: return false
         }
     }
     
-    func getWordType(str: String)->ContextFreeSymbol{
+    public func getWordType(str: String)->ContextFreeSymbol{
         switch str{
         case "NP":  return .NP
         case "VP": return  .VP

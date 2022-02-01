@@ -9,7 +9,7 @@ import Foundation
 
 
 //these verbs have special construction logic for several of their tenses
-enum SpecialVerbModel {
+public enum SpecialVerbModel {
     case ESTAR
     case HABER
     case REIR
@@ -32,9 +32,9 @@ struct ParsedExceptionStruct {
 }
 */
 
-struct VerbModel : Identifiable {
+public struct VerbModel : Identifiable {
     
-    struct Exception {
+    public struct Exception {
         let exceptionPattern : String
         let tense : String
         let person : String?
@@ -42,7 +42,7 @@ struct VerbModel : Identifiable {
         let to : String?
     }
     
-    let id : Int
+    public let id : Int
     let modelVerb : String
     var exceptionList = [Exception]()
     var includeWord = ""
@@ -53,7 +53,7 @@ struct VerbModel : Identifiable {
     var specialVerb = ""
     var consistentVerbEnding = ExceptionVerbEnding.none  //assume that include suffixes are not consistent verb ending
  
-    mutating func appendException(exceptionPattern: ExceptionPattern, tense : ExceptionTense, person : ExceptionPerson, from : String, to : String ) {
+    public mutating func appendException(exceptionPattern: ExceptionPattern, tense : ExceptionTense, person : ExceptionPerson, from : String, to : String ) {
         let exception = exceptionPattern.rawValue
         let tense = tense.rawValue
         let person = person.rawValue
@@ -70,12 +70,12 @@ struct VerbModel : Identifiable {
         exceptionList.append(except)
     }
     
-    mutating func appendWord(word: String){
+    public mutating func appendWord(word: String){
         includeWord = word
     }
         
     
-    mutating func appendSuffix(suffix: String){
+    public mutating func appendSuffix(suffix: String){
         includeSuffixList.append(suffix)
         
         var consistentEnding = true
@@ -100,20 +100,20 @@ struct VerbModel : Identifiable {
         
     }
     
-    mutating func appendExcludeSuffix(suffix: String){
+    public mutating func appendExcludeSuffix(suffix: String){
         excludeSuffixList.append(suffix)
     }
     
-    func hasConsistentVerbEnding(suffix: String)->Bool {
+    public func hasConsistentVerbEnding(suffix: String)->Bool {
         if suffix == consistentVerbEnding.rawValue {return true}
         return false
     }
     
-    func getConsistentVerbEnding()->String {
+    public func getConsistentVerbEnding()->String {
         return consistentVerbEnding.rawValue
     }
     
-    func isModelFor(verbWord: String)->Bool {
+    public func isModelFor(verbWord: String)->Bool {
         
         if verbWord == includeWord {
             return true
@@ -139,7 +139,7 @@ struct VerbModel : Identifiable {
     }
     
     
-    mutating func parseVerbModel()->[ParsedExceptionStruct] {
+    public mutating func parseVerbModel()->[ParsedExceptionStruct] {
         var parsedStructList = [ParsedExceptionStruct]()
         
         for exception in exceptionList {
@@ -219,7 +219,7 @@ struct VerbModel : Identifiable {
 
 }
 
-func createVerbModel(id: Int, verbWord : String, exceptionPattern: ExceptionPattern)->VerbModel
+public func createVerbModel(id: Int, verbWord : String, exceptionPattern: ExceptionPattern)->VerbModel
 {
     let id = id
     let mv = verbWord

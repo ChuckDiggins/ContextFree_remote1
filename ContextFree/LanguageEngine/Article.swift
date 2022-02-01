@@ -7,22 +7,22 @@
 
 import Foundation
 
-class Article : Word {
+public class Article : Word {
     var type: ArticleType
     
-    init(word: String, def: String, type : ArticleType){
+    public init(word: String, def: String, type : ArticleType){
         self.type = type
         super.init(word: word, wordType: .article)
     }
 }
 
-class EnglishArticle : Article {
+public class EnglishArticle : Article {
     let indefinitePreConsonsant = "a"
     let indefinitePreVowel = "an"
     let indefinitePlural = "some"
     let definite = "the"
     
-    func getIndefinite(number:Number, startingLetterIsVowelSound:Bool)->String{
+    public func getIndefinite(number:Number, startingLetterIsVowelSound:Bool)->String{
         switch number{
         case .singular:
             if startingLetterIsVowelSound {return indefinitePreVowel}
@@ -32,11 +32,11 @@ class EnglishArticle : Article {
         }
     }
     
-    func getDefinite()->String{
+    public func getDefinite()->String{
         return definite
     }
     
-    func isArticle(word: String)->(Bool, ArticleType, Number){
+    public func isArticle(word: String)->(Bool, ArticleType, Number){
         
         //check for indefinite
 
@@ -53,7 +53,7 @@ class EnglishArticle : Article {
 }
 
 
-class RomanceArticle : Article {
+public class RomanceArticle : Article {
     var indefiniteSingularMasc = ""
     var indefiniteSingularFem = ""
     var indefinitePluralMasc = ""
@@ -64,7 +64,7 @@ class RomanceArticle : Article {
     var definitePluralMasc = ""
     var definitePluralFem = ""
        
-    func getArticle(type: ArticleType, gender: Gender, number: Number)->String{
+    public func getArticle(type: ArticleType, gender: Gender, number: Number)->String{
         switch type {
         case .indefinite:
             return getIndefiniteForm(gender: gender, number: number)
@@ -77,7 +77,7 @@ class RomanceArticle : Article {
         }
     }
     
-    func getIndefiniteForm(gender: Gender, number: Number)->String{
+    public func getIndefiniteForm(gender: Gender, number: Number)->String{
         switch gender {
         case .feminine:
             switch number {
@@ -96,7 +96,7 @@ class RomanceArticle : Article {
         }
     }
 
-    func getDefiniteForm(gender: Gender, number: Number)->String{
+    public func getDefiniteForm(gender: Gender, number: Number)->String{
         switch gender {
         case .feminine:
             switch number {
@@ -115,7 +115,7 @@ class RomanceArticle : Article {
         }
     }
 
-    func isArticle(word: String)->(Bool, ArticleType, gender : Gender, number : Number){
+    public func isArticle(word: String)->(Bool, ArticleType, gender : Gender, number : Number){
 
         if word == definiteSingularFem {return (true, .definite, .feminine, .singular)}
         if word == definitePluralFem {return (true, .definite, .feminine, .plural)}
@@ -132,9 +132,9 @@ class RomanceArticle : Article {
 }
 
 
-class SpanishArticle : RomanceArticle {
+public class SpanishArticle : RomanceArticle {
     
-    init(){
+    public init(){
         super.init(word: "", def: "", type: .unknown)
         
         indefiniteSingularMasc = "un"
@@ -149,13 +149,13 @@ class SpanishArticle : RomanceArticle {
     }
 }
 
-class FrenchArticle : RomanceArticle {
+public class FrenchArticle : RomanceArticle {
     var partativeSingularMasc = ""
     var partativeSingularFem = ""
     var partativePluralMasc = ""
     var partativePluralFem = ""
     
-    init(){
+    public init(){
         super.init(word: "", def: "", type: .unknown)
         
         indefiniteSingularMasc = "un"
@@ -174,7 +174,7 @@ class FrenchArticle : RomanceArticle {
         partativePluralFem = "des"
     }
     
-    func getPartativeForm(gender: Gender, number: Number)->String{
+    public func getPartativeForm(gender: Gender, number: Number)->String{
         switch gender {
         case .feminine:
             switch number {

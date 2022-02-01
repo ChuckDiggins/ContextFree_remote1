@@ -7,20 +7,20 @@
 
 import Foundation
 
-class Preposition : Word {
+public class Preposition : Word {
     var type: PrepositionType
     
-    override init(){
+    public override init(){
         self.type = .general
         super.init(word: "", wordType: .preposition)
     }
     
-    init(word: String, type : PrepositionType){
+    public init(word: String, type : PrepositionType){
         self.type = type
         super.init(word: word, wordType: .preposition)
     }
     
-    init(json: JsonPreposition, language: LanguageType){
+    public init(json: JsonPreposition, language: LanguageType){
         self.type = PrepositionType.general
         
         switch(language){
@@ -36,7 +36,7 @@ class Preposition : Word {
         self.english = json.english
     }
     
-    func convertPrepositionTypeStringToPrepositionType(inputString: String){
+    public func convertPrepositionTypeStringToPrepositionType(inputString: String){
         type = .general
         if ( inputString == "G" ){type = .general}
         if ( inputString == "A" ){type = .assignment}
@@ -46,63 +46,63 @@ class Preposition : Word {
     }
 }
 
-class RomancePreposition : Preposition {
-    override init(word: String, type : PrepositionType){
+public class RomancePreposition : Preposition {
+    public override init(word: String, type : PrepositionType){
         super.init(word: word, type: type)
     }
     
-    override init(json: JsonPreposition, language: LanguageType){
+    public override init(json: JsonPreposition, language: LanguageType){
         super.init(json: json, language: language)
     }
     
     
-    func isPreposition(word:String)->Bool{
+    public func isPreposition(word:String)->Bool{
         if word == self.word {return true}
         return false
     }
     
-    func getPrepositionString()->String {
+    public func getPrepositionString()->String {
         return word
     }
 }
 
-class SpanishPreposition : RomancePreposition {
-    override init(word: String, type : PrepositionType){
+public class SpanishPreposition : RomancePreposition {
+    public override init(word: String, type : PrepositionType){
         super.init(word: word, type: type)
     }
     
-    init(json: JsonPreposition){
+    public init(json: JsonPreposition){
         super.init(json: json, language: .Spanish)
     }
     
 }
 
-class FrenchPreposition : RomancePreposition {
-    override init(word: String, type : PrepositionType){
+public class FrenchPreposition : RomancePreposition {
+    public override init(word: String, type : PrepositionType){
         super.init(word: word, type: type)
     }
     
-    init(json: JsonPreposition){
+    public init(json: JsonPreposition){
         super.init(json: json, language: .French)
     }
     
 }
 
-class EnglishPreposition : Preposition {
-    override init(word: String, type : PrepositionType){
+public class EnglishPreposition : Preposition {
+    public override init(word: String, type : PrepositionType){
         super.init(word: word, type: type)
     }
     
-    override init(json: JsonPreposition, language: LanguageType){
+    public override init(json: JsonPreposition, language: LanguageType){
         super.init(json: json, language: language)
     }
     
-    func isPreposition(word:String)->Bool{
+    public func isPreposition(word:String)->Bool{
         if word == self.word {return true}
         return false
     }
     
-    func getPrepositionString()->String {
+    public func getPrepositionString()->String {
         return word
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RandomWordLists  {
+public struct RandomWordLists  {
     var id = UUID()
     static func == (lhs: RandomWordLists, rhs: RandomWordLists) -> Bool {
         return lhs.m_language == rhs.m_language
@@ -43,14 +43,14 @@ struct RandomWordLists  {
         createListOfAgnosticPronouns()
     }
     
-    mutating func createListOfAgnosticAdjectives(){
+    public mutating func createListOfAgnosticAdjectives(){
         m_adjectives.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .adjective) {
             m_adjectives.append( m_wsp!.getAgnosticWordFromDictionary(wordType:.adjective, index: i))
         }
     }
     
-    mutating func createListOfAgnosticAdverbs(){
+    public  mutating func createListOfAgnosticAdverbs(){
         m_adverbs.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .adverb) {
             let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.adverb, index: i)
@@ -61,7 +61,7 @@ struct RandomWordLists  {
         }
     }
     
-    mutating func createListOfAgnosticConjunctions(){
+    public mutating func createListOfAgnosticConjunctions(){
         m_conjunctions.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .conjunction) {
             let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.conjunction, index: i)
@@ -73,7 +73,7 @@ struct RandomWordLists  {
     }
     
 
-    mutating func createListOfAgnosticDeterminers(){
+    public mutating func createListOfAgnosticDeterminers(){
         m_determiners.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .determiner) {
             let w = m_wsp!.getAgnosticWordFromDictionary(wordType:.determiner, index: i)
@@ -83,7 +83,7 @@ struct RandomWordLists  {
         }
     }
     
-    mutating func createListOfAgnosticSubjects(){
+    public mutating func createListOfAgnosticSubjects(){
         m_subjects.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
             //get language-converted noun from dictionary
@@ -94,7 +94,7 @@ struct RandomWordLists  {
         }
     }
     
-    mutating func createListOfAgnosticObjects(){
+    public mutating func createListOfAgnosticObjects(){
         m_objects.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .noun) {
             //get language-converted noun from dictionary
@@ -105,7 +105,7 @@ struct RandomWordLists  {
         }
     }
     
-    mutating func createListOfAgnosticPronouns(){
+    public mutating func createListOfAgnosticPronouns(){
         m_pronouns.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .pronoun) {
             m_pronouns.append(m_wsp!.getAgnosticWordFromDictionary(wordType:.pronoun,  index: i))
@@ -114,13 +114,13 @@ struct RandomWordLists  {
 
 
     
-    mutating func createListOfAgnosticVerbs(){
+    public mutating func createListOfAgnosticVerbs(){
         for i in 0 ..< m_wsp!.getWordCount(wordType: .verb) {
             m_verbs.append(m_wsp!.getAgnosticWordFromDictionary(wordType:.verb, index: i))
         }
     }
     
-    mutating func createListOfAgnosticPrepositions(){
+    public mutating func createListOfAgnosticPrepositions(){
         m_prepositions.removeAll()
         for i in 0 ..< m_wsp!.getWordCount(wordType: .preposition) {
             //get language-converted noun from dictionary
@@ -131,7 +131,7 @@ struct RandomWordLists  {
 
    
 
-    func getAgnosticRandomWordAsSingle(wordType : ContextFreeSymbol, isSubject:Bool)->dSingle{
+    public func getAgnosticRandomWordAsSingle(wordType : ContextFreeSymbol, isSubject:Bool)->dSingle{
         var word = Word()
         var i = 0
         var single = dSingle()

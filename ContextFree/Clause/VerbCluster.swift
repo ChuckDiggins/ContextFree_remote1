@@ -7,13 +7,13 @@
 
 import Foundation
 
-class dVerbPhrase : dPhrase {
+public class dVerbPhrase : dPhrase {
     var type = ContextFreeSymbol.VP
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: type, data: WordStateData())
     }
     
-    init(word: Word, data: WordStateData ){
+    public init(word: Word, data: WordStateData ){
         super.init(word: word, clusterType: type, data: data)
     }
     
@@ -25,13 +25,13 @@ class dVerbPhrase : dPhrase {
     var m_subjectCluster = dCluster(word: Word(), clusterType: .PersPro)
  
     var m_verbType = VerbType.normal
-    func setVerbType(type: VerbType ){m_verbType = type}
-    func getVerbType()->VerbType{return m_verbType}
+    public func setVerbType(type: VerbType ){m_verbType = type}
+    public func getVerbType()->VerbType{return m_verbType}
     
-    func setSubjectCluster(cluster: dCluster){m_subjectCluster = cluster}
-    func getSubjectCluster()->dCluster{return m_subjectCluster}
+    public func setSubjectCluster(cluster: dCluster){m_subjectCluster = cluster}
+    public func getSubjectCluster()->dCluster{return m_subjectCluster}
     
-    override func setPerson(value: Person){
+    public override func setPerson(value: Person){
         for cluster in getClusterList(){
             if cluster.getClusterType() == .V {
                 let v = cluster as! dVerbSingle
@@ -44,7 +44,7 @@ class dVerbPhrase : dPhrase {
         }
     }
     
-    override func getPerson()->Person{
+    public override func getPerson()->Person{
         for cluster in getClusterList(){
             if cluster.getClusterType() == .V {
                 let v = cluster as! dVerbSingle
@@ -59,7 +59,7 @@ class dVerbPhrase : dPhrase {
     }
     
     
-    override func setTense(value: Tense){
+    public override func setTense(value: Tense){
         for cluster in getClusterList(){
             if cluster.getClusterType() == .V {
                 let v = cluster as! dVerbSingle
@@ -73,7 +73,7 @@ class dVerbPhrase : dPhrase {
         }
     }
     
-    override func getTense()->Tense{
+    public override func getTense()->Tense{
         for cluster in getClusterList(){
             if cluster.getClusterType() == .V {
                 let v = cluster as! dVerbSingle
@@ -96,22 +96,22 @@ class dVerbPhrase : dPhrase {
     func getComputedPerson()->Person{return m_computedPerson}
     */
     
-    func isConjugated()->Bool{return m_isConjugated}
-    func isToBe()->Bool{return m_toBe}
-    func isPerfect()->Bool{return m_isPerfect}
+    public func isConjugated()->Bool{return m_isConjugated}
+    public func isToBe()->Bool{return m_toBe}
+    public func isPerfect()->Bool{return m_isPerfect}
 
 }
 
-class dVerbSingle : dSingle
+public class dVerbSingle : dSingle
 /*------------------------------------------------------------------
  Purpose: provide a phrase for handling verb single word clusters.
  ------------------------------------------------------------------*/
 {
-    override init(){
+    public override init(){
         super.init(word: Word(), clusterType: .V, data: WordStateData())
     }
     
-    init(word: Word, data: WordStateData){
+    public init(word: Word, data: WordStateData){
         super.init(word: word, clusterType: .V, data: data)
     }
     
@@ -126,41 +126,41 @@ class dVerbSingle : dSingle
     var    m_isPassive = false
     var    m_isAuxiliary = false
     
-    func   setIsAuxillary(flag : Bool){m_isAuxiliary = flag}
-    func   setIsConjugated(flag : Bool){m_isConjugated = flag}
-    func   isConjugated()->Bool{return m_isConjugated}
-    func   isToBe()->Bool{return m_toBe}
-    func   isPerfect()->Bool{return m_isPerfect}
+    public func   setIsAuxillary(flag : Bool){m_isAuxiliary = flag}
+    public func   setIsConjugated(flag : Bool){m_isConjugated = flag}
+    public func   isConjugated()->Bool{return m_isConjugated}
+    public func   isToBe()->Bool{return m_toBe}
+    public func   isPerfect()->Bool{return m_isPerfect}
     
     
     //func    processCompoundTense(){flag = true}
-    func    setAuxiliaryType(type:AuxiliaryType){m_auxiliaryType = type}
-    func    getAuxiliaryType()->AuxiliaryType{return m_auxiliaryType}
-    func    getModalAuxiliaryType()->AuxiliaryType{return m_modalAuxiliaryType}
-    func    isPassive()->Bool{return m_isPassive}
-    func    setPassive(flag: Bool){m_isPassive = flag}
-    func    constructPassiveTense(tense : Tense){}
+    public func    setAuxiliaryType(type:AuxiliaryType){m_auxiliaryType = type}
+    public func    getAuxiliaryType()->AuxiliaryType{return m_auxiliaryType}
+    public func    getModalAuxiliaryType()->AuxiliaryType{return m_modalAuxiliaryType}
+    public func    isPassive()->Bool{return m_isPassive}
+    public func    setPassive(flag: Bool){m_isPassive = flag}
+    public func    constructPassiveTense(tense : Tense){}
     
-    func    extractActiveTense()->Tense{return .present}
+    public func    extractActiveTense()->Tense{return .present}
     
-    func    setBestPrep(word: String){m_bestPreposition = word}
-    func    getBestPrep()->String{return m_bestPreposition}
-    func    setVerbType (type: VerbType){m_verbType = type}
-    func    getVerbType ()->VerbType{return m_verbType}
+    public func    setBestPrep(word: String){m_bestPreposition = word}
+    public func    getBestPrep()->String{return m_bestPreposition}
+    public func    setVerbType (type: VerbType){m_verbType = type}
+    public func    getVerbType ()->VerbType{return m_verbType}
     
-    func    setBVerb(bVerb: BVerb)
+    public func    setBVerb(bVerb: BVerb)
     {
         let bv = getClusterWord() as! Verb
         bv.setBVerb(bVerb: bVerb)
     }
     
-    func    getBVerb(bVerb: BVerb)->BVerb
+    public func    getBVerb(bVerb: BVerb)->BVerb
     {
         let bv = getClusterWord() as! Verb
         return bv.getBVerb()
     }
     
-    func getLanguageString(language: LanguageType)->String{
+    public func getLanguageString(language: LanguageType)->String{
         
         let v = getClusterWord() as! Verb
         switch language{
@@ -175,11 +175,11 @@ class dVerbSingle : dSingle
         }
     }
     
-    func getPhraseVerb()->String{
+    public func getPhraseVerb()->String{
         return ""
     }
     
-    override func    getWordString()->String{
+    public override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         switch sd.language {
@@ -194,30 +194,30 @@ class dVerbSingle : dSingle
         }
     }
     
-    override func getString()->String
+    public override func getString()->String
     {
         return getWordString()
     }
-    func    getString( tense: Tense,  clusterString: SentenceWordList)->String{return ""}
-    func    getString( tense: Tense,  clusterString: SentenceWordList, subj : dNounSingle)->String{return ""}
+    public func    getString( tense: Tense,  clusterString: SentenceWordList)->String{return ""}
+    public func    getString( tense: Tense,  clusterString: SentenceWordList, subj : dNounSingle)->String{return ""}
     
     
 } //dVerbSingle
 
-class dSpanishVerbSingle : dVerbSingle
+public class dSpanishVerbSingle : dVerbSingle
 /*------------------------------------------------------------------
  Purpose: provide a phrase for handling verb single word clusters.
  ------------------------------------------------------------------*/
 {
-    override init(){
+    public override init(){
         super.init()
     }
     
-    override init(word: Word, data: WordStateData){
+    public override init(word: Word, data: WordStateData){
         super.init(word: word, data: data)
     }
 
-    override func    getWordString()->String{
+    public override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         let verb = word as! SpanishVerb
@@ -227,20 +227,20 @@ class dSpanishVerbSingle : dVerbSingle
 
 }
 
-class dFrenchVerbSingle : dVerbSingle
+public class dFrenchVerbSingle : dVerbSingle
 /*------------------------------------------------------------------
  Purpose: provide a phrase for handling verb single word clusters.
  ------------------------------------------------------------------*/
 {
-    override init(){
+    public override init(){
         super.init()
     }
     
-    override init(word: Word, data: WordStateData){
+    public override init(word: Word, data: WordStateData){
         super.init(word: word, data: data)
     }
 
-    override func    getWordString()->String{
+    public override func    getWordString()->String{
         let sd = getSentenceData()
         let word = getClusterWord()
         let verb = word as! FrenchVerb
