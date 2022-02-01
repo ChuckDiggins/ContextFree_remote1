@@ -30,10 +30,17 @@ class CFModelView: ObservableObject {
         return cfModel!.bundleManager
     }
     
+    func getPhraseManager()->dPhraseManager{
+        return cfModel!.phraseManager
+    }
+    
     func getWordCollectionManager()->dWordCollectionManager{
         return cfModel!.m_wsp.wordCollectionManager
     }
     
+//    func getJsonWordCollectionManager()->JSONCollectionManager{
+//        return cfModel!json
+//    }
     func setCurrentClusterAndWordTypeForFilling(cluster: dCluster, wordType: WordType){
         activeCluster = cluster
         activeWordType = wordType

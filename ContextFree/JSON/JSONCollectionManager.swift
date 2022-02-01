@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+
 class JSONCollectionManager: Codable {
      
     var myCollectionList = [JSONCollectionStruct]()
@@ -16,6 +18,15 @@ class JSONCollectionManager: Codable {
     
     func printOne(jv: JSONCollectionStruct){
         print(jv)
+    }
+    
+    func convertWordCollectionsToJSONCollectionStructsAndEncode(wordCollectionList : [dWordCollection]){
+        myCollectionList.removeAll()
+        for collection in wordCollectionList{
+            let jwcs = getJsonWordCollectionStructFromWordCollection(wordCollection: collection)
+            myCollectionList.append(jwcs)
+        }
+        encodeWords()
     }
     
     func encodeWordCollections(total: Int){
@@ -92,7 +103,7 @@ class JSONCollectionManager: Codable {
             return myCollectionList[0].collectionName  //need a default
         }
         else {
-            let collection = myCollectionList[index]
+//            let collection = myCollectionList[index]
             return myCollectionList[index].collectionName
         }
     }

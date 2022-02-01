@@ -14,6 +14,10 @@ struct dPhraseManager{
         m_clusterList.append(cluster)
     }
     
+    func getClusterList()->[dCluster]{
+        return m_clusterList
+    }
+    
     func getCluster(index: Int)->dCluster{
         if index >= 0 && index < m_clusterList.count { return m_clusterList[index] }
         return dCluster()

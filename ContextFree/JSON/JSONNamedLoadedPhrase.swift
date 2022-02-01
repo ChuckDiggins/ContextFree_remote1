@@ -65,8 +65,7 @@ struct JSONNamedLoadedPhrase: Codable {
         }
         if clusterList.count > 0 {
             var subCluster = dCluster()
-            for c in clusterList {
-                var wordType = getWordTypeFromString(str: c.wordType)
+            for _ in clusterList {
                 switch phraseType{
                 case "NP": subCluster = dNounPhrase()
                 case "VP": subCluster = dVerbPhrase()

@@ -76,7 +76,7 @@ struct BuildNamedPhraseView: View {
                     HStack{
                         Button("Create test phrase:" , action: {
                             if wordViewModel.hasPhrase(){
-                                var phrase = wordViewModel.getPhrase() as! dPhrase
+                                let phrase = wordViewModel.getPhrase()
                                 phrase.createNewRandomPhrase()
                                 phrase.processInfo()
                                 testPhrase = phrase.getStringAtLanguage(language: .Spanish)
@@ -130,7 +130,7 @@ struct BuildNamedPhraseView: View {
                     .font(.caption2)
             } .onAppear{
                 wordViewModel.setPhrase(phrase: m_phrase)
-                var phrase = m_phrase as! dPhrase
+                let phrase = m_phrase as! dPhrase
                 phrase.setRandomWordList(randomWordList: cfModelView.getRandomWordList())
                
             }

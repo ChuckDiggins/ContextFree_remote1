@@ -31,7 +31,7 @@ struct CFModel{
     private var m_currentPerson : Person = .S1
 
     private var bReconstructVerbModels = false
-    //private var bUseJsonStarterFiles = true   //this will reconstruct json words from user-supplied files, any other words will be lost
+    private var bUseJsonStarterFiles = false   //this will reconstruct json words from user-supplied files, any other words will be lost
     private var m_randomSentence : RandomSentence!
     private var m_randomWordLists : RandomWordLists!
 
@@ -40,6 +40,7 @@ struct CFModel{
     var jsonPhraseManager = JsonPhraseManager()
     var jsonBundleManager = JSONBundleManager()
     var jsonClauseManager = JsonClauseManager()
+    var jsonWordCollectionManager = JSONCollectionManager()
     var m_jsonDictionaryManager = JSONDictionaryManager()
     
     var phraseManager = dPhraseManager()
@@ -113,20 +114,20 @@ struct CFModel{
     }
     
     mutating func loadJsonPhrasesAndClauses(){
-        jsonPhraseManager.encodeInternalPhrases(total: 2000)
+//        if bUseJsonStarterFiles {
+            jsonPhraseManager.encodeInternalPhrases(total: 2000)
+//        }
         createPhrasesFromJsonPhrases()
         print("phraseManager phrase count = \(phraseManager.getClusterCount())")
-        ////jsonClauseManager.encodeInternalClauses(total: 2000)
     }
     mutating func loadJsonBundles(){
-        jsonBundleManager.encodeBundles(total: 2000)
+        //if bUseJsonStarterFiles {
+            jsonBundleManager.encodeBundles(total: 2000)
+        //}
         createBundlesFromJsonBundles()
         print("bundleManager bundle count = \(bundleManager.getBundleCount())")
-        ////jsonClauseManager.encodeInternalClauses(total: 2000)
     }
-    
-   
-    
+
     mutating func createBundlesFromJsonBundles(){
         for jsonBundle in jsonBundleManager.myBundleList {
             let bundleName = jsonBundle.bundleName
@@ -158,7 +159,7 @@ struct CFModel{
 
     mutating func createPhraseFromJsonPhrase(jsonPhrase: JSONNamedLoadedPhrase)->dCluster{
     let clusterType = getClusterTypeFromString(str: jsonPhrase.phraseType)
-        var np = dPhrase(randomWord: m_randomWordLists!, phraseName: jsonPhrase.phraseName, phraseType: clusterType)
+        let np = dPhrase(randomWord: m_randomWordLists!, phraseName: jsonPhrase.phraseName, phraseType: clusterType)
         //rebuild all of the member clusters from the jsonPhrase cluster list
         for jsonCluster in jsonPhrase.clusterList {
             np.appendCluster(cluster: m_randomWordLists.getAgnosticRandomWordAsSingle(wordType: getClusterTypeFromString(str: jsonCluster.wordType), isSubject:false))

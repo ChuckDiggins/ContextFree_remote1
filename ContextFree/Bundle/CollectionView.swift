@@ -45,7 +45,7 @@ struct CollectionView: View {
             }
             
             .listStyle(GroupedListStyle())
-            .navigationTitle("Bundle List")
+            .navigationTitle("Collection List")
             .navigationBarItems(
                 leading: EditButton(),
                 trailing: addButton)

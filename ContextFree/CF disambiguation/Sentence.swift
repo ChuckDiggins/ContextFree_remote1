@@ -207,7 +207,7 @@ struct Sentence  {
                 np.reconcile()
             }
             
-            let lastIndex = firstClusterIndex + matchCount-1
+//            let lastIndex = firstClusterIndex + matchCount-1
 //            replaceClusterRange(firstIndex: firstClusterIndex, lastIndex: lastIndex , cluster: newPhrase)
             return firstClusterIndex + 1
         }

@@ -78,7 +78,7 @@ class dCluster : Hashable {
     }
     
     func replaceClusterWordWithRandomAssociatedWord(){
-        var index = Int.random(in: 0..<m_associatedWordList.count)
+        let index = Int.random(in: 0..<m_associatedWordList.count)
         m_clusterWord = m_associatedWordList[index]
     }
     

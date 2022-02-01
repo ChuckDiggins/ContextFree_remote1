@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct JSONWord : Codable, CustomStringConvertible {
     var spanish: String
     var english: String
@@ -20,6 +21,8 @@ struct JSONWord : Codable, CustomStringConvertible {
         let word = Word(word: spanish, spanish: spanish, french: french, english: english, wordType: getWordTypeFromString(str: wordType))
         return word
     }
+    
+    
 }
 
 struct JSONCollectionStruct : Codable, CustomStringConvertible {
@@ -34,6 +37,15 @@ struct JSONCollectionStruct : Codable, CustomStringConvertible {
         self.idNum = idNum
         self.collectionName = collectionName
         self.wordList = wordList
+    }
+    
+    init(idNum: Int, collectionName: String){
+        self.idNum = idNum
+        self.collectionName = collectionName
+    }
+    
+    mutating func appendJsonWord(jw: JSONWord){
+        wordList.append(jw)
     }
     
     func printThyself(){
@@ -74,7 +86,6 @@ class JSONWordCollection: Codable {
         
         for v in wordList{
             myWordList.append(v)
-            //print("JSONWordCollection: appending word \(v.spanish), \(v.french), \(v.english)")
             if myWordList.count >= total {break}
         }
         encodeWords()
@@ -83,9 +94,6 @@ class JSONWordCollection: Codable {
     func encodeWords(){
         //encode to JSON
         let encoder = JSONEncoder()
-//        if let encodedPreps = try? encoder.encode(collectionName){
-//            try? encodedPreps.write(to: getURL(), options: .noFileProtection)
-//        }
         if let encodedPreps = try? encoder.encode(myWordList){
             try? encodedPreps.write(to: getURL(), options: .noFileProtection)
         }
@@ -125,7 +133,6 @@ class JSONWordCollection: Codable {
     }
     
     func getWordAt(index: Int)->Word{
-        var word = Word()
         if index > myWordList.count-1 {
             return Word()
         }

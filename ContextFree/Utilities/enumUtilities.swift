@@ -26,6 +26,7 @@ func getClusterTypeFromString(str: String)->ContextFreeSymbol{
                 
 func getWordTypeFromString(str: String)->WordType{
     switch str{
+    case "determiner": return .determiner
     case "noun": return .noun
     case "verb": return .verb
     case "adjective": return .adjective
@@ -35,6 +36,20 @@ func getWordTypeFromString(str: String)->WordType{
     default: return .ambiguous
     }
 }
+
+func getStringFromWordType(wordType: WordType)->String{
+    switch wordType{
+    case .noun: return "noun"
+    case .verb: return "verb"
+    case .adjective: return "adjective"
+    case .adverb: return  "adverb"
+    case .preposition: return "preposition"
+    case .conjunction: return "conjunction"
+    case .determiner: return "determiner"
+    default: return "ambiguous"
+    }
+}
+
 
 func getTenseFromString(str: String)->Tense{
     switch str.lowercased(){
