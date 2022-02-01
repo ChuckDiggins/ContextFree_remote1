@@ -12,7 +12,7 @@ enum JsonCollectionTypes : String {
     //case CarpenterChapter3
     case Simple
 }
-
+//fdfd
 enum JsonWordType : String, Decodable {
     case adjective
     case adverb
