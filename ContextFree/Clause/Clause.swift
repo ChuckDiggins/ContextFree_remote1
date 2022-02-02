@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 public class dClause : dCluster, ObservableObject {
     @Published private(set) var clause = dClause.self

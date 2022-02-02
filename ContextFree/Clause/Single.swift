@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import JumpLinguaHelpers
 
 public class dSingle  : dCluster, Identifiable
 /*------------------------------------------------------------------

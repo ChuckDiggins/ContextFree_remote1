@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 class  ClauseModel: ObservableObject {
     @Published var currentSingleIndex: Int

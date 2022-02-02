@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 class  LanguageSelection : ObservableObject{
     @Published var selectedLanguage: LanguageType

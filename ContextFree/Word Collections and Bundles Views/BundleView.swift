@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct BundleView: View {
     @EnvironmentObject var cfModelView : CFModelView
@@ -87,7 +88,7 @@ struct BundleView: View {
                 VStack{
                     Text("Word collections:").bold()
                     ForEach (0..<currentBundle.getCollectionCount()){ i in
-                        Text(currentBundle.getWordCollection(index: i).collectionName)
+                        Text(currentBundle.getWordCollection(index: i).getCollectionName())
                     }
                 }.background(Color.green.opacity(0.3))
                     .padding()

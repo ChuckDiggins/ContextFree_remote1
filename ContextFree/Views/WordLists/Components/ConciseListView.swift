@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import JumpLinguaHelpers
 
 
 struct ConciseListView: View {

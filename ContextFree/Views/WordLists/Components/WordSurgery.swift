@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct WordSurgery: View {
     var body: some View {

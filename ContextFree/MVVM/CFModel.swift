@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 //this is where every little thing is constructed
 
@@ -45,7 +46,9 @@ struct CFModel{
     
     var phraseManager = dPhraseManager()
     var bundleManager = dBundleManager()
-   
+    var m_spanishVerbModelConjugation = RomanceVerbModelConjugation()
+    var m_frenchVerbModelConjugation = RomanceVerbModelConjugation()
+    var m_englishVerbModelConjugation = EnglishVerbModelConjugation()
     
     var m_currentTenseIndex = 0
     

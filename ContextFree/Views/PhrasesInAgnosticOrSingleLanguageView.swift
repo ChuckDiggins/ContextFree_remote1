@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct PhrasesInAgnosticOrSingleLanguageView: View {
     @EnvironmentObject var cfModelView : CFModelView
@@ -232,7 +233,7 @@ struct PhrasesInAgnosticOrSingleLanguageView: View {
         //AgnosticPhraseMapping
         for i in 0..<phraseStringList.count {
             phraseColorList.append(.green)
-            let pim = PhraseIndexMapping(cfs : singleList[i].getWordType(), agnosticIndex: i, spanishIndex: i, frenchIndex: i, englishIndex: i)
+            let pim = PhraseIndexMapping(cfs : singleList[i].getWordType(), agnosticIndex: i, spanishIndex: i, englishIndex: i, frenchIndex: i)
             phraseIndexMapping.append(pim)
         }
     

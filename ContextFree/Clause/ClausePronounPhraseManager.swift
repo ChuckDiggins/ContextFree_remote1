@@ -6,13 +6,16 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 //pulls subject and object pronoun phrases from a given clause
 
-struct ClausePronounPhraseManager{
+public struct ClausePronounPhraseManager{
     var clause : dIndependentAgnosticClause
     
-    func getPronoun(language: LanguageType, type : PronounType)->Pronoun{
+    
+    
+    public func getPronoun(language: LanguageType, type : PronounType)->Pronoun{
         switch type{
         case .SUBJECT: return getSubjectPronoun(language: language)
         case .DIRECT_OBJECT: return getDirectObjectPronoun(language: language)
@@ -21,7 +24,7 @@ struct ClausePronounPhraseManager{
         }
     }
     
-    func getPronounString(language: LanguageType, type : PronounType)->String{
+    public  func getPronounString(language: LanguageType, type : PronounType)->String{
         let pronoun = getPronoun(language: language, type: type)
         let person = clause.getPerson()
         let gender = clause.getGender()
@@ -58,7 +61,7 @@ struct ClausePronounPhraseManager{
 //        return ""
 //    }
 //    
-    func getSubjectPronoun(language: LanguageType)->Pronoun
+    public func getSubjectPronoun(language: LanguageType)->Pronoun
     {
     if ( clause.headNoun.getClusterType() == .UNK){
         clause.setHeadNounAndHeadVerb()
@@ -70,7 +73,7 @@ struct ClausePronounPhraseManager{
     return Pronoun()
     }
     
-    func getDirectObjectPronoun(language: LanguageType)->Pronoun{
+    public func getDirectObjectPronoun(language: LanguageType)->Pronoun{
         let hvp = clause.headVerb as! dVerbPhrase
         if hvp.hasClusterFunction(fn: .DirectObject){
             let c = hvp.getClusterAtFunction(fn: .DirectObject)
@@ -80,7 +83,7 @@ struct ClausePronounPhraseManager{
         return Pronoun()
     }
     
-    func getIndirectObjectPronoun(language: LanguageType)->Pronoun{
+    public func getIndirectObjectPronoun(language: LanguageType)->Pronoun{
         let hvp = clause.headVerb as! dVerbPhrase
         if hvp.hasClusterFunction(fn: .DirectObject){
             let c = hvp.getClusterAtFunction(fn: .IndirectObject)
@@ -93,7 +96,7 @@ struct ClausePronounPhraseManager{
     
     
     
-    func getDirectObjectPronounString(language: LanguageType)->String{
+    public func getDirectObjectPronounString(language: LanguageType)->String{
         let hvp = clause.headVerb as! dVerbPhrase
         if hvp.hasClusterFunction(fn: .DirectObject){
             let c = hvp.getClusterAtFunction(fn: .DirectObject)
@@ -103,7 +106,7 @@ struct ClausePronounPhraseManager{
         return ""
     }
     
-    func getIndirectObjectPronounString(language: LanguageType)->String{
+    public func getIndirectObjectPronounString(language: LanguageType)->String{
         let hvp = clause.headVerb as! dVerbPhrase
         if hvp.hasClusterFunction(fn: .IndirectObject){
             let c = hvp.getClusterAtFunction(fn: .IndirectObject)

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 //
 //  WordViewModel.swift
@@ -74,7 +75,8 @@ class  RegularWordViewModel : ObservableObject {
     }
     
     func getWordType(index: Int)->WordType{
-        return ContextFree.getWordType(clusterType: regularPhrase.getCluster(index:index).getClusterType())
+        let clusterType = regularPhrase.getCluster(index:index).getClusterType()
+        return getEquivalentWordType(clusterType: clusterType)
     }
     
     func getClusterType(index: Int)->ContextFreeSymbol{

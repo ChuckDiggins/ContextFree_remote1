@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct ExpandedAdjectiveView: View {
     @State var words : Array<ModifierComponent>

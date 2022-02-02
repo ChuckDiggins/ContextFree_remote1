@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import JumpLinguaHelpers
 
 struct MultiVerbConjugation: View {
     @EnvironmentObject var cfModelView : CFModelView

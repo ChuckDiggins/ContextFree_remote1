@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 public class WordStateData : Hashable, Equatable {
     var title: String = ""

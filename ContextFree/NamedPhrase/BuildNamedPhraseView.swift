@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 
 struct BuildNamedPhraseView: View {
@@ -182,6 +183,6 @@ struct BuildNamedPhraseView: View {
 
 struct BuildNamedPhraseView_Previews: PreviewProvider {
     static var previews: some View {
-        BuildNamedPhraseView(clusterType: .AMB)
+        BuildNamedPhraseView(clusterType: ContextFreeSymbol.UNK)
     }
 }

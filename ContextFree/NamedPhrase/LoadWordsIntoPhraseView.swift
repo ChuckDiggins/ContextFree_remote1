@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 //see How to use @ObservableObject and @StateObject in SwiftUI - Bootcamp#50
 

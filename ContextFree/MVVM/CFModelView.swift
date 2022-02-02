@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 class CFModelView: ObservableObject {
     private var cfModel : CFModel?

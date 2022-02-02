@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 struct ContextFreeLesson {
     var m_lessonName : String

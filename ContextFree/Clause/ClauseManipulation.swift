@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JumpLinguaHelpers
 
 struct ClauseManipulation{
     var m_clause : dIndependentAgnosticClause

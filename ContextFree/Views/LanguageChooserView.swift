@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct LanguageChooserView: View {
     //@EnvironmentObject var cfModelView : CFModelView

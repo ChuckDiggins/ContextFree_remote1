@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 let categories = ["Regular", "Irregular", "Demonst!", "Inter?", "Poss"]
 

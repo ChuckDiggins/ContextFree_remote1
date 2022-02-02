@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct ShowNounStuffView: View {
     @EnvironmentObject var awmModelView : AWMModelView

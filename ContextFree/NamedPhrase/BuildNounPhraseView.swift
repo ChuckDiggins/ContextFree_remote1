@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct BuildNounPhraseView : View {
     @EnvironmentObject var cfModelView : CFModelView

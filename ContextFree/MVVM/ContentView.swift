@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct ContentView: View {
     @State private var sentence: String = ""

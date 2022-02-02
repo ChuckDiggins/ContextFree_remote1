@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//import JumpLinguaHelpers
+import JumpLinguaHelpers
 
 @main
 struct ContextFreeApp: App {
@@ -19,6 +19,9 @@ struct ContextFreeApp: App {
             
             ContentView()
                 .environmentObject(cfModelView)
+                .onAppear {
+                    Rebeloper.work()
+                }
         }
     }
 }

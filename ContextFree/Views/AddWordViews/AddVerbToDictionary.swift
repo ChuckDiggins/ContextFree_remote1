@@ -9,6 +9,7 @@
 //
 
 import SwiftUI
+import JumpLinguaHelpers
 
 struct VerbOption : Identifiable {
     var id : Int

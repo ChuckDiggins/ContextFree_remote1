@@ -5,16 +5,20 @@
 //  Created by Charles Diggins on 4/3/21.
 //
 
+
+//    override init(){
+//        super.init(word: Word(), clusterType: .S)
+//    }
+//
+//    init(word: Word){
+//        super.init(word: word, clusterType: .S)
+//    }
+
 import Foundation
+import JumpLinguaHelpers
 
-class dSentence : dClause {
-    override init(){
-        super.init(word: Word(), clusterType: .S)
-    }
+public class dSentence : dClause {
 
-    init(word: Word){
-        super.init(word: word, clusterType: .S)
-    }
 
     var subClauseList = Array<dClause>()
 
