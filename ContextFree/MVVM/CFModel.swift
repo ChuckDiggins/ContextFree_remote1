@@ -37,15 +37,13 @@ struct CFModel{
     private var m_randomWordLists : RandomWordLists!
 
     var m_wsp : WordStringParser!
-    
-    var jsonPhraseManager = JsonPhraseManager()
-    var jsonBundleManager = JSONBundleManager()
     var jsonClauseManager = JsonClauseManager()
-    var jsonWordCollectionManager = JSONCollectionManager()
     var m_jsonDictionaryManager = JSONDictionaryManager()
-    
-    var phraseManager = dPhraseManager()
-    var bundleManager = dBundleManager()
+//    var jsonWordCollectionManager = JSONCollectionManager()
+//    var jsonPhraseManager = JsonPhraseManager()
+//    var jsonBundleManager = JSONBundleManager()
+//    var phraseManager = dPhraseManager()
+//    var bundleManager = dBundleManager()
     var m_spanishVerbModelConjugation = RomanceVerbModelConjugation()
     var m_frenchVerbModelConjugation = RomanceVerbModelConjugation()
     var m_englishVerbModelConjugation = EnglishVerbModelConjugation()
@@ -66,20 +64,22 @@ struct CFModel{
         
         m_disambiguation.setWordStringParser(wsp: m_wsp)
         createVerbModels()
-        buildSomeStuff()
+
         m_tenseList = tenseManager.getActiveTenseList()
         
         m_jsonDictionaryManager.setWordStringParser(wsp: m_wsp)
         m_jsonDictionaryManager.loadJsonWords()
         m_wsp.getWordCounts()
         
-        //loadJsonWords()
+        
         
         m_randomWordLists = RandomWordLists(wsp: m_wsp)
         m_randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleClause)
 
-        loadJsonPhrasesAndClauses()
-        loadJsonBundles()
+//        buildSomeStuff()
+//        loadJsonWords()
+//        loadJsonPhrasesAndClauses()
+//        loadJsonBundles()
     }
 
     func getRandomWordLists()->RandomWordLists{
@@ -116,116 +116,18 @@ struct CFModel{
         }
     }
     
-    mutating func loadJsonPhrasesAndClauses(){
-//        if bUseJsonStarterFiles {
-            jsonPhraseManager.encodeInternalPhrases(total: 2000)
-//        }
-        createPhrasesFromJsonPhrases()
-        print("phraseManager phrase count = \(phraseManager.getClusterCount())")
-    }
-    mutating func loadJsonBundles(){
-        //if bUseJsonStarterFiles {
-            jsonBundleManager.encodeBundles(total: 2000)
-        //}
-        createBundlesFromJsonBundles()
-        print("bundleManager bundle count = \(bundleManager.getBundleCount())")
-    }
-
-    mutating func createBundlesFromJsonBundles(){
-        for jsonBundle in jsonBundleManager.myBundleList {
-            let bundleName = jsonBundle.bundleName
-            let idNum = jsonBundle.idNum
-            let teacher = jsonBundle.teacher
-            var tenseList = [Tense]()
-            for str in jsonBundle.tenseList{
-                let tense = getTenseFromString(str: str)
-                tenseList.append(tense)
-            }
-            //look for phrases in phraseManager
-            
-            var phraseList = [dCluster]()
-            for jsonPhrase in jsonBundle.phraseList{
-                let name = jsonPhrase.phraseName
-                let phrase = phraseManager.getClusterByName(clusterName: name)
-                phraseList.append(phrase)
-            }
-            var wordCollectionList = [dWordCollection]()
-            for jsonCollection in jsonBundle.collectionList{
-                let name = jsonCollection.collectionName
-                let collection = m_wsp.wordCollectionManager.getCollectionByName(collectionName: name)
-                wordCollectionList.append(collection)
-            }
-            let bundle = dBundle(idNum: idNum, teacher: teacher, bundleName: bundleName, tenseList: tenseList, collectionList: wordCollectionList, phraseList: phraseList)
-            bundleManager.appendBundle(bundle: bundle)
-        }
-    }
-
-    mutating func createPhraseFromJsonPhrase(jsonPhrase: JSONNamedLoadedPhrase)->dCluster{
-    let clusterType = getClusterTypeFromString(str: jsonPhrase.phraseType)
-        let np = dPhrase(randomWord: m_randomWordLists!, phraseName: jsonPhrase.phraseName, phraseType: clusterType)
-        //rebuild all of the member clusters from the jsonPhrase cluster list
-        for jsonCluster in jsonPhrase.clusterList {
-            np.appendCluster(cluster: m_randomWordLists.getAgnosticRandomWordAsSingle(wordType: getClusterTypeFromString(str: jsonCluster.wordType), isSubject:false))
-            if jsonPhrase.wordListCount() > 0 {
-                for jsonWord in jsonPhrase.wordList{
-                    let word = m_jsonDictionaryManager.getExistingWord(jsonWord: jsonWord)
-                    np.appendWordToAssociatedWordList(word: word)
-                }
-            }
-        }
-        return np
-    }
-
-    mutating func createPhrasesFromJsonPhrases(){
-        var np = dPhrase()
-        
-        for jsonPhrase in jsonPhraseManager.myList {
-            let clusterType = getClusterTypeFromString(str: jsonPhrase.phraseType)
-            //if rebuilding a phrase ...
-            if (clusterType != .AMB){
-                np = dPhrase(randomWord: m_randomWordLists!, phraseName: jsonPhrase.phraseName, phraseType: clusterType)
-                //rebuild all of the member clusters from the jsonPhrase cluster list
-                for jsonCluster in jsonPhrase.clusterList {
-                    np.appendCluster(cluster: m_randomWordLists.getAgnosticRandomWordAsSingle(wordType: getClusterTypeFromString(str: jsonCluster.wordType), isSubject:false))
-                    if jsonPhrase.wordListCount() > 0 {
-                        for jsonWord in jsonPhrase.wordList{
-                            let word = m_jsonDictionaryManager.getExistingWord(jsonWord: jsonWord)
-                            np.appendWordToAssociatedWordList(word: word)
-                        }
-                    }
-                }
-                phraseManager.appendCluster(cluster: np)
-            }
-            //not legitimate phrase type
-            else {
-                
-            }
-        }
-    }
+//
 
     func getRandomSentenceObject()->RandomSentence?{
         return m_randomSentence
     }
-    
-//    mutating func getAgnosticRandomSubjPronounSentence()->dIndependentAgnosticClause{
-//        m_randomSentence = RandomSentence(wsp: m_wsp, rft: .subjectPronounVerb)
-//        return m_randomSentence.createAgnosticSubjectPronounVerbClause()
-//    }
 
     mutating func getRandomAgnosticSentence()->dIndependentAgnosticClause{
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .twoArticles)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simplePrepositionPhrase)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleVerbPhrase)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .complexNounPhrase)
-        //var randomSentence = RandomSentence(wsp: m_wsp, rft: .simpleNounPhrase)
         if m_currentLanguage == .English {
             m_randomSentence.setRandomPhraseType(rft: .simpleEnglishClause)
             return m_randomSentence.createRandomAgnosticPhrase(phraseType: .simpleEnglishClause)
         }
         else {
-            //m_randomSentence.setRandomPhraseType(rft: .simpleClause)
-            //m_randomSentence.setRandomPhraseType(rft: .simpleNounPhrase)
-            //return m_randomSentence.createRandomAgnosticPhrase(phraseType: .simpleVerbAdverbPhrase)
             return m_randomSentence.createRandomAgnosticPhrase(phraseType: .subjectPronounVerb)
         }
     }
@@ -321,33 +223,119 @@ struct CFModel{
         return m_wsp.getVerbCount()
     }
     
-    mutating func buildSomeStuff(){
-        
-        let wordList = VerbUtilities().getListOfWords(characterArray: "ls sddd a principios  de dddddd  a principios    de fff    fffff ddd")
-        let prepList = VerbUtilities().getListOfWords(characterArray: "a principios de")
-        var startIndex = 0
-        var wordIndex = 1
-        while  wordIndex > 0 {
-            wordIndex = VerbUtilities().doesStringListContainSubstringList(inputStringList: wordList, subStringList: prepList, startIndex : startIndex)
-            if ( wordIndex > 0 ){
-                print("substring found at index \(wordIndex)")
-            }
-            
-            startIndex = wordIndex + prepList.count  //jump startIndex past this "find" and look for another
-        }
-        
-        var cfgc = ContextFreeGrammarConstruction()
-        grammarLibrary.nounPhraseGrammar = cfgc.createSomeNounPhraseGrammar()
-        grammarLibrary.verbPhraseGrammar = cfgc.createSomeVerbPhraseGrammar()
-        grammarLibrary.prepositionalPhraseGrammar = cfgc.createSomePrepositionalPhraseGrammar()
-        grammarLibrary.adjectivePhraseGrammar = cfgc.createSomeAdjectivePhraseGrammar()
-        
-    }
+//    mutating func buildSomeStuff(){
+//
+//        let wordList = VerbUtilities().getListOfWords(characterArray: "ls sddd a principios  de dddddd  a principios    de fff    fffff ddd")
+//        let prepList = VerbUtilities().getListOfWords(characterArray: "a principios de")
+//        var startIndex = 0
+//        var wordIndex = 1
+//        while  wordIndex > 0 {
+//            wordIndex = VerbUtilities().doesStringListContainSubstringList(inputStringList: wordList, subStringList: prepList, startIndex : startIndex)
+//            if ( wordIndex > 0 ){
+//                print("substring found at index \(wordIndex)")
+//            }
+//
+//            startIndex = wordIndex + prepList.count  //jump startIndex past this "find" and look for another
+//        }
+//
+//        var cfgc = ContextFreeGrammarConstruction()
+//        grammarLibrary.nounPhraseGrammar = cfgc.createSomeNounPhraseGrammar()
+//        grammarLibrary.verbPhraseGrammar = cfgc.createSomeVerbPhraseGrammar()
+//        grammarLibrary.prepositionalPhraseGrammar = cfgc.createSomePrepositionalPhraseGrammar()
+//        grammarLibrary.adjectivePhraseGrammar = cfgc.createSomeAdjectivePhraseGrammar()
+//
+//    }
     
     func getGrammarLibrary()->CFGrammarLibrary{
         return grammarLibrary
     }
     
+//    mutating func loadJsonPhrasesAndClauses(){
+   ////        if bUseJsonStarterFiles {
+   //            jsonPhraseManager.encodeInternalPhrases(total: 2000)
+   ////        }
+   //        createPhrasesFromJsonPhrases()
+   //        print("phraseManager phrase count = \(phraseManager.getClusterCount())")
+   //    }
+   //    mutating func loadJsonBundles(){
+   //        //if bUseJsonStarterFiles {
+   //            jsonBundleManager.encodeBundles(total: 2000)
+   //        //}
+   //        createBundlesFromJsonBundles()
+   //        print("bundleManager bundle count = \(bundleManager.getBundleCount())")
+   //    }
+   //
+   //    mutating func createBundlesFromJsonBundles(){
+   //        for jsonBundle in jsonBundleManager.myBundleList {
+   //            let bundleName = jsonBundle.bundleName
+   //            let idNum = jsonBundle.idNum
+   //            let teacher = jsonBundle.teacher
+   //            var tenseList = [Tense]()
+   //            for str in jsonBundle.tenseList{
+   //                let tense = getTenseFromString(str: str)
+   //                tenseList.append(tense)
+   //            }
+   //            //look for phrases in phraseManager
+   //
+   //            var phraseList = [dCluster]()
+   //            for jsonPhrase in jsonBundle.phraseList{
+   //                let name = jsonPhrase.phraseName
+   //                let phrase = phraseManager.getClusterByName(clusterName: name)
+   //                phraseList.append(phrase)
+   //            }
+   //            var wordCollectionList = [dWordCollection]()
+   //            for jsonCollection in jsonBundle.collectionList{
+   //                let name = jsonCollection.collectionName
+   //                let collection = m_wsp.wordCollectionManager.getCollectionByName(collectionName: name)
+   //                wordCollectionList.append(collection)
+   //            }
+   //            let bundle = dBundle(idNum: idNum, teacher: teacher, bundleName: bundleName, tenseList: tenseList, collectionList: wordCollectionList, phraseList: phraseList)
+   //            bundleManager.appendBundle(bundle: bundle)
+   //        }
+   //    }
+   //
+   //    mutating func createPhraseFromJsonPhrase(jsonPhrase: JSONNamedLoadedPhrase)->dCluster{
+   //    let clusterType = getClusterTypeFromString(str: jsonPhrase.phraseType)
+   //        let np = dPhrase(randomWord: m_randomWordLists!, phraseName: jsonPhrase.phraseName, phraseType: clusterType)
+   //        //rebuild all of the member clusters from the jsonPhrase cluster list
+   //        for jsonCluster in jsonPhrase.clusterList {
+   //            np.appendCluster(cluster: m_randomWordLists.getAgnosticRandomWordAsSingle(wordType: getClusterTypeFromString(str: jsonCluster.wordType), isSubject:false))
+   //            if jsonPhrase.wordListCount() > 0 {
+   //                for jsonWord in jsonPhrase.wordList{
+   //                    let word = m_jsonDictionaryManager.getExistingWord(jsonWord: jsonWord)
+   //                    np.appendWordToAssociatedWordList(word: word)
+   //                }
+   //            }
+   //        }
+   //        return np
+   //    }
+   //
+   //    mutating func createPhrasesFromJsonPhrases(){
+   //        var np = dPhrase()
+   //
+   //        for jsonPhrase in jsonPhraseManager.myList {
+   //            let clusterType = getClusterTypeFromString(str: jsonPhrase.phraseType)
+   //            //if rebuilding a phrase ...
+   //            if (clusterType != .AMB){
+   //                np = dPhrase(randomWord: m_randomWordLists!, phraseName: jsonPhrase.phraseName, phraseType: clusterType)
+   //                //rebuild all of the member clusters from the jsonPhrase cluster list
+   //                for jsonCluster in jsonPhrase.clusterList {
+   //                    np.appendCluster(cluster: m_randomWordLists.getAgnosticRandomWordAsSingle(wordType: getClusterTypeFromString(str: jsonCluster.wordType), isSubject:false))
+   //                    if jsonPhrase.wordListCount() > 0 {
+   //                        for jsonWord in jsonPhrase.wordList{
+   //                            let word = m_jsonDictionaryManager.getExistingWord(jsonWord: jsonWord)
+   //                            np.appendWordToAssociatedWordList(word: word)
+   //                        }
+   //                    }
+   //                }
+   //                phraseManager.appendCluster(cluster: np)
+   //            }
+   //            //not legitimate phrase type
+   //            else {
+   //
+   //            }
+   //        }
+   //    }
 //    mutating func createIndependentClause(clauseString: String)->dIndependentClause{
 //        //convert sentence string into array of word strings
 //

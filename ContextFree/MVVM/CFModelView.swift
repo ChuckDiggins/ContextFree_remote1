@@ -12,7 +12,6 @@ class CFModelView: ObservableObject {
     private var cfModel : CFModel?
     private var language : LanguageType
     
-    //private var currentCluster = dCluster()
     private var activeCluster = dCluster()
     private var activeWordType =  WordType.ambiguous
     private var currentWordType : WordType
@@ -27,21 +26,6 @@ class CFModelView: ObservableObject {
         return cfModel!
     }
     
-    func getBundleManager()->dBundleManager{
-        return cfModel!.bundleManager
-    }
-    
-    func getPhraseManager()->dPhraseManager{
-        return cfModel!.phraseManager
-    }
-    
-    func getWordCollectionManager()->dWordCollectionManager{
-        return cfModel!.m_wsp.wordCollectionManager
-    }
-    
-//    func getJsonWordCollectionManager()->JSONCollectionManager{
-//        return cfModel!json
-//    }
     func setCurrentClusterAndWordTypeForFilling(cluster: dCluster, wordType: WordType){
         activeCluster = cluster
         activeWordType = wordType
@@ -114,19 +98,10 @@ class CFModelView: ObservableObject {
         return cfModel!.m_currentLanguage
     }
 
-    /*
-    func getRandomSentence()->dIndependentClause{
-        return cfModel!.getRandomSentence()
-    }
-    */
     func getRandomAgnosticSentence()->dIndependentAgnosticClause{
         return cfModel!.getRandomAgnosticSentence()
     }
-    
-//    func getAgnosticRandomSubjPronounSentence()->dIndependentAgnosticClause{
-//        return cfModel!.getAgnosticRandomSubjPronounSentence()
-//    }
-//    
+  
     func getModifierList(wordType: WordType)->Array<Word>{
         return cfModel!.getModifierList(wordType: wordType)
     }
@@ -151,11 +126,7 @@ class CFModelView: ObservableObject {
         return cfModel!.getVerbCount()
     }
     
-    /*
-    func getRandomSubjPronounSentence()->dIndependentClause{
-        return cfModel!.getRandomSubjPronounSentence()
-    }
-    */
+   
 
     func getNextPerson(currentPerson:Person)->Person{
         return cfModel!.getNextPerson(currentPerson: currentPerson)
@@ -181,7 +152,28 @@ class CFModelView: ObservableObject {
         return cfModel!.getGrammarLibrary()
     }
     
+
+//    func getRandomSubjPronounSentence()->dIndependentClause{
+//        return cfModel!.getRandomSubjPronounSentence()
+//    }
+
 //    func createIndependentClause(clauseString: String)->dIndependentClause{
 //        return cfModel!.createIndependentClause(clauseString: clauseString)
 //    }
+    
+//    func getBundleManager()->dBundleManager{
+   //        return cfModel!.bundleManager
+   //    }
+   //
+   //    func getPhraseManager()->dPhraseManager{
+   //        return cfModel!.phraseManager
+   //    }
+   //
+   //    func getWordCollectionManager()->dWordCollectionManager{
+   //        return cfModel!.m_wsp.wordCollectionManager
+   //    }
+       
+   //    func getJsonWordCollectionManager()->JSONCollectionManager{
+   //        return cfModel!json
+   //    }
 }

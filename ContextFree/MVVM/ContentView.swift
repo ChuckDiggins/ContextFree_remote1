@@ -14,27 +14,6 @@ struct ContentView: View {
         NavigationView {
             
             List {
-                NavigationLink(destination: BundleView()){
-                    Text("Bundles")
-                }.frame(width: 200, height: 50)
-                .padding(.leading, 10)
-                .background(Color.blue.opacity(0.5))
-                .cornerRadius(10)
-                
-                NavigationLink(destination: CollectionView()){
-                    Text("Word Collections")
-                }.frame(width: 200, height: 50)
-                .padding(.leading, 10)
-                .background(Color.green.opacity(0.5))
-                .cornerRadius(10)
-                
-                NavigationLink(destination: PhraseView()){
-                    Text("Phrases")
-                }.frame(width: 200, height: 50)
-                .padding(.leading, 10)
-                .background(Color.green.opacity(0.5))
-                .cornerRadius(10)
-                
                 NavigationLink(destination: MultiVerbConjugation()){
                     Text("Multi Verbs")
                 }.frame(width: 200, height: 50)
