@@ -112,6 +112,8 @@
 		6E6A4936264487AA0096C36F /* Games */ = {
 			isa = PBXGroup;
 			children = (
+				6E273EAE26B9ACDB002D219A /* HeaderView.swift */,
+				6EBD7BA8277D0CF300460AB7 /* ClauseWorkSpace.swift */,
 				6E6A492C2644565B0096C36F /* GamesTemplate.swift */,
 				6EE7BD8D2619019900840EB7 /* WordGames.swift */,
 				6E6A493426446FF50096C36F /* AdjectiveGames.swift */,
@@ -126,8 +128,6 @@
 			isa = PBXGroup;
 			children = (
 				6E6A494E2645CC7C0096C36F /* WordComponent.swift */,
-				6EC671A0267D356800AEBE31 /* MultiVerbConjugation.swift */,
-				6E83D960268F7D81007912FE /* PersonalPronounGames.swift */,
 				6E6A494D26459B4F0096C36F /* Components */,
 			);
 			path = WordLists;
@@ -156,18 +156,17 @@
 			path = CFLesson;
 			sourceTree = "<group>";
 		};
-		6E87AE52278DFBFE0089CDC3 /* NamedPhrase */ = {
+		6E87AE52278DFBFE0089CDC3 /* NamedLoadedPhrase */ = {
 			isa = PBXGroup;
 			children = (
 				6E87AE50278CDA700089CDC3 /* LoadWordsIntoPhraseView.swift */,
-				6E87AE4C278B9D410089CDC3 /* FilledPhraseView.swift */,
 				6E0518BC27989DA700843352 /* NewNameAlert.swift */,
 				6E0518C02798BEE600843352 /* BuildSingletonPhraseView.swift */,
 				6E0518C22798CB1100843352 /* BuildNounPhraseView.swift */,
 				6E0518C62799DB1200843352 /* RegularWordViewModel.swift */,
 				6E0518C8279A00E500843352 /* BuildNamedPhraseView.swift */,
 			);
-			path = NamedPhrase;
+			path = NamedLoadedPhrase;
 			sourceTree = "<group>";
 		};
 		6ED031A027A9E4E6009AFEA8 /* Word Collections and Bundles Views */ = {
@@ -203,13 +202,15 @@
 				6EE7BD772618C02400840EB7 /* Assets.xcassets */,
 				6E0BF82F2789F7F300CEC576 /* Capitulo.swift */,
 				6ED031AD27A9E76E009AFEA8 /* ClauseManipulation.swift */,
+				6EE7BD992619040900840EB7 /* Unconjugate.swift */,
+				6E6A4936264487AA0096C36F /* Games */,
 				6E83D96C26A47BD6007912FE /* CFLesson */,
 				6EE7BD7C2618C02400840EB7 /* Info.plist */,
 				6EE7BDB8261A1EFB00840EB7 /* MVVM */,
-				6E87AE52278DFBFE0089CDC3 /* NamedPhrase */,
-				6EE7BD792618C02400840EB7 /* Preview Content */,
-				6EE7BD992619040900840EB7 /* Unconjugate.swift */,
 				6EE7BD932619020D00840EB7 /* Views */,
+				6E6A4937264487D60096C36F /* WordLists */,
+				6E87AE52278DFBFE0089CDC3 /* NamedLoadedPhrase */,
+				6EE7BD792618C02400840EB7 /* Preview Content */,
 				6ED031A027A9E4E6009AFEA8 /* Word Collections and Bundles Views */,
 			);
 			path = ContextFree;
@@ -226,12 +227,11 @@
 		6EE7BD932619020D00840EB7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6E273EAE26B9ACDB002D219A /* HeaderView.swift */,
-				6E6A4937264487D60096C36F /* WordLists */,
-				6E6A4936264487AA0096C36F /* Games */,
 				6E273EB026B9B40A002D219A /* LanguageChooserView.swift */,
-				6EBD7BA8277D0CF300460AB7 /* ClauseWorkSpace.swift */,
+				6EC671A0267D356800AEBE31 /* MultiVerbConjugation.swift */,
+				6E87AE4C278B9D410089CDC3 /* FilledPhraseView.swift */,
 				6E0518D0279B2F5000843352 /* PhrasesInAgnosticOrSingleLanguageView.swift */,
+				6E83D960268F7D81007912FE /* PersonalPronounGames.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
